@@ -12,7 +12,15 @@ export class AppComponent {
 
   add(text: string): number{
     if(text.length == 0) return 0;
-    let array = text.split(',');
+    let array;
+    if(text.slice(0, 2) === "//"){
+      debugger;
+      let separator = text[2];
+      array = text.slice(3, text.length).split("/n").join(separator).split(separator);
+    }
+    else{
+      array = text.split("/n").join(',').split(',');
+    }
     return array.reduce(function(a, b) {return a + parseInt(b)}, 0);
   }
 

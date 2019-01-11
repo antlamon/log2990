@@ -57,4 +57,22 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.add('5,7,3,2,1')).toEqual(18);
   });
+
+  it('User can une /n instead of ,', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.add('5/n7,3,2/n1')).toEqual(18);
+  });
+
+  it('For an indefinite number of numbers, add returns the sum of all numbers', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.add('1,/n2')).toEqual(NaN);
+  });
+
+  it('update the separator', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.add('//;1/n2;6;1')).toEqual(10);
+  });
 });
