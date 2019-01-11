@@ -11,7 +11,9 @@ export class AppComponent {
   result = 0;
 
   add(text: string): number{
-    return 0;
+    if(text.length == 0) return 0;
+    let array = text.split(',');
+    return array.reduce(function(a, b) {return a + parseInt(b)}, 0);
   }
 
   add1(): void{

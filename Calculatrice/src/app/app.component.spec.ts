@@ -39,4 +39,22 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.add('')).toEqual(0);
   });
+
+  it('For a simgle number, add returns the number', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.add('6')).toEqual(6);
+  });
+
+  it('For two numbers, add returns the sum of the two numbers', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.add('5,7')).toEqual(12);
+  });
+
+  it('For an indefinite number of numbers, add returns the sum of all numbers', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.debugElement.componentInstance;
+    expect(app.add('5,7,3,2,1')).toEqual(18);
+  });
 });
