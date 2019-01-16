@@ -10,7 +10,7 @@ branches:
     - master
 
 before-install:
-  - cd client
+  - cd ./client
 
 cache:
   directories:
