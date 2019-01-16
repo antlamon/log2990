@@ -9,8 +9,8 @@ branches:
   only:
     - master
 
-before-install:
-  - cd ./client
+before_install:
+  - cd client
 
 cache:
   directories:
