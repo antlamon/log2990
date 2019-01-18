@@ -8,14 +8,13 @@ import { SimpleGeneratorComponent} from './adminView/simple-generator/simple-gen
 
 const routes: Routes = [
   { path: 'admin', component: AdminMenuComponent},
+  { path: 'freegen', component: FreeGeneratorComponent},
+  { path: 'simplegen', component: SimpleGeneratorComponent},
 ];
 
 
 @NgModule({
-  exports: [ RouterModule ],
-  imports: [
-    CommonModule
-  ],
-  declarations: []
+  imports:[ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ],  declarations: []
 })
 export class AppRoutingModule { }
