@@ -4,13 +4,17 @@ import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
 import { BasicService } from "./basic.service";
 import { HttpClientModule } from "@angular/common/http";
+import { InitialComponent } from './initial/initial.component';
+import {FormsModule} from "@angular/forms";
+
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        InitialComponent
       ],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, FormsModule],
       providers: [BasicService]
     }).compileComponents();
   }));
