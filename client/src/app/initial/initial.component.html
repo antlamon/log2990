@@ -1,7 +1,11 @@
-<p>
-  Afficher le logo
-</p>
-<label>Name:
-  <input [(ngModel)]="username" placeholder="Enter Name"/>
-  <button (click)="connect(username)">Connect</button>
-</label>
+<div class="main-container">
+  <div class="flex-items"><img src="assets/Logo.jpg" class="logo" alt="Logo missing"></div>
+  <div class="flex-items">
+   <label>Name:
+     <input [(ngModel)]="username" placeholder="Enter Name"/>
+   </label>
+    <div class="flex-items">
+      <button (click)="connect(username)">Connect</button>
+    </div>
+  </div>
+</div>
