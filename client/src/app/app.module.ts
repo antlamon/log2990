@@ -5,6 +5,8 @@ import { AppComponent } from "./app.component";
 import { BasicService } from "./basic.service";
 import { HttpClientModule } from "@angular/common/http";
 import { InitialComponent } from './initial/initial.component';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -12,6 +14,7 @@ import { InitialComponent } from './initial/initial.component';
     InitialComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     HttpClientModule
   ],

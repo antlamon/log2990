@@ -1,3 +1,7 @@
 <p>
-  Devrait etre la vue initial
+  Afficher le logo
 </p>
+<label>Name:
+  <input [(ngModel)]="username" placeholder="Enter Name"/>
+  <button (click)="connect(username)">Connect</button>
+</label>
