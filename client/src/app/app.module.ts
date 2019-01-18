@@ -25,8 +25,6 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    FreeGeneratorComponent,
-    SimpleGeneratorComponent
   ],
   providers: [BasicService],
   bootstrap: [AppComponent]
