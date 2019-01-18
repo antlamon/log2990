@@ -1,0 +1,14 @@
+.form-grid {
+    display: grid;
+    grid-template-rows: 60px 60px 60px;
+    grid-template-columns: 30% 30%;
+}
+
+.fileButton {
+
+}
+
+.rightColumn{
+    align-self: center;
+
+}
