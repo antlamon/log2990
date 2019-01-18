@@ -26,8 +26,10 @@ export class InitialComponent implements OnInit {
   {
     return nom.length<this.MAX_LENGTH && nom.length>this.MIN_LENGTH;
   }
-  public containAlphaNumeric(nom:String) {
-    return nom.match(/^[a-z0-9]+$/i) !== null;
+  public containOnlyAlphaNumeric(nom:String) {
+    let check= nom.match(/^[a-z0-9A-Z]+$/i);
+    console.log(check);
+    return check==null?false:check[0].length==nom.length
   }
 
 }

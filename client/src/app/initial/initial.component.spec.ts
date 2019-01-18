@@ -34,8 +34,19 @@ describe("Test for the class InitialComponent using functions related to the con
     initialComponent = new InitialComponent();
   });
 
-  it('A username should return false', () => {
-    expect(initialComponent.isValidUsername("")).toEqual(false);
+  describe("Test for the function containAlphaNumerics",()=> {
+    it('A string containing only regular char should return true', () => {
+      expect(initialComponent.containOnlyAlphaNumeric("abc123")).toEqual(true);
+    });
+    it('An empty should return false', () => {
+      expect(initialComponent.containOnlyAlphaNumeric("")).toEqual(false);
+    });
+    it('A string containing @ should return false', () => {
+      expect(initialComponent.containOnlyAlphaNumeric("@")).toEqual(false);
+    });
+    it('A string containing both alpha numerics char and non alpha numerics char should return false', () => {
+      expect(initialComponent.containOnlyAlphaNumeric("abc123@")).toEqual(false);
+    });
   });
 
   describe("Test for the function isValidUsername",()=> {
