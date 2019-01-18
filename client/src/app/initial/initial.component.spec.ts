@@ -65,6 +65,7 @@ describe("Test for the class InitialComponent using functions related to the con
     it('An ordinary username between 3 and 10 char sould return true', () => {
       expect(initialComponent.isValidUsername("aaaaa")).toEqual(true);
     });
+
   });
 
 });

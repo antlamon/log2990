@@ -24,7 +24,7 @@ export class InitialComponent implements OnInit {
   }
    public isValidUsername(nom:String):boolean
   {
-    return nom.length<this.MAX_LENGTH && nom.length>this.MIN_LENGTH;
+    return nom.length<this.MAX_LENGTH && nom.length>this.MIN_LENGTH && this.containOnlyAlphaNumeric(nom);
   }
   public containOnlyAlphaNumeric(nom:String) {
     let check= nom.match(/^[a-z0-9A-Z]+$/i);
