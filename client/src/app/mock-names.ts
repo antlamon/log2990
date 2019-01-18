@@ -1,4 +1,4 @@
-export const NAMES:String[]=[
+export const NAMES:string[]=[
   "Julien",
   "Antoine",
   "Stephane",
