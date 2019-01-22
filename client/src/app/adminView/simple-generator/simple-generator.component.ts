@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-simple-generator',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SimpleGeneratorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { 
+  }
 
   ngOnInit() {
+  }
+
+  submit() {
+    //submit form ... TODO
+    this.router.navigate(['admin']); // go back to admin home
+  }
+
+  close() {
+    this.router.navigate(['admin']); // go back to admin home
   }
 
 }

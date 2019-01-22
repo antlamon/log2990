@@ -1,3 +1,32 @@
-<p>
-  simple-generator works!
-</p>
+<div class="simpleViewForm">
+    <div>
+      <h1>Créer un jeu point de vue simple</h1>
+      <p>Format d'image: bitmap 24-bit (640x480)</p>
+    </div>
+  
+    <div class="form-grid">
+      <div>
+        <p>Nom du jeu</p>
+      </div>
+      <div class="rightColumn">
+        <input type="text">
+      </div>
+      <div>
+        <p>Image originale</p>
+      </div>
+      <div class="rightColumn">
+        <button type="button">Choisir un fichier</button>
+      </div>
+      <div>
+        <p>Image modifiée</p>
+      </div>
+      <div class="rightColumn">
+        <button type="button">Choisir un fichier</button>
+      </div>
+  
+    </div>
+    <div>
+      <button (click) = "submit()">Soumettre </button>
+      <button (click) = "close()"> Annuler </button>
+    </div>
+  </div>

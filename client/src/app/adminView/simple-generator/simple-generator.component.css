@@ -1,0 +1,38 @@
+.simpleViewForm{
+    padding: 10px;
+    border: 2px solid gray;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(243, 243, 243);
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
+    position: fixed;
+    top:10%;
+    width: 100%;
+}
+input {
+    border: 1px solid rgb(48, 46, 46);
+}
+.form-grid {
+    display: grid;
+    grid-template-rows: 60px 60px 60px;
+    grid-template-columns: 30% 30%;
+}
+
+button {
+    background-color: #f4f7f7;
+    background-image: linear-gradient(#a8a8a8,#e7ebeb);
+    margin: 4px;
+    border-radius: 12px;
+}
+button:hover {
+   cursor: pointer;
+   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+button:focus{
+    outline:0;
+}
+
+.rightColumn{
+    align-self: center;
+}
