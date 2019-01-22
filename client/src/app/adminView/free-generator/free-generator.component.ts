@@ -12,4 +12,12 @@ export class FreeGeneratorComponent implements OnInit {
   ngOnInit() {
   }
 
+  submitFreeViewForm() {
+    //submit form ... TODO
+  }
+
+  closeFreeViewForm() {
+    //TODO
+  }
+
 }
