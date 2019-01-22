@@ -12,21 +12,29 @@
       <input type="text">
     </div>
     <div>
-      <p>Image originale</p>
+      <p>Type d'objets</p>
+    </div>
+    <select class="rightColumn">
+      <option value="none"></option>
+      <option value="formesGeo"> formes géométriques</option>
+      <option value="thematique">thématique </option>
+    </select>
+    <div>
+      <p>Quantité d'objets</p>
     </div>
     <div class="rightColumn">
-      <button type="button">Choisir un fichier</button>
+        <input type="text">
     </div>
     <div>
-      <p>Image modifiée</p>
+      <p>Type de modifications</p>
     </div>
-    <div class="rightColumn">
-      <button type="button">Choisir un fichier</button>
+    <div class = "rightColumn"> 
+      <input type="checkbox" value="add"> Ajout<br>
+      <input type="checkbox" value="delete" > Supression <br>
+      <input type="checkbox" value="colorChange" > Changement de couleur <br>
     </div>
-
+    <div>
+      <button (click)="submit()">Soumettre </button>
+      <button (click)="close()"> Annuler </button>
+    </div>
   </div>
-  <div>
-    <button (click) = "submit()">Soumettre </button>
-    <button (click) = "close()"> Annuler </button>
-  </div>
-</div>
