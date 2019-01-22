@@ -16,12 +16,12 @@ export class FreeGeneratorComponent implements OnInit {
   ngOnInit() {
   }
 
-  submitFreeViewForm() {
+  submit() {
     //submit form ... TODO
     this.router.navigate(['admin']); // go back to admin home
   }
 
-  closeFreeViewForm() {
+  close() {
     this.router.navigate(['admin']); // go back to admin home
   }
 
