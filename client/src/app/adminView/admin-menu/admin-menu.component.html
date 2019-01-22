@@ -1,4 +1,11 @@
-<div class = "menuBar">
-  <button class = "freeGenButton" type = "button">Créer un jeu libre</button> 
-  <button class = "simpleGenButton" type = "button">Créer un jeu simple</button> 
+<h1>Welcome to the admin menu!</h1>
+<div class = "menuBar" *ngIf = "!isHidden">
+  <button class = "freeGenButton" type = "button" (click) = "openFreeViewForm()">Créer un jeu libre</button> 
+  <button class = "simpleGenButton" type = "button" (click) = "openSimpleViewForm()">Créer un jeu simple</button> 
+</div>
+<router-outlet></router-outlet>
+<div class = "fiche de jeu">
+ 
+<p> ICI SONT LES FICHES DE JEUX</p>
+
 </div>
