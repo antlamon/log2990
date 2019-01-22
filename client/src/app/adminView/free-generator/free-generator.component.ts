@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-free-generator',
@@ -7,17 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FreeGeneratorComponent implements OnInit {
 
-  constructor() { }
+  
+
+  constructor(private router: Router) { 
+  }
 
   ngOnInit() {
   }
 
   submitFreeViewForm() {
     //submit form ... TODO
+    this.router.navigate(['admin']); // go back to admin home
   }
 
   closeFreeViewForm() {
-    //TODO
+    this.router.navigate(['admin']); // go back to admin home
   }
 
 }

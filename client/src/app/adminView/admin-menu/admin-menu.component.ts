@@ -21,8 +21,6 @@ export class AdminMenuComponent implements OnInit {
   openSimpleViewForm() {
     this.router.navigate(['simplegen'], {relativeTo: this.route});
   }
-  closeSimpleViewForm() {
-    this.router.navigate([''], {relativeTo: this.route});
-  }
+  
 
 }
