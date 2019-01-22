@@ -1,10 +1,17 @@
 .freeViewForm{
     padding: 10px;
     border: 2px solid gray;
-    margin: 10px;
     width: 400px;
     display: flex;
     flex-direction: column;
+    background-color: rgb(243, 243, 243);
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
+    position: fixed;
+    top:10%;
+    width: 100%;
+}
+input {
+    border: 1px solid rgb(48, 46, 46);
 }
 .form-grid {
     display: grid;
