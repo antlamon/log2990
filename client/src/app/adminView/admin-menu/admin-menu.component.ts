@@ -8,10 +8,7 @@ import { Router, ActivatedRoute} from '@angular/router';
 })
 export class AdminMenuComponent implements OnInit {
 
-  isHidden: boolean;
-
   constructor(private router: Router, private route: ActivatedRoute) {
-    this.isHidden=false;
   }
 
   ngOnInit() {
@@ -19,18 +16,13 @@ export class AdminMenuComponent implements OnInit {
 
   openFreeViewForm() {
     this.router.navigate(['freegen'], {relativeTo: this.route});
-    this.isHidden=true;
   }
-
-  
 
   openSimpleViewForm() {
     this.router.navigate(['simplegen'], {relativeTo: this.route});
-    this.isHidden=true;
   }
   closeSimpleViewForm() {
     this.router.navigate([''], {relativeTo: this.route});
-    this.isHidden=false;
   }
 
 }
