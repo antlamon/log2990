@@ -11,8 +11,8 @@
     text-align: center;
 }
 .menuBar{
-    background-color:rgba(18, 20, 44, 0.5); 
-    background-blend-mode: lighten;
+    background-color:rgba(161, 50, 50, 0.7);
+    background-image: radial-gradient( rgba(226, 28, 28, 0.7),rgba(121, 15, 15, 0.7)) ;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -22,10 +22,11 @@
 }
 
 button {
- background-color: rgb(54, 77, 77);
-  border:none;
-  border-radius: 12px;
-  color: white;
+  background-color: #635d5d;
+  background-image: linear-gradient(#8a8a8a,#cccccc);
+  border-radius: 10px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.24), 0 1px 3px 0 rgba(0,0,0,0.19);
+  color: black;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
