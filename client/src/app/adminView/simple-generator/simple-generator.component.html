@@ -1,0 +1,34 @@
+<div class="simpleViewForm">
+    <div>
+      <h1>Créer un jeu point de vue simple</h1>
+      <p>Format d'image: bitmap 24-bit (640x480)</p>
+    </div>
+  
+    <div class="form-grid">
+      <div>
+        <p>Nom du jeu</p>
+      </div>
+      <div class="rightColumn">
+        <input type="text" class = "textInput">
+      </div>
+      <div>
+        <p>Image originale</p>
+      </div>
+      <div class="rightColumn">
+        <input type="file" name="file" id="fileOrigin" class = "uploader">
+        <label for="fileOrigin">Choisir un fichier </label>
+      </div>
+      <div>
+        <p>Image modifiée</p>
+      </div>
+      <div class="rightColumn">
+        <input type="file" name="file" id="fileModified" class = "uploader">
+        <label for="fileModified">Choisir un fichier </label>
+      </div>
+  
+    </div>
+    <div>
+      <button (click) = "submit()">Soumettre </button>
+      <button (click) = "close()"> Annuler </button>
+    </div>
+  </div>

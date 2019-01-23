@@ -1,0 +1,40 @@
+<div class="freeViewForm">
+  <div>
+    <h1>Créer un jeu point de vue libre</h1>
+    <p>Format d'image: bitmap 24-bit (640x480)</p>
+  </div>
+
+  <div class="form-grid">
+    <div>
+      <p>Nom du jeu</p>
+    </div>
+    <div class="rightColumn">
+      <input type="text">
+    </div>
+    <div>
+      <p>Type d'objets</p>
+    </div>
+    <select class="rightColumn">
+      <option value="none"></option>
+      <option value="formesGeo"> formes géométriques</option>
+      <option value="thematique">thématique </option>
+    </select>
+    <div>
+      <p>Quantité d'objets</p>
+    </div>
+    <div class="rightColumn">
+        <input type="text">
+    </div>
+    <div>
+      <p>Type de modifications</p>
+    </div>
+    <div class = "rightColumn"> 
+      <input type="checkbox" value="add"> Ajout<br>
+      <input type="checkbox" value="delete" > Supression <br>
+      <input type="checkbox" value="colorChange" > Changement de couleur <br>
+    </div>
+    <div>
+      <button (click)="submit()">Soumettre </button>
+      <button (click)="close()"> Annuler </button>
+    </div>
+  </div>
