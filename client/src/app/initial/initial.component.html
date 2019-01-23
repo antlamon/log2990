@@ -2,10 +2,10 @@
   <div class="flex-items"><img src="assets/Logo.jpg" class="logo" alt="Logo missing"></div>
   <div class="flex-items">
    <label>Name:
-     <input [(ngModel)]="username" placeholder="Enter Name"/>
+     <input [(ngModel)]="username" placeholder="  Enter Name" title="Your name must be between 3 and 10 letters and contain only alphanumericals"/>
    </label>
     <div class="flex-items">
-      <button (click)="connect(username)">Connect</button>
+      <div class="connect-button" (click)="connect(username)">Connect</div>
     </div>
   </div>
 </div>

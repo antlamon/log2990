@@ -16,7 +16,8 @@ export class InitialComponent implements OnInit {
   username:string;
 
   constructor() {
-    this.username="";//nom invalide
+    this.username="";//invalid name
+    //Mock values for testing
     this.names=NAMES;
   }
 
@@ -25,11 +26,16 @@ export class InitialComponent implements OnInit {
   }
   public connect(username:string):void
   {
-    if(!(this.isValidUsername(username)))
+    if(!(this.isValidUsername(username))) {
+      //Write error message
       return;
+    }
     //TO simulate a server database
-    if(this.names.includes(username))
+    if(this.names.includes(username)) {
+      //Write error message
       return;
+    }
+    //Change view
     this.names.push(username);
   }
    public isValidUsername(nom:string):boolean
