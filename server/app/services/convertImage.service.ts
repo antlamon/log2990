@@ -5,6 +5,9 @@ import "reflect-metadata";
 
 @injectable()
 export class ConvertImage {
+
+    //À modifier car INTERNET IS LIFE
+
     convertToImageData(buffer: ArrayBuffer): ImageData {
         const bmp = this._getBMP(buffer);
         return this._BMPToImageData(bmp);
