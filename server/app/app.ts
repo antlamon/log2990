@@ -1,12 +1,12 @@
 import * as express from "express";
-import * as path from "path";
 import * as logger from "morgan";
 import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import Types from "./types";
 import { injectable, inject } from "inversify";
-import { Routes } from "./routes";
+import { IndexController } from "./controllers/index.controller";
+import { DateController } from "./controllers/date.controller";
 
 @injectable()
 export class Application {
@@ -14,12 +14,13 @@ export class Application {
     private readonly internalError: number = 500;
     public app: express.Application;
 
-    public constructor(@inject(Types.Routes) private api: Routes) {
+    public constructor(@inject(Types.IndexController) private indexController: IndexController,
+        @inject(Types.DateController) private dateController: DateController) {
         this.app = express();
 
         this.config();
 
-        this.routes();
+        this.bindRoutes();
     }
 
     private config(): void {
@@ -28,17 +29,13 @@ export class Application {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
-        this.app.use(express.static(path.join(__dirname, "../client")));
         this.app.use(cors());
     }
 
-    public routes(): void {
-        const router: express.Router = express.Router();
-
-        router.use(this.api.routes);
-
-        this.app.use(router);
-
+    public bindRoutes(): void {
+        // Notre application utilise le routeur de notre API `Index`
+        this.app.use('/api/index', this.indexController.router);
+        this.app.use('/api/date', this.dateController.router);
         this.errorHandeling();
     }
 
