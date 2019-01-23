@@ -2,7 +2,6 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
 import { AppComponent } from "./app.component";
-import { BasicService } from "./basic.service";
 import { HttpClientModule } from "@angular/common/http";
 import { InitialComponent } from './initial/initial.component';
 import { AdminMenuComponent } from './adminView/admin-menu/admin-menu.component';
@@ -10,6 +9,7 @@ import { FreeGeneratorComponent } from './adminView/free-generator/free-generato
 import { SimpleGeneratorComponent } from './adminView/simple-generator/simple-generator.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { FormsModule } from '@angular/forms';
+import { IndexService } from "./index.service";
 
 
 @NgModule({
@@ -26,7 +26,7 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     AppRoutingModule,
   ],
-  providers: [BasicService],
+  providers: [IndexService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

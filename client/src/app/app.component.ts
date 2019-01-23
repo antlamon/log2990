@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Message } from "../../../common/communication/message";
-import { BasicService } from "./basic.service";
-
+import { IndexService } from "./index.service";
 
 @Component({
   selector: "app-root",
@@ -9,12 +8,11 @@ import { BasicService } from "./basic.service";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent implements OnInit {
-    public constructor(private basicService: BasicService) {
+    public constructor(private basicService: IndexService) {
     }
 
     public readonly title: string = "LOG2990";
     public message: string;
-
 
     public ngOnInit(): void {
       if (!this.message) { return; }
