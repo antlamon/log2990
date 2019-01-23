@@ -30,7 +30,7 @@ export class InitialComponent implements OnInit {
       //Write error message
       return;
     }
-    //TO simulate a server database
+    //To simulate a server database, must be changed
     if(this.names.includes(username)) {
       //Write error message
       return;
@@ -43,8 +43,8 @@ export class InitialComponent implements OnInit {
     return nom.length<this.MAX_LENGTH && nom.length>this.MIN_LENGTH && this.containOnlyAlphaNumeric(nom);
   }
   public containOnlyAlphaNumeric(nom:string):boolean {
-    let check= nom.match(/^[a-z0-9A-Z]+$/i);
-    return check==null?false:check[0].length==nom.length
+    let check= nom.match(/^[a-zA-Z0-9]+$/i);
+    return check==null ? false : check[0].length==nom.length
   }
 
 }

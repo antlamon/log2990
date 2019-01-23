@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8ffbf2b-32c1-47cb-897c-af3904623a1f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/initial/initial.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/initial/initial.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/initial/initial.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/initial/initial.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/assets/Logo (1).jpg" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,7 +55,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
@@ -71,7 +67,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1125">
+            <state relative-caret-position="1394">
               <caret line="82" column="36" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
               <folding>
                 <element signature="e#0#73#0" expanded="true" />
@@ -89,10 +85,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="367">
+            <state relative-caret-position="758">
               <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
@@ -152,8 +148,8 @@
         <option value="$PROJECT_DIR$/client/src/app/mock-names.ts" />
         <option value="$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts" />
         <option value="$PROJECT_DIR$/client/src/app/initial/initial.component.css" />
-        <option value="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" />
         <option value="$PROJECT_DIR$/client/src/app/initial/initial.component.html" />
+        <option value="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" />
       </list>
     </option>
   </component>
@@ -284,12 +280,12 @@
       <workItem from="1547815066774" duration="3058000" />
       <workItem from="1547820054023" duration="15774000" />
       <workItem from="1547906924881" duration="120000" />
-      <workItem from="1548250300347" duration="2320000" />
+      <workItem from="1548250300347" duration="3138000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34885000" />
+    <option name="totallyTimeSpent" value="35703000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -461,26 +457,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1125">
-          <caret line="82" column="36" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#73#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="588">
@@ -492,6 +468,26 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="144" lean-forward="true" selection-start-line="4" selection-start-column="144" selection-end-line="4" selection-end-column="144" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1394">
+          <caret line="82" column="36" selection-start-line="82" selection-start-column="36" selection-end-line="82" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="758">
+          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
