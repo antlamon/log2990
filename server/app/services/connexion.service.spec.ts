@@ -42,47 +42,31 @@ describe("Test for the function containAlphaNumerics",()=> {
         expect(component.containOnlyAlphaNumeric("abc123@")).to.equal(false);
     });
 });
-/*
-*  describe("Test for the function containAlphaNumerics",()=> {
-    it('A string containing only regular char should return true', () => {
-      expect(component.containOnlyAlphaNumeric("abc123")).toEqual(true);
-    });
-    it('An empty should return false', () => {
-      expect(component.containOnlyAlphaNumeric("")).toEqual(false);
-    });
-    it('A string containing @ should return false', () => {
-      expect(component.containOnlyAlphaNumeric("@")).toEqual(false);
-    });
-    it('A string containing both alpha numerics char and non alpha numerics char should return false', () => {
-      expect(component.containOnlyAlphaNumeric("abc123@")).toEqual(false);
-    });
-  });
-
-
-  describe("Test for the function connect",()=> {
+describe("Test for the function connect",()=> {
+    let component:ConnexionService = new ConnexionService();
     it('An empty username should not be added to the names array', () => {
-      component.connect("");
-      expect(component.names.some(o=>o=="")).toEqual(false);
+        component.addName("");
+        expect(component.names.some(o => o == "")).to.equal(false);
     });
     it('An  username longer than 10 chars should not be added', () => {
-      component.connect("aaa@@aa");
-      expect(component.names.some(o=>o=="")).toEqual(false);
+        component.addName("aaa@@aa");
+        expect(component.names.some(o => o == "")).to.equal(false);
     });
     it('An  username shorter than 3 characters should not be added to the names array', () => {
-      component.connect("aaa@@aa");
-      expect(component.names.some(o=>o=="")).toEqual(false);
+        component.addName("aaa@@aa");
+        expect(component.names.some(o => o == "")).to.equal(false);
     });
     it('An  username containing alphaNumerics chars should not be added to the names array', () => {
-      component.connect("aaa@@aa");
-      expect(component.names.some(o=>o=="")).toEqual(false);
+        component.addName("aaa@@aa");
+        expect(component.names.some(o => o == "")).to.equal(false);
     });
     it('The username HanasBye should be correctly added', () => {
-      component.connect("HanasBye");
-      expect(component.names.some(o=>o=="HanasBye")).toEqual(true);
+        component.addName("HanasBye");
+        expect(component.names.some(o => o == "HanasBye")).to.equal(true);
     });
     it('The username HanasBye should not be added twice', () => {
-      component.connect("HanasBye");
-      component.connect("HanasBye");
-      expect(component.names.filter(o=>o=="HanasBye").length).toEqual(1);
+        component.addName("HanasBye");
+        component.addName("HanasBye");
+        expect(component.names.filter(o => o == "HanasBye").length).to.equal(1);
     });
-  });*/
+});

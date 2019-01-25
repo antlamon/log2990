@@ -14,7 +14,11 @@ export class ConnexionService {
     public readonly  ERROR_MESSAGE_INVALID_NAME: string = "The name entered was invalid";
     public readonly  ERROR_MESSAGE_ALREADY_USED_NAME: string = "The name is already being used";
 
-    public names: string[]=NAMES;
+    public names: string[];
+
+    constructor(){
+        this.names=NAMES;
+    }
 
     public async addName(newName:string): Promise<Message> {
         if(newName ==null)
@@ -24,7 +28,11 @@ export class ConnexionService {
         if(!this.containOnlyAlphaNumeric(newName))
             return {title:this.ERROR_ID,body:"Name must contain only alpha numerics"};
         //Checker si dans liste
+        if(this.names.some(o => o == newName))
+            return {title:this.ERROR_ID,body:"Name was already taken"};
 
+        //Mock-data
+        this.names.push(newName);
         return {title:this.CONNECT_ID,body:"The name"+newName+" was added to the list of names"};
     }
     public isCorrectLength(nom: string): boolean {
