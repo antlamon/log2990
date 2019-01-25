@@ -3,7 +3,7 @@
       <h1>Créer un jeu point de vue simple</h1>
       <p>Format d'image: bitmap 24-bit (640x480)</p>
     </div>
-  
+    <form [formGroup]="formGroup" novalidate (ngSubmit)="submit()">
     <div class="form-grid">
       <div>
         <p>Nom du jeu</p>
@@ -15,20 +15,22 @@
         <p>Image originale</p>
       </div>
       <div class="rightColumn">
-        <input type="file" name="file" id="fileOrigin" class = "uploader">
+        <input type="file" name="file" id="fileOrigin" class = "uploader" (change)="onFileChange($event)">
         <label for="fileOrigin">Choisir un fichier </label>
       </div>
       <div>
         <p>Image modifiée</p>
       </div>
       <div class="rightColumn">
-        <input type="file" name="file" id="fileModified" class = "uploader">
+        <input type="file" name="file" id="fileModified" class="uploader">
         <label for="fileModified">Choisir un fichier </label>
       </div>
   
     </div>
+    
     <div>
-      <button (click) = "submit()">Soumettre </button>
+      <button type="submit" id="submitButton" disabled>Soumettre </button>
       <button (click) = "close()"> Annuler </button>
     </div>
+    </form>
   </div>
