@@ -7,7 +7,7 @@ import Types from "./types";
 import { injectable, inject } from "inversify";
 import { IndexController } from "./controllers/index.controller";
 import { DateController } from "./controllers/date.controller";
-import { ImageController } from "./controllers/image.controlleur";
+import { ImageController } from "./controllers/image.controller";
 
 @injectable()
 export class Application {
