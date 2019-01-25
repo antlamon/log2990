@@ -34,6 +34,9 @@ export class ConnexionService {
         return nom.length <= this.MAX_LENGTH && nom.length >= this.MIN_LENGTH;
     }
     public containOnlyAlphaNumeric(nom: string): boolean {
+        if(nom==null) {
+            return false;
+        }
         const check: RegExpMatchArray | null = nom.match(/^[a-zA-Z0-9]+$/i);
 
         return check == null ? false : check[0].length === nom.length;

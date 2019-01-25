@@ -24,6 +24,24 @@ describe('Test for the function isCorrectLength', () => {
         done();
     });
 });
+describe("Test for the function containAlphaNumerics",()=> {
+    let component:ConnexionService = new ConnexionService();
+    it('A null string should return false', () => {
+        expect(component.containOnlyAlphaNumeric(null)).to.equal(false);
+    });
+    it('A string containing only regular char should return true', () => {
+        expect(component.containOnlyAlphaNumeric("abc123")).to.equal(true);
+    });
+    it('An empty string should return false', () => {
+        expect(component.containOnlyAlphaNumeric("")).to.equal(false);
+    });
+    it('A string containing @ should return false', () => {
+        expect(component.containOnlyAlphaNumeric("@")).to.equal(false);
+    });
+    it('A string containing both alpha numerics char and non alpha numerics char should return false', () => {
+        expect(component.containOnlyAlphaNumeric("abc123@")).to.equal(false);
+    });
+});
 /*
 *  describe("Test for the function containAlphaNumerics",()=> {
     it('A string containing only regular char should return true', () => {
@@ -40,23 +58,6 @@ describe('Test for the function isCorrectLength', () => {
     });
   });
 
-  describe("Test for the function isValidUsername",()=> {
-    it('An empty username should return false', () => {
-      expect(component.isValidUsername("")).toEqual(false);
-    });
-    it('A username under 3 char should return false', () => {
-      expect(component.isValidUsername("aa")).toEqual(false);
-    });
-    it('A username above 10 char should return false', () => {
-      expect(component.isValidUsername("aaaaaaaaaaa")).toEqual(false);
-    });
-    it('A username containing unvalide char should return false', () => {
-      expect(component.isValidUsername("aa@@aa")).toEqual(false);
-    });
-    it('An ordinary username between 3 and 10 char sould return true', () => {
-      expect(component.isValidUsername("aaaaa")).toEqual(true);
-    });
-  });
 
   describe("Test for the function connect",()=> {
     it('An empty username should not be added to the names array', () => {
