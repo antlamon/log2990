@@ -9,6 +9,7 @@ export class DateController {
     public constructor(@inject(Types.DateService) private dateService: DateService) { }
 
     public get router(): Router {
+        
         const router: Router = Router();
         router.get("/",
             (req: Request, res: Response, next: NextFunction) => {
