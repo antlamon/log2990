@@ -11,9 +11,9 @@ export class ImageController {
     public get router(): Router {
         const router: Router = Router();
 
-        router.get("/imagegen",
+        router.get("/",
             (req: Request, res: Response, next: NextFunction) => {
-                this.imageService.getDifferentImage(req, res);
+                res.json(this.imageService.getDifferentImage(req, res));
                 });
         return router;
     }
