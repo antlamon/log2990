@@ -12,7 +12,7 @@ export class ImageService {
     public constructor(@inject(Types.ConvertImage) private convertImage: ConvertImage) {}
 
     public getDifferentImage(req: Request, res: Response ) {
-
+        
         const path1: string = "./app/documents/image1.bmp";
         const path2: string = "./app/documents/image2.bmp";
         const image1: ImageBMP= this.convertImage.bufferToImageBMP(readFileSync(path1));
