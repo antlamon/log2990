@@ -13,7 +13,7 @@ export class ImageController {
 
         router.get("/imagegen",
             (req: Request, res: Response, next: NextFunction) => {
-                this.imageService.getDifferentImage(req, res);
+             //   this.imageService.getDifferentImage(req, res);
                 });
         return router;
     }
