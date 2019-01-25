@@ -4,13 +4,18 @@ import "reflect-metadata";
 import { Pixel, ImageBMP, ConvertImage } from "./convertImage.service";
 import Types from "../types";
 import { Request, Response } from "express";
+<<<<<<< HEAD
 import { readFile, readFileSync, writeFileSync } from "fs";
+=======
+import * as fs from "fs"
+>>>>>>> cc53f2cae2c9eec48dd02893f3aafa46d71484d7
 
 @injectable()
 export class ImageService {
 
     public constructor(@inject(Types.ConvertImage) private convertImage: ConvertImage) {}
 
+<<<<<<< HEAD
     public getDifferentImage(req: Request, res: Response ) {
         
         const path1: string = "../documents/image1.bmp";
@@ -47,6 +52,14 @@ export class ImageService {
             green: pixel1.green - pixel2.green,
             blue: pixel1.blue - pixel2.blue
         }
+=======
+    getDifferentImage(req: Request, res: Response ) {
+        const bmp1: Buffer = fs.readFileSync("../images/1.bmp");
+        const bmp2: Buffer = fs.readFileSync("../images/2.bmp");
+
+        const image1: ImageData = this.convertImage.convertToImageData(bmp1);
+        const image2: ImageData = this.convertImage.convertToImageData(bmp2);
+>>>>>>> cc53f2cae2c9eec48dd02893f3aafa46d71484d7
     }
 
 }

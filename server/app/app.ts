@@ -7,7 +7,11 @@ import Types from "./types";
 import { injectable, inject } from "inversify";
 import { IndexController } from "./controllers/index.controller";
 import { DateController } from "./controllers/date.controller";
+<<<<<<< HEAD
 import { ImageController } from "./controllers/image.controlleur";
+=======
+import { ImageController } from "./controllers/image.controller";
+>>>>>>> cc53f2cae2c9eec48dd02893f3aafa46d71484d7
 
 @injectable()
 export class Application {
@@ -38,7 +42,11 @@ export class Application {
         // Notre application utilise le routeur de notre API `Index`
         this.app.use('/api/index', this.indexController.router);
         this.app.use('/api/date', this.dateController.router);
+<<<<<<< HEAD
         this.app.use(this.imageController.url, this.imageController.router);
+=======
+        this.app.use('/api/imagegen', this.imageController.router)
+>>>>>>> cc53f2cae2c9eec48dd02893f3aafa46d71484d7
         this.errorHandeling();
     }
 

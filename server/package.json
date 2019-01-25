@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon out/server/app/www.js\" ",
+    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon --inspect app/www.js\" ",
     "lint": "tslint --project tsconfig.json \"./app/**/*.ts\" --format stylish",
     "test": "mocha",
     "coverage": "nyc mocha",
@@ -17,7 +17,7 @@
     "check-coverage": true,
     "per-file": true,
     "include": [
-      "app/services/**/*.ts"
+      "app/**/*.ts"
     ],
     "extension": [
       ".ts"
@@ -70,7 +70,7 @@
     "concurrently": "^4.0.1",
     "mocha": "~5.2.0",
     "nyc": "^13.1.0",
-    "rimraf": "2.6.2",
+    "rimraf": "^2.6.2",
     "sinon": "^7.2.2",
     "tslint": "~5.11.0",
     "tslint-eslint-rules": "5.4.0",

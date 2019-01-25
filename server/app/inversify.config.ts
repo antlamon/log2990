@@ -6,7 +6,7 @@ import { IndexController } from "./controllers/index.controller";
 import { IndexService } from "./services/index.service";
 import { DateController } from "./controllers/date.controller";
 import { DateService } from "./services/date.service";
-import { ImageController } from "./controllers/image.controlleur";
+import { ImageController } from "./controllers/image.controller";
 import { ImageService } from "./services/image.service";
 import { ConvertImage } from "./services/convertImage.service";
 
