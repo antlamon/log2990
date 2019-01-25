@@ -17,12 +17,13 @@ export class ImageService {
         const path2: string = "./app/documents/image2.bmp";
         const image1: ImageBMP= this.convertImage.bufferToImageBMP(readFileSync(path1));
         const image2: ImageBMP= this.convertImage.bufferToImageBMP(readFileSync(path2));
-
+        console.log("imagedCompared");
         let imagedCompared: ImageBMP = this.compareData(image1, image2);
-
+        console.log("imagedCompared");
         let bufferSortie = readFileSync(path1);
         this.convertImage.imageBMPtoBuffer(imagedCompared,bufferSortie);
-        writeFileSync("../documents/result.bmp",bufferSortie);
+        writeFileSync("./app/documents/result.bmp",bufferSortie);
+        res.json(imagedCompared);
     }
     
     compareData(image1:ImageBMP, image2:ImageBMP):ImageBMP {
@@ -33,7 +34,7 @@ export class ImageService {
 
                 imageCompared.pixels[i][j] = this.comparePixel(image1.pixels[i][j],image2.pixels[i][j]);
                 if(imageCompared.pixels[i][j] != {red: 0, green:0, blue: 0})
-                    imageCompared.pixels[i][j] = {red: 255,green:255, blue: 255};
+                    imageCompared.pixels[i][j] = {red: 0,green:255, blue: 255};
             }
         }
         return imageCompared;

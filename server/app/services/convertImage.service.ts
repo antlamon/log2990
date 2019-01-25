@@ -31,23 +31,27 @@ export class ConvertImage {
 
   
   private getPixels(header: BMPHeader, buffer: Buffer): ImageBMP {
-    const datav = buffer;
+    const datav:Buffer = buffer;
     const imageBMP: ImageBMP = {
       header: header,
       stride: Math.floor((header.infoHeader.biBitCount * header.infoHeader.biWidth + 31) / 32) * 4,
       width: header.infoHeader.biWidth,
       height: header.infoHeader.biHeight,
-      pixels: null
+      pixels: Array<Array<Pixel>>(header.infoHeader.biHeight)
     };
-    const start = header.fileHeader.bfOffBits;
-    const bmpData: Uint8Array = new Uint8Array(datav.buffer, start);
-    for (let x = 0; x < imageBMP.height; ++x) {
-      for (let y = 0; y < imageBMP.width; ++y) {
 
-        const index2 = y * 3 + imageBMP.stride * x;
-        imageBMP.pixels[x][y].red = bmpData[index2 + 2];
-        imageBMP.pixels[x][y].green = bmpData[index2 + 1];
-        imageBMP.pixels[x][y].blue = bmpData[index2];
+    const start = header.fileHeader.bfOffBits;
+    //const bmpData: Uint8Array = new Uint8Array(datav.buffer, start);
+    for (let y = 0; y < imageBMP.height; ++y) {
+      imageBMP.pixels[y] = new Array<Pixel>(imageBMP.width);
+      for (let x = 0; x < imageBMP.width; ++x) {
+
+        const index2 = x * 3 + imageBMP.stride * y+start;
+
+        imageBMP.pixels[y][x] = {} as Pixel;
+        imageBMP.pixels[y][x].red = buffer.readUInt8(index2 + 2);
+        imageBMP.pixels[y][x].green = buffer.readUInt8(index2 + 1);
+        imageBMP.pixels[y][x].blue = buffer.readUInt8(index2);
       }
     }
 
