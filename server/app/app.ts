@@ -7,6 +7,7 @@ import Types from "./types";
 import { injectable, inject } from "inversify";
 import { IndexController } from "./controllers/index.controller";
 import { DateController } from "./controllers/date.controller";
+import { ConnexionController } from "./controllers/connexion.controller";
 
 @injectable()
 export class Application {
@@ -15,7 +16,8 @@ export class Application {
     public app: express.Application;
 
     public constructor(@inject(Types.IndexController) private indexController: IndexController,
-        @inject(Types.DateController) private dateController: DateController) {
+        @inject(Types.DateController) private dateController: DateController,
+                       @inject(Types.ConnexionController) private connexionController: ConnexionController) {
         this.app = express();
 
         this.config();
@@ -36,6 +38,7 @@ export class Application {
         // Notre application utilise le routeur de notre API `Index`
         this.app.use('/api/index', this.indexController.router);
         this.app.use('/api/date', this.dateController.router);
+        this.app.use('/api/connexion',this.connexionController.router)
         this.errorHandeling();
     }
 
