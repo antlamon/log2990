@@ -7,5 +7,7 @@ export default  {
         DateService: Symbol("DateService"),
         ImageController: Symbol("ImageController"),
         ImageService: Symbol("ImageService"),
-        ConvertImage: Symbol("ConvertImage")
+        ConvertImage: Symbol("ConvertImage"),
+        ConnexionController : Symbol("ConnexionController"),
+        ConnexionService: Symbol("ConnexionService")
 };

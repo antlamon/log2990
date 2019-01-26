@@ -9,6 +9,8 @@ import { DateService } from "./services/date.service";
 import { ImageController } from "./controllers/image.controlleur";
 import { ImageService } from "./services/image.service";
 import { ConvertImage } from "./services/convertImage.service";
+import {ConnexionController} from "./controllers/connexion.controller";
+import {ConnexionService} from "./services/connexion.service";
 
 
 const container: Container = new Container();
@@ -23,6 +25,9 @@ container.bind(Types.DateService).to(DateService);
 container.bind(Types.ImageController).to(ImageController);
 container.bind(Types.ImageService).to(ImageService);
 container.bind(Types.ConvertImage).to(ConvertImage);
+
+container.bind(Types.ConnexionService).to(ConnexionService);
+container.bind(Types.ConnexionController).to(ConnexionController);
 
 
 export { container };
