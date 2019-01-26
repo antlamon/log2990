@@ -35,6 +35,14 @@ export class ConnexionService {
         this.names.push(newName);
         return {title:this.CONNECT_ID,body:"The name"+newName+" was added to the list of names"};
     }
+    public async removeName(newName:string): Promise<Message> {
+        const index = this.names.indexOf(newName, 0);
+        if (index === -1) {
+            return {title:this.ERROR_ID,body:"Name was not present"};
+        }
+        this.names.splice(index,1);
+        return {title:this.CONNECT_ID,body:"The name"+newName+" was removed to the list of names"};
+    }
     public isCorrectLength(nom: string): boolean {
         if(nom==null) {
             return false;

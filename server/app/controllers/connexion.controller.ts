@@ -16,6 +16,12 @@ export class ConnexionController {
                     res.json(message);
                 });
             });
+        router.get("/disconnect",
+            (req: Request, res: Response, next: NextFunction) => {
+                this.connexionService.removeName(req.query.name).then(message => {
+                    res.json(message);
+                });
+            });
         return router;
     }
 }
