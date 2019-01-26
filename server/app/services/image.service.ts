@@ -9,59 +9,69 @@ import { readFile, readFileSync, writeFileSync } from "fs";
 @injectable()
 export class ImageService {
 
-    public constructor(@inject(Types.ConvertImage) private convertImage: ConvertImage) {}
+    public constructor(@inject(Types.ConvertImage) private convertImage: ConvertImage) { }
 
-    public getDifferentImage(req: Request, res: Response ) {
-        
+    public getDifferentImage(req: Request, res: Response) {
         const path1: string = "./app/documents/gros1.bmp";
         const path2: string = "./app/documents/gros2.bmp";
-        const image1: ImageBMP= this.convertImage.bufferToImageBMP(readFileSync(path1));
-        const image2: ImageBMP= this.convertImage.bufferToImageBMP(readFileSync(path2));
-        console.log("imagedCompared");
+        let bufferImage: Buffer = readFileSync(path1);
+        const image1: ImageBMP = this.convertImage.bufferToImageBMP(bufferImage);
+        const image2: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(path2));
+        console.log("imageCompared");
         let imagedCompared: ImageBMP = this.compareData(image1, image2);
-        console.log("imagedCompared");
-        let bufferSortie = readFileSync(path1);
-        this.convertImage.imageBMPtoBuffer(imagedCompared,bufferSortie);
-        writeFileSync("./app/documents/result.bmp",bufferSortie);
+        console.log("imageCompared");
+        this.convertImage.imageBMPtoBuffer(imagedCompared, bufferImage);
+        writeFileSync("./app/documents/result.bmp", bufferImage);
         res.json(imagedCompared);
     }
-    
-    compareData(image1:ImageBMP, image2:ImageBMP):ImageBMP {
 
+    private compareData(image1: ImageBMP, image2: ImageBMP): ImageBMP {
         let imageCompared: ImageBMP = image1;
-        for(let i =0; i < image1.height; i++) {
-            for(let j=0; j < image1.width; j++) {
+        let pixels: Pixel[][] = [];
+        let differentPixels: [number, number][] = [];
 
-                //imageCompared.pixels[i][j] = {red: 255,green:255, blue: 255};
-                imageCompared.pixels[i][j] = this.comparePixel(image1.pixels[i][j],image2.pixels[i][j]);
+        for (let i = 0; i < image1.height; i++) {
+            pixels[i] = [];
+            for (let j = 0; j < image1.width; j++) {
+                pixels[i][j] = this.comparePixel(image1.pixels[i][j], image2.pixels[i][j]);
 
-                if(this.isBlackPixel(imageCompared.pixels[i][j])) 
-                    imageCompared.pixels[i][j] = {red: 255,green:255, blue: 255};
-                else
-                {
-                    for(let x:number = -3; x<= 3; x++) {
-                        for(let y:number =-3; y<= 3; y++) {
-
-                            if(Math.abs(x)+Math.abs(y) <= 4 && i+x >= 0 && i+x < image1.height && i+y >= 0 && i+y < image1.width)
-                                imageCompared.pixels[i+x][j+y] = {red: 0, green: 0, blue: 0};
-                        }
-                    }
+                if (this.isBlackPixel(pixels[i][j]))
+                    pixels[i][j] = { red: 255, green: 255, blue: 255 };
+                else {
+                    pixels[i][j] = { red: 0, green: 0, blue: 0 };
+                    differentPixels.push([i,j]);
                 }
             }
         }
+        imageCompared.pixels = pixels;
+        this.enlargeBlackPixels(imageCompared, differentPixels);
         return imageCompared;
-
     }
-    comparePixel(pixel1: Pixel, pixel2: Pixel): Pixel {
 
+    private enlargeBlackPixels(image: ImageBMP, pixelsToEnlarge: [number, number][]): void {
+        pixelsToEnlarge.forEach(element => {
+            const i: number = element[0];
+            const j: number = element[1];
+            for (let y: number = -3; y <= 3; y++) {
+                if (i + y >= 0 && i + y < image.height) {
+                    for (let x: number = -3; x <= 3; x++) {
+                        if (Math.abs(x) + Math.abs(y) <= 4 && i + x >= 0 && i + x < image.width)
+                            image.pixels[i + y][j + x] = { red: 0, green: 0, blue: 0 };
+                    }
+                }
+            }
+        });
+    }
+
+    private comparePixel(pixel1: Pixel, pixel2: Pixel): Pixel {
         return {
             red: pixel1.red - pixel2.red,
             green: pixel1.green - pixel2.green,
             blue: pixel1.blue - pixel2.blue
         } as Pixel
     }
-    isBlackPixel(pixel: Pixel): boolean {
 
+    private isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
     }
 

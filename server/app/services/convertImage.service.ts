@@ -1,4 +1,4 @@
-import {fromByteArray} from "base64-js";
+import { fromByteArray } from "base64-js";
 import { injectable } from "inversify";
 import "reflect-metadata";
 
@@ -8,7 +8,7 @@ export class ConvertImage {
 
 
   public bufferToImageBMP(buffer: Buffer): ImageBMP {
-          
+
     const header: BMPHeader = this.getHeader(buffer);
 
     return this.getPixels(header, buffer);
@@ -16,12 +16,13 @@ export class ConvertImage {
 
   public imageBMPtoBuffer(imageBMP: ImageBMP, buffer: Buffer): Buffer {
 
-    const offBits: number = imageBMP.header.fileHeader.bfOffBits
-    for(let y = 0; y < imageBMP.height; y++) {
-      for(let x=0; x< imageBMP.width; x++) {
-          buffer.writeUInt8(imageBMP.pixels[y][x].blue,offBits+x*3+y*imageBMP.width*3);
-          buffer.writeUInt8(imageBMP.pixels[y][x].green,offBits+x*3+y*imageBMP.width*3+1);
-          buffer.writeUInt8(imageBMP.pixels[y][x].red,offBits+x*3+y*imageBMP.width*3+2);
+    const offBits: number = imageBMP.header.fileHeader.bfOffBits;
+    const stride: number = imageBMP.stride;
+    for (let y: number = 0; y < imageBMP.height; y++) {
+      for (let x: number = 0; x < imageBMP.width; x++) {
+        buffer.writeUInt8(imageBMP.pixels[y][x].blue, offBits + x * 3 + y * stride);
+        buffer.writeUInt8(imageBMP.pixels[y][x].green, offBits + x * 3 + y * stride + 1);
+        buffer.writeUInt8(imageBMP.pixels[y][x].red, offBits + x * 3 + y * stride + 2);
       }
     }
     return buffer;
@@ -29,24 +30,24 @@ export class ConvertImage {
   }
 
 
-  
+
   private getPixels(header: BMPHeader, buffer: Buffer): ImageBMP {
-    const datav:Buffer = buffer;
+    const datav: Buffer = buffer;
     const imageBMP: ImageBMP = {
       header: header,
       stride: Math.floor((header.infoHeader.biBitCount * header.infoHeader.biWidth + 31) / 32) * 4,
       width: header.infoHeader.biWidth,
       height: header.infoHeader.biHeight,
-      pixels: Array<Array<Pixel>>(header.infoHeader.biHeight)
+      pixels: []
     };
 
     const start = header.fileHeader.bfOffBits;
     //const bmpData: Uint8Array = new Uint8Array(datav.buffer, start);
-    for (let y = 0; y < imageBMP.height; ++y) {
-      imageBMP.pixels[y] = new Array<Pixel>(imageBMP.width);
-      for (let x = 0; x < imageBMP.width; ++x) {
+    for (let y: number = 0; y < imageBMP.height; ++y) {
+      imageBMP.pixels[y] = [];
+      for (let x: number = 0; x < imageBMP.width; ++x) {
 
-        const index2 = x * 3 + imageBMP.stride * y+start;
+        const index2: number = x * 3 + imageBMP.stride * y + start;
 
         imageBMP.pixels[y][x] = {} as Pixel;
         imageBMP.pixels[y][x].red = buffer.readUInt8(index2 + 2);
@@ -83,37 +84,37 @@ export class ConvertImage {
         biClrImportant: datav.readInt32LE(50, true)
       },
     };
-    
+
     return header;
   }
 }
 
-    export interface BMPHeader{
+export interface BMPHeader {
 
-      fileHeader: {
-        bfType: number; bfSize: number; bfReserved1: number; bfReserved2: number; bfOffBits: number;
-      };
-      infoHeader: {
-        biSize: number; biWidth: number; biHeight: number; biPlanes: number; biBitCount: number;
-        biCompression: number;
-        biSizeImage: number;
-        biXPelsPerMeter: number;
-        biYPelsPerMeter: number;
-        biClrUsed: number;
-        biClrImportant: number
-      };
+  fileHeader: {
+    bfType: number; bfSize: number; bfReserved1: number; bfReserved2: number; bfOffBits: number;
+  };
+  infoHeader: {
+    biSize: number; biWidth: number; biHeight: number; biPlanes: number; biBitCount: number;
+    biCompression: number;
+    biSizeImage: number;
+    biXPelsPerMeter: number;
+    biYPelsPerMeter: number;
+    biClrUsed: number;
+    biClrImportant: number
+  };
 
-    }
-    export interface Pixel {
-      red: number;
-      green: number;
-      blue: number;
-    }
-    export interface ImageBMP {
-      header: BMPHeader;
-      stride: number;
-      width: number;
-      height: number;
-      pixels: Pixel[][];
-    }
-  
+}
+export interface Pixel {
+  red: number;
+  green: number;
+  blue: number;
+}
+export interface ImageBMP {
+  header: BMPHeader;
+  stride: number;
+  width: number;
+  height: number;
+  pixels: Pixel[][];
+}
+
