@@ -2,10 +2,8 @@ import { fromByteArray } from "base64-js";
 import { injectable } from "inversify";
 import "reflect-metadata";
 
-
 @injectable()
 export class ConvertImage {
-
 
   public bufferToImageBMP(buffer: Buffer): ImageBMP {
 
@@ -25,11 +23,10 @@ export class ConvertImage {
         buffer.writeUInt8(imageBMP.pixels[y][x].red, offBits + x * 3 + y * stride + 2);
       }
     }
+
     return buffer;
 
   }
-
-
 
   private getPixels(header: BMPHeader, buffer: Buffer): ImageBMP {
     const datav: Buffer = buffer;
@@ -38,11 +35,10 @@ export class ConvertImage {
       stride: Math.floor((header.infoHeader.biBitCount * header.infoHeader.biWidth + 31) / 32) * 4,
       width: header.infoHeader.biWidth,
       height: header.infoHeader.biHeight,
-      pixels: []
+      pixels: [],
     };
 
-    const start = header.fileHeader.bfOffBits;
-    //const bmpData: Uint8Array = new Uint8Array(datav.buffer, start);
+    const start: number = header.fileHeader.bfOffBits;
     for (let y: number = 0; y < imageBMP.height; ++y) {
       imageBMP.pixels[y] = [];
       for (let x: number = 0; x < imageBMP.width; ++x) {
@@ -59,9 +55,8 @@ export class ConvertImage {
     return imageBMP;
   }
 
-
   private getHeader(buffer: Buffer): BMPHeader {
-    const datav = (buffer);
+    const datav: Buffer = (buffer);
     const header: BMPHeader = {
       fileHeader: {
         bfType: datav.readInt16LE(0, true),
@@ -117,4 +112,3 @@ export interface ImageBMP {
   height: number;
   pixels: Pixel[][];
 }
-
