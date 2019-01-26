@@ -36,6 +36,8 @@ export class ConnexionService {
         return {title:this.CONNECT_ID,body:"The name"+newName+" was added to the list of names"};
     }
     public async removeName(newName:string): Promise<Message> {
+        if(newName==null)
+            return {title:this.ERROR_ID,body:"Name given is not valid"};
         const index = this.names.indexOf(newName, 0);
         if (index === -1) {
             return {title:this.ERROR_ID,body:"Name was not present"};

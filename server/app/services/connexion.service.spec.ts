@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import {ConnexionService} from "./connexion.service";
-
+import { Message } from "../../../common/communication/message";
 describe('Test for the function isCorrectLength', () => {
     let component:ConnexionService = new ConnexionService();
     it('A empty string should return false', (done) => {
@@ -42,7 +42,7 @@ describe("Test for the function containAlphaNumerics",()=> {
         expect(component.containOnlyAlphaNumeric("abc123@")).to.equal(false);
     });
 });
-describe("Test for the function connect",()=> {
+describe("Test for the function addName",()=> {
     let component:ConnexionService = new ConnexionService();
     it('An empty username should not be added to the names array', () => {
         component.addName("");
@@ -66,7 +66,38 @@ describe("Test for the function connect",()=> {
     });
     it('The username HanasBye should not be added twice', () => {
         component.addName("HanasBye");
-        component.addName("HanasBye");
         expect(component.names.filter(o => o == "HanasBye").length).to.equal(1);
+    });
+});
+describe("Test for the function removeName",()=> {
+    let component:ConnexionService = new ConnexionService();
+    it('An null string should return a error message', () => {
+        component.removeName(null).then( (message:Message) =>{
+            expect(message.title).to.equal(component.ERROR_ID);
+        });
+    });
+    it('An string not present in the names array should not modify the name array and should return a error message', () => {
+        component = new ConnexionService();
+        let nbNames:number = component.names.length;
+        component.removeName("isNotPresent");
+        component.removeName("isNotPresent").then( (message:Message) =>{
+            expect(message.title).to.equal(component.ERROR_ID);
+            expect(component.names.length).to.equal(nbNames);
+        });
+    });
+    it('A name recently added should be removed from the array', () => {
+        component = new ConnexionService();
+        let nbNames:number = component.names.length;
+        component.addName("HanasBuh");
+        component.removeName("HanasBuh");
+        expect(component.names.length).to.equal(nbNames);
+    });
+    it('Removing a anme twice should not affect the array beysond the first time', () => {
+        component = new ConnexionService();
+        let nbNames:number = component.names.length;
+        component.addName("Charlie");
+        component.removeName("Charlie");
+        component.removeName("Charlie");
+        expect(component.names.length).to.equal(nbNames);
     });
 });
