@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8ffbf2b-32c1-47cb-897c-af3904623a1f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/index.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/index.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/app/controllers/connexion.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/controllers/connexion.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/app/services/connexion.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/services/connexion.service.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,28 +12,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="25" column="5" selection-start-line="23" selection-start-column="22" selection-end-line="25" selection-end-column="5" />
-              <folding>
-                <element signature="e#0#73#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="40" column="32" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="32" />
+            <state relative-caret-position="306">
+              <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
               <folding>
                 <element signature="e#0#61#0" expanded="true" />
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/app/app.component.css">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -312,12 +300,12 @@
       <workItem from="1547906924881" duration="120000" />
       <workItem from="1548250300347" duration="4767000" />
       <workItem from="1548458730388" duration="531000" />
-      <workItem from="1548459296773" duration="1673000" />
+      <workItem from="1548459296773" duration="1974000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50927000" />
+    <option name="totallyTimeSpent" value="51228000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -497,9 +485,6 @@
           </folding>
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/app/app.component.css">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/server/app/controllers/index.controller.ts">
       <provider selected="true" editor-type-id="text-editor">
@@ -709,10 +694,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/app/app.component.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="40" column="32" selection-start-line="40" selection-start-column="32" selection-end-line="40" selection-end-column="32" />
+        <state relative-caret-position="306">
+          <caret line="27" column="34" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
           <folding>
             <element signature="e#0#61#0" expanded="true" />
           </folding>

@@ -25,6 +25,7 @@ export class InitialComponent implements OnInit {
         this.showErrorMessage(message.body);
       }
       if (message.title === this.CONNECT_ID) {
+        this.showErrorMessage("");
         console.log("change view");
       }
     });
@@ -40,7 +41,6 @@ export class InitialComponent implements OnInit {
   @HostListener('window:beforeunload', ['$event']) public disconnect($event: Event): void {
     ($event).returnValue = true;
     this.basicService.disconnect(this.username).subscribe((message: Message) => {
-      this.username = "";
     });
   }
 }
