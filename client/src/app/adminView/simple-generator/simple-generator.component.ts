@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 // import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
-const FILE_FORMAT = "bmp";
-const IMAGE_WIDTH = 640;
-const IMAGE_HEIGHT = 480; 
+// const FILE_FORMAT = "bmp";
+// const IMAGE_WIDTH = 640;
+// const IMAGE_HEIGHT = 480; 
+// readonly MIN_LENGTH:number =3;
+// readonly MAX_LENGTH:number =10;
 
-let correctModifiedFile = false;
-let correctOriginalFile = false;
+// let correctModifiedFile = false;
+// let correctOriginalFile = false;
 
 
 @Component({
@@ -17,25 +19,33 @@ let correctOriginalFile = false;
 })
 export class SimpleGeneratorComponent implements OnInit {
 
+  readonly FILE_FORMAT: string = "bmp";
+  readonly IMAGE_WIDTH: number = 640;
+  readonly IMAGE_HEIGHT: number = 480; 
+  readonly MIN_LENGTH:number =3;
+  readonly MAX_LENGTH:number =10;
+
+  public correctModifiedFile: boolean = false;
+  public correctOriginalFile: boolean = false;
 
   constructor(private router: Router) { 
     
   }
 
   public ngOnInit(): void {
-    while(correctModifiedFile == true && correctOriginalFile == true){
-      if (document.getElementById("submitButton")) {
-        const boutonSub: HTMLButtonElement | null= document.getElementById("submitButton") as HTMLButtonElement;
-        boutonSub.disabled = false;
-      }
-    }
+    // while(correctModifiedFile == true && correctOriginalFile == true){
+    //   if (document.getElementById("submitButton")) {
+    //     const boutonSub: HTMLButtonElement | null= document.getElementById("submitButton") as HTMLButtonElement;
+    //     boutonSub.disabled = false;
+    //   }
+    // }
   }
 
-  public onFileChange(event: any): void {
+  // public onFileChange(event: any): void {
     
-  }
+  // }
 
-  onModifiedFileChange(event: any){
+  public onModifiedFileChange(event: any){
     const reader = new FileReader();
 
     if(event.target.files && event.target.files.length && this.checkModifiedExtension()) {
@@ -47,15 +57,15 @@ export class SimpleGeneratorComponent implements OnInit {
         let bmpWidth = new DataView(buffer); 
         let bmpHeight = new DataView(buffer); 
 
-        if(bmpWidth.getUint32(18,true) == IMAGE_WIDTH && bmpHeight.getUint32(22,true) == IMAGE_HEIGHT){
-          correctModifiedFile = true;
+        if(bmpWidth.getUint32(18,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(22,true) == this.IMAGE_HEIGHT){
+          this.correctModifiedFile = true;
         }
       };
     }
-    else{ correctModifiedFile = false; }
+    else{ this.correctModifiedFile = false; }
   }
 
-  onOriginalFileChange(event: any){
+  public onOriginalFileChange(event: any){
     const reader = new FileReader();
 
     if(event.target.files && event.target.files.length && this.checkOriginalExtension()) {
@@ -67,38 +77,68 @@ export class SimpleGeneratorComponent implements OnInit {
         let bmpWidth = new DataView(buffer); 
         let bmpHeight = new DataView(buffer); 
 
-        if(bmpWidth.getUint32(18,true) == IMAGE_WIDTH && bmpHeight.getUint32(22,true) == IMAGE_HEIGHT){
-          correctOriginalFile = true;
+        if(bmpWidth.getUint32(18,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(22,true) == this.IMAGE_HEIGHT){
+          this.correctOriginalFile = true;
         }
       };
     }
-    else{ correctOriginalFile = false; }
+    else{ this.correctOriginalFile = false; }
   }
 
-  submit() {
-    //submit form ... TODO
-    this.router.navigate(['admin']); // go back to admin home
+  public submit() {
+    let gameName = (document.getElementById("gameName") as HTMLInputElement).value;
+
+    if(!this.isValidGameName(gameName)){
+      console.log("Nom de jeu invalide");
+      (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red"; 
+    }else{ (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "black"; }
+
+    if(this.correctModifiedFile == false){
+      console.log("Fichier de jeu modifié invalide");
+      (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red"; 
+    }else{ (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "black"; }
+
+    if(this.correctOriginalFile == false){
+      console.log("Fichier de jeu original invalide");
+      (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red"; 
+    }else{ (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black"; }
+
+    if(this.correctModifiedFile == true && this.correctOriginalFile == true && this.isValidGameName(gameName)){
+      // this.router.navigate(['admin']); // go back to admin home
+      console.log("Jeu créé")
+    }
   }
 
-  close() {
+  public close() {
     this.router.navigate(['admin']); // go back to admin home
   }
  
-  checkOriginalExtension(){
+  public checkOriginalExtension(){
    
     let filenameOriginal = (document.getElementById("originalFile") as HTMLInputElement).value; 
     let extensionOriginal = filenameOriginal.slice((filenameOriginal.lastIndexOf(".") - 1 >>> 0) + 2);
 
-    return (extensionOriginal == FILE_FORMAT);
+    return (extensionOriginal == this.FILE_FORMAT);
 
   }
 
-  checkModifiedExtension(){
+  public checkModifiedExtension(){
     let filenameModified = (document.getElementById("modifiedFile") as HTMLInputElement).value; 
     let extensionModified = filenameModified.slice((filenameModified.lastIndexOf(".") - 1 >>> 0) + 2);
 
-    return (extensionModified == FILE_FORMAT);
+    return (extensionModified == this.FILE_FORMAT);
   }
+
+  public isValidGameName(nom:string):boolean
+  {
+    return nom.length<this.MAX_LENGTH && nom.length>this.MIN_LENGTH && this.containOnlyAlphaNumeric(nom);
+  }
+  public containOnlyAlphaNumeric(nom:string):boolean {
+    let check= nom.match(/^[a-zA-Z0-9]+$/i);
+    return check==null ? false : check[0].length==nom.length
+  }
+
+
 }
 
 
