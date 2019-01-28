@@ -1,16 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-// import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
-// const FILE_FORMAT = "bmp";
-// const IMAGE_WIDTH = 640;
-// const IMAGE_HEIGHT = 480; 
-// readonly MIN_LENGTH:number =3;
-// readonly MAX_LENGTH:number =10;
-
-// let correctModifiedFile = false;
-// let correctOriginalFile = false;
-
 
 @Component({
   selector: 'app-simple-generator',
@@ -22,8 +11,10 @@ export class SimpleGeneratorComponent implements OnInit {
   readonly FILE_FORMAT: string = "bmp";
   readonly IMAGE_WIDTH: number = 640;
   readonly IMAGE_HEIGHT: number = 480; 
-  readonly MIN_LENGTH:number =3;
-  readonly MAX_LENGTH:number =10;
+  readonly MIN_LENGTH:number = 3;
+  readonly MAX_LENGTH:number = 10;
+  readonly WIDTH_OFFSET: number = 18; 
+	readonly HEIGHT_OFFSET: number = 22;
 
   public correctModifiedFile: boolean = false;
   public correctOriginalFile: boolean = false;
@@ -33,17 +24,8 @@ export class SimpleGeneratorComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // while(correctModifiedFile == true && correctOriginalFile == true){
-    //   if (document.getElementById("submitButton")) {
-    //     const boutonSub: HTMLButtonElement | null= document.getElementById("submitButton") as HTMLButtonElement;
-    //     boutonSub.disabled = false;
-    //   }
-    // }
-  }
 
-  // public onFileChange(event: any): void {
-    
-  // }
+  }
 
   public onModifiedFileChange(event: any){
     const reader = new FileReader();
@@ -57,7 +39,7 @@ export class SimpleGeneratorComponent implements OnInit {
         let bmpWidth = new DataView(buffer); 
         let bmpHeight = new DataView(buffer); 
 
-        if(bmpWidth.getUint32(18,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(22,true) == this.IMAGE_HEIGHT){
+        if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
           this.correctModifiedFile = true;
         }
       };
@@ -77,7 +59,7 @@ export class SimpleGeneratorComponent implements OnInit {
         let bmpWidth = new DataView(buffer); 
         let bmpHeight = new DataView(buffer); 
 
-        if(bmpWidth.getUint32(18,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(22,true) == this.IMAGE_HEIGHT){
+        if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
           this.correctOriginalFile = true;
         }
       };
