@@ -11,8 +11,6 @@ export class ConnexionService {
 
     public readonly  ERROR_ID: string = "error";
     public readonly  CONNECT_ID:string = "connected";
-    public readonly  ERROR_MESSAGE_INVALID_NAME: string = "The name entered was invalid";
-    public readonly  ERROR_MESSAGE_ALREADY_USED_NAME: string = "The name is already being used";
 
     public names: string[];
 
