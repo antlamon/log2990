@@ -10,6 +10,7 @@ import { SimpleGeneratorComponent } from './adminView/simple-generator/simple-ge
 import { AppRoutingModule } from './/app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { IndexService } from "./index.service";
+import { ListViewComponent } from './list-view/list-view.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { IndexService } from "./index.service";
     InitialComponent,
     AdminMenuComponent,
     FreeGeneratorComponent,
-    SimpleGeneratorComponent
+    SimpleGeneratorComponent,
+    ListViewComponent
   ],
   imports: [
     FormsModule,
