@@ -50,7 +50,6 @@ export class Server {
                 throw error;
         }
     }
-
     /**
      * Se produit lorsque le serveur se met à écouter sur le port.
      */
