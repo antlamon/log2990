@@ -2,18 +2,18 @@
     "compilerOptions": {
          "target": "es6",
          "module": "commonjs",
-        // "moduleResolution": "node",
-        // "sourceRoot": "app",
+        "moduleResolution": "node",
+        "sourceRoot": "app",
         "sourceMap": true,
-        // "outDir": "out",
+        "outDir": "out",
          "emitDecoratorMetadata": true,
          "experimentalDecorators": true,
-        // "noImplicitAny": true,
-        // "noImplicitThis": true,
-        // "noFallthroughCasesInSwitch": true,
-        // "noUnusedLocals": true,
-        // "noImplicitReturns": true,
-        // "suppressImplicitAnyIndexErrors": true,
-        // "strictNullChecks": true
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "strictNullChecks": true
     }
 }
