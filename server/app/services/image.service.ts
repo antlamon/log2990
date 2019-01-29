@@ -1,5 +1,4 @@
-import { Request, Response } from "express";
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
@@ -12,17 +11,14 @@ export class ImageService implements ImageServiceInterface {
 
     public constructor(@inject(TYPES.ConvertImageServiceInterface) private convertImage: ConvertImage) { }
 
-    public getDifferentImage(req: Request, res: Response): Message {
-        const path1: string = req.body.image1;
-        const path2: string = req.body.image2;
-        const bufferImage: Buffer = readFileSync(path1);
-        const image1: ImageBMP = this.convertImage.bufferToImageBMP(bufferImage);
-        const image2: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(path2));
+    public getDifferentImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
+        const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
+        const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
 
         try {
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
-            this.convertImage.imageBMPtoBuffer(imagesCompared, bufferImage);
-            writeFileSync("./app/documents/result.bmp", bufferImage);
+            this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
+            writeFileSync(`./app/documents/${newImageName}.bmp`, originalBuffer);
 
             return {
                 title: "Images compared",

@@ -1,4 +1,4 @@
-import { Application, Request, Response, Router } from "express";
+import { Application, Router } from "express";
 import { Message } from "../../common/communication/message";
 
 export interface IndexServiceInterface {
@@ -23,7 +23,7 @@ export interface ImageControllerInterface {
 }
 
 export interface ImageServiceInterface {
-    getDifferentImage(req: Request, res: Response): Message
+    getDifferentImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message;
 }
 
 export interface ConvertImageServiceInterface {

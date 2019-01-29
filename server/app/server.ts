@@ -1,9 +1,9 @@
-import { Application } from "./app";
 import * as http from "http";
-import { TYPES } from "./types";
-import { injectable, inject } from "inversify";
+import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
+import { Application } from "./app";
 import { ServerInterface } from "./interfaces";
+import { TYPES } from "./types";
 
 @injectable()
 export class Server implements ServerInterface {

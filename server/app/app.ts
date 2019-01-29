@@ -1,15 +1,14 @@
-import * as express from "express";
-import * as logger from "morgan";
-import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
 import * as cors from "cors";
-import { TYPES } from "./types";
-import { injectable, inject } from "inversify";
-import { IndexController } from "./controllers/index.controller";
+import * as express from "express";
+import { inject, injectable } from "inversify";
+import * as logger from "morgan";
 import { DateController } from "./controllers/date.controller";
 import { ImageController } from "./controllers/image.controller";
+import { IndexController } from "./controllers/index.controller";
 import { ApplicationInterface } from "./interfaces";
-
+import { TYPES } from "./types";
 
 @injectable()
 export class Application implements ApplicationInterface {
@@ -56,7 +55,7 @@ export class Application implements ApplicationInterface {
                 res.status(err.status || this.internalError);
                 res.send({
                     message: err.message,
-                    error: err
+                    error: err,
                 });
             });
         }
@@ -68,7 +67,7 @@ export class Application implements ApplicationInterface {
             res.status(err.status || this.internalError);
             res.send({
                 message: err.message,
-                error: {}
+                error: {},
             });
         });
     }
