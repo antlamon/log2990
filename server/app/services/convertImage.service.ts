@@ -29,7 +29,6 @@ export class ConvertImage implements ConvertImageServiceInterface {
   }
 
   private getPixels(header: BMPHeader, buffer: Buffer): ImageBMP {
-    const datav: Buffer = buffer;
     const imageBMP: ImageBMP = {
       header: header,
       stride: Math.floor((header.infoHeader.biBitCount * header.infoHeader.biWidth + 31) / 32) * 4,
@@ -56,30 +55,27 @@ export class ConvertImage implements ConvertImageServiceInterface {
   }
 
   private getHeader(buffer: Buffer): BMPHeader {
-    const datav: Buffer = (buffer);
-    const header: BMPHeader = {
+    return {
       fileHeader: {
-        bfType: datav.readInt16LE(0, true),
-        bfSize: datav.readInt32LE(2, true),
-        bfReserved1: datav.readInt16LE(6, true),
-        bfReserved2: datav.readInt16LE(8, true),
-        bfOffBits: datav.readInt32LE(10, true),
+        bfType: buffer.readInt16LE(0, true),
+        bfSize: buffer.readInt32LE(2, true),
+        bfReserved1: buffer.readInt16LE(6, true),
+        bfReserved2: buffer.readInt16LE(8, true),
+        bfOffBits: buffer.readInt32LE(10, true),
       },
       infoHeader: {
-        biSize: datav.readInt32LE(14, true),
-        biWidth: datav.readInt32LE(18, true),
-        biHeight: datav.readInt32LE(22, true),
-        biPlanes: datav.readInt16LE(26, true),
-        biBitCount: datav.readInt16LE(28, true),
-        biCompression: datav.readInt32LE(30, true),
-        biSizeImage: datav.readInt32LE(34, true),
-        biXPelsPerMeter: datav.readInt32LE(38, true),
-        biYPelsPerMeter: datav.readInt32LE(42, true),
-        biClrUsed: datav.readInt32LE(46, true),
-        biClrImportant: datav.readInt32LE(50, true)
+        biSize: buffer.readInt32LE(14, true),
+        biWidth: buffer.readInt32LE(18, true),
+        biHeight: buffer.readInt32LE(22, true),
+        biPlanes: buffer.readInt16LE(26, true),
+        biBitCount: buffer.readInt16LE(28, true),
+        biCompression: buffer.readInt32LE(30, true),
+        biSizeImage: buffer.readInt32LE(34, true),
+        biXPelsPerMeter: buffer.readInt32LE(38, true),
+        biYPelsPerMeter: buffer.readInt32LE(42, true),
+        biClrUsed: buffer.readInt32LE(46, true),
+        biClrImportant: buffer.readInt32LE(50, true)
       },
     };
-
-    return header;
   }
 }

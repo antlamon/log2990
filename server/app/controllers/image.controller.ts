@@ -1,8 +1,9 @@
+import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
+import { Message } from "../../../common/communication/message";
+import { ImageControllerInterface } from "../interfaces";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
-import { Router, Request, Response, NextFunction } from "express";
-import { ImageControllerInterface } from "../interfaces";
 
 @injectable()
 export class ImageController implements ImageControllerInterface {
@@ -15,11 +16,11 @@ export class ImageController implements ImageControllerInterface {
 
         const router: Router = Router();
 
-        router.post("/",
-            (req: Request, res: Response, next: NextFunction) => {
-                const message = this.imageService.getDifferentImage(req, res);
+        router.post("/", (req: Request, res: Response, next: NextFunction) => {
+                const message: Message = this.imageService.getDifferentImage(req, res);
                 res.json(message);
             });
+
         return router;
     }
 }

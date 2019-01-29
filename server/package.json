@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon --inspect app/www.js\" ",
+    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon --inspect out/server/app/www.js\" ",
     "lint": "tslint --project tsconfig.json \"./app/**/*.ts\" --format stylish",
     "test": "mocha",
     "coverage": "nyc mocha",
