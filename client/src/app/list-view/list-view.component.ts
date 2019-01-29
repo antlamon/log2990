@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Game} from '../model/game';
 
 @Component({
   selector: 'app-list-view',
@@ -7,7 +8,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListViewComponent implements OnInit {
 
-  constructor() { }
+  simpleGames: Game[];
+  freeGames: Game[];
+
+  constructor() { 
+    //mock data
+    this.simpleGames = [ new Game("Nissan Patrol", "image Patrol URL"),
+                         new Game("Jello", "image jello URL"), 
+                         new Game("Apple Pie", "image apple URL"),
+                         new Game("Lemon Pie", "image lemon URL"),
+                         new Game("Cake Patrol", "image cake URL")];
+
+    this.multiGames = [ new Game("Nissan Patrol", "image Patrol URL"),
+                         new Game("Jello", "image jello URL"), 
+                         new Game("Apple Pie", "image apple URL"),
+                         new Game("Lemon Pie", "image lemon URL"),
+                         new Game("Cake Patrol", "image cake URL")];
+
+
+  }
 
   ngOnInit() {
   }

@@ -1,3 +1,18 @@
-<p>
-  list-view works!
-</p>
+<h1>
+  Games
+</h1>
+<div class="gameList">
+  <ul class="simpleColumn">
+    <li *ngFor="let game of simpleGames">
+    <span class="gameTitle">{{game.name}}</span>
+    <div class="imageBox">{{game.imageURL}}</div>
+    </li>
+
+  </ul>
+  <ul class="freeColumn">
+      <li *ngFor="let game of multiGames">
+      <span class="gameTitle">{{game.name}}</span>
+      <div class="imageBox">{{game.imageURL}}</div>
+      </li>
+  </ul> 
+</div>
