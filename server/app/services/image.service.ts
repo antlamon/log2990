@@ -1,17 +1,18 @@
 import { Message } from "../../../common/communication/message";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import { Pixel, ImageBMP, ConvertImage } from "./convertImage.service";
-import Types from "../types";
+import { TYPES } from "../types";
 import { Request, Response } from "express";
-import { readFile, readFileSync, writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
+import { ImageServiceInterface, Pixel, ImageBMP } from "../interfaces";
+import { ConvertImage } from "./convertImage.service";
 
 @injectable()
-export class ImageService {
+export class ImageService implements ImageServiceInterface {
 
-    public constructor(@inject(Types.ConvertImage) private convertImage: ConvertImage) { }
+    public constructor(@inject(TYPES.ConvertImageServiceInterface) private convertImage: ConvertImage) { }
 
-    public getDifferentImage(req: Request, res: Response) {
+    public getDifferentImage(req: Request, res: Response): Message {
         const path1: string = "./app/documents/gros1.bmp";
         const path2: string = "./app/documents/gros2.bmp";
         let bufferImage: Buffer = readFileSync(path1);
@@ -22,7 +23,10 @@ export class ImageService {
         console.log("imageCompared");
         this.convertImage.imageBMPtoBuffer(imagedCompared, bufferImage);
         writeFileSync("./app/documents/result.bmp", bufferImage);
-        res.json(imagedCompared);
+        return {
+            title: "imagedCompared",
+            body: ""
+        }
     }
 
     private compareData(image1: ImageBMP, image2: ImageBMP): ImageBMP {
