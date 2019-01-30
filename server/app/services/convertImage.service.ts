@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import { ImageBMP, BMPHeader, Pixel, ConvertImageServiceInterface } from "../interfaces"
+import { BMPHeader, ConvertImageServiceInterface, ImageBMP, Pixel } from "../interfaces";
 
 @injectable()
 export class ConvertImage implements ConvertImageServiceInterface {
@@ -11,6 +11,7 @@ export class ConvertImage implements ConvertImageServiceInterface {
     if (header.infoHeader.biBitCount !== 24) {
       throw Error("Les images ne sont pas dans le bon format");
     }
+
     return this.getPixels(header, buffer);
   }
 
@@ -38,7 +39,7 @@ export class ConvertImage implements ConvertImageServiceInterface {
       height: header.infoHeader.biHeight,
       pixels: [],
     };
-    
+
     const start: number = header.fileHeader.bfOffBits;
     for (let y: number = 0; y < imageBMP.height; ++y) {
       imageBMP.pixels[y] = [];
