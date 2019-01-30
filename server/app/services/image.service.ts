@@ -2,7 +2,8 @@ import { Message } from "../../../common/communication/message";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { ConvertImage } from "./convertImage.service";
-import Types from "../types"
+import Types from "../types";
+import {Request,Response} from "express";
 
 @injectable()
 export class ImageService {
