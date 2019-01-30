@@ -29,6 +29,7 @@ export class UsersManager {
             return true;
         }
         this.users[index].username=username;
+        return true; 
     }
     private removeUser(socketId:string): boolean {
         const index = this.users.findIndex(x=>x.socket.client.id === socketId);
