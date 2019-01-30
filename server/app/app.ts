@@ -1,27 +1,27 @@
-import * as express from "express";
-import * as logger from "morgan";
-import * as cookieParser from "cookie-parser";
 import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
 import * as cors from "cors";
-import Types from "./types";
-import { injectable, inject } from "inversify";
-import { IndexController } from "./controllers/index.controller";
+import * as express from "express";
+import { inject, injectable } from "inversify";
+import * as logger from "morgan";
 import { DateController } from "./controllers/date.controller";
 import { ImageController } from "./controllers/image.controller";
+import { IndexController } from "./controllers/index.controller";
+import { ApplicationInterface } from "./interfaces";
+import { TYPES } from "./types";
 
 @injectable()
-export class Application {
+export class Application implements ApplicationInterface {
 
     private readonly internalError: number = 500;
     public app: express.Application;
 
-    public constructor(@inject(Types.IndexController) private indexController: IndexController,
-        @inject(Types.DateController) private dateController: DateController,
-        @inject(Types.ImageController) private imageController: ImageController) {
+    public constructor(
+            @inject(TYPES.IndexControllerInterface) private indexController: IndexController,
+            @inject(TYPES.DateControllerInterface) private dateController: DateController,
+            @inject(TYPES.ImageControllerInterface) private imageController: ImageController) {
         this.app = express();
-
         this.config();
-
         this.bindRoutes();
     }
 
@@ -35,15 +35,13 @@ export class Application {
     }
 
     public bindRoutes(): void {
-        // Notre application utilise le routeur de notre API `Index`
-        this.app.use('/api/index', this.indexController.router);
-        this.app.use('/api/date', this.dateController.router);
+        this.app.use("/api/index", this.indexController.router);
+        this.app.use("/api/date/", this.dateController.router);
         this.app.use(this.imageController.url, this.imageController.router);
         this.errorHandeling();
     }
 
     private errorHandeling(): void {
-        // Gestion des erreurs
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
             const err: Error = new Error("Not Found");
             next(err);
@@ -57,7 +55,7 @@ export class Application {
                 res.status(err.status || this.internalError);
                 res.send({
                     message: err.message,
-                    error: err
+                    error: err,
                 });
             });
         }
@@ -69,7 +67,7 @@ export class Application {
             res.status(err.status || this.internalError);
             res.send({
                 message: err.message,
-                error: {}
+                error: {},
             });
         });
     }

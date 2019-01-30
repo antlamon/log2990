@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { readFileSync } from "fs";
-import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
+import { ConvertImage } from "./convertImage.service";
+import { ImageBMP, Pixel } from "../interfaces";
 import { ImageService } from "./image.service";
 
 describe ( "imageService tests", () => {
@@ -78,13 +79,14 @@ describe ( "imageService tests", () => {
     describe("Getting different image", () => {
         it("Should create an result.bmp file", () => {
 
-            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path2))).to.equal("image created");
+            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("success");
         });
 
         it("Should return a string with a error message for the format", () => {
 
             const buffer: Buffer = readFileSync("./app/documents/image_wrongformat.bmp");
-            expect(service.getDifferentImage("name", readFileSync(path1), buffer)).to.equal("Les images ne sont pas dans le bon format");
+            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.not.equal("success");
+            // should be equal(Error("Les images ne sont pas dans le bon format"));
             
         });
     });

@@ -1,29 +1,36 @@
 import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import Types from "../types";
-import { ConvertImage, ImageBMP, Pixel,  } from "./convertImage.service";
+import { Message } from "../../../common/communication/message";
+import { ImageBMP, ImageServiceInterface, Pixel } from "../interfaces";
+import { TYPES } from "../types";
+import { ConvertImage } from "./convertImage.service";
 
 @injectable()
-export class ImageService {
+export class ImageService implements ImageServiceInterface {
 
-    public constructor(@inject(Types.ConvertImage) private convertImage: ConvertImage) { }
+    public constructor(@inject(TYPES.ConvertImageServiceInterface) private convertImage: ConvertImage) { }
 
-    public getDifferentImage(name: string, bufferOriginal: Buffer, bufferModified: Buffer): string {
+    public getDifferentImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
+        
 
         try {
-            const bufferOut: Buffer = bufferOriginal;
-            const image1: ImageBMP = this.convertImage.bufferToImageBMP(bufferOriginal);
-            const image2: ImageBMP = this.convertImage.bufferToImageBMP(bufferModified);
-            const imagedCompared: ImageBMP = this.compareData(image1, image2);
-            this.convertImage.imageBMPtoBuffer(imagedCompared, bufferOut);
-            writeFileSync("./app/documents/" + name + ".bmp", bufferOut);
+            const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
+            const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
+            const imagesCompared: ImageBMP = this.compareData(image1, image2);
+            this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
+            writeFileSync(`./app/documents/${newImageName}.bmp`, originalBuffer);
 
-            return "image created";
+            return {
+                title: "Images compared",
+                body: "success",
+            };
 
         } catch (error) {
-
-            return error.message;
+            return {
+                title: "Images compared",
+                body: error,
+            };
         }
     }
 
