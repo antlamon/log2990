@@ -2,17 +2,16 @@ import { NextFunction, Request, RequestHandler, Response, Router } from "express
 import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { Message } from "../../../common/communication/message";
-import { ImageControllerInterface } from "../interfaces";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 
 @injectable()
-export class ImageController implements ImageControllerInterface {
+export class ImageController {
 
     public readonly url: string = "/imagegen";
     private upload: RequestHandler;
 
-    public constructor(@inject(TYPES.ImageServiceInterface) private imageService: ImageService) {
+    public constructor(@inject(TYPES.ImageService) private imageService: ImageService) {
         this.upload = multer().fields([
             {
                 name: "originalImage", maxCount: 1,

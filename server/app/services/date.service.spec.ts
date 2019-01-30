@@ -3,11 +3,11 @@ import { Container } from "inversify";
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
-import { DateServiceInterface } from "../interfaces";
+import { DateService } from "./date.service"
 import { TYPES } from "../types";
 
 @injectable()
-class DateServiceBidon implements DateServiceInterface {
+class DateServiceBidon {
 
     public currentTime(): Promise<Message> {
         return new Promise<Message>(function(resolve, reject) {
@@ -18,10 +18,10 @@ class DateServiceBidon implements DateServiceInterface {
 }
 
 const container: Container = new Container();
-container.bind<DateServiceInterface>(TYPES.DateServiceInterface).to(DateServiceBidon);
+container.bind<DateService>(TYPES.DateService).to(DateServiceBidon);
 
-const service: DateServiceInterface =
-     container.get<DateServiceInterface>(TYPES.DateServiceInterface);
+const service: DateService =
+     container.get<DateService>(TYPES.DateService);
 
 describe("function currentTime", () => {
     it("should return correct date", async () => {

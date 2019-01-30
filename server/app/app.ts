@@ -8,20 +8,19 @@ import { ConnexionController } from "./controllers/connexion.controller";
 import { DateController } from "./controllers/date.controller";
 import { ImageController } from "./controllers/image.controller";
 import { IndexController } from "./controllers/index.controller";
-import { ApplicationInterface } from "./interfaces";
 import { TYPES } from "./types";
 
 @injectable()
-export class Application implements ApplicationInterface {
+export class Application {
 
     private readonly internalError: number = 500;
     public app: express.Application;
 
     public constructor(
-            @inject(TYPES.IndexControllerInterface) private indexController: IndexController,
-            @inject(TYPES.DateControllerInterface) private dateController: DateController,
-            @inject(TYPES.ConnexionController)private connexionController: ConnexionController,
-            @inject(TYPES.ImageControllerInterface) private imageController: ImageController) {
+            @inject(TYPES.IndexController) private indexController: IndexController,
+            @inject(TYPES.DateController) private dateController: DateController,
+            @inject(TYPES.ConnexionController) private connexionController: ConnexionController,
+            @inject(TYPES.ImageController) private imageController: ImageController) {
         this.app = express();
         this.config();
         this.bindRoutes();

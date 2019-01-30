@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import { readFileSync } from "fs";
-import { ImageBMP, Pixel } from "../interfaces";
-import { ConvertImage } from "./convertImage.service";
+import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 import { ImageService } from "./image.service";
 
 describe ( "imageService tests", () => {
