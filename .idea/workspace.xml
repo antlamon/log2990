@@ -2,12 +2,49 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b8ffbf2b-32c1-47cb-897c-af3904623a1f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/controllers/image.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/createdImage.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/expectedImage.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/gros1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/gros2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/hi.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/image1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/image2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/image_result.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/image_test_1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/image_test_2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/image_wrongformat.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/result.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/test1.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/documents/test2.bmp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/interfaces.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/services/date.service.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/app/services/image.service.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/initial/initial.component.spec.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/initial/initial.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/polyfills.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/polyfills.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/app/adminView/simple-generator/simple-generator.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/app/adminView/simple-generator/simple-generator.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/controllers/connexion.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/controllers/connexion.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/controllers/date.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/controllers/date.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/controllers/image.controlleur.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/controllers/index.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/controllers/index.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/example.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/example.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/inversify.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/inversify.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/other-example.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/server.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/server.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app/services/connexion.service.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/services/connexion.service.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/services/convertImage.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/services/convertImage.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/services/date.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/services/date.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/services/image.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/services/image.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/services/index.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/services/index.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/services/sample-service.spec.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/server/app/services/users.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/services/users.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/app/www.ts" beforeDir="false" afterPath="$PROJECT_DIR$/server/app/www.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/tslint.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/tslint.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,30 +67,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/app/SocketServerManager.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-              <folding>
-                <element signature="e#0#29#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/app/server.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="19" selection-start-line="19" selection-end-line="19" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/app/services/users.service.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="187">
@@ -65,10 +78,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/app/services/connexion.service.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-88">
+            <state relative-caret-position="-104">
               <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
               <folding>
                 <element signature="e#0#81#0" expanded="true" />
@@ -78,10 +91,15 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/app/services/users.service.spec.ts">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/app/services/convertImage.service.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="56" selection-start-line="7" selection-start-column="56" selection-end-line="7" selection-end-column="56" />
+            <state relative-caret-position="187">
+              <caret line="11" column="56" selection-start-line="11" selection-start-column="56" selection-end-line="11" selection-end-column="56" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -89,14 +107,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server/app/services/connexion.service.spec.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="86" column="7" lean-forward="true" selection-start-line="86" selection-start-column="7" selection-end-line="86" selection-end-column="7" />
+            <state relative-caret-position="119">
+              <caret line="7" column="51" lean-forward="true" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -127,9 +154,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="289">
               <caret line="17" column="15" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#29#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -139,6 +163,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>initialComponent</find>
+      <find>'</find>
     </findStrings>
     <replaceStrings>
       <replace>component</replace>
@@ -272,7 +297,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1548853528565" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1548855520675" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="C:\Users\Stéphane\Desktop\Université\Session 4\LOG2990\Projet\server\node_modules\tslint" />
@@ -317,12 +342,12 @@
       <workItem from="1547820054023" duration="15774000" />
       <workItem from="1547906924881" duration="120000" />
       <workItem from="1548250300347" duration="4767000" />
-      <workItem from="1548851235221" duration="2281000" />
+      <workItem from="1548851235221" duration="2727000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46768000" />
+    <option name="totallyTimeSpent" value="47214000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -337,7 +362,7 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2181208" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2181208" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -355,11 +380,11 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="TypeScript" order="10" weight="0.3286119" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.490604" visible="true" weight="0.22521247" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" sideWeight="0.490604" visible="true" weight="0.22521247" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.50939596" side_tool="true" visible="true" weight="0.22521247" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24966443" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Theme Preview" order="4" />
       <window_info anchor="right" id="Maven" order="5" />
@@ -460,13 +485,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/app/services/gameFileGenerator.service.spec.ts" />
     <entry file="file://$PROJECT_DIR$/server/app/services/gameFileGenerator.service.ts" />
-    <entry file="file://$PROJECT_DIR$/server/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-660">
-          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/app/initial/initial.component.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -644,9 +662,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="289">
           <caret line="17" column="15" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -656,6 +671,26 @@
           <caret line="24" column="56" selection-start-line="24" selection-start-column="56" selection-end-line="24" selection-end-column="56" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/app/services/convertImage.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="56" selection-start-line="11" selection-start-column="56" selection-end-line="11" selection-end-column="56" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/app/services/connexion.service.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-104">
+          <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#81#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -670,32 +705,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/app/services/convertImage.service.ts">
+    <entry file="file://$PROJECT_DIR$/server/app/services/users.service.spec.ts">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="56" selection-start-line="7" selection-start-column="56" selection-end-line="7" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="136">
+          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/app/services/connexion.service.spec.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="86" column="7" lean-forward="true" selection-start-line="86" selection-start-column="7" selection-end-line="86" selection-end-column="7" />
+        <state relative-caret-position="119">
+          <caret line="7" column="51" lean-forward="true" selection-start-line="7" selection-start-column="51" selection-end-line="7" selection-end-column="51" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/app/services/connexion.service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-88">
-          <caret line="19" column="27" selection-start-line="19" selection-start-column="27" selection-end-line="19" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#81#0" expanded="true" />
           </folding>
         </state>
       </provider>

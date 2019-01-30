@@ -43,7 +43,7 @@ export class UsersManager {
     {
         const index = this.users.findIndex(x=>x.username===username);
         if (index === -1) {
-            return null;
+            //return null;
         }
         return this.users[index];
     }
