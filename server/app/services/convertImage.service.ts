@@ -77,7 +77,7 @@ export class ConvertImage implements ConvertImageServiceInterface {
         biXPelsPerMeter: buffer.readInt32LE(38, true),
         biYPelsPerMeter: buffer.readInt32LE(42, true),
         biClrUsed: buffer.readInt32LE(46, true),
-        biClrImportant: buffer.readInt32LE(50, true)
+        biClrImportant: buffer.readInt32LE(50, true),
       },
     };
   }

@@ -2,4 +2,15 @@
 /.vscode/chrome
 /.vs/
 
-package-lock.json
+# Keep the package-lock.json !
+!package-lock.json
+
+# Jetbrains
+.idea/
+
+coverage/
+
+#MongoDB files
+data/
+
+**/yarn.lock

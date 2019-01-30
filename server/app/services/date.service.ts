@@ -6,7 +6,7 @@ import { DateServiceInterface } from "../interfaces";
 import { IDate } from "./IDate";
 
 @injectable()
-export class DateService implements DateServiceInterface{
+export class DateService implements DateServiceInterface {
 
     public async currentTime(): Promise<Message> {
         const apiResponse: AxiosResponse<IDate> = await Axios.get<IDate>("http://worldclockapi.com/api/json/est/now");

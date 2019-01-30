@@ -4,9 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
+    "docker": "ng serve --host 0.0.0.0",
     "build": "ng build",
     "test": "ng test",
+    "coverage": "ng test --code-coverage --sourceMap=true --watch=false",
     "lint": "ng lint --type-check --format stylish",
+    "codecov": "cat coverage/lcov.info | codecov",
+    "fix-lint": "ng lint --type-check --format stylish --fix",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -40,6 +44,7 @@
     "@types/node": "~8.9.4",
     "@types/socket.io": "^1.4.38",
     "@types/socket.io-client": "1.4.32  ",
+    "codecov": "^3.1.0",
     "codelyzer": "~4.2.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",

@@ -12,7 +12,7 @@ export class Server implements ServerInterface {
     private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;
     private server: http.Server;
-    private socketServerManager:SocketServerManager = new SocketServerManager();
+    private socketServerManager: SocketServerManager = new SocketServerManager();
 
     public constructor(@inject(TYPES.ApplicationInterface) private application: Application) { }
 

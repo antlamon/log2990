@@ -4,33 +4,42 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon --inspect out/server/app/www.js\" ",
+    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon out/server/app/www.js\" ",
+    "debug": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon --inspect out/server/app/www.js\" ",
     "lint": "tslint --project tsconfig.json \"./app/**/*.ts\" --format stylish",
-    "test": "tsc && concurrently --kill-others mocha",
-    "coverage": "nyc mocha",
+    "fix-lint": "tslint --project tsconfig.json \"./app/**/*.ts\" --format stylish --fix",
+    "test": "mocha",
+    "coverage": "nyc --check-coverage --lines 90 --reporter=html --reporter=text mocha -r ts-node/register app/**/*.spec.ts --opts ./test/mocha.opts",
+    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "tsc": "tsc",
-    "tsc:w": "tscw",
+    "tsc:w": "tsc -w",
     "clean": "rimraf out node_modules",
     "postinstall": "rimraf false"
   },
   "nyc": {
     "check-coverage": true,
     "per-file": true,
+    "lines": 90,
+    "statements": 90,
+    "functions": 90,
+    "branches": 90,
     "include": [
       "app/**/*.ts"
     ],
+    "exclude": [
+      "app/*.ts",
+      "app/**/*.spec.ts",
+      "app/models/**/*.ts"
+    ],
     "extension": [
       ".ts"
-    ],
-    "exclude": [
-      "**/*.spec.ts"
     ],
     "require": [
       "ts-node/register"
     ],
     "reporter": [
-      "html",
-      "text"
+      "text-summary",
+      "html"
     ],
     "all": true,
     "cache": true,
@@ -38,7 +47,6 @@
     "instrument": true
   },
   "dependencies": {
-    "@types/multer": "^1.3.7",
     "axios": "^0.18.0",
     "base64-js": "^1.3.0",
     "body-parser": "^1.18.3",
@@ -64,11 +72,13 @@
     "@types/express-serve-static-core": "4.16.0",
     "@types/mocha": "5.2.5",
     "@types/morgan": "~1.7.35",
+    "@types/multer": "^1.3.7",
     "@types/node": "~10.12.18",
     "@types/node-uuid": "0.0.28",
     "@types/sinon": "^7.0.3",
     "@types/socket.io": "1.4.38",
     "chai": "~4.1.0",
+    "codecov": "^3.1.0",
     "concurrently": "^4.0.1",
     "mocha": "~5.2.0",
     "nyc": "^13.1.0",

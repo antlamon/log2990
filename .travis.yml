@@ -1,0 +1,45 @@
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - "lts/*"
+      branches:
+        only:
+          - master
+      before_install:
+        - cd server
+        - npm install -g yarn
+        - npm install -g nyc
+      install:
+        - yarn
+      cache:
+        directories:
+          - node_modules
+      script:
+        - yarn coverage
+      after_success:
+        - yarn report-coverage
+
+    - language: node_js
+      node_js:
+        - "lts/*"
+      branches:
+        only:
+          - master
+      before_install:
+        - cd client
+        - npm install -g yarn
+        - npm install -g codecov
+      install:
+        - yarn
+      cache:
+        directories:
+          - node_modules
+      script:
+        - yarn coverage
+      after_success:
+        - cat coverage/lcov.info | codecov
+notifications:
+  email:
+    on_failure: always
+    on_success: always

@@ -46,7 +46,7 @@ describe ( "imageService tests", () => {
             let same: boolean = true;
             for (let i: number = 0; i < image2.height; i++) {
                 for (let j: number = 0; j < image2.width; j++) {
-                    if (!service.comparePixel(pixels[i][j],{red: 255, blue: 255, green: 255})) {
+                    if (!service.comparePixel(pixels[i][j], {red: 255, blue: 255, green: 255})) {
                         same = false;
                     }
                 }
@@ -59,7 +59,7 @@ describe ( "imageService tests", () => {
             expect(() => service.compareData(image1, image3)).to.throw(Error);
         });
 
-        it("Should return the expected image with the enlarged pixels", ()=> {
+        it("Should return the expected image with the enlarged pixels", () => {
 
             const pixels: Pixel[][] = service.compareData(image1, image2).pixels;
             let same: boolean = true;
