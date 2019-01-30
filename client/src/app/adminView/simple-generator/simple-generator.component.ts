@@ -8,7 +8,7 @@ import { Router} from "@angular/router";
 })
 export class SimpleGeneratorComponent implements OnInit {
 
-  private constructor(private router: Router) {}
+  public constructor(private router: Router) {}
 
   public ngOnInit() {  }
 

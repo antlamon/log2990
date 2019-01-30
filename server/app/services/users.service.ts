@@ -29,7 +29,7 @@ export class UsersManager {
         return true;
     }
     private removeUser(socketId: string): boolean {
-        const index: number = this.users.findIndex((x) => x.socket.client.id === socketId);
+        const index: number = this.users.findIndex((x: IUser) => x.socket.client.id === socketId);
         if (index === -1) {
             return false;
         }
@@ -38,7 +38,7 @@ export class UsersManager {
         return true;
     }
     public getUser(username: string): IUser {
-        const index: number = this.users.findIndex((x) => x.username === username);
+        const index: number = this.users.findIndex((x: IUser) => x.username === username);
         if (index === -1) {
             return this.users[index];
         }
