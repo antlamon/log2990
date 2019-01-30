@@ -40,13 +40,13 @@ export class UsersManager {
     public getUser(username: string): IUser {
         const index: number = this.users.findIndex((x) => x.username === username);
         if (index === -1) {
-            // return null;
+             return this.users[index];
         }
 
         return this.users[index];
     }
     public userExist(username: string): boolean {
-        const index: number = this.users.findIndex((x) => x.username === username);
+        const index: number = this.users.findIndex((x: IUser) => x.username === username);
         if (index === -1) {
             return false;
         }

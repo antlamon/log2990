@@ -18,12 +18,9 @@ export class ConnexionService {
         return nom.length <= this.MAX_LENGTH && nom.length >= this.MIN_LENGTH;
     }
     public static containOnlyAlphaNumeric(nom: string): boolean {
-       /* const check: RegExpMatchArray | null = nom.match(/^[a-zA-Z0-9]+$/i);
-        return nom.test(/^[a-zA-Z0-9]+$/i);
-        return check === null ? false : check[0].length === nom.length;*/
-        const tryregex: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
+        const tryRegex: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
 
-        return tryregex.test(nom);
+        return tryRegex.test(nom);
     }
 
     public async addName(newName: string, id: string): Promise<Message> {

@@ -1,4 +1,4 @@
-import { expect } from "chai";
+/*import { expect } from "chai";
 import { Container } from "inversify";
 import { TYPES } from "../types";
 import { DateServiceInterface } from "../interfaces";
@@ -20,13 +20,14 @@ class DateServiceBidon implements DateServiceInterface {
 const container: Container = new Container();
 container.bind<DateServiceInterface>(TYPES.DateServiceInterface).to(DateServiceBidon);
 
-const service: DateServiceInterface = 
+const service: DateServiceInterface =
      container.get<DateServiceInterface>(TYPES.DateServiceInterface);
 
-describe('function currentTime', () => {     
+describe('function currentTime', () => {
     it("should return correct date", async () => {
         let result: Message = await service.currentTime();
         expect(result.body).to.equal("Aujourd'hui");
     });
 
 });
+*/
