@@ -5,9 +5,6 @@ describe("Test for the function isCorrectLength", () => {
     it("A empty string should return false", () => {
         expect(ConnexionService.isCorrectLength("")).to.equal(false);
     });
-    it("A null string should return false", () => {
-        expect(ConnexionService.isCorrectLength(null)).to.equal(false);
-    });
     it("A string under " + ConnexionService.MIN_LENGTH + " char should return false", () => {
         expect(ConnexionService.isCorrectLength("aa")).to.equal(false);
     });
@@ -19,9 +16,6 @@ describe("Test for the function isCorrectLength", () => {
     });
 });
 describe("Test for the function containAlphaNumerics", () => {
-    it("A null string should return false", () => {
-        expect(ConnexionService.containOnlyAlphaNumeric(null)).to.equal(false);
-    });
     it("A string containing only regular char should return true", () => {
         expect(ConnexionService.containOnlyAlphaNumeric("abc123")).to.equal(true);
     });
@@ -37,13 +31,8 @@ describe("Test for the function containAlphaNumerics", () => {
 });
 describe("Test for the function containAlphaNumerics", () => {
     const component: ConnexionService = new ConnexionService();
-    it("A null string should return A ERROR MESSAGE", () => {
-        component.addName(null, null).then((message: Message) => {
-            expect(message.title).to.equal(ERROR_ID);
-        });
-    });
     it("A empty username should return an ERROR MESSAGE", () => {
-        component.addName("", null).then((message: Message) => {
+        component.addName("", "").then((message: Message) => {
             expect(message.title).to.equal(ERROR_ID);
         });
     });

@@ -15,26 +15,18 @@ export class ConnexionService {
 
     public names: string[];
     public static isCorrectLength(nom: string): boolean {
-        if (nom === null) {
-            return false;
-        }
-
         return nom.length <= this.MAX_LENGTH && nom.length >= this.MIN_LENGTH;
     }
     public static containOnlyAlphaNumeric(nom: string): boolean {
-        if (nom === null) {
-            return false;
-        }
-        const check: RegExpMatchArray | null = nom.match(/^[a-zA-Z0-9]+$/i);
+       /* const check: RegExpMatchArray | null = nom.match(/^[a-zA-Z0-9]+$/i);
+        return nom.test(/^[a-zA-Z0-9]+$/i);
+        return check === null ? false : check[0].length === nom.length;*/
+        const tryregex: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
 
-        return check === null ? false : check[0].length === nom.length;
+        return tryregex.test(nom);
     }
 
     public async addName(newName: string, id: string): Promise<Message> {
-
-        if (newName === null) {
-            return {title: ERROR_ID, body: "Name is null"};
-        }
         if (!ConnexionService.isCorrectLength(newName)) {
             return {title: ERROR_ID, body: "Name is not the correct length it must be between "
                     + ConnexionService.MIN_LENGTH + " and " + ConnexionService.MAX_LENGTH};
