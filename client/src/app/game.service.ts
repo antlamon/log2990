@@ -16,25 +16,10 @@ export class GameService {
   }
 
   public getSimpleGames():  Observable<IGame[]> {
-    /*const fakeGames: Game[] = [ new Game("Nissan Patrol", "1.bmp"),
-                                new Game("Jello", "1.bmp"),
-                                new Game("Apple Pie", "1.bmp"),
-                                new Game("Lemon Pie", "1.bmp"),
-                                new Game("Cake Patrol", "1.bmp")];
-
-    return of(fakeGames);*/
-
     return this.http.get<IGame[]>(this.SIMPLE_URL);
   }
 
   public getFreeGames(): Observable<IGame[]> {
-    /*const fakeGames: Game[] = [ new Game("Nissan Patrol", "1.bmp"),
-                        new Game("Jello", "1.bmp"),
-                        new Game("Apple Pie", "1.bmp"),
-                        new Game("Lemon Pie", "1.bmp"),
-                        new Game("Cake Patrol", "1.bmp")];
-    return of(fakeGames);*/
-
     return this.http.get<IGame[]>(this.FREE_URL);
   }
 

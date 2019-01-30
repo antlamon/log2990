@@ -11,10 +11,8 @@ export class GameListService {
         return this.fakeGames;
     }
 
+    public async getFreeGames(): Promise<IGame[]> {
+        return this.fakeGames;
+    }
+
 }
-/*export interface IGame {
-    name: String;
-    imageURL: String;
-    solo: ITop3;
-    multi: ITop3;
-}*/
