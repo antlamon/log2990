@@ -4,7 +4,7 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon app/www.js\" ",
+    "start": "tsc && concurrently --kill-others \"tsc -w \" \"nodemon --inspect out/server/app/www.js\" ",
     "lint": "tslint --project tsconfig.json \"./app/**/*.ts\" --format stylish",
     "test": "tsc && concurrently --kill-others mocha",
     "coverage": "nyc mocha",
@@ -38,6 +38,7 @@
     "instrument": true
   },
   "dependencies": {
+    "@types/multer": "^1.3.7",
     "axios": "^0.18.0",
     "base64-js": "^1.3.0",
     "body-parser": "^1.18.3",
@@ -47,6 +48,7 @@
     "express": "~4.16.0",
     "inversify": "^4.13.0",
     "morgan": "^1.9.1",
+    "multer": "^1.4.1",
     "nodemon": "^1.18.9",
     "reflect-metadata": "^0.1.10",
     "serve-favicon": "~2.5.0",
@@ -70,7 +72,7 @@
     "concurrently": "^4.0.1",
     "mocha": "~5.2.0",
     "nyc": "^13.1.0",
-    "rimraf": "2.6.2",
+    "rimraf": "^2.6.2",
     "sinon": "^7.2.2",
     "tslint": "~5.11.0",
     "tslint-eslint-rules": "5.4.0",

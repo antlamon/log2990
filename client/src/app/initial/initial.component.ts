@@ -10,7 +10,7 @@ export class InitialComponent implements OnInit {
   public username: string;
   public readonly MESSAGE_BOX_ID: string="message_box";
 
-  public constructor(private basicService: IndexService) {
+  public constructor(private indexService: IndexService) {
     this.username = ""; // invalid name
     // Mock values for testing
   }
@@ -18,7 +18,7 @@ export class InitialComponent implements OnInit {
   public ngOnInit() {
   }
   public connect(username: string): void {
-    this.basicService.connect(this.username).subscribe((message: Message) => {
+    this.indexService.connect(this.username).subscribe((message: Message) => {
       if (message.title === ERROR_ID ) {
         this.showErrorMessage(message.body);
       }
