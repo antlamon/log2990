@@ -40,7 +40,7 @@ export class UsersManager {
     public getUser(username: string): IUser {
         const index: number = this.users.findIndex((x) => x.username === username);
         if (index === -1) {
-             return this.users[index];
+            return this.users[index];
         }
 
         return this.users[index];
