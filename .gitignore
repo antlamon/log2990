@@ -2,8 +2,7 @@
 /.vscode/chrome
 /.vs/
 
-# Keep the package-lock.json !
-!package-lock.json
+**/package-lock.json
 
 # Jetbrains
 .idea/

@@ -3,8 +3,8 @@ import { Container } from "inversify";
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
-import { DateService } from "./date.service"
 import { TYPES } from "../types";
+import { DateService } from "./date.service";
 
 @injectable()
 class DateServiceBidon {
