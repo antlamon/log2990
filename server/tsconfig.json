@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
-         "target": "es6",
-         "module": "commonjs",
+        "target": "es6",
+        "module": "commonjs",
         "moduleResolution": "node",
         "sourceRoot": "app",
         "sourceMap": true,
         "outDir": "out",
-         "emitDecoratorMetadata": true,
-         "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "noImplicitAny": true,
         "noImplicitThis": true,
         "noFallthroughCasesInSwitch": true,

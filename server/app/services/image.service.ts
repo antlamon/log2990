@@ -1,5 +1,4 @@
-import { Request, Response } from "express";
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import Types from "../types";
@@ -10,21 +9,21 @@ export class ImageService {
 
     public constructor(@inject(Types.ConvertImage) private convertImage: ConvertImage) { }
 
-    public getDifferentImage(req: Request, res: Response): void {
-        console.log("req.body.image1");
-        const path1: string = req.body.image1;
-        const path2: string = req.body.image2;
-        const bufferImage: Buffer = readFileSync(path1);
-        const image1: ImageBMP = this.convertImage.bufferToImageBMP(bufferImage);
-        const image2: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(path2));
+    public getDifferentImage(name: string, bufferOriginal: Buffer, bufferModified: Buffer): string {
 
         try {
+            const bufferOut: Buffer = bufferOriginal;
+            const image1: ImageBMP = this.convertImage.bufferToImageBMP(bufferOriginal);
+            const image2: ImageBMP = this.convertImage.bufferToImageBMP(bufferModified);
             const imagedCompared: ImageBMP = this.compareData(image1, image2);
-            this.convertImage.imageBMPtoBuffer(imagedCompared, bufferImage);
-            writeFileSync("./app/documents/result.bmp", bufferImage);
+            this.convertImage.imageBMPtoBuffer(imagedCompared, bufferOut);
+            writeFileSync("./app/documents/" + name + ".bmp", bufferOut);
+
+            return "image created";
 
         } catch (error) {
-            res.json(error);
+
+            return error.message;
         }
     }
 
@@ -32,13 +31,13 @@ export class ImageService {
         const imageCompared: ImageBMP = image1;
         const pixels: Pixel[][] = [];
         const differentPixels: [number, number][] = [];
-        if (image1.height !== image2.height || image1.width !== image2.width) {
+        if (image1.height !== image2.height || image1.width !== image2.width || image1.height !== 480 || image1.width !== 640) {
             throw Error("La taille des deux images n'est pas la bonne");
         }
         for (let i: number = 0; i < image1.height; i++) {
             pixels[i] = [];
             for (let j: number = 0; j < image1.width; j++) {
-                pixels[i][j] = this.comparePixel(image1.pixels[i][j], image2.pixels[i][j]);
+                pixels[i][j] = this.substractPixel(image1.pixels[i][j], image2.pixels[i][j]);
 
                 if (this.isBlackPixel(pixels[i][j])) {
                     pixels[i][j] = { red: 255, green: 255, blue: 255 };
@@ -70,12 +69,18 @@ export class ImageService {
         });
     }
 
-    public comparePixel(pixel1: Pixel, pixel2: Pixel): Pixel {
+    public substractPixel(pixel1: Pixel, pixel2: Pixel): Pixel {
         return {
             red: pixel1.red - pixel2.red,
             green: pixel1.green - pixel2.green,
             blue: pixel1.blue - pixel2.blue,
         } as Pixel;
+    }
+
+    public comparePixel(pixel1: Pixel, pixel2: Pixel): boolean {
+
+        return pixel1.red === pixel2.red && pixel1.blue === pixel2.blue && pixel1.green === pixel2.green;
+
     }
 
     public isBlackPixel(pixel: Pixel): boolean {

@@ -7,7 +7,9 @@ export class ConvertImage {
   public bufferToImageBMP(buffer: Buffer): ImageBMP {
 
     const header: BMPHeader = this.getHeader(buffer);
-
+    if (header.infoHeader.biBitCount !== 24) {
+      throw Error("Les images ne sont pas dans le bon format");
+    }
     return this.getPixels(header, buffer);
   }
 
@@ -35,7 +37,7 @@ export class ConvertImage {
       height: header.infoHeader.biHeight,
       pixels: [],
     };
-
+    
     const start: number = header.fileHeader.bfOffBits;
     for (let y: number = 0; y < imageBMP.height; ++y) {
       imageBMP.pixels[y] = [];

@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import { inject, injectable  } from "inversify";
+import multer = require("multer");
 import { ImageService } from "../services/image.service";
 import Types from "../types";
 
@@ -13,8 +14,13 @@ export class ImageController {
     public get router(): Router {
 
         const router: Router = Router();
-
-        router.post("/", (req: Request, res: Response) => { this.imageService.getDifferentImage(req, res); });
+        const upload: multer.Instance = multer();
+        router.post("/", upload.fields([{name: "originalImage", maxCount: 1}, {name: "modifiedImage", maxCount: 1}]),
+                    (req: Request, res: Response) => {
+            const buffer1: Buffer = req.files["originalImage"][0].buffer;
+            const buffer2: Buffer = req.files["modifiedImage"][0].buffer;
+            res.json(this.imageService.getDifferentImage(req.body["name"], buffer1, buffer2));
+         });
 
         return router;
     }
