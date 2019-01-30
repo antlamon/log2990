@@ -1,9 +1,9 @@
-import { TYPES } from "../types";
-import { injectable, inject } from "inversify";
-import { Router, Request, Response, NextFunction } from "express";
-import { DateService } from "../services/date.service";
+import { NextFunction, Request, Response, Router } from "express";
+import { inject, injectable } from "inversify";
+import { Message } from "../../../common/communication/message";
 import { DateControllerInterface } from "../interfaces";
-
+import { DateService } from "../services/date.service";
+import { TYPES } from "../types";
 
 @injectable()
 export class DateController implements DateControllerInterface {
@@ -12,13 +12,13 @@ export class DateController implements DateControllerInterface {
 
     public get router(): Router {
         const router: Router = Router();
-        router.get("/",
-            (req: Request, res: Response, next: NextFunction) => {
+        router.get("/", (req: Request, res: Response, next: NextFunction) => {
                 // Send the request to the service and send the response
-                this.dateService.currentTime().then(time => {
+                this.dateService.currentTime().then((time: Message) => {
                     res.json(time);
                 });
             });
+
         return router;
     }
 }
