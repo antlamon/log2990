@@ -12,6 +12,7 @@ describe("Test for the class InitialComponent using functions related to the con
     TestBed.configureTestingModule({
       declarations: [ InitialComponent ],
       imports: [FormsModule],
+      providers: [IndexService],
     })
       .compileComponents();
   }));
