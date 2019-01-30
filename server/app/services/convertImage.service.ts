@@ -3,11 +3,12 @@ import "reflect-metadata";
 
 @injectable()
 export class ConvertImage {
+  public readonly VALID_BIT_COUNT: number = 24;
 
   public bufferToImageBMP(buffer: Buffer): ImageBMP {
 
     const header: BMPHeader = this.getHeader(buffer);
-    if (header.infoHeader.biBitCount !== 24) {
+    if (header.infoHeader.biBitCount !== this.VALID_BIT_COUNT) {
       throw Error("Les images ne sont pas dans le bon format");
     }
 

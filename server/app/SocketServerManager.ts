@@ -1,7 +1,7 @@
 import * as http from "http";
 import { injectable} from "inversify";
 import * as SocketIO from "socket.io";
-import {UsersManagerInstance} from "./services/users.service";
+import { usersManagerInstance } from "./services/users.service";
 
 type Socket = SocketIO.Socket;
 @injectable()
@@ -10,7 +10,7 @@ export class SocketServerManager {
     public startServer(server: http.Server): void {
         this.socketServer = SocketIO(server);
         this.socketServer.on("connect", (socket: Socket) => {
-            UsersManagerInstance.addUser(socket);
+            usersManagerInstance.addUser(socket);
         });
     }
 }
