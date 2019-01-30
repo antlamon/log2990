@@ -24,9 +24,8 @@ export class UsersManager {
         if (index === -1) {
             return false;
         }
-        this.users[index].username = username;
-
-        return true;
+        this.users[index].username=username;
+        return true; 
     }
     private removeUser(socketId: string): boolean {
         const index: number = this.users.findIndex((x) => x.socket.client.id === socketId);
