@@ -6,8 +6,8 @@ import {Socket} from "socket.io";
 
 @injectable()
 export class ConnexionService {
-    public readonly MIN_LENGTH: number = 3;
-    public readonly MAX_LENGTH: number = 10;
+    public static readonly MIN_LENGTH: number = 3;
+    public static readonly MAX_LENGTH: number = 10;
 
     public names: string[];
 
@@ -19,9 +19,9 @@ export class ConnexionService {
 
         if(newName ===null)
             return {title:ERROR_ID,body:"Name is null"};
-        if(!this.isCorrectLength(newName))
-            return {title:ERROR_ID,body:"Name is not the correct length and must be between "+this.MIN_LENGTH+" and "+this.MAX_LENGTH};
-        if(!this.containOnlyAlphaNumeric(newName))
+        if(!ConnexionService.isCorrectLength(newName))
+            return {title:ERROR_ID,body:"Name is not the correct length and must be between "+ConnexionService.MIN_LENGTH+" and "+ConnexionService.MAX_LENGTH};
+        if(!ConnexionService.containOnlyAlphaNumeric(newName))
             return {title:ERROR_ID,body:"Name must contain only alpha numerics"};
         //Checker si dans liste
         if(this.names.some(o => o == newName))
@@ -41,13 +41,13 @@ export class ConnexionService {
         this.names.splice(index,1);
         return {title:BASE_ID,body:"The name"+newName+" was removed to the list of names"};
     }
-    public isCorrectLength(nom: string): boolean {
+    public static isCorrectLength(nom: string): boolean {
         if(nom===null) {
             return false;
         }
         return nom.length <= this.MAX_LENGTH && nom.length >= this.MIN_LENGTH;
     }
-    public containOnlyAlphaNumeric(nom: string): boolean {
+    public static containOnlyAlphaNumeric(nom: string): boolean {
         if(nom===null) {
             return false;
         }
