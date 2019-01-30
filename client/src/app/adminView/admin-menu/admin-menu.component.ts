@@ -8,19 +8,18 @@ import { Router, ActivatedRoute} from '@angular/router';
 })
 export class AdminMenuComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  public constructor(private router: Router, private route: ActivatedRoute) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
-  openFreeViewForm() {
+  public openFreeViewForm() {
     this.router.navigate(['freegen'], {relativeTo: this.route});
   }
 
-  openSimpleViewForm() {
+  public openSimpleViewForm() {
     this.router.navigate(['simplegen'], {relativeTo: this.route});
   }
-  
 
 }

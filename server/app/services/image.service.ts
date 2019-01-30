@@ -1,10 +1,10 @@
-import { writeFileSync } from "fs";
-import { inject, injectable } from "inversify";
-import "reflect-metadata";
-import { Message } from "../../../common/communication/message";
-import { ImageBMP, ImageServiceInterface, Pixel } from "../interfaces";
-import { TYPES } from "../types";
-import { ConvertImage } from "./convertImage.service";
+import { writeFileSync } from 'fs';
+import { inject, injectable } from 'inversify';
+import 'reflect-metadata';
+import { Message } from '../../../common/communication/message';
+import { ImageBMP, ImageServiceInterface, Pixel } from '../interfaces';
+import { TYPES } from '../types';
+import { ConvertImage } from './convertImage.service';
 
 @injectable()
 export class ImageService implements ImageServiceInterface {
@@ -23,13 +23,13 @@ export class ImageService implements ImageServiceInterface {
             writeFileSync(`./app/documents/${newImageName}.bmp`, originalBuffer);
 
             return {
-                title: "Images compared",
-                body: "success",
+                title: 'Images compared',
+                body: 'success',
             };
 
         } catch (error) {
             return {
-                title: "Images compared",
+                title: 'Images compared',
                 body: error.message,
             };
         }

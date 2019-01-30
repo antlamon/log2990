@@ -9,7 +9,7 @@ import {RenderService} from './render.service';
 
 export class CubeComponent implements AfterViewInit {
 
-  constructor(private renderService: RenderService) {
+  public constructor(private renderService: RenderService) {
   }
 
   private get container(): HTMLDivElement {

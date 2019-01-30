@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InitialComponent } from './initial.component';
-import {FormsModule} from "@angular/forms";
-import {IndexService} from "../index.service";
+import {FormsModule} from '@angular/forms';
+import {IndexService} from '../index.service';
 
-describe("Test for the class InitialComponent using functions related to the connexion",()=>{
+describe('Test for the class InitialComponent using functions related to the connexion', () => {
   let component: InitialComponent;
   let fixture: ComponentFixture<InitialComponent>;
 

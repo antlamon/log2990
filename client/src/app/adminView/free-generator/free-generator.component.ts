@@ -8,20 +8,18 @@ import { Router} from '@angular/router';
 })
 export class FreeGeneratorComponent implements OnInit {
 
-  
-
-  constructor(private router: Router) { 
+  public constructor(private router: Router) {
   }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
-  submit() {
+  public submit() {
     //submit form ... TODO
     this.router.navigate(['admin']); // go back to admin home
   }
 
-  close() {
+  public close() {
     this.router.navigate(['admin']); // go back to admin home
   }
 

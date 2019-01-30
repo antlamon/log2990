@@ -1,18 +1,18 @@
-import Axios, { AxiosResponse } from "axios";
-import { injectable } from "inversify";
-import "reflect-metadata";
-import { Message } from "../../../common/communication/message";
-import { DateServiceInterface } from "../interfaces";
-import { IDate } from "./IDate";
+import Axios, { AxiosResponse } from 'axios';
+import { injectable } from 'inversify';
+import 'reflect-metadata';
+import { Message } from '../../../common/communication/message';
+import { DateServiceInterface } from '../interfaces';
+import { IDate } from './IDate';
 
 @injectable()
 export class DateService implements DateServiceInterface {
 
     public async currentTime(): Promise<Message> {
-        const apiResponse: AxiosResponse<IDate> = await Axios.get<IDate>("http://worldclockapi.com/api/json/est/now");
+        const apiResponse: AxiosResponse<IDate> = await Axios.get<IDate>('http://worldclockapi.com/api/json/est/now');
 
         return {
-            title: "Time",
+            title: 'Time',
             body: apiResponse.data.currentDateTime.toString(),
         };
     }

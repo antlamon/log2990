@@ -8,7 +8,7 @@ import { InitialComponent} from './initial/initial.component';
 
 const routes: Routes = [
   { path: 'admin',
-   component: AdminMenuComponent,
+    component: AdminMenuComponent,
     children: [
     { path: 'freegen', component: FreeGeneratorComponent},
     { path: 'simplegen', component: SimpleGeneratorComponent}
@@ -17,9 +17,8 @@ const routes: Routes = [
   { path: '', component: InitialComponent }
 ];
 
-
 @NgModule({
-  imports:[ RouterModule.forRoot(routes) ], 
+  imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ],  declarations: []
 })
 export class AppRoutingModule { }

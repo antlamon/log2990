@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
-import * as ClientSocketIO from "socket.io-client";
+import { Injectable } from '@angular/core';
+import * as ClientSocketIO from 'socket.io-client';
 type Socket = SocketIOClient.Socket;
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class SocketService {
   private readonly socket: Socket;
   public constructor() {
     try {
-      this.socket = ClientSocketIO("http://localhost:3000/");
+      this.socket = ClientSocketIO('http://localhost:3000/');
     } catch (e) {
     }
   }

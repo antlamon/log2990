@@ -1,5 +1,5 @@
-import { Application, Router } from "express";
-import { Message } from "../../common/communication/message";
+import { Application, Router } from 'express';
+import { Message } from '../../common/communication/message';
 
 export interface IndexServiceInterface {
     about(): Message;
