@@ -17,7 +17,7 @@ matrix:
           - node_modules
       script:
         - yarn coverage
-      after_success:
+      after_script:
         - yarn report-coverage
 
     - language: node_js
@@ -37,7 +37,7 @@ matrix:
           - node_modules
       script:
         - yarn coverage
-      after_success:
+      after_script:
         - cat coverage/lcov.info | codecov
 notifications:
   email:
