@@ -19,14 +19,14 @@ export class UsersManager {
         });
         console.log("user added");
     }
-    public setUserName(username:string,socketId:string): void
+    public setUserName(username:string,socketId:string): boolean
     {
         console.log("user named");
         if(username===null || socketId===null)
-            return;
+            return false;
         const index = this.users.findIndex(x=>x.socket.client.id===socketId);
         if (index === -1) {
-            return;
+            return true;
         }
         this.users[index].username=username;
     }
