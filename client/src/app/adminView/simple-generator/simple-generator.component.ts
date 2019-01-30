@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { Router} from "@angular/router";
 
 @Component({
-  selector: 'app-simple-generator',
-  templateUrl: './simple-generator.component.html',
-  styleUrls: ['./simple-generator.component.css']
+  selector: "app-simple-generator",
+  templateUrl: "./simple-generator.component.html",
+  styleUrls: ["./simple-generator.component.css"]
 })
 export class SimpleGeneratorComponent implements OnInit {
 
@@ -15,11 +15,11 @@ export class SimpleGeneratorComponent implements OnInit {
   public submit() {
     // submit form ...
 
-    this.router.navigate(['admin']); // go back to admin home
+    this.router.navigate(["admin"]); // go back to admin home
   }
 
   public close() {
-    this.router.navigate(['admin']); // go back to admin home
+    this.router.navigate(["admin"]); // go back to admin home
   }
 
 }

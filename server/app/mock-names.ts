@@ -1,9 +1,9 @@
 export const NAMES: string[] = [
-  'Julien',
-  'Antoine',
-  'Stephane',
-  'Rosanne',
-  'Jonathan',
-  'Annie',
-  'Felix',
+  "Julien",
+  "Antoine",
+  "Stephane",
+  "Rosanne",
+  "Jonathan",
+  "Annie",
+  "Felix",
 ];

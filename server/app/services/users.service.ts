@@ -1,7 +1,7 @@
-import { injectable } from 'inversify';
-import 'reflect-metadata';
-import * as SocketIO from 'socket.io';
-import {IUser} from './IUser';
+import { injectable } from "inversify";
+import "reflect-metadata";
+import * as SocketIO from "socket.io";
+import {IUser} from "./IUser";
 type Socket= SocketIO.Socket;
 
 @injectable()
@@ -11,14 +11,14 @@ export class UsersManager {
         this.users = [];
     }
     public addUser(userSocket: Socket): void {
-        this.users.push({username: '--', socket: userSocket});
-        userSocket.on('disconnect', () => {
+        this.users.push({username: "--", socket: userSocket});
+        userSocket.on("disconnect", () => {
             this.removeUser(userSocket.client.id);
         });
-        console.log('user added');
+        console.log("user added");
     }
     public setUserName(username: string, socketId: string): void {
-        console.log('user named');
+        console.log("user named");
         if (username === null || socketId === null) {
             return;
         }
@@ -33,7 +33,7 @@ export class UsersManager {
         if (index === -1) {
             return false;
         }
-        console.log('user removed:' + this.users[index].username);
+        console.log("user removed:" + this.users[index].username);
         this.users.splice(index, 1);
         return true;
     }

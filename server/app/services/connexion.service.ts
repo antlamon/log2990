@@ -1,8 +1,8 @@
-import { injectable } from 'inversify';
-import 'reflect-metadata';
-import { BASE_ID, ERROR_ID, Message } from '../../../common/communication/message';
-import {NAMES} from '../mock-names';
-import {UsersManagerInstance} from './users.service';
+import { injectable } from "inversify";
+import "reflect-metadata";
+import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
+import {NAMES} from "../mock-names";
+import {UsersManagerInstance} from "./users.service";
 
 @injectable()
 export class ConnexionService {
@@ -32,21 +32,21 @@ export class ConnexionService {
     public async addName(newName: string, id: string): Promise<Message> {
 
         if (newName === null) {
-            return {title: ERROR_ID, body: 'Name is null'};
+            return {title: ERROR_ID, body: "Name is null"};
         }
         if (!ConnexionService.isCorrectLength(newName)) {
-            return {title: ERROR_ID, body: 'Name is not the correct length it must be between ' + ConnexionService.MIN_LENGTH + ' and ' + ConnexionService.MAX_LENGTH};
+            return {title: ERROR_ID, body: "Name is not the correct length it must be between " + ConnexionService.MIN_LENGTH + " and " + ConnexionService.MAX_LENGTH};
         }
         if (!ConnexionService.containOnlyAlphaNumeric(newName)) {
-            return {title: ERROR_ID, body: 'Name must contain only alpha numerics'};
+            return {title: ERROR_ID, body: "Name must contain only alpha numerics"};
         }
         // Checker si dans liste
         if (UsersManagerInstance.userExist(newName)) {
-            return {title: ERROR_ID, body: 'Name was already taken'};
+            return {title: ERROR_ID, body: "Name was already taken"};
         }
 
         // Mock-data
         UsersManagerInstance.setUserName(newName, id);
-        return {title: BASE_ID, body: 'The name' + newName + ' was added to the list of names'};
+        return {title: BASE_ID, body: "The name" + newName + " was added to the list of names"};
     }
 }

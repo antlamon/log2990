@@ -1,4 +1,4 @@
-import { defer, Observable, from } from 'rxjs';
+import { defer, Observable, from } from "rxjs";
 
 /** Create async observable that emits-once and completes
  *  after a JS engine turn */

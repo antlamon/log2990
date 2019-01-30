@@ -1,15 +1,15 @@
-import * as bodyParser from 'body-parser';
-import * as cookieParser from 'cookie-parser';
-import * as cors from 'cors';
-import * as express from 'express';
-import { inject, injectable } from 'inversify';
-import * as logger from 'morgan';
-import { ConnexionController } from './controllers/connexion.controller';
-import { DateController } from './controllers/date.controller';
-import { ImageController } from './controllers/image.controller';
-import { IndexController } from './controllers/index.controller';
-import { ApplicationInterface } from './interfaces';
-import { TYPES } from './types';
+import * as bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
+import * as cors from "cors";
+import * as express from "express";
+import { inject, injectable } from "inversify";
+import * as logger from "morgan";
+import { ConnexionController } from "./controllers/connexion.controller";
+import { DateController } from "./controllers/date.controller";
+import { ImageController } from "./controllers/image.controller";
+import { IndexController } from "./controllers/index.controller";
+import { ApplicationInterface } from "./interfaces";
+import { TYPES } from "./types";
 
 @injectable()
 export class Application implements ApplicationInterface {
@@ -29,7 +29,7 @@ export class Application implements ApplicationInterface {
 
     private config(): void {
         // Middlewares configuration
-        this.app.use(logger('dev'));
+        this.app.use(logger("dev"));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
@@ -38,22 +38,22 @@ export class Application implements ApplicationInterface {
 
     public bindRoutes(): void {
         // Notre application utilise le routeur de notre API `Index`
-        this.app.use('/api/connexion', this.connexionController.router);
-        this.app.use('/api/index', this.indexController.router);
-        this.app.use('/api/date/', this.dateController.router);
+        this.app.use("/api/connexion", this.connexionController.router);
+        this.app.use("/api/index", this.indexController.router);
+        this.app.use("/api/date/", this.dateController.router);
         this.app.use(this.imageController.url, this.imageController.router);
         this.errorHandeling();
     }
 
     private errorHandeling(): void {
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-            const err: Error = new Error('Not Found');
+            const err: Error = new Error("Not Found");
             next(err);
         });
 
         // development error handler
         // will print stacktrace
-        if (this.app.get('env') === 'development') {
+        if (this.app.get("env") === "development") {
             // tslint:disable-next-line:no-any
             this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
                 res.status(err.status || this.internalError);

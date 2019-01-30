@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response, Router } from 'express';
-import { inject, injectable } from 'inversify';
-import {ConnexionService} from '../services/connexion.service';
-import { TYPES } from '../types';
+import { NextFunction, Request, Response, Router } from "express";
+import { inject, injectable } from "inversify";
+import {ConnexionService} from "../services/connexion.service";
+import { TYPES } from "../types";
 
 @injectable()
 export class ConnexionController {
@@ -10,7 +10,7 @@ export class ConnexionController {
 
     public get router(): Router {
         const router: Router = Router();
-        router.get('/',
+        router.get("/",
                    (req: Request, res: Response, next: NextFunction) => {
                 this.connexionService.addName(req.query.name, req.query.id).then((message) => {
                     res.json(message);
