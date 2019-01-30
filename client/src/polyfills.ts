@@ -74,3 +74,5 @@ import "zone.js/dist/zone";  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+// To fix socket-user incompatibility with angular version
+(window as any).global = window;

@@ -1,23 +1,26 @@
-import { Application } from "./app";
 import * as http from "http";
-import Types from "./types";
-import { injectable, inject } from "inversify";
+import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
+import{SocketServerManager} from "./SocketServerManager";
+import { Application } from "./app";
+import { ServerInterface } from "./interfaces";
+import { TYPES } from "./types";
 
 @injectable()
-export class Server {
+export class Server implements ServerInterface {
 
     private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;
     private server: http.Server;
+    private socketServerManager:SocketServerManager = new SocketServerManager();
 
-    public constructor(@inject(Types.Application) private application: Application) { }
+    public constructor(@inject(TYPES.ApplicationInterface) private application: Application) { }
 
     public init(): void {
         this.application.app.set("port", this.appPort);
 
         this.server = http.createServer(this.application.app);
-
+        this.socketServerManager.startServer(this.server);
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
@@ -50,7 +53,6 @@ export class Server {
                 throw error;
         }
     }
-
     /**
      * Se produit lorsque le serveur se met à écouter sur le port.
      */
