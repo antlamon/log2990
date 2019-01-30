@@ -10,7 +10,7 @@ import { SimpleGeneratorComponent } from "./adminView/simple-generator/simple-ge
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule } from "@angular/forms";
 import { IndexService } from "./index.service";
-import { ListViewComponent } from "./list-view/list-view.component";
+import { ListViewComponent } from './list-view/list-view.component';
 import {SocketService} from "./socket.service";
 
 @NgModule({

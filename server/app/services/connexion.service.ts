@@ -1,19 +1,16 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import {NAMES} from "../mock-names";
 import {usersManagerInstance} from "./users.service";
 
 @injectable()
 export class ConnexionService {
 
-    public constructor() {
-        this.names = NAMES;
-    }
     public static readonly MIN_LENGTH: number = 3;
     public static readonly MAX_LENGTH: number = 10;
 
-    public names: string[];
+    public constructor() {
+    }
     public static isCorrectLength(nom: string): boolean {
         return nom.length <= this.MAX_LENGTH && nom.length >= this.MIN_LENGTH;
     }
@@ -38,7 +35,6 @@ export class ConnexionService {
 
         // Mock-data
         usersManagerInstance.setUserName(newName, id);
-
         return {title: BASE_ID, body: "The name" + newName + " was added to the list of names"};
     }
 }
