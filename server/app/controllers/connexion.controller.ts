@@ -12,13 +12,7 @@ export class ConnexionController {
         const router: Router = Router();
         router.get("/",
             (req: Request, res: Response, next: NextFunction) => {
-                this.connexionService.addName(req.query.name).then(message => {
-                    res.json(message);
-                });
-            });
-        router.get("/disconnect",
-            (req: Request, res: Response, next: NextFunction) => {
-                this.connexionService.removeName(req.query.name).then(message => {
+                this.connexionService.addName(req.query.name,req.query.id).then(message => {
                     res.json(message);
                 });
             });
