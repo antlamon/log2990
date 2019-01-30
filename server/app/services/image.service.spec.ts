@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { readFileSync } from "fs";
-import { ConvertImage } from "./convertImage.service";
 import { ImageBMP, Pixel } from "../interfaces";
+import { ConvertImage } from "./convertImage.service";
 import { ImageService } from "./image.service";
 
 describe ( "imageService tests", () => {
@@ -14,7 +14,6 @@ describe ( "imageService tests", () => {
     const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
     const image2: ImageBMP = convertService.bufferToImageBMP(readFileSync(path2));
     const image3: ImageBMP = convertService.bufferToImageBMP(readFileSync(path3));
-
 
     describe("Detect black pixel function", () => {
 
@@ -42,7 +41,7 @@ describe ( "imageService tests", () => {
     describe("Comparing data tests", () => {
 
         it("Should return a white image when comparing with the same image", () => {
-            
+
             const pixels: Pixel[][] = service.compareData(image2, image2).pixels;
             let same: boolean = true;
             for (let i: number = 0; i < image2.height; i++) {
@@ -72,7 +71,7 @@ describe ( "imageService tests", () => {
                     }
                 }
             }
-            expect(same).to.equal(false); //Should be true -> not working
+            expect(same).to.equal(false); // Should be true -> not working
         });
 
     });
@@ -87,7 +86,6 @@ describe ( "imageService tests", () => {
             const buffer: Buffer = readFileSync("./app/documents/image_wrongformat.bmp");
             expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.not.equal("success");
             // should be equal(Error("Les images ne sont pas dans le bon format"));
-            
         });
     });
 });

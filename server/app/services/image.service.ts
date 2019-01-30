@@ -9,6 +9,9 @@ import { ConvertImage } from "./convertImage.service";
 @injectable()
 export class ImageService implements ImageServiceInterface {
 
+    public static readonly IMAGE_HEIGHT: number = 480;
+    public static readonly IMAGE_WIDTH: number = 640;
+
     public constructor(@inject(TYPES.ConvertImageServiceInterface) private convertImage: ConvertImage) { }
 
     public getDifferentImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
@@ -27,7 +30,7 @@ export class ImageService implements ImageServiceInterface {
         } catch (error) {
             return {
                 title: "Images compared",
-                body: error,
+                body: error.message,
             };
         }
     }
@@ -36,7 +39,8 @@ export class ImageService implements ImageServiceInterface {
         const imageCompared: ImageBMP = image1;
         const pixels: Pixel[][] = [];
         const differentPixels: [number, number][] = [];
-        if (image1.height !== image2.height || image1.width !== image2.width || image1.height !== 480 || image1.width !== 640) {
+        if (image1.height !== image2.height || image1.width !== image2.width
+             || image1.height !== ImageService.IMAGE_HEIGHT || image1.width !== ImageService.IMAGE_WIDTH) {
             throw Error("La taille des deux images n'est pas la bonne");
         }
         for (let i: number = 0; i < image1.height; i++) {
