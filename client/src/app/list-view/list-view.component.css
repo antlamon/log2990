@@ -1,7 +1,27 @@
 .gameList{
     display: flex;
     flex-direction: row;
-    align-content: space-around;
+    justify-content: space-around;
+}
+
+h1{
+    border:2px solid rgb(37, 10, 10);
+    background-color:rgba(161, 50, 50, 0.7);
+    background-image: radial-gradient( rgba(226, 28, 28, 0.7),rgba(121, 15, 15, 0.7));
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.24), 0 1px 3px 0 rgba(0,0,0,0.19);
+    text-shadow:0 1px 2px 0 darken(black,50%);
+    text-align :center; 
+
+}
+li{
+    border: 2px solid black;
+    border-radius: 20%;
+    padding: 10px;
+    margin: 20px;
+}
+
+ul{
+    list-style: none;
 }
 
 .imageBox{
