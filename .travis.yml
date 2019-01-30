@@ -37,9 +37,7 @@ matrix:
           - node_modules
       script:
         - yarn coverage
-      after_script:
+      after_success:
         - cat coverage/lcov.info | codecov
 notifications:
-  email:
-    on_failure: always
-    on_success: always
+  slack: log2990-h19:0ULBTBhVnKcmCqvOUI7oIRUT

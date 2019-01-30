@@ -1,7 +1,7 @@
 import * as http from 'http';
 import { inject, injectable } from 'inversify';
 import { AddressInfo } from 'net';
-import{SocketServerManager} from './SocketServerManager';
+import {SocketServerManager} from './SocketServerManager';
 import { Application } from './app';
 import { ServerInterface } from './interfaces';
 import { TYPES } from './types';
