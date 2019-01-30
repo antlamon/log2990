@@ -12,8 +12,6 @@ export class ImageService implements ImageServiceInterface {
     public constructor(@inject(TYPES.ConvertImageServiceInterface) private convertImage: ConvertImage) { }
 
     public getDifferentImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
-        
-
         try {
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
@@ -85,13 +83,10 @@ export class ImageService implements ImageServiceInterface {
     }
 
     public comparePixel(pixel1: Pixel, pixel2: Pixel): boolean {
-
         return pixel1.red === pixel2.red && pixel1.blue === pixel2.blue && pixel1.green === pixel2.green;
-
     }
 
     public isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
     }
-
 }
