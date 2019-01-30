@@ -31,16 +31,6 @@ export class ConnexionService {
         UsersManagerInstance.setUserName(newName,id);
         return {title:BASE_ID,body:"The name"+newName+" was added to the list of names"};
     }
-    public async removeName(newName:string): Promise<Message> {
-        if(newName===null)
-            return {title:ERROR_ID,body:"Name given is not valid"};
-        const index = this.names.indexOf(newName, 0);
-        if (index === -1) {
-            return {title:ERROR_ID,body:"Name was not present"};
-        }
-        this.names.splice(index,1);
-        return {title:BASE_ID,body:"The name"+newName+" was removed to the list of names"};
-    }
     public static isCorrectLength(nom: string): boolean {
         if(nom===null) {
             return false;
