@@ -18,7 +18,9 @@ const TYPES =  {
         DateServiceInterface: Symbol.for("DateServiceInterface"),
         ImageControllerInterface: Symbol.for("ImageControllerInterface"),
         ImageServiceInterface: Symbol.for("ImageServiceInterface"),
-        ConvertImageServiceInterface: Symbol.for("ConvertImageServiceInterface")
+        ConvertImageServiceInterface: Symbol.for("ConvertImageServiceInterface"),
+        GameListService: Symbol.for("GameListService"),
+        GameListController: Symbol.for("GameListController"),
 };
 
 export  { TYPES };

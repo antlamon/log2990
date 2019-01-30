@@ -13,11 +13,11 @@ export class DateController implements DateControllerInterface {
     public get router(): Router {
         const router: Router = Router();
         router.get("/", (req: Request, res: Response, next: NextFunction) => {
-                // Send the request to the service and send the response
-                this.dateService.currentTime().then((time: Message) => {
-                    res.json(time);
-                });
+            // Send the request to the service and send the response
+            this.dateService.currentTime().then((time: Message) => {
+                res.json(time);
             });
+        });
 
         return router;
     }

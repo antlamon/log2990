@@ -4,8 +4,9 @@ import * as cors from "cors";
 import * as express from "express";
 import { inject, injectable } from "inversify";
 import * as logger from "morgan";
-import { DateController } from "./controllers/date.controller";
 import { ConnexionController } from "./controllers/connexion.controller";
+import { DateController } from "./controllers/date.controller";
+import { GameListController } from "./controllers/game-list.controller";
 import { ImageController } from "./controllers/image.controller";
 import { IndexController } from "./controllers/index.controller";
 import { ApplicationInterface } from "./interfaces";
@@ -21,7 +22,8 @@ export class Application implements ApplicationInterface {
             @inject(TYPES.IndexControllerInterface) private indexController: IndexController,
             @inject(TYPES.DateControllerInterface) private dateController: DateController,
             @inject(TYPES.ConnexionController)private connexionController: ConnexionController,
-            @inject(TYPES.ImageControllerInterface) private imageController: ImageController) {
+            @inject(TYPES.ImageControllerInterface) private imageController: ImageController,
+            @inject(TYPES.GameListController) private gameListController: GameListController) {
         this.app = express();
         this.config();
         this.bindRoutes();
@@ -38,10 +40,11 @@ export class Application implements ApplicationInterface {
 
     public bindRoutes(): void {
         // Notre application utilise le routeur de notre API `Index`
-        this.app.use('/api/connexion',this.connexionController.router)
+        this.app.use("/api/connexion", this.connexionController.router);
         this.app.use("/api/index", this.indexController.router);
         this.app.use("/api/date/", this.dateController.router);
         this.app.use(this.imageController.url, this.imageController.router);
+        this.app.use("/api/gameList", this.gameListController.router);
         this.errorHandeling();
     }
 

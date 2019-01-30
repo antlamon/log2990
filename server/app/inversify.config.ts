@@ -7,6 +7,8 @@ import { DateController } from "./controllers/date.controller";
 import { IndexService } from "./services/index.service";
 import { DateService } from "./services/date.service";
 import { ImageController } from "./controllers/image.controller";
+import { GameListController} from "./controllers/game-list.controller";
+import { GameListService} from "./services/game-list.service";
 
 
 import { DateServiceInterface,
@@ -39,6 +41,9 @@ container.bind<ConvertImageServiceInterface>(TYPES.ConvertImageServiceInterface)
 
 container.bind(TYPES.ConnexionService).to(ConnexionService);
 container.bind(TYPES.ConnexionController).to(ConnexionController);
+
+container.bind(TYPES.GameListController).to(GameListController);
+container.bind(TYPES.GameListService).to(GameListService);
 
 
 export { container };

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameService } from '../game.service';
-import { Game } from '../model/game';
+import { IGame } from '../../../../common/models/game';
 
 @Component({
   selector: 'app-list-view',
@@ -9,11 +9,10 @@ import { Game } from '../model/game';
 })
 export class ListViewComponent implements OnInit {
 
-  simpleGames: Game[];
-  freeGames: Game[];
+  private simpleGames: IGame[];
+  private freeGames: IGame[];
 
-  constructor(private gameService: GameService) { 
-
+  constructor(private gameService: GameService) {
   }
 
   ngOnInit() {
@@ -24,12 +23,12 @@ export class ListViewComponent implements OnInit {
 
   public getSimpleGames(): void {
     this.gameService.getSimpleGames()
-        .subscribe(simpleGames => this.simpleGames = simpleGames);
+        .subscribe((simpleGames) => this.simpleGames = simpleGames);
   }
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe(freeGames => this.freeGames = freeGames);
+        .subscribe((freeGames) => this.freeGames = freeGames);
   }
 
 }
