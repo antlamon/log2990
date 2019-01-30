@@ -5,7 +5,7 @@ import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 
 import { Message } from "../../../common/communication/message";
-//import {SocketService} from "./socket.service";
+import {SocketService} from "./socket.service";
 
 @Injectable()
 export class IndexService {
@@ -21,7 +21,7 @@ export class IndexService {
         );
     }
     public connect(name: string): Observable<Message> {
-      return this.http.get<Message>(this.CONNECT_URL + "?name=" /*+ name + "&id=" + this.socket.id*/).pipe(
+      return this.http.get<Message>(this.CONNECT_URL + "?name=" + name + "&id=" + SocketService.getSocketId()).pipe(
         catchError(this.handleError<Message>("connect"))
       );
     }

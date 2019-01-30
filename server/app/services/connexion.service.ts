@@ -2,7 +2,7 @@ import { Message,ERROR_ID,BASE_ID } from "../../../common/communication/message"
 import "reflect-metadata";
 import { injectable } from "inversify";
 import {NAMES} from "../mock-names";
-import {Socket} from "socket.io";
+import {UsersManagerInstance} from "./users.service";
 
 @injectable()
 export class ConnexionService {
@@ -15,20 +15,20 @@ export class ConnexionService {
         this.names=NAMES;
     }
 
-    public async addName(newName:string): Promise<Message> {
+    public async addName(newName:string,id:string): Promise<Message> {
 
         if(newName ===null)
             return {title:ERROR_ID,body:"Name is null"};
         if(!ConnexionService.isCorrectLength(newName))
-            return {title:ERROR_ID,body:"Name is not the correct length and must be between "+ConnexionService.MIN_LENGTH+" and "+ConnexionService.MAX_LENGTH};
+            return {title:ERROR_ID,body:"Name is not the correct length it must be between "+ConnexionService.MIN_LENGTH+" and "+ConnexionService.MAX_LENGTH};
         if(!ConnexionService.containOnlyAlphaNumeric(newName))
             return {title:ERROR_ID,body:"Name must contain only alpha numerics"};
         //Checker si dans liste
-        if(this.names.some(o => o == newName))
+        if(UsersManagerInstance.userExist(newName))
             return {title:ERROR_ID,body:"Name was already taken"};
 
         //Mock-data
-        this.names.push(newName);
+        UsersManagerInstance.setUserName(newName,id);
         return {title:BASE_ID,body:"The name"+newName+" was added to the list of names"};
     }
     public async removeName(newName:string): Promise<Message> {

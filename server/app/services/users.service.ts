@@ -13,13 +13,15 @@ export class UsersManager {
     }
     public addUser(userSocket:Socket): void
     {
-        userSocket.on("disconnect",()=>{
-            this.removeUser({username:"--",socket:userSocket});
-        });
         this.users.push({username:"--",socket:userSocket});
+        userSocket.on("disconnect",()=>{
+            this.removeUser(userSocket.client.id);
+        });
+        console.log("user added");
     }
     public setUserName(username:string,socketId:string): void
     {
+        console.log("user named");
         if(username===null || socketId===null)
             return;
         const index = this.users.findIndex(x=>x.socket.client.id===socketId);
@@ -28,11 +30,12 @@ export class UsersManager {
         }
         this.users[index].username=username;
     }
-    private removeUser(user:IUser): boolean {
-        const index = this.users.findIndex(x=>x === user);
+    private removeUser(socketId:string): boolean {
+        const index = this.users.findIndex(x=>x.socket.client.id === socketId);
         if (index === -1) {
             return false;
         }
+        console.log("user removed:"+this.users[index].username);
         this.users.splice(index,1);
         return true;
     }

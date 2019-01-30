@@ -1,7 +1,7 @@
-import {Component, OnInit, HostListener} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {IndexService} from "../index.service";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
-
+import {SocketService} from "../socket.service";
 @Component({
   selector: "app-initial",
   templateUrl: "./initial.component.html",
@@ -9,10 +9,12 @@ import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/mes
 })
 export class InitialComponent implements OnInit {
   public username: string;
+  public readonly MESSAGE_BOX_ID: string="message_box";
 
   public constructor(private basicService: IndexService) {
     this.username = ""; // invalid name
     // Mock values for testing
+    SocketService.IsOk();
   }
 
   public ngOnInit() {
@@ -29,16 +31,17 @@ export class InitialComponent implements OnInit {
     });
   }
   private showErrorMessage(message: string): void {
-    const errorBox: HTMLElement = document.getElementById(ERROR_ID) as HTMLElement;
+    const errorBox: HTMLElement = document.getElementById(this.MESSAGE_BOX_ID) as HTMLElement;
 
     // DEMANDER POUR JQUERY
+    console.log(message);
     errorBox.textContent = message;
     errorBox.style.opacity = "1";
   }
 
-  @HostListener('window:beforeunload', ['$event']) public disconnect($event: Event): void {
+/*  @HostListener('window:beforeunload', ['$event']) public disconnect($event: Event): void {
     ($event).returnValue = true;
     this.basicService.disconnect(this.username).subscribe((message: Message) => {
     });
-  }
+  }*/
 }
