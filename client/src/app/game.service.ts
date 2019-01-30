@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { IGame } from "../../../common/models/game";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
+import { catchError } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({
@@ -16,7 +17,15 @@ export class GameService {
   }
 
   public getSimpleGames():  Observable<IGame[]> {
-    return this.http.get<IGame[]>(this.SIMPLE_URL);
+    return this.http.get<IGame[]>(this.SIMPLE_URL).pipe(
+      catchError(this.handleError<IGame[]>("getSimpleGames"))
+    );
+  }
+
+  private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
+    return (error: Error): Observable<T> => {
+        return of(result as T);
+    };
   }
 
   public getFreeGames(): Observable<IGame[]> {

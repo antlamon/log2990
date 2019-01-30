@@ -9,7 +9,7 @@ import { IGame } from '../../../../common/models/game';
 })
 export class ListViewComponent implements OnInit {
 
-  private simpleGames: IGame[];
+  private simpleGames: IGame[]; 
   private freeGames: IGame[];
 
   constructor(private gameService: GameService) {
