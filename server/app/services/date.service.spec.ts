@@ -5,8 +5,8 @@ import { Container } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
 import { TYPES } from "../types";
-import { DateService } from "./date.service";
 import { IDate } from "./IDate";
+import { DateService } from "./date.service";
 
 const container: Container = new Container();
 container.bind<DateService>(TYPES.DateService).to(DateService);
