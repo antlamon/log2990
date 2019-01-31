@@ -18,10 +18,10 @@ export class Application {
     public app: express.Application;
 
     public constructor(
-            @inject(TYPES.IndexControllerInterface) private indexController: IndexController,
-            @inject(TYPES.DateControllerInterface) private dateController: DateController,
+            @inject(TYPES.IndexController) private indexController: IndexController,
+            @inject(TYPES.DateController) private dateController: DateController,
             @inject(TYPES.ConnexionController)private connexionController: ConnexionController,
-            @inject(TYPES.ImageControllerInterface) private imageController: ImageController,
+            @inject(TYPES.ImageController) private imageController: ImageController,
             @inject(TYPES.GameListController) private gameListController: GameListController) {
         this.app = express();
         this.config();
