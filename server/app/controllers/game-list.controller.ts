@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import {GameListService} from "../services/game-list.service";
- import { Message } from "../../../common/communication/message";
 import { TYPES } from "../types";
 
 @injectable()
@@ -17,8 +16,10 @@ export class GameListController {
             });
         });
 
-        router.get("/free",async (req: Request, res: Response, next: NextFunction) => {
-            res.json(this.gameListService.getFreeGames());
+        router.get("/free", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.getFreeGames().then((freeGames)=>{
+                res.json(freeGames);
+            })
         });
 
         return router;

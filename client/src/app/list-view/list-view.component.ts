@@ -25,12 +25,11 @@ export class ListViewComponent implements OnInit {
   public getSimpleGames(): void {
     this.gameService.getSimpleGames()
         .subscribe((response: IGame[]) => this.simpleGames = response);
-    console.log(this.simpleGames);
   }
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe((freeGames) => this.freeGames = freeGames);
+        .subscribe((response: IGame[]) => this.freeGames = response);
   }
 
 }
