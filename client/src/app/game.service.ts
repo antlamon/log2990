@@ -34,7 +34,7 @@ export class GameService {
   }
 
 
-  public createSimpleGame(game: IGame) {
+  public createSimpleGame(game: IGame): void {
 
     console.log("envoi de la requete au serveur...");
     const httpOptions = {
@@ -48,7 +48,14 @@ export class GameService {
   
 
   public createFreeGame(game: IGame): void {
-    // return this.http.post(this.FREE_URL, game);
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    this.http.post<IGame>(this.FREE_URL, game, httpOptions).subscribe();
   }
 
   public deleteSimpleGame(game: IGame): void {

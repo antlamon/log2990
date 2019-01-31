@@ -29,6 +29,12 @@ export class GameListController {
             });
         });
 
+        router.post("/free", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.addFreeGame(req.body).then((game)=>{
+                res.json(game);
+             });
+        });
+
         return router;
     }
 }

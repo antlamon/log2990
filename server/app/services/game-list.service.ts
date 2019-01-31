@@ -19,4 +19,9 @@ export class GameListService {
         return(newGame);
     }
 
+    public async addFreeGame(newGame: IGame): Promise<IGame>{
+        GAMES.push(newGame);//mock-data for sprint1 
+        return(newGame);
+    }
+
 }
