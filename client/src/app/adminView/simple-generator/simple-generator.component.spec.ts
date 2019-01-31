@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SimpleGeneratorComponent } from './simple-generator.component';
+import { SimpleGeneratorComponent } from "./simple-generator.component";
 
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { AdminMenuComponent } from '../admin-menu/admin-menu.component';
@@ -24,7 +24,7 @@ describe('SimpleGeneratorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AdminMenuComponent } from './admin-menu.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
@@ -7,7 +7,7 @@ import { FreeGeneratorComponent } from '../free-generator/free-generator.compone
 import { SimpleGeneratorComponent } from '../simple-generator/simple-generator.component';
 // import { InitialComponent } from 'src/app/initial/initial.component';
 
-describe('AdminMenuComponent', () => {
+describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
 
@@ -25,7 +25,7 @@ describe('AdminMenuComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

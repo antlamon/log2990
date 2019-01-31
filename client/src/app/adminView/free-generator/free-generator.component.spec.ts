@@ -4,7 +4,7 @@ import { FreeGeneratorComponent } from './free-generator.component';
 import { AdminMenuComponent } from '../admin-menu/admin-menu.component';
 import { SimpleGeneratorComponent } from '../simple-generator/simple-generator.component';
 
-describe('FreeGeneratorComponent', () => {
+describe("FreeGeneratorComponent", () => {
   let component: FreeGeneratorComponent;
   let fixture: ComponentFixture<FreeGeneratorComponent>;
 
@@ -22,7 +22,7 @@ describe('FreeGeneratorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

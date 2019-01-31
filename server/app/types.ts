@@ -1,4 +1,4 @@
-export default  {
+const TYPES =  {
         Server: Symbol("Server"),
         Application: Symbol("Application"),
         IndexController: Symbol("IndexController"),
@@ -7,5 +7,9 @@ export default  {
         DateService: Symbol("DateService"),
         ImageController: Symbol("ImageController"),
         ImageService: Symbol("ImageService"),
-        ConvertImage: Symbol("ConvertImage")
+        ConvertImage: Symbol("ConvertImage"),
+        ConnexionController : Symbol("ConnexionController"),
+        ConnexionService: Symbol("ConnexionService"),
 };
+
+export  { TYPES };

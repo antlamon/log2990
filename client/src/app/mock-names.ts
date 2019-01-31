@@ -1,4 +1,4 @@
-export const NAMES:string[]=[
+export const NAMES: string[] = [
   "Julien",
   "Antoine",
   "Stephane",
@@ -7,5 +7,3 @@ export const NAMES:string[]=[
   "Annie",
   "Felix"
 ];
-
-

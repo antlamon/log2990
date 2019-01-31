@@ -1,28 +1,33 @@
 import { Container } from "inversify";
-import Types from "./types";
-import { Server } from "./server";
 import { Application } from "./app";
-import { IndexController } from "./controllers/index.controller";
-import { IndexService } from "./services/index.service";
 import { DateController } from "./controllers/date.controller";
+import { ImageController } from "./controllers/image.controller";
+import { IndexController } from "./controllers/index.controller";
+import { Server } from "./server";
 import { DateService } from "./services/date.service";
-import { ImageController } from "./controllers/image.controlleur";
-import { ImageService } from "./services/image.service";
-import { ConvertImage } from "./services/convertImage.service";
+import { IndexService } from "./services/index.service";
+import { TYPES } from "./types";
 
+import { ConnexionController } from "./controllers/connexion.controller";
+import { ConnexionService } from "./services/connexion.service";
+import { ConvertImage } from "./services/convertImage.service";
+import { ImageService } from "./services/image.service";
 
 const container: Container = new Container();
 
-container.bind(Types.Server).to(Server);
-container.bind(Types.Application).to(Application);
-container.bind(Types.IndexController).to(IndexController);
-container.bind(Types.IndexService).to(IndexService);
+container.bind(TYPES.Server).to(Server);
+container.bind(TYPES.Application).to(Application);
+container.bind(TYPES.IndexController).to(IndexController);
+container.bind(TYPES.IndexService).to(IndexService);
 
-container.bind(Types.DateController).to(DateController);
-container.bind(Types.DateService).to(DateService);
-container.bind(Types.ImageController).to(ImageController);
-container.bind(Types.ImageService).to(ImageService);
-container.bind(Types.ConvertImage).to(ConvertImage);
+container.bind(TYPES.DateController).to(DateController);
+container.bind(TYPES.DateService).to(DateService);
 
+container.bind(TYPES.ImageController).to(ImageController);
+container.bind(TYPES.ImageService).to(ImageService);
+container.bind(TYPES.ConvertImage).to(ConvertImage);
+
+container.bind(TYPES.ConnexionService).to(ConnexionService);
+container.bind(TYPES.ConnexionController).to(ConnexionController);
 
 export { container };

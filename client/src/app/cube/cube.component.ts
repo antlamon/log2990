@@ -1,22 +1,22 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild, HostListener } from '@angular/core';
-import {RenderService} from './render.service';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild, HostListener } from "@angular/core";
+import {RenderService} from "./render.service";
 
 @Component({
-  selector: 'app-cube-component',
-  templateUrl: './cube.component.html',
-  styleUrls: ['./cube.component.css']
+  selector: "app-cube-component",
+  templateUrl: "./cube.component.html",
+  styleUrls: ["./cube.component.css"]
 })
 
 export class CubeComponent implements AfterViewInit {
 
-  constructor(private renderService: RenderService) {
+  public constructor(private renderService: RenderService) {
   }
 
   private get container(): HTMLDivElement {
     return this.containerRef.nativeElement;
   }
 
-  @ViewChild('container')
+  @ViewChild("container")
   private containerRef: ElementRef;
 
   @Input()
@@ -25,7 +25,7 @@ export class CubeComponent implements AfterViewInit {
   @Input()
   public rotationSpeedY = 0.01;
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   public onResize() {
     this.renderService.onResize();
   }
