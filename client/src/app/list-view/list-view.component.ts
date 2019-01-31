@@ -24,6 +24,7 @@ export class ListViewComponent implements OnInit {
   public getSimpleGames(): void {
     this.gameService.getSimpleGames()
         .subscribe((simpleGames) => this.simpleGames = simpleGames);
+        
   }
 
   public getFreeGames(): void {

@@ -12,11 +12,11 @@ export class GameListController {
     public get router(): Router {
         const router: Router = Router();
        router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
-            return this.gameListService.getSimpleGames();
+            res.json(this.gameListService.getSimpleGames());
         });
 
         router.get("/free",async (req: Request, res: Response, next: NextFunction) => {
-            return this.gameListService.getFreeGames();
+            res.json(this.gameListService.getFreeGames());
         });
 
         return router;
