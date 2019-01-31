@@ -35,5 +35,4 @@ describe("function currentTime", () => {
         expect(result.title).to.equal("Time");
         expect(result.body).to.equal(mockedData.currentDateTime);
     });
-
 });
