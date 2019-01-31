@@ -16,7 +16,6 @@
 //     }
 // }
 
-
 // beforeEach((d) => {
 //     console.log(`Waiting for the before each`);
 //     setTimeout(() => {
@@ -55,7 +54,7 @@
 //         done()
 //     })
 //  });
- 
+
 //  it('should show something about an error', () => {
 //     return Promise.reject('Something went wrong')
 //  });

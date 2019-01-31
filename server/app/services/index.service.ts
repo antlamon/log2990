@@ -2,10 +2,9 @@ import Axios from "axios";
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
-import { IndexServiceInterface } from "../interfaces";
 
 @injectable()
-export class IndexService implements IndexServiceInterface {
+export class IndexService {
     public about(): Message {
         return {
             title: "This is merely a test",

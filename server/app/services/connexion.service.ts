@@ -1,16 +1,13 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import {usersManagerInstance} from "./users.service";
+import { usersManagerInstance } from "./users.service";
 
 @injectable()
 export class ConnexionService {
-
     public static readonly MIN_LENGTH: number = 3;
     public static readonly MAX_LENGTH: number = 10;
 
-    public constructor() {
-    }
     public static isCorrectLength(nom: string): boolean {
         return nom.length <= this.MAX_LENGTH && nom.length >= this.MIN_LENGTH;
     }

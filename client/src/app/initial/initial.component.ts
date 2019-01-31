@@ -8,7 +8,7 @@ import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/mes
 })
 export class InitialComponent implements OnInit {
   public username: string;
-  public readonly MESSAGE_BOX_ID: string="message_box";
+  public readonly MESSAGE_BOX_ID: string = "message_box";
 
   public constructor(private indexService: IndexService) {
     this.username = ""; // invalid name

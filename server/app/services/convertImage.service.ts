@@ -1,9 +1,8 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import { BMPHeader, ConvertImageServiceInterface, ImageBMP, Pixel } from "../interfaces";
 
 @injectable()
-export class ConvertImage implements ConvertImageServiceInterface {
+export class ConvertImage {
   public readonly VALID_BIT_COUNT: number = 24;
 
   public bufferToImageBMP(buffer: Buffer): ImageBMP {
@@ -78,8 +77,37 @@ export class ConvertImage implements ConvertImageServiceInterface {
         biXPelsPerMeter: buffer.readInt32LE(38, true),
         biYPelsPerMeter: buffer.readInt32LE(42, true),
         biClrUsed: buffer.readInt32LE(46, true),
-        biClrImportant: buffer.readInt32LE(50, true)
+        biClrImportant: buffer.readInt32LE(50, true),
       },
     };
   }
+}
+
+export interface BMPHeader {
+  fileHeader: {
+      bfType: number; bfSize: number; bfReserved1: number; bfReserved2: number; bfOffBits: number;
+  };
+  infoHeader: {
+      biSize: number; biWidth: number; biHeight: number; biPlanes: number; biBitCount: number;
+      biCompression: number;
+      biSizeImage: number;
+      biXPelsPerMeter: number;
+      biYPelsPerMeter: number;
+      biClrUsed: number;
+      biClrImportant: number
+  };
+}
+
+export interface Pixel {
+  red: number;
+  green: number;
+  blue: number;
+}
+
+export interface ImageBMP {
+  header: BMPHeader;
+  stride: number;
+  width: number;
+  height: number;
+  pixels: Pixel[][];
 }

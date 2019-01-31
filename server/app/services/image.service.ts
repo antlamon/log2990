@@ -2,9 +2,8 @@ import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
-import { ImageBMP, ImageServiceInterface, Pixel } from "../interfaces";
 import { TYPES } from "../types";
-import { ConvertImage } from "./convertImage.service";
+import { ConvertImage, ImageBMP, Pixel,  } from "./convertImage.service";
 
 @injectable()
 export class ImageService implements ImageServiceInterface {
@@ -12,7 +11,7 @@ export class ImageService implements ImageServiceInterface {
     public static readonly IMAGE_HEIGHT: number = 480;
     public static readonly IMAGE_WIDTH: number = 640;
 
-    public constructor(@inject(TYPES.ConvertImageServiceInterface) private convertImage: ConvertImage) { }
+    public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
     public getDifferentImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
         try {

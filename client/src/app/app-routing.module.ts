@@ -10,17 +10,16 @@ const routes: Routes = [
   { path: 'admin',
     component: AdminMenuComponent,
     children: [
-    { path: 'freegen', component: FreeGeneratorComponent},
-    { path: 'simplegen', component: SimpleGeneratorComponent}
-   ]
+      { path: "freegen", component: FreeGeneratorComponent } as Route,
+      { path: "simplegen", component: SimpleGeneratorComponent } as Route,
+    ]
   },
   { path: '', component: InitialComponent },
   { path: 'games', component: ListViewComponent }
 ];
 
-
 @NgModule({
-  imports:[ RouterModule.forRoot(routes) ], 
-  exports: [ RouterModule ],  declarations: []
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule], declarations: []
 })
 export class AppRoutingModule { }

@@ -2,7 +2,6 @@ import Axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
-import { DateServiceInterface } from "../interfaces";
 import { IDate } from "./IDate";
 
 @injectable()

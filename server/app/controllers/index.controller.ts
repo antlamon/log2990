@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
-import { IndexControllerInterface } from "../interfaces";
 import { IndexService } from "../services/index.service";
 import { TYPES } from "../types";
 
 @injectable()
 export class IndexController implements IndexControllerInterface {
 
-    public constructor(@inject(TYPES.IndexServiceInterface) private indexService: IndexService) { }
+    public constructor(@inject(TYPES.IndexService) private indexService: IndexService) { }
 
     public get router(): Router {
         const router: Router = Router();
