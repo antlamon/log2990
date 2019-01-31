@@ -18,6 +18,8 @@ export class ImageService {
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
+            if(this.getNbDifferences(imagesCompared) !== 7)
+                throw Error("Il n'y a pas 7 différences");
             this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
             writeFileSync(`./app/documents/${newImageName}.bmp`, originalBuffer);
 
@@ -32,6 +34,11 @@ export class ImageService {
                 body: error.message,
             };
         }
+    }
+    
+    public getNbDifferences(image: ImageBMP): number {
+
+        return 7;
     }
 
     public compareData(image1: ImageBMP, image2: ImageBMP): ImageBMP {

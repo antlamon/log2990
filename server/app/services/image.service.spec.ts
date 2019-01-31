@@ -10,9 +10,7 @@ describe ( "imageService tests", () => {
     const path1: string = "./app/documents/image_test_1.bmp";
     const path2: string = "./app/documents/image_test_2.bmp";
     const path3: string = "./app/documents/image1.bmp";
-    const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
-    const image2: ImageBMP = convertService.bufferToImageBMP(readFileSync(path2));
-    const image3: ImageBMP = convertService.bufferToImageBMP(readFileSync(path3));
+    const path4: string = "./app/documents/image7diff.bmp";
 
     describe("Detect black pixel function", () => {
 
@@ -38,8 +36,28 @@ describe ( "imageService tests", () => {
 
     });
     describe("Comparing data tests", () => {
+        
+        it("Should return the expected image with the enlarged pixels", () => {
 
+            const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
+            const image2: ImageBMP = convertService.bufferToImageBMP(readFileSync(path2));
+
+            const pixels: Pixel[][] = service.compareData(image1, image2).pixels;
+            let same: boolean = true;
+            const expectedPixels: Pixel[][] = convertService.bufferToImageBMP(readFileSync("./app/documents/expectedImage.bmp")).pixels;
+            for (let i: number = 0; i < image1.height; i++) {
+                for (let j: number = 0; j < image1.width; j++) {
+                    if (!service.comparePixel(pixels[i][j], expectedPixels[i][j])) {
+                        same = false;
+                    }
+                }
+            }
+            expect(same).to.equal(true);
+        });
+       
         it("Should return a white image when comparing with the same image", () => {
+
+            const image2: ImageBMP = convertService.bufferToImageBMP(readFileSync(path2));
 
             const pixels: Pixel[][] = service.compareData(image2, image2).pixels;
             let same: boolean = true;
@@ -54,30 +72,28 @@ describe ( "imageService tests", () => {
         });
 
         it("Should return an error for wrong size", () => {
-
+            const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
+            const image3: ImageBMP = convertService.bufferToImageBMP(readFileSync(path3));
             expect(() => service.compareData(image1, image3)).to.throw(Error);
         });
 
-        it("Should return the expected image with the enlarged pixels", () => {
 
-            const pixels: Pixel[][] = service.compareData(image1, image2).pixels;
-            let same: boolean = true;
-            const expectedPixels: Pixel[][] = convertService.bufferToImageBMP(readFileSync("./app/documents/expectedImage.bmp")).pixels;
-            for (let i: number = 0; i < image1.height; i++) {
-                for (let j: number = 0; j < image1.width; j++) {
-                    if (!service.comparePixel(pixels[i][j], expectedPixels[i][j])) {
-                        same = false;
-                    }
-                }
-            }
-            expect(same).to.equal(false); // Should be true -> not working
+    });
+    
+    describe("Counting the differences", () => {
+
+        it("Should return the correct number of differences", () => {
+            const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
+            const image4: ImageBMP = convertService.bufferToImageBMP(readFileSync(path4));
+            const image: ImageBMP = service.compareData(image1, image4);
+            expect(service.getNbDifferences(image)).to.equal(7);
         });
 
     });
-    describe("Getting different image", () => {
+        describe("Getting different image", () => {
         it("Should create an result.bmp file", () => {
 
-            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("success");
+            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path4)).body).to.equal("success");
         });
 
         it("Should return a string with a error message for the format", () => {
@@ -86,5 +102,10 @@ describe ( "imageService tests", () => {
             expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.equal("Les images ne sont pas dans le bon format");
 
         });
+        it("Should return an error for wrong number of differences", () => {
+
+            expect(service.getDifferentImage("name", readFileSync(path1), readFileSync(path2)).body).to.equal("Il n'y a pas 7 différences");
+        });
     });
+
 });
