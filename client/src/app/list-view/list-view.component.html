@@ -6,7 +6,7 @@
   <div class="gamesColumn">
     <ul>
       <h2>Point de vue simple</h2>
-      <li *ngFor="let game of simpleGames$ | async">
+      <li *ngFor="let game of simpleGames">
         <span class="gameTitle">{{game.name}}</span>
         <div class="imageBox">{{game.imageURL}}</div>
       </li>
@@ -16,7 +16,7 @@
   <div class="gamesColumn">
     <ul>
       <h2>Point de vue libre</h2>
-      <li *ngFor="let game of freeGames$ | async">
+      <li *ngFor="let game of freeGames">
         <span class="gameTitle">{{game.name}}</span>
         <div class="imageBox">{{game.imageURL}}</div>
       </li>

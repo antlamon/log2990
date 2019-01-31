@@ -9,10 +9,11 @@ import { IGame } from '../../../../common/models/game';
 })
 export class ListViewComponent implements OnInit {
 
-  private simpleGames: IGame[]; 
-  private freeGames: IGame[];
+  public simpleGames: IGame[];
+  public freeGames: IGame[];
 
   constructor(private gameService: GameService) {
+    this.simpleGames = [];
   }
 
   ngOnInit() {
@@ -23,8 +24,8 @@ export class ListViewComponent implements OnInit {
 
   public getSimpleGames(): void {
     this.gameService.getSimpleGames()
-        .subscribe((simpleGames) => this.simpleGames = simpleGames);
-        
+        .subscribe((response: IGame[]) => this.simpleGames = response);
+    console.log(this.simpleGames);
   }
 
   public getFreeGames(): void {
