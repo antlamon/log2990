@@ -25,7 +25,7 @@ export class InitialComponent implements OnInit {
         this.showErrorMessage(message.body);
       }
       if (message.title === BASE_ID) {
-        this.router.navigate(["games"]); 
+        this.router.navigate(["games"]);
       }
     });
   }
@@ -37,9 +37,4 @@ export class InitialComponent implements OnInit {
     errorBox.style.opacity = "1";
   }
 
-/*  @HostListener('window:beforeunload', ['$event']) public disconnect($event: Event): void {
-    ($event).returnValue = true;
-    this.basicService.disconnect(this.username).subscribe((message: Message) => {
-    });
-  }*/
 }
