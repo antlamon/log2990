@@ -33,7 +33,8 @@ export class GameService {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
 
-  public createSimpleGame(game: IGame): Observable<IGame> {
+
+  public createSimpleGame(game: IGame) {
 
     console.log("envoi de la requete au serveur...");
     const httpOptions = {
@@ -42,10 +43,9 @@ export class GameService {
       })
     };
 
-    return this.http.post<IGame>(this.SIMPLE_URL, game, httpOptions).pipe(
-      catchError(this.handleError('addSimpleGame', game))
-    );
+    this.http.post<IGame>(this.SIMPLE_URL, game, httpOptions).subscribe();
   }
+  
 
   public createFreeGame(game: IGame): void {
     // return this.http.post(this.FREE_URL, game);

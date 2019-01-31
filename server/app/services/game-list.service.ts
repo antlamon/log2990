@@ -16,7 +16,6 @@ export class GameListService {
 
     public async addSimpleGame(newGame: IGame): Promise<IGame>{
         GAMES.push(newGame);
-        console.log(newGame + "ajouté BRAVO");
         return(newGame);
     }
 
