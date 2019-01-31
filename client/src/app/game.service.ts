@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import { IGame } from "../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+
 
 @Injectable({
   providedIn: "root"
@@ -32,8 +33,18 @@ export class GameService {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
 
-  public createSimpleGame(game: IGame): void {
-    // return this.http.post(this.SIMPLE_URL, game);
+  public createSimpleGame(game: IGame): Observable<IGame> {
+
+    console.log("envoi de la requete au serveur...");
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+
+    return this.http.post<IGame>(this.SIMPLE_URL, game, httpOptions).pipe(
+      catchError(this.handleError('addSimpleGame', game))
+    );
   }
 
   public createFreeGame(game: IGame): void {
