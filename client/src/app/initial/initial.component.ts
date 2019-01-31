@@ -1,50 +1,44 @@
-import {Component, OnInit} from '@angular/core';
-import{NAMES} from '../mock-names'
-
+import {Component, OnInit} from "@angular/core";
+import {IndexService} from "../index.service";
+import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
 @Component({
-  selector: 'app-initial',
-  templateUrl: './initial.component.html',
-  styleUrls: ['./initial.component.css']
+  selector: "app-initial",
+  templateUrl: "./initial.component.html",
+  styleUrls: ["./initial.component.css"]
 })
 export class InitialComponent implements OnInit {
+  public username: string;
+  public readonly MESSAGE_BOX_ID: string="message_box";
 
-  readonly MIN_LENGTH:number =3;
-  readonly MAX_LENGTH:number =10;
-
-  public names:string[];
-
-  username:string;
-
-  constructor() {
-    this.username="";//invalid name
-    //Mock values for testing
-    this.names=NAMES;
+  public constructor(private indexService: IndexService) {
+    this.username = ""; // invalid name
+    // Mock values for testing
   }
 
-  ngOnInit() {
+  public ngOnInit() {
+  }
+  public connect(username: string): void {
+    this.indexService.connect(this.username).subscribe((message: Message) => {
+      if (message.title === ERROR_ID ) {
+        this.showErrorMessage(message.body);
+      }
+      if (message.title === BASE_ID) {
+        this.showErrorMessage("");
+        console.log("change view");
+      }
+    });
+  }
+  private showErrorMessage(message: string): void {
+    const errorBox: HTMLElement = document.getElementById(this.MESSAGE_BOX_ID) as HTMLElement;
 
-  }
-  public connect(username:string):void
-  {
-    if(!(this.isValidUsername(username))) {
-      //Write error message
-      return;
-    }
-    //To simulate a server database, must be changed
-    if(this.names.includes(username)) {
-      //Write error message
-      return;
-    }
-    //Change view
-    this.names.push(username);
-  }
-   public isValidUsername(nom:string):boolean
-  {
-    return nom.length<this.MAX_LENGTH && nom.length>this.MIN_LENGTH && this.containOnlyAlphaNumeric(nom);
-  }
-  public containOnlyAlphaNumeric(nom:string):boolean {
-    let check= nom.match(/^[a-zA-Z0-9]+$/i);
-    return check==null ? false : check[0].length==nom.length
+    // DEMANDER POUR JQUERY
+    errorBox.textContent = message;
+    errorBox.style.opacity = "1";
   }
 
+/*  @HostListener('window:beforeunload', ['$event']) public disconnect($event: Event): void {
+    ($event).returnValue = true;
+    this.basicService.disconnect(this.username).subscribe((message: Message) => {
+    });
+  }*/
 }

@@ -5,12 +5,12 @@ import { TestHelper } from "../test.helper";
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpy: any;
 let indexService: IndexService;
-
+import {SocketService} from "./socket.service";
 describe("IndexService", () => {
 
     beforeEach(() => {
         httpClientSpy = jasmine.createSpyObj("HttpClient", ["get"]);
-        indexService = new IndexService(httpClientSpy);
+        indexService = new IndexService(httpClientSpy, new SocketService());
     });
 
     it("should return expected message (HttpClient called once)", () => {

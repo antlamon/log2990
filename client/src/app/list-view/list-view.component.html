@@ -1,0 +1,26 @@
+<h1>
+  Games
+</h1>
+<div class="gameList">
+
+  <div class="gamesColumn">
+    <ul>
+      <h2>Point de vue simple</h2>
+      <li *ngFor="let game of simpleGames">
+        <span class="gameTitle">{{game.name}}</span>
+        <div class="imageBox">{{game.imageURL}}</div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="gamesColumn">
+    <ul>
+      <h2>Point de vue libre</h2>
+      <li *ngFor="let game of freeGames">
+        <span class="gameTitle">{{game.name}}</span>
+        <div class="imageBox">{{game.imageURL}}</div>
+      </li>
+    </ul>
+  </div>
+
+</div>
