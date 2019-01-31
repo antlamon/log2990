@@ -1,6 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {IndexService} from "../index.service";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
+import { Router} from "@angular/router";
+
 @Component({
   selector: "app-initial",
   templateUrl: "./initial.component.html",
@@ -10,7 +12,7 @@ export class InitialComponent implements OnInit {
   public username: string;
   public readonly MESSAGE_BOX_ID: string="message_box";
 
-  public constructor(private indexService: IndexService) {
+  public constructor(private indexService: IndexService, private router: Router) {
     this.username = ""; // invalid name
     // Mock values for testing
   }
@@ -23,8 +25,7 @@ export class InitialComponent implements OnInit {
         this.showErrorMessage(message.body);
       }
       if (message.title === BASE_ID) {
-        this.showErrorMessage("");
-        console.log("change view");
+        this.router.navigate(["games"]); 
       }
     });
   }
