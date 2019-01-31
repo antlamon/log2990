@@ -83,8 +83,8 @@ describe ( "imageService tests", () => {
         it("Should return a string with a error message for the format", () => {
 
             const buffer: Buffer = readFileSync("./app/documents/image_wrongformat.bmp");
-            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.not.equal("success");
-            // should be equal(Error("Les images ne sont pas dans le bon format"));
+            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.equal("Les images ne sont pas dans le bon format");
+
         });
     });
 });
