@@ -6,31 +6,33 @@ import { Router } from '@angular/router';
   templateUrl: './simple-generator.component.html',
   styleUrls: ['./simple-generator.component.css']
 })
-export class SimpleGeneratorComponent implements OnInit {
 
-  readonly FILE_FORMAT: string = "bmp";
-  readonly IMAGE_WIDTH: number = 640;
-  readonly IMAGE_HEIGHT: number = 480; 
-  readonly MIN_LENGTH:number = 3;
-  readonly MAX_LENGTH:number = 10;
-  readonly WIDTH_OFFSET: number = 18; 
-	readonly HEIGHT_OFFSET: number = 22;
+export class SimpleGeneratorComponent implements OnInit {
+  
+  private readonly FILE_FORMAT: string = "bmp";
+  private readonly IMAGE_WIDTH: number = 640;
+  private readonly IMAGE_HEIGHT: number = 480; 
+  private readonly MIN_LENGTH: number = 3;
+  private readonly MAX_LENGTH: number = 15;
+  private readonly WIDTH_OFFSET: number = 18; 
+	private readonly HEIGHT_OFFSET: number = 22;
 
   public correctModifiedFile: boolean = false;
   public correctOriginalFile: boolean = false;
 
-  constructor(private router: Router) { 
-    
+  public constructor(private router: Router) { 
+
   }
 
   public ngOnInit(): void {
 
   }
 
-  public onModifiedFileChange(event: any){
+  public onModifiedFileChange(event: any): void {
+    let filenameModified: string = (document.getElementById("modifiedFile") as HTMLInputElement).value; 
     const reader = new FileReader();
 
-    if(event.target.files && event.target.files.length && this.checkModifiedExtension()) {
+    if(event.target.files && event.target.files.length && this.checkModifiedExtension(filenameModified)) {
       const [file] = event.target.files;
       reader.readAsArrayBuffer(file);
       
@@ -48,9 +50,10 @@ export class SimpleGeneratorComponent implements OnInit {
   }
 
   public onOriginalFileChange(event: any){
+    let filenameOriginal: string = (document.getElementById("originalFile") as HTMLInputElement).value; 
     const reader = new FileReader();
 
-    if(event.target.files && event.target.files.length && this.checkOriginalExtension()) {
+    if(event.target.files && event.target.files.length && this.checkOriginalExtension(filenameOriginal)) {
       const [file] = event.target.files;
       reader.readAsArrayBuffer(file);
       
@@ -67,7 +70,7 @@ export class SimpleGeneratorComponent implements OnInit {
     else{ this.correctOriginalFile = false; }
   }
 
-  public submit() {
+  public submit(): void {
     let gameName = (document.getElementById("gameName") as HTMLInputElement).value;
 
     if(!this.isValidGameName(gameName)){
@@ -86,38 +89,37 @@ export class SimpleGeneratorComponent implements OnInit {
     }else{ (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black"; }
 
     if(this.correctModifiedFile == true && this.correctOriginalFile == true && this.isValidGameName(gameName)){
-      // this.router.navigate(['admin']); // go back to admin home
-      console.log("Jeu créé")
-    }
+      this.router.navigate(['admin']);
+      console.log("Jeu créé");
+    } 
   }
 
-  public close() {
+  public close(): void {
     this.router.navigate(['admin']); // go back to admin home
+
   }
  
-  public checkOriginalExtension(){
+  public checkOriginalExtension(filename: string): boolean { 
    
-    let filenameOriginal = (document.getElementById("originalFile") as HTMLInputElement).value; 
-    let extensionOriginal = filenameOriginal.slice((filenameOriginal.lastIndexOf(".") - 1 >>> 0) + 2);
+    let extensionOriginal = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
 
     return (extensionOriginal == this.FILE_FORMAT);
-
   }
 
-  public checkModifiedExtension(){
-    let filenameModified = (document.getElementById("modifiedFile") as HTMLInputElement).value; 
-    let extensionModified = filenameModified.slice((filenameModified.lastIndexOf(".") - 1 >>> 0) + 2);
+  public checkModifiedExtension(filename: string): boolean {
+  
+    let extensionModified = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
 
     return (extensionModified == this.FILE_FORMAT);
   }
 
-  public isValidGameName(nom:string):boolean
-  {
-    return nom.length<this.MAX_LENGTH && nom.length>this.MIN_LENGTH && this.containOnlyAlphaNumeric(nom);
+  public isValidGameName(name: string): boolean {
+    return name.length < this.MAX_LENGTH && name.length > this.MIN_LENGTH && this.containOnlyAlphaNumeric(name);
   }
-  public containOnlyAlphaNumeric(nom:string):boolean {
-    let check= nom.match(/^[a-zA-Z0-9]+$/i);
-    return check==null ? false : check[0].length==nom.length
+
+  public containOnlyAlphaNumeric(name: string): boolean {
+    let check = name.match(/^[a-zA-Z0-9]+$/i);
+    return check == null ? false : check[0].length == name.length
   }
 
 
