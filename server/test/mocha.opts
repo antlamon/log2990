@@ -4,3 +4,4 @@
 --recursive
 app/**/*.spec.ts
 --timeout 10000
+--exit

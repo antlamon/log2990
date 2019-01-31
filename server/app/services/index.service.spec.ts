@@ -3,7 +3,6 @@ import * as chai from "chai";
 import * as spies from "chai-spies";
 import { Done } from "mocha";
 import { Message } from "../../../common/communication/message";
-import { IDate } from "./IDate";
 import { IndexService } from "./index.service";
 
 describe("Index service", () => {
@@ -30,10 +29,9 @@ describe("Index service", () => {
     });
 
     it("Should return HelloWorld message", async () => {
-        const mockedData: IDate = {
-            currentDateTime: "24:00",
-            timeZoneName: "",
-            dayOfTheWeek: "",
+        const mockedData: Message = {
+            title: "Time",
+            body: "24:00"
         };
 
         sandbox.on(Axios, "get", () => Promise.resolve({
