@@ -24,7 +24,7 @@ export class SimpleGeneratorComponent implements OnInit {
     this.router.navigate(["admin"]); // go back to admin home
   }
 
-  close() {
+  public close() {
     this.router.navigate(["admin"]); // go back to admin home
   }
 

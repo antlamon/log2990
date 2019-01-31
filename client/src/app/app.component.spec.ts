@@ -4,7 +4,7 @@ import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
 import { IndexService } from "./index.service";
 import { HttpClientModule } from "@angular/common/http";
-import { InitialComponent } from './initial/initial.component';
+import { InitialComponent } from "./initial/initial.component";
 import {FormsModule} from "@angular/forms";
 
 describe("AppComponent", () => {

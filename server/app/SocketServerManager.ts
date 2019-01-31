@@ -1,7 +1,7 @@
 import * as http from "http";
 import { injectable} from "inversify";
 import * as SocketIO from "socket.io";
-import {usersManagerInstance} from "./services/users.service";
+import { usersManagerInstance } from "./services/users.service";
 
 type Socket = SocketIO.Socket;
 @injectable()

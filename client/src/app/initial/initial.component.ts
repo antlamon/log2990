@@ -10,7 +10,7 @@ import { Router} from "@angular/router";
 })
 export class InitialComponent implements OnInit {
   public username: string;
-  public readonly MESSAGE_BOX_ID: string="message_box";
+  public readonly MESSAGE_BOX_ID: string = "message_box";
 
   public constructor(private indexService: IndexService, private router: Router) {
     this.username = ""; // invalid name

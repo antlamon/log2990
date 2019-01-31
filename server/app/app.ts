@@ -9,11 +9,10 @@ import { DateController } from "./controllers/date.controller";
 import { GameListController } from "./controllers/game-list.controller";
 import { ImageController } from "./controllers/image.controller";
 import { IndexController } from "./controllers/index.controller";
-import { ApplicationInterface } from "./interfaces";
 import { TYPES } from "./types";
 
 @injectable()
-export class Application implements ApplicationInterface {
+export class Application {
 
     private readonly internalError: number = 500;
     public app: express.Application;

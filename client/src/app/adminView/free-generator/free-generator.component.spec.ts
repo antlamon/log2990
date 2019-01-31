@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { FreeGeneratorComponent } from './free-generator.component';
+import { FreeGeneratorComponent } from "./free-generator.component";
 
-describe('FreeGeneratorComponent', () => {
+describe("FreeGeneratorComponent", () => {
   let component: FreeGeneratorComponent;
   let fixture: ComponentFixture<FreeGeneratorComponent>;
 
@@ -19,7 +19,7 @@ describe('FreeGeneratorComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

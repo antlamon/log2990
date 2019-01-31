@@ -1,20 +1,19 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
-import{SocketServerManager} from "./SocketServerManager";
+import {SocketServerManager} from "./SocketServerManager";
 import { Application } from "./app";
-import { ServerInterface } from "./interfaces";
 import { TYPES } from "./types";
 
 @injectable()
-export class Server implements ServerInterface {
+export class Server {
 
     private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;
     private server: http.Server;
-    private socketServerManager:SocketServerManager = new SocketServerManager();
+    private socketServerManager: SocketServerManager = new SocketServerManager();
 
-    public constructor(@inject(TYPES.ApplicationInterface) private application: Application) { }
+    public constructor(@inject(TYPES.Application) private application: Application) { }
 
     public init(): void {
         this.application.app.set("port", this.appPort);
