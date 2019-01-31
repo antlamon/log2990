@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { AppRoutingModule } from 'src/app/app-routing.module';
 import { FreeGeneratorComponent } from './free-generator.component';
+import { AdminMenuComponent } from '../admin-menu/admin-menu.component';
+import { SimpleGeneratorComponent } from '../simple-generator/simple-generator.component';
 
 describe('FreeGeneratorComponent', () => {
   let component: FreeGeneratorComponent;
@@ -8,7 +10,8 @@ describe('FreeGeneratorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FreeGeneratorComponent ]
+      declarations: [ FreeGeneratorComponent, AdminMenuComponent, SimpleGeneratorComponent ],
+      imports: [ AppRoutingModule ]
     })
     .compileComponents();
   }));

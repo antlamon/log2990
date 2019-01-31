@@ -2,20 +2,27 @@
 // tslint:disable:no-floating-promises pour le before each
 import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
-import { BasicService } from "./basic.service";
+import { IndexService } from "./index.service";
 import { HttpClientModule } from "@angular/common/http";
-import { InitialComponent } from './initial/initial.component';
+// import { InitialComponent } from './initial/initial.component';
 import {FormsModule} from "@angular/forms";
+import { AppRoutingModule } from "./app-routing.module";
+import { AdminMenuComponent } from "./adminView/admin-menu/admin-menu.component";
+import { FreeGeneratorComponent } from "./adminView/free-generator/free-generator.component";
+import { SimpleGeneratorComponent } from "./adminView/simple-generator/simple-generator.component";
 
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        InitialComponent
+        // InitialComponent
+        AdminMenuComponent,
+        FreeGeneratorComponent,
+        SimpleGeneratorComponent
       ],
-      imports: [HttpClientModule, FormsModule],
-      providers: [BasicService]
+      imports: [HttpClientModule, FormsModule, AppRoutingModule],
+      providers: [IndexService]
     }).compileComponents();
   }));
   it("should create the app", async(() => {
