@@ -35,6 +35,17 @@ describe ( "imageService tests", () => {
         });
 
     });
+    describe("Contains fonction tests", () =>{
+        it("Should contain the data", () => {
+            expect(service.contains([[0,1],[1,2],[2,3]], [1, 2])).to.be.true;
+
+        });
+        it("Should not contain the data", () => {
+
+            expect(service.contains([[0,1],[1,2],[2,3]], [1, 3])).to.be.false;
+        });
+
+    });
     describe("Comparing data tests", () => {
         
         it("Should return the expected image with the enlarged pixels", () => {
@@ -82,7 +93,7 @@ describe ( "imageService tests", () => {
 
     describe("Counting the differences", () => {
 
-        it("Should return the correct number of differences", (done) => {
+        it("Should return the correct number of differences", async (done) => {
             const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
             const image4: ImageBMP = convertService.bufferToImageBMP(readFileSync(path4));
             const image: ImageBMP = service.compareData(image1, image4);
@@ -92,7 +103,7 @@ describe ( "imageService tests", () => {
 
     });
         describe("Getting different image", () => {
-        it("Should create an result.bmp file", () => {
+        it("Should create an result.bmp file", async () => {
 
             expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path4)).body).to.equal("success");
         });
