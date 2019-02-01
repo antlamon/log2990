@@ -1,17 +1,23 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { SimpleGeneratorComponent } from "./simple-generator.component";
-
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { AdminMenuComponent } from "../admin-menu/admin-menu.component";
 import { FreeGeneratorComponent } from "../free-generator/free-generator.component";
 import { InitialComponent } from "src/app/initial/initial.component";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
-
+ 
 describe("SimpleGeneratorComponent", () => {
   let component: SimpleGeneratorComponent;
   let fixture: ComponentFixture<SimpleGeneratorComponent>;
+  const LARGER_WIDTH: number = 1000;
+  const LARGER_HEIGHT: number = 1000;
+  const SMALLER_WIDTH: number = 200;
+  const SMALLER_HEIGHT: number = 200;
+  const NULL_HEIGHT: number = 0;
+  const NULL_WIDTH: number = 0;
+  const CORRECT_WIDTH: number = 640;
+  const CORRECT_HEIGHT: number = 480;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -51,16 +57,16 @@ describe("SimpleGeneratorComponent", () => {
 
   describe("Test for the function checkBmpDimensions", () => {
     it("A bmp that is smaller than 640x480 should return false", () => {
-      expect(component.checkBmpDimensions(250, 300)).toEqual(false);
+      expect(component.checkBmpDimensions(SMALLER_WIDTH, SMALLER_HEIGHT)).toEqual(false);
     });
     it("A .bmp that is larger than 640x480 should return false", () => {
-      expect(component.checkBmpDimensions(1000, 1500)).toEqual(false);
+      expect(component.checkBmpDimensions(LARGER_WIDTH, LARGER_HEIGHT)).toEqual(false);
     });
     it("A .bmp wih null dimensions should return false", () => {
-      expect(component.checkBmpDimensions(0,0)).toEqual(false);
+      expect(component.checkBmpDimensions(NULL_WIDTH, NULL_HEIGHT)).toEqual(false);
     });
     it("A .bmp wih 640x480 dimensions should return true", () => {
-      expect(component.checkBmpDimensions(640,480)).toEqual(true);
+      expect(component.checkBmpDimensions(CORRECT_WIDTH, CORRECT_HEIGHT)).toEqual(true);
     });
   });
 
