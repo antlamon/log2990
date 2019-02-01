@@ -79,14 +79,15 @@ describe ( "imageService tests", () => {
 
 
     });
-    
+
     describe("Counting the differences", () => {
 
-        it("Should return the correct number of differences", () => {
+        it("Should return the correct number of differences", (done) => {
             const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
             const image4: ImageBMP = convertService.bufferToImageBMP(readFileSync(path4));
             const image: ImageBMP = service.compareData(image1, image4);
             expect(service.getNbDifferences(image)).to.equal(7);
+            done();
         });
 
     });

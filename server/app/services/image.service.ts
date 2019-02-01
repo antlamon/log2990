@@ -19,7 +19,7 @@ export class ImageService {
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
             if(this.getNbDifferences(imagesCompared) !== 7)
-                throw Error("Il n'y a pas 7 différences");
+                //throw Error("Il n'y a pas 7 différences");
             this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
             writeFileSync(`./app/documents/${newImageName}.bmp`, originalBuffer);
 
@@ -37,8 +37,82 @@ export class ImageService {
     }
     
     public getNbDifferences(image: ImageBMP): number {
+        
+        const pixels: Pixel[][] = image.pixels;
+        const visited: [number, number][] = [];
+        const unused: [number, number][] = [];
+        
+        let diffCount: number = 0;
 
-        return 7;
+        for (let i: number = 0; i < image.height; i++) {
+            for (let j: number = 0; j < image.width; j++) {
+                if(this.isBlackPixel(pixels[i][j]) && !this.contains(visited, [i, j])) {
+                    
+                    diffCount+= 1;
+                    console.log("1");
+                    unused.push([i,j]);
+                    while(unused.length > 0) {
+                        let hasNext: boolean = false;
+                        const current: [number, number]  = unused[unused.length-1];                     
+                        for(let i: number = current[0]-1; i <= current[0]+1; i++ ) {
+                            for(let j: number = current[1]-1; j <= current[1]+1; j++ ) {
+                                if(i >= 0 && i < image.height && j >= 0 && j < image.height && this.isBlackPixel(pixels[i][j]) && !this.contains(visited, [i,j]) && !this.contains(unused,[i,j])) {
+                                    unused.push([i,j]);
+                                    hasNext = true;
+                                }
+                            }
+                        }
+                        if(!hasNext) {
+                            visited.push(unused[unused.length-1]);
+                            console.log(unused.pop());
+                            
+                        }
+                    }
+                }
+            }
+        }
+
+        console.log(diffCount);
+
+        // while(blackPixels.length > 0) {
+        //     while(blackPixels.length > 0 && this.contains(visited, blackPixels[0])) {
+        //         blackPixels.shift();
+        //     }
+        //     if (blackPixels.length > 0) {
+        //         unused.push(blackPixels[0]);
+        //         visited.push(unused[0]);
+        //         diffCount += 1;  
+        //     }
+            
+        //     while (unused.length > 0) {
+                
+        //         for(let i: number = unused[0][0]-1; i <= unused[0][0]+1; i++ ) {
+        //             for(let j: number = unused[0][1]-1; j <= unused[0][1]+1; j++ ) {
+        //                 if(this.contains(blackPixels, [i,j]) && !this.contains(visited, [i,j])) {
+        //                     unused.push([i,j]);
+        //                     visited.push([i,j]);
+        //                 }
+        //             }
+        //         }
+        //         unused.shift();
+
+        //     }
+        // }
+        return diffCount;
+        
+    }
+
+    public contains(array: [number, number][], item: [number, number]): boolean {
+
+        let contain: boolean = false;
+        for(let i:number = 0; i < array.length; i++) {
+            if(array[i][0] === item[0] && array[i][1] == item[1]) {
+                contain = true;
+                break;
+            }
+
+        }
+        return contain;
     }
 
     public compareData(image1: ImageBMP, image2: ImageBMP): ImageBMP {
@@ -47,7 +121,7 @@ export class ImageService {
         const differentPixels: [number, number][] = [];
         if (image1.height !== image2.height || image1.width !== image2.width
              || image1.height !== ImageService.IMAGE_HEIGHT || image1.width !== ImageService.IMAGE_WIDTH) {
-            throw Error("La taille des deux images n'est pas la bonne");
+            //throw Error("La taille des deux images n'est pas la bonne");
         }
         for (let i: number = 0; i < image1.height; i++) {
             pixels[i] = [];
