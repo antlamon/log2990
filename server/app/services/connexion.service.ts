@@ -33,6 +33,9 @@ export class ConnexionService {
         // Mock-data
         usersManagerInstance.setUserName(newName, id);
 
-        return {title: BASE_ID, body: "The name" + newName + " was added to the list of names"};
+        return {
+            title: BASE_ID,
+            body: `The name ${newName} was added to the list of names`,
+        };
     }
 }

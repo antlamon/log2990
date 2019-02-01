@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import * as supertest from "supertest";
+import supertest = require("supertest");
 import { Message } from "../../../common/communication/message";
 import { Application } from "../app";
 import { container } from "../inversify.config";
