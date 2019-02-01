@@ -9,22 +9,17 @@ import { TYPES } from "../types";
 export class GameListService {
 
     public constructor(@inject(TYPES.ImageService)private imageService: ImageService){
-
+        for(let i:number=0; i < GAMES.length;i++)
+        {
+              GAMES[i].imageURL =  this.imageService.imageToString64(GAMES[i].imageURL);
+        }
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
-        for(let i:number=0; i < GAMES.length;i++)
-        {
-              GAMES[i].imageURL =  this.imageService.imageToString64("./app/documents/image_wrongformat.bmp");
-        }
         return GAMES;
     }
 
     public async getFreeGames(): Promise<IGame[]> {
-        for(let i:number=0; i < GAMES.length;i++)
-        {
-              GAMES[i].imageURL =  this.imageService.imageToString64("./app/documents/image_wrongformat.bmp");
-        }
         return GAMES;
     }
 

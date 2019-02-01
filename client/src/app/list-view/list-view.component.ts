@@ -22,6 +22,7 @@ export class ListViewComponent implements OnInit {
     this.getSimpleGames();
     this.getFreeGames();
     this.isAdminMode = false;
+  
   }
 
 
