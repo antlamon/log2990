@@ -25,10 +25,9 @@ describe("Index controller", () => {
     let app: Express.Application;
 
     before(() => {
-        app = container.get<Application>(TYPES.Application).app;
         container.snapshot();
-        container.unbind(TYPES.IndexService);
-        container.bind(TYPES.IndexService).toConstantValue(mockedIndexService);
+        container.rebind(TYPES.IndexService).toConstantValue(mockedIndexService);
+        app = container.get<Application>(TYPES.Application).app;
     });
 
     after(() => {
@@ -41,10 +40,7 @@ describe("Index controller", () => {
             .expect("Content-Type", /json/)
             .expect(200)
             .then((response) => {
-                expect(response.body as Message).to.equal(mockedHelloWorld);
-            })
-            .catch((error) => {
-                console.log(error);
+                expect(response.body as Message).to.deep.equal(mockedHelloWorld);
             });
     });
 
@@ -54,10 +50,7 @@ describe("Index controller", () => {
             .expect("Content-Type", /json/)
             .expect(200)
             .then((response) => {
-                expect(response.body).to.equal(mockedAbout);
-            })
-            .catch((error) => {
-                console.log(error);
+                expect(response.body).to.deep.equal(mockedAbout);
             });
     });
 });
