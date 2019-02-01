@@ -18,6 +18,9 @@ export class ImageService {
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
+            if(this.getNbDifferences(imagesCompared) !== 7) {
+                throw Error("Il n'y a pas 7 différences");
+            }
             this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
             writeFileSync(`./app/documents/${newImageName}.bmp`, originalBuffer);
 
@@ -32,6 +35,53 @@ export class ImageService {
                 body: error.message,
             };
         }
+    }
+    
+    public getNbDifferences(image: ImageBMP): number {
+        
+        const pixels: Pixel[][] = image.pixels;
+        const visited: [number, number][] = [];
+        const unused: [number, number][] = [];
+        
+        let diffCount: number = 0;
+
+        for (let x: number = 0; x < image.height; x++) {
+            for (let y: number = 0; y < image.width; y++) {
+                if(this.isBlackPixel(pixels[x][y]) && !this.contains(visited, [x, y])) {
+                    
+                    diffCount+= 1;
+                    unused.push([x,y]);
+                    while(unused.length > 0) {
+                        let hasNext: boolean = false;
+                        const current: [number, number]  = unused[unused.length-1];                     
+                        for(let i: number = current[0]-1; i <= current[0]+1; i++ ) {
+                            for(let j: number = current[1]-1; j <= current[1]+1; j++ ) {
+                                if(i >= 0 && i < image.height && j >= 0 && j < image.width && this.isBlackPixel(pixels[i][j]) && !this.contains(visited, [i,j]) && !this.contains(unused,[i,j])) {
+                                    unused.push([i,j]);
+                                    hasNext = true;
+                                }
+                            }
+                        }
+                        if(!hasNext) {
+                            visited.push(unused[unused.length-1]);
+                            unused.pop();
+                        }
+                    }
+                }
+            }
+        }
+        return diffCount;
+        
+    }
+
+    public contains(array: [number, number][], item: [number, number]): boolean {
+
+        for(let i:number = 0; i < array.length; i++) {
+            if(array[i][0] === item[0] && array[i][1] == item[1]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public compareData(image1: ImageBMP, image2: ImageBMP): ImageBMP {

@@ -3,7 +3,7 @@
         "target": "es6",
         "module": "commonjs",
         "moduleResolution": "node",
-        "sourceRoot": "app",
+        //"sourceRoot": "app",
         "sourceMap": true,
         "outDir": "out",
         "emitDecoratorMetadata": true,
