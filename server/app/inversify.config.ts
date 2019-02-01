@@ -14,7 +14,6 @@ import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socketServerManager";
 import { TYPES } from "./types";
 
-
 const container: Container = new Container();
 
 container.bind(TYPES.Server).to(Server);
@@ -36,4 +35,3 @@ container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager);
 
 export { container };
-
