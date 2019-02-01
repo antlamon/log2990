@@ -3,88 +3,72 @@
 </h1>
 <div class="gameList">
 
-    <div class="gamesColumn">
-        <ul>
-          <h2>Point de vue simple</h2>
-          <li *ngFor="let game of simpleGames">
-            <div class=gameCard>
-    
-              <h2>{{game.name}}</h2>
-    
-              <div class="middle">
-    
-                <img src={{game.imageURL}}>
-    
-                <div class="scoreBox">
-                  <div class = "top3"> TOP 3 </div>
-                    <div></div> 
-                    <div class = "case"> Solo </div>
-                    <div class = "case"> 1 VS 1 </div>
-                    <div class = "case"> 1 </div>
-                    <div class = "case">444</div>
-                    <div class = "case">444</div>
-                    <div class = "case"> 2 </div>
-                    <div class = "case">555</div>
-                    <div class = "case">555</div>
-                    <div class = "case"> 3 </div>
-                    <div class = "case">3444</div>
-                    <div class = "case">111</div>
-    
+  <div class = "game-card-list">
+      <h2>Point de vue simple</h2>
+          <div *ngFor="let game of simpleGames">
+              <div class ="game-card" >
+                <div class ="game-card-left-content">
+                  <div class ="game-card-title">{{game.name}}</div>
+                  <div class ="game-card-img-container"><img class ="game-card-img" src={{game.imageURL}} alt=""></div>
+                      <div class="game-card-buttons" *ngIf="!isAdminMode">
+                          <div class ="game-card-button-container"><button>JOUER</button></div>
+                          <div class ="game-card-button-container"><button>CRÉER</button></div>
+                      </div>
+                      <div class="game-card-buttons" *ngIf="isAdminMode">
+                        <div class ="game-card-button-container"><button>RÉINITIALISER</button></div>
+                        <div class ="game-card-button-container"><button>SUPPRIMER</button></div>
+                      </div>
+                </div>
+                <div class ="game-card-right-content">
+                  <div class ="top-container">
+                      <div class ="top-title">TOP SOLO</div>
+                      <div class ="top-score">1:{{game.solo.first}}</div>
+                      <div class ="top-score">2:{{game.solo.second}}</div>
+                      <div class ="top-score">3:{{game.solo.third}}</div>
+                  </div>
+                  <div class ="top-container">
+                      <div class ="top-title">TOP 1V1</div>
+                      <div class ="top-score">1:{{game.multi.first}}</div>
+                      <div class ="top-score">2:{{game.multi.second}}</div>
+                      <div class ="top-score">3:{{game.multi.third}}</div>
                   </div>
               </div>
-              <div class="bottom" *ngIf="!isAdminMode">
-                <button>Jouer</button>
-                <button>Creer</button>
-              </div>
-              <div class="bottom" *ngIf="isAdminMode">
-                <button>Supprimer</button>
-                <button>Réinitialiser</button>
-              </div>
-            </div>
-          </li>
-        </ul>
+          </div>
       </div>
+  </div>
 
-  <div class="gamesColumn">
-    <ul>
+  <div class = "game-card-list">
       <h2>Point de vue libre</h2>
-      <li *ngFor="let game of freeGames">
-        <div class=gameCard>
-
-          <h2>{{game.name}}</h2>
-
-          <div class="middle">
-
-            <img src={{game.imageURL}}>
-
-            <div class="scoreBox">
-              <div class = "top3"> TOP 3 </div>
-                <div></div> 
-                <div class = "case"> Solo </div>
-                <div class = "case"> 1 VS 1 </div>
-                <div class = "case"> 1 </div>
-                <div class = "case">444</div>
-                <div class = "case">444</div>
-                <div class = "case"> 2 </div>
-                <div class = "case">555</div>
-                <div class = "case">555</div>
-                <div class = "case"> 3 </div>
-                <div class = "case">3444</div>
-                <div class = "case">111</div>
-
+          <div *ngFor="let game of freeGames">
+              <div class ="game-card" >
+                <div class ="game-card-left-content">
+                  <div class ="game-card-title">{{game.name}}</div>
+                  <div class ="game-card-img-container"><img class ="game-card-img" src={{game.imageURL}} alt=""></div>
+                      <div class="game-card-buttons" *ngIf="!isAdminMode">
+                          <div class ="game-card-button-container"><button>JOUER</button></div>
+                          <div class ="game-card-button-container"><button>CRÉER</button></div>
+                      </div>
+                      <div class="game-card-buttons" *ngIf="isAdminMode">
+                        <div class ="game-card-button-container"><button>RÉINITIALISER</button></div>
+                        <div class ="game-card-button-container"><button>SUPPRIMER</button></div>
+                      </div>
+                </div>
+                <div class ="game-card-right-content">
+                  <div class ="top-container">
+                      <div class ="top-title">TOP SOLO</div>
+                      <div class ="top-score">1:{{game.solo.first}}</div>
+                      <div class ="top-score">2:{{game.solo.second}}</div>
+                      <div class ="top-score">3:{{game.solo.third}}</div>
+                  </div>
+                  <div class ="top-container">
+                      <div class ="top-title">TOP 1V1</div>
+                      <div class ="top-score">1:{{game.multi.first}}</div>
+                      <div class ="top-score">2:{{game.multi.second}}</div>
+                      <div class ="top-score">3:{{game.multi.third}}</div>
+                  </div>
               </div>
           </div>
-          <div class="bottom" *ngIf="!isAdminMode">
-            <button>Jouer</button>
-            <button>Creer</button>
-          </div>
-          <div class="bottom" *ngIf="isAdminMode">
-            <button>Supprimer</button>
-            <button>Réinitialiser</button>
-          </div>
-        </div>
-      </li>
-    </ul>
+      </div>
   </div>
 
 </div>
