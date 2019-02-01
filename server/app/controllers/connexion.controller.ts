@@ -2,7 +2,6 @@ import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import {ConnexionService} from "../services/connexion.service";
 import { TYPES } from "../types";
-
 @injectable()
 export class ConnexionController {
 

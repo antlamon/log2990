@@ -15,4 +15,7 @@ export class SocketService {
   public getSocketId(): string {
     return this.socket.id;
   }
+  public addEvent( eventName: string, eventFunction: () => any): void {
+    this.socket.on(eventName, eventFunction);
+  }
 }
