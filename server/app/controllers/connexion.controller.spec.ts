@@ -28,13 +28,14 @@ describe("Connexion Controller", () => {
         container.restore();
     });
 
-    it("Should return added message", async() => {
+    it("Should return added message", (done: MochaDone) => {
         supertest(app)
         .get("/api/connexion")
         .expect("Content-Type", /json/)
         .expect(200)
-        .then((response) => {
-            expect(response.body).to.deep.equal(mockedAddName);
+        .end((error: Error, response: supertest.Response) => {
+            expect(response.body).to.deep.equal(mockedAddName, "Add name didnt work");
+            done(error);
         });
     });
 });

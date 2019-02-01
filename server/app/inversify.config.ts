@@ -12,6 +12,7 @@ import { ConnexionController } from "./controllers/connexion.controller";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
 import { ImageService } from "./services/image.service";
+import { UsersManager } from "./services/users.service";
 
 const container: Container = new Container();
 
@@ -29,5 +30,7 @@ container.bind(TYPES.ConvertImage).to(ConvertImage);
 
 container.bind(TYPES.ConnexionService).to(ConnexionService);
 container.bind(TYPES.ConnexionController).to(ConnexionController);
+
+container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 
 export { container };

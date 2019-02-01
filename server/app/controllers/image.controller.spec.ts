@@ -27,15 +27,16 @@ describe("Image Controller", () => {
         container.restore();
     });
 
-    it("Should return image with difference created", async() => {
+    it("Should return image with difference created", (done: MochaDone) => {
         supertest(app)
         .post("/imagegen")
         .field("name", "test")
         .attach("originalImage", "./app/documents/image_test_1.bmp")
         .attach("modifiedImage", "./app/documents/image_test_2.bmp")
         .expect(200)
-        .then((response) => {
-            expect(response.body).to.deep.equal(mockedGetDiffenrenceData);
+        .end((error: Error, response: supertest.Response) => {
+            expect(response.body).to.eql(mockedGetDiffenrenceData, "Image differences not created");
+            done(error);
         });
     });
 });

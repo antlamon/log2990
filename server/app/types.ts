@@ -10,6 +10,7 @@ const TYPES =  {
         ConvertImage: Symbol("ConvertImage"),
         ConnexionController : Symbol("ConnexionController"),
         ConnexionService: Symbol("ConnexionService"),
+        UserManager: Symbol("UserManager"),
 };
 
 export  { TYPES };

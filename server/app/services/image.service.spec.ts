@@ -6,7 +6,7 @@ import { ImageService } from "./image.service";
 describe ( "imageService tests", () => {
 
     const convertService: ConvertImage = new ConvertImage();
-    const service: ImageService = new ImageService( convertService);
+    const service: ImageService = new ImageService(convertService);
     const path1: string = "./app/documents/image_test_1.bmp";
     const path2: string = "./app/documents/image_test_2.bmp";
     const path3: string = "./app/documents/image1.bmp";

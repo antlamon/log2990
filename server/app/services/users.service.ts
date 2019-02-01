@@ -65,4 +65,3 @@ export class UsersManager {
         });
     }
 }
-export let usersManagerInstance: UsersManager = new UsersManager();
