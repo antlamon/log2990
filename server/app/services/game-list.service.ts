@@ -14,13 +14,13 @@ export class GameListService {
         return GAMES;
     }
 
-    public async addSimpleGame(newGame: IGame): Promise<IGame>{
+    public async addSimpleGame(newGame: IGame): Promise<IGame> {
         GAMES.push(newGame);
         return(newGame);
     }
 
-    public async addFreeGame(newGame: IGame): Promise<IGame>{
-        GAMES.push(newGame);//mock-data for sprint1 
+    public async addFreeGame(newGame: IGame): Promise<IGame> {
+        GAMES.push(newGame); // mock-data for sprint1
         return(newGame);
     }
 

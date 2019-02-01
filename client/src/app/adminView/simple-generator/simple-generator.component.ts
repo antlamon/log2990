@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router} from "@angular/router";
 import { GameService } from "src/app/game.service";
+import { ISolo } from "../../../../../common/models/game";
 
 @Component({
   selector: "app-simple-generator",
@@ -13,13 +14,15 @@ export class SimpleGeneratorComponent implements OnInit {
 
   public ngOnInit() {  }
 
-  public submit() {
-    // submit form ... 
-    let newGame = {name: "NouveauJeu", imageURL: "nouveauTest.bmp", 
-                    solo:{first: 9999, second: 9999, third: 9999}, 
-                    multi:{first: 9999, second: 9999, third: 9999}};//for tests
+  public submit(): void {
+    // submit form ...
+    const name: string = (document.getElementById("name") as HTMLInputElement).value;
+    const file1: File = (document.getElementById("originalImage") as HTMLInputElement).files[0];
+    const file2: File = (document.getElementById("modifiedImage") as HTMLInputElement).files[0];
+
+    const newGame: ISolo = {name: name, originalImage: file1, modifiedImage: file2 };
+
     this.gameService.createSimpleGame(newGame);
-    console.log("tentative de creer un jeu ... ");
 
     this.router.navigate(["admin"]); // go back to admin home
   }

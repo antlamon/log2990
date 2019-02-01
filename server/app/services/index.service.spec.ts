@@ -31,7 +31,7 @@ describe("Index service", () => {
     it("Should return HelloWorld message", async () => {
         const mockedData: Message = {
             title: "Time",
-            body: "24:00"
+            body: "24:00",
         };
 
         sandbox.on(Axios, "get", () => Promise.resolve({

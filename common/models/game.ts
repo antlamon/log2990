@@ -6,3 +6,10 @@ export interface IGame {
     solo: ITop3;
     multi: ITop3;
 }
+
+export interface ISolo {
+
+    name: String;
+    originalImage: File;
+    modifiedImage: File;
+}

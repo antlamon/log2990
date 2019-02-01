@@ -15,5 +15,4 @@ const TYPES =  {
 };
 
 export  { TYPES };
-
-
+

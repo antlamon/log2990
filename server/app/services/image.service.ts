@@ -10,6 +10,9 @@ export class ImageService {
 
     public static readonly IMAGE_HEIGHT: number = 480;
     public static readonly IMAGE_WIDTH: number = 640;
+    public static readonly NUM_DIFF: number = 7;
+    public static readonly ENLARGE_LENGHT: number = 3;
+    public static readonly ENLARGE_MAX_DIST: number = 4;
 
     public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
@@ -18,7 +21,7 @@ export class ImageService {
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
-            if(this.getNbDifferences(imagesCompared) !== 7) {
+            if (this.getNbDifferences(imagesCompared) !== ImageService.NUM_DIFF) {
                 throw Error("Il n'y a pas 7 différences");
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
@@ -36,51 +39,46 @@ export class ImageService {
             };
         }
     }
-    
+
     public getNbDifferences(image: ImageBMP): number {
-        
         const pixels: Pixel[][] = image.pixels;
         const visited: [number, number][] = [];
         const unused: [number, number][] = [];
-        
         let diffCount: number = 0;
-
         for (let x: number = 0; x < image.height; x++) {
             for (let y: number = 0; y < image.width; y++) {
-                if(this.isBlackPixel(pixels[x][y]) && !this.contains(visited, [x, y])) {
-                    
-                    diffCount+= 1;
-                    unused.push([x,y]);
-                    while(unused.length > 0) {
+                if (this.isBlackPixel(pixels[x][y]) && !this.contains(visited, [x, y])) {
+                    diffCount += 1;
+                    unused.push([x, y]);
+                    while (unused.length > 0) {
                         let hasNext: boolean = false;
-                        const current: [number, number]  = unused[unused.length-1];                     
-                        for(let i: number = current[0]-1; i <= current[0]+1; i++ ) {
-                            for(let j: number = current[1]-1; j <= current[1]+1; j++ ) {
-                                if(i >= 0 && i < image.height && j >= 0 && j < image.width && this.isBlackPixel(pixels[i][j]) && !this.contains(visited, [i,j]) && !this.contains(unused,[i,j])) {
-                                    unused.push([i,j]);
-                                    hasNext = true;
-                                }
+                        const current: [number, number]  = unused[unused.length - 1];
+                        for (let i: number = current[0] - 1; i <= current[0] + 1; i++ ) {
+                            for (let j: number = current[1] - 1; j <= current[1] + 1; j++ ) {
+                                if (i >= 0 && i < image.height && j >= 0 && j < image.width &&
+                                    this.isBlackPixel(pixels[i][j]) && !this.contains(visited, [i, j]) && !this.contains(unused, [i, j])) {
+                                    unused.push([i, j]);
+                                    hasNext = true; }
                             }
                         }
-                        if(!hasNext) {
-                            visited.push(unused[unused.length-1]);
-                            unused.pop();
-                        }
+                        if (!hasNext) {
+                            visited.push(unused[unused.length - 1]);
+                            unused.pop(); }
                     }
                 }
-            }
-        }
+        }}
+
         return diffCount;
-        
     }
 
     public contains(array: [number, number][], item: [number, number]): boolean {
 
-        for(let i:number = 0; i < array.length; i++) {
-            if(array[i][0] === item[0] && array[i][1] == item[1]) {
+        for (const element of array) {
+             if ( element[0] === item[0] && element[1] === item[1]) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -115,10 +113,10 @@ export class ImageService {
         pixelsToEnlarge.forEach((element: [number, number]) => {
             const i: number = element[0];
             const j: number = element[1];
-            for (let y: number = -3; y <= 3; y++) {
+            for (let y: number = -ImageService.ENLARGE_LENGHT; y <= ImageService.ENLARGE_LENGHT; y++) {
                 if (i + y >= 0 && i + y < image.height) {
-                    for (let x: number = -3; x <= 3; x++) {
-                        if (Math.abs(x) + Math.abs(y) <= 4 && i + x >= 0 && i + x < image.width) {
+                    for (let x: number = -ImageService.ENLARGE_LENGHT; x <= ImageService.ENLARGE_LENGHT; x++) {
+                        if (Math.abs(x) + Math.abs(y) <= ImageService.ENLARGE_MAX_DIST && i + x >= 0 && i + x < image.width) {
                             image.pixels[i + y][j + x] = { red: 0, green: 0, blue: 0 };
                         }
                     }
