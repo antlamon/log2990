@@ -1,4 +1,5 @@
 import chai = require("chai");
+import spies = require("chai-spies");
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
@@ -6,6 +7,7 @@ import { ConnexionService } from "./connexion.service";
 import { UsersManager } from "./users.service";
 
 const expect: Chai.ExpectStatic = chai.expect;
+chai.use(spies);
 
 describe("Connexion service", () => {
     describe("Test for the function isCorrectLength", () => {
