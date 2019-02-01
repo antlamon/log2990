@@ -6,7 +6,7 @@ import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel,  } from "./convertImage.service";
 
 @injectable()
-export class ImageService implements ImageServiceInterface {
+export class ImageService {
 
     public static readonly IMAGE_HEIGHT: number = 480;
     public static readonly IMAGE_WIDTH: number = 640;

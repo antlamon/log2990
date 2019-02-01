@@ -6,7 +6,7 @@ import { Application } from "./app";
 import { TYPES } from "./types";
 
 @injectable()
-export class Server implements ServerInterface {
+export class Server {
 
     private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;

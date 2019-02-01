@@ -22,15 +22,7 @@ export class SimpleGeneratorComponent implements OnInit {
   public correctModifiedFile: boolean = false;
   public correctOriginalFile: boolean = false;
 
-  public submit() {
-    // submit form ... 
-    let newGame = {name: "NouveauJeu", imageURL: "nouveauTest.bmp", 
-                    solo:{first: 9999, second: 9999, third: 9999}, 
-                    multi:{first: 9999, second: 9999, third: 9999}};//for tests
-    this.gameService.createSimpleGame(newGame);
-    console.log("tentative de creer un jeu ... ");
-
-  }
+ 
 
   public ngOnInit(): void {
 
@@ -108,7 +100,11 @@ export class SimpleGeneratorComponent implements OnInit {
 
     if(this.correctModifiedFile == true && this.correctOriginalFile == true && this.isValidGameName(gameName)){
       this.router.navigate(['admin']);
-      console.log("Jeu créé");
+      let newGame = {name: gameName, imageURL: "nouveauTest.bmp", 
+                    solo:{first: 9999, second: 9999, third: 9999}, 
+                    multi:{first: 9999, second: 9999, third: 9999}};//for tests
+      this.gameService.createSimpleGame(newGame);
+      console.log("tentative de creer un jeu ... ");
     }
   }
 

@@ -5,7 +5,7 @@ import { DateService } from "../services/date.service";
 import { TYPES } from "../types";
 
 @injectable()
-export class DateController implements DateControllerInterface {
+export class DateController {
 
     public constructor(@inject(TYPES.DateService) private dateService: DateService) { }
 

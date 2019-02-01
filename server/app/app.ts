@@ -12,7 +12,7 @@ import { IndexController } from "./controllers/index.controller";
 import { TYPES } from "./types";
 
 @injectable()
-export class Application implements ApplicationInterface {
+export class Application {
 
     private readonly internalError: number = 500;
     public app: express.Application;
