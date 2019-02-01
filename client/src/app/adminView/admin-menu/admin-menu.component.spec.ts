@@ -1,11 +1,14 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { AdminMenuComponent } from './admin-menu.component';
-import { AppRoutingModule } from 'src/app/app-routing.module';
-import { AppComponent } from 'src/app/app.component';
-import { FreeGeneratorComponent } from '../free-generator/free-generator.component';
-import { SimpleGeneratorComponent } from '../simple-generator/simple-generator.component';
-// import { InitialComponent } from 'src/app/initial/initial.component';
+import { AdminMenuComponent } from "./admin-menu.component";
+import { AppRoutingModule } from "src/app/app-routing.module";
+import { AppComponent } from "src/app/app.component";
+import { FreeGeneratorComponent } from "../free-generator/free-generator.component";
+import { SimpleGeneratorComponent } from "../simple-generator/simple-generator.component";
+import { InitialComponent } from "src/app/initial/initial.component";
+import { ListViewComponent } from "src/app/list-view/list-view.component";
+import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
@@ -13,8 +16,19 @@ describe("AdminMenuComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminMenuComponent, AppComponent, FreeGeneratorComponent, SimpleGeneratorComponent],
-      imports: [ AppRoutingModule ]
+      declarations: [
+        AdminMenuComponent,
+        AppComponent,
+        FreeGeneratorComponent,
+        SimpleGeneratorComponent,
+        InitialComponent,
+        ListViewComponent
+      ],
+      imports: [
+        AppRoutingModule,
+        FormsModule,
+        HttpClientModule
+      ],
     })
     .compileComponents();
   }));
