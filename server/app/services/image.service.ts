@@ -4,9 +4,10 @@ import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel,  } from "./convertImage.service";
+import { readFileSync } from "fs";
 
 @injectable()
-export class ImageService implements ImageServiceInterface {
+export class ImageService {
 
     public static readonly IMAGE_HEIGHT: number = 480;
     public static readonly IMAGE_WIDTH: number = 640;
@@ -92,4 +93,8 @@ export class ImageService implements ImageServiceInterface {
     public isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
     }
+    public imageToString64(path:string):  string{
+        return "data:image/bmp;base64," + readFileSync(path).toString('base64');
+    }
+
 }

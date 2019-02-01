@@ -5,7 +5,7 @@ import { IndexService } from "../services/index.service";
 import { TYPES } from "../types";
 
 @injectable()
-export class IndexController implements IndexControllerInterface {
+export class IndexController {
 
     public constructor(@inject(TYPES.IndexService) private indexService: IndexService) { }
 

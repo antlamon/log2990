@@ -82,7 +82,7 @@ export class SimpleGeneratorComponent implements OnInit {
     }
   }
 
-  public submit(): void {
+  /*public submit(): void {
     let gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
 
     if( !this.isValidGameName(gameName) ){
@@ -110,7 +110,7 @@ export class SimpleGeneratorComponent implements OnInit {
       this.router.navigate(['admin']);
       console.log("Jeu créé");
     }
-  }
+  }*/
 
   public close(): void {
     this.router.navigate(['admin']); // go back to admin home

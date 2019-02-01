@@ -1,3 +1,13 @@
+img{
+    width: 140px;
+    height: 140px;
+    border: 2px solid black;
+    margin: 5px;
+}
+
+h2{
+    text-align: center;
+}
 
 .gameList{
     display: flex;
@@ -83,9 +93,3 @@ ul{
 }
 
 
-.imageBox{
-    width: 100px;
-    height: 100px;
-    border: 2px solid black;
-    margin: 5px;
-}
