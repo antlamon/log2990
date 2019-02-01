@@ -1,18 +1,27 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import {IGame} from "../../../common/models/game";
+import { IGame } from "../../../common/models/game";
+import { GAMES } from "../mock-games";
 
 @injectable()
 export class GameListService {
-    public readonly fakeGames: IGame[]
-        = [ { name: "Nissan Patrol", imageURL: "test.url", solo: {first: 9999, second: 9999, third: 9999}, multi: {first: 9999, second: 9999, third: 9999}}];
 
     public async getSimpleGames(): Promise<IGame[]> {
-        return this.fakeGames;
+        return GAMES;
     }
 
     public async getFreeGames(): Promise<IGame[]> {
-        return this.fakeGames;
+        return GAMES;
+    }
+
+    public async addSimpleGame(newGame: IGame): Promise<IGame>{
+        GAMES.push(newGame);
+        return(newGame);
+    }
+
+    public async addFreeGame(newGame: IGame): Promise<IGame>{
+        GAMES.push(newGame);//mock-data for sprint1 
+        return(newGame);
     }
 
 }

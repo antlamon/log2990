@@ -10,6 +10,13 @@ export class GameListController {
 
     public get router(): Router {
         const router: Router = Router();
+
+        router.post("/simple", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.addSimpleGame(req.body).then((game)=>{
+                res.json(game);
+             });
+        });
+
        router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.getSimpleGames().then((simpleGames)=>{
                res.json(simpleGames);
@@ -19,7 +26,13 @@ export class GameListController {
         router.get("/free", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.getFreeGames().then((freeGames)=>{
                 res.json(freeGames);
-            })
+            });
+        });
+
+        router.post("/free", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.addFreeGame(req.body).then((game)=>{
+                res.json(game);
+             });
         });
 
         return router;

@@ -12,7 +12,6 @@ export class IndexService {
 
     private readonly BASE_URL: string = "http://localhost:3000/api/index";
     private readonly CONNECT_URL: string = "http://localhost:3000/api/connexion";
-    private readonly DISCONNECT_URL: string = "http://localhost:3000/api/connexion/disconnect";
     public constructor(private http: HttpClient, private socketService: SocketService) { }
     public basicGet(): Observable<Message> {
         return this.http.get<Message>(this.BASE_URL).pipe(
@@ -24,12 +23,6 @@ export class IndexService {
         catchError(this.handleError<Message>("connect"))
       );
     }
-    public disconnect(name: string): Observable<Message> {
-    return this.http.get<Message>(this.DISCONNECT_URL + "?name=" + name).pipe(
-      catchError(this.handleError<Message>("disconnect"))
-    );
-  }
-
     private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
         return (error: Error): Observable<T> => {
             return of(result as T);

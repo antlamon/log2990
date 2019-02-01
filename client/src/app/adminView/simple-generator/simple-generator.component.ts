@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router} from "@angular/router";
+import { GameService } from "src/app/game.service";
 
 @Component({
   selector: "app-simple-generator",
@@ -16,11 +17,18 @@ export class SimpleGeneratorComponent implements OnInit {
   private readonly MAX_LENGTH: number = 15;
   private readonly WIDTH_OFFSET: number = 18;
 	private readonly HEIGHT_OFFSET: number = 22;
+  public constructor(private router: Router, private gameService: GameService) {}
 
   public correctModifiedFile: boolean = false;
   public correctOriginalFile: boolean = false;
 
-  public constructor(private router: Router) {
+  public submit() {
+    // submit form ... 
+    let newGame = {name: "NouveauJeu", imageURL: "nouveauTest.bmp", 
+                    solo:{first: 9999, second: 9999, third: 9999}, 
+                    multi:{first: 9999, second: 9999, third: 9999}};//for tests
+    this.gameService.createSimpleGame(newGame);
+    console.log("tentative de creer un jeu ... ");
 
   }
 

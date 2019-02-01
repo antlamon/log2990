@@ -3,22 +3,86 @@
 </h1>
 <div class="gameList">
 
-  <div class="gamesColumn">
-    <ul>
-      <h2>Point de vue simple</h2>
-      <li *ngFor="let game of simpleGames">
-        <span class="gameTitle">{{game.name}}</span>
-        <div class="imageBox">{{game.imageURL}}</div>
-      </li>
-    </ul>
-  </div>
+    <div class="gamesColumn">
+        <ul>
+          <h2>Point de vue simple</h2>
+          <li *ngFor="let game of simpleGames">
+            <div class=gameCard>
+    
+              <h2>{{game.name}}</h2>
+    
+              <div class="middle">
+    
+                <div class="imageBox">{{game.imageURL}}</div>
+    
+                <div class="scoreBox">
+                  <div class = "top3"> TOP 3 </div>
+                    <div></div> 
+                    <div class = "case"> Solo </div>
+                    <div class = "case"> 1 VS 1 </div>
+                    <div class = "case"> 1 </div>
+                    <div class = "case">444</div>
+                    <div class = "case">444</div>
+                    <div class = "case"> 2 </div>
+                    <div class = "case">555</div>
+                    <div class = "case">555</div>
+                    <div class = "case"> 3 </div>
+                    <div class = "case">3444</div>
+                    <div class = "case">111</div>
+    
+                  </div>
+              </div>
+              <div class="bottom" *ngIf="!isAdminMode">
+                <button>Jouer</button>
+                <button>Creer</button>
+              </div>
+              <div class="bottom" *ngIf="isAdminMode">
+                <button>Supprimer</button>
+                <button>Réinitialiser</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
 
   <div class="gamesColumn">
     <ul>
       <h2>Point de vue libre</h2>
       <li *ngFor="let game of freeGames">
-        <span class="gameTitle">{{game.name}}</span>
-        <div class="imageBox">{{game.imageURL}}</div>
+        <div class=gameCard>
+
+          <h2>{{game.name}}</h2>
+
+          <div class="middle">
+
+            <div class="imageBox">{{game.imageURL}}</div>
+
+            <div class="scoreBox">
+              <div class = "top3"> TOP 3 </div>
+                <div></div> 
+                <div class = "case"> Solo </div>
+                <div class = "case"> 1 VS 1 </div>
+                <div class = "case"> 1 </div>
+                <div class = "case">444</div>
+                <div class = "case">444</div>
+                <div class = "case"> 2 </div>
+                <div class = "case">555</div>
+                <div class = "case">555</div>
+                <div class = "case"> 3 </div>
+                <div class = "case">3444</div>
+                <div class = "case">111</div>
+
+              </div>
+          </div>
+          <div class="bottom" *ngIf="!isAdminMode">
+            <button>Jouer</button>
+            <button>Creer</button>
+          </div>
+          <div class="bottom" *ngIf="isAdminMode">
+            <button>Supprimer</button>
+            <button>Réinitialiser</button>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

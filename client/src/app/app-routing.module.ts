@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes, Route } from '@angular/router';
-import { AdminMenuComponent } from './adminView/admin-menu/admin-menu.component';
-import { FreeGeneratorComponent } from './adminView/free-generator/free-generator.component';
-import { SimpleGeneratorComponent} from './adminView/simple-generator/simple-generator.component';
-import { InitialComponent} from './initial/initial.component';
-import { ListViewComponent } from './list-view/list-view.component';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes, Route } from "@angular/router";
+import {AdminMenuComponent} from "./adminView/admin-menu/admin-menu.component";
+import {FreeGeneratorComponent} from "./adminView/free-generator/free-generator.component";
+import {SimpleGeneratorComponent} from "./adminView/simple-generator/simple-generator.component";
+import {InitialComponent} from "./initial/initial.component";
+import { ListViewComponent } from "./list-view/list-view.component";
 
 const routes: Routes = [
   { path: 'admin',
@@ -14,8 +14,8 @@ const routes: Routes = [
       { path: "simplegen", component: SimpleGeneratorComponent } as Route,
     ]
   },
-  { path: '', component: InitialComponent },
-  { path: 'games', component: ListViewComponent }
+  { path: "", component: InitialComponent },
+  { path: "games", component: ListViewComponent }
 ];
 
 @NgModule({

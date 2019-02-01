@@ -10,6 +10,10 @@ const TYPES =  {
         ConvertImage: Symbol("ConvertImage"),
         ConnexionController : Symbol("ConnexionController"),
         ConnexionService: Symbol("ConnexionService"),
+        GameListService: Symbol.for("GameListService"),
+        GameListController: Symbol.for("GameListController"),
 };
 
 export  { TYPES };
+
+
