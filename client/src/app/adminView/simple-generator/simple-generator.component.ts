@@ -11,13 +11,15 @@ import { GameService } from "src/app/game.service";
 export class SimpleGeneratorComponent implements OnInit {
 
   private readonly FILE_FORMAT: string = "bmp";
+  
   private readonly IMAGE_WIDTH: number = 640;
   private readonly IMAGE_HEIGHT: number = 480;
   private readonly MIN_LENGTH: number = 3;
   private readonly MAX_LENGTH: number = 15;
   private readonly WIDTH_OFFSET: number = 18;
-	private readonly HEIGHT_OFFSET: number = 22;
-  public constructor(private router: Router, private gameService: GameService) {}
+  private readonly HEIGHT_OFFSET: number = 22;
+  
+  public constructor(private router: Router,private gameService: GameService) {}
 
   public correctModifiedFile: boolean = false;
   public correctOriginalFile: boolean = false;
@@ -27,8 +29,9 @@ export class SimpleGeneratorComponent implements OnInit {
   public ngOnInit(): void {
 
   }
-
+  
   public onModifiedFileChange(event: any): void {
+    
     const filenameModified: string = (document.getElementById("modifiedFile") as HTMLInputElement).value;
     const reader: FileReader = new FileReader();
 
@@ -49,9 +52,11 @@ export class SimpleGeneratorComponent implements OnInit {
     } else { 
       this.correctModifiedFile = false;
     }
+    
   }
 
   public onOriginalFileChange(event: any){
+    
     const filenameOriginal: string = (document.getElementById("originalFile") as HTMLInputElement).value;
     const reader: FileReader = new FileReader();
 
@@ -72,17 +77,19 @@ export class SimpleGeneratorComponent implements OnInit {
     } else {
       this.correctOriginalFile = false;
     }
+    
   }
 
-  /*public submit(): void {
+  public submit(): void {
     let gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
-
+    
     if( !this.isValidGameName(gameName) ){
       console.log("Nom de jeu invalide");
       (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
     } else {
       (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "black";
     }
+    
 
     if( this.correctModifiedFile == false ){
       console.log("Fichier de jeu modifié invalide");
@@ -90,6 +97,7 @@ export class SimpleGeneratorComponent implements OnInit {
     } else {
       (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "black";
     }
+    
 
     if(this.correctOriginalFile == false){
       console.log("Fichier de jeu original invalide");
@@ -97,17 +105,19 @@ export class SimpleGeneratorComponent implements OnInit {
     } else {
       (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black";
     }
+    
 
     if(this.correctModifiedFile == true && this.correctOriginalFile == true && this.isValidGameName(gameName)){
-      this.router.navigate(['admin']);
       let newGame = {name: gameName, imageURL: "nouveauTest.bmp", 
                     solo:{first: 9999, second: 9999, third: 9999}, 
                     multi:{first: 9999, second: 9999, third: 9999}};//for tests
       this.gameService.createSimpleGame(newGame);
       console.log("tentative de creer un jeu ... ");
-    }
-  }*/
+      //this.close();
+    }      
+  }
 
+  
   public close(): void {
     this.router.navigate(['admin']); // go back to admin home
   }
