@@ -1,18 +1,19 @@
 import { Container } from "inversify";
 import { Application } from "./app";
+import { ConnexionController } from "./controllers/connexion.controller";
 import { DateController } from "./controllers/date.controller";
 import { ImageController } from "./controllers/image.controller";
 import { IndexController } from "./controllers/index.controller";
 import { Server } from "./server";
-import { DateService } from "./services/date.service";
-import { IndexService } from "./services/index.service";
-import { TYPES } from "./types";
-
-import { ConnexionController } from "./controllers/connexion.controller";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
+import { DateService } from "./services/date.service";
 import { ImageService } from "./services/image.service";
+import { IndexService } from "./services/index.service";
 import { UsersManager } from "./services/users.service";
+import { SocketServerManager } from "./socketServerManager";
+import { TYPES } from "./types";
+
 
 const container: Container = new Container();
 
@@ -32,5 +33,7 @@ container.bind(TYPES.ConnexionService).to(ConnexionService);
 container.bind(TYPES.ConnexionController).to(ConnexionController);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
+container.bind(TYPES.SocketServerManager).to(SocketServerManager);
 
 export { container };
+

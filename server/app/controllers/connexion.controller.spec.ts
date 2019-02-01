@@ -3,7 +3,6 @@ import supertest = require("supertest");
 import { Message } from "../../../common/communication/message";
 import { Application } from "../app";
 import { container } from "../inversify.config";
-import { ConnexionService } from "../services/connexion.service";
 import { TYPES } from "../types";
 
 const mockedAddName: Message = {
@@ -11,7 +10,7 @@ const mockedAddName: Message = {
     body: "The name test was added",
 };
 
-const mockedConnexionService: ConnexionService = {
+const mockedConnexionService: Object = {
     addName: () => Promise.resolve(mockedAddName),
 };
 

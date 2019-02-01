@@ -1,8 +1,9 @@
 import * as http from "http";
 import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
-import {SocketServerManager} from "./SocketServerManager";
 import { Application } from "./app";
+import { container } from "./inversify.config";
+import { SocketServerManager } from "./socketServerManager";
 import { TYPES } from "./types";
 
 @injectable()
@@ -11,7 +12,7 @@ export class Server {
     private readonly appPort: string|number|boolean = this.normalizePort(process.env.PORT || "3000");
     private readonly baseDix: number = 10;
     private server: http.Server;
-    private socketServerManager: SocketServerManager = new SocketServerManager();
+    private socketServerManager: SocketServerManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
 
     public constructor(@inject(TYPES.Application) private application: Application) { }
 

@@ -11,6 +11,7 @@ const TYPES =  {
         ConnexionController : Symbol("ConnexionController"),
         ConnexionService: Symbol("ConnexionService"),
         UserManager: Symbol("UserManager"),
+        SocketServerManager: Symbol("SocketServerManager"),
 };
 
 export  { TYPES };
