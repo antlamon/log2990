@@ -1,6 +1,7 @@
 <div class="adminPage">
-  <div class = "emptyBox">
-
+  <div class = "emptyBox"></div>
+  <div class="fiche de jeu">
+        <app-list-view #games></app-list-view>
   </div>
   <div class="menuBar">
     <button class="freeGenButton" type="button" (click)="openFreeViewForm()">Créer un jeu libre</button>
@@ -8,6 +9,6 @@
   </div>
   <router-outlet></router-outlet>
   <div class="fiche de jeu">
-    <app-list-view></app-list-view>
+    <app-list-view #games></app-list-view>
   </div>
 </div>
