@@ -26,7 +26,7 @@ export class GameListController {
         router.get("/free", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.getFreeGames().then((freeGames)=>{
                 res.json(freeGames);
-            })
+            });
         });
 
         router.post("/free", (req: Request, res: Response, next: NextFunction) => {
@@ -35,7 +35,6 @@ export class GameListController {
              });
         });
 
-        
         return router;
     }
 }
