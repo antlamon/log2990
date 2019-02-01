@@ -1,0 +1,9 @@
+div[ng-view]{
+    height: 100%;
+}
+html, body { height: 100vh !important;
+background-color: #CDD5FF;
+margin: 0 !important; }
+*{
+    margin: 0;
+}

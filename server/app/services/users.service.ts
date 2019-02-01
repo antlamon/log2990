@@ -18,7 +18,6 @@ export class UsersManager {
             this.removeUser(userSocket.client.id);
         });
     }
-
     public setUserName(username: string, socketId: string): boolean {
         if (username === null || socketId === null) {
             return false;
@@ -49,7 +48,6 @@ export class UsersManager {
 
         return this.users[index];
     }
-
     public userExist(username: string): boolean {
         const index: number = this.users.findIndex((x: IUser) => x.username === username);
         if (index === -1) {
@@ -58,7 +56,6 @@ export class UsersManager {
 
         return true;
     }
-
     public emitEvent(event: string): void {
         this.users.forEach((user: IUser) => {
             user.socket.emit(event);

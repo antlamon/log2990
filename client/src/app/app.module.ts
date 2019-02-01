@@ -12,6 +12,7 @@ import { FormsModule } from "@angular/forms";
 import { IndexService } from "./index.service";
 import { ListViewComponent } from './list-view/list-view.component';
 import {SocketService} from "./socket.service";
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import {SocketService} from "./socket.service";
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    MatCardModule,
   ],
   providers: [IndexService, SocketService],
   bootstrap: [AppComponent]

@@ -4,6 +4,7 @@ import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel,  } from "./convertImage.service";
+import { readFileSync } from "fs";
 
 @injectable()
 export class ImageService {
@@ -142,4 +143,8 @@ export class ImageService {
     public isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
     }
+    public imageToString64(path:string):  string{
+        return "data:image/bmp;base64," + readFileSync(path).toString('base64');
+    }
+
 }
