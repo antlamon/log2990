@@ -14,6 +14,8 @@ import {SocketService} from "./socket.service";
 import {MatCardModule} from '@angular/material/card';
 import { MatDialogModule } from "@angular/material";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalComponent } from "./adminView/simple-generator/_directives/modal.component";
+import { ModalService } from "./modal.service";
 
 @NgModule({
   declarations: [
@@ -23,6 +25,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FreeGeneratorComponent,
     ListViewComponent,
     SimpleGeneratorComponent,
+    ModalComponent,
+    ModalService,
     
   ],
   imports: [

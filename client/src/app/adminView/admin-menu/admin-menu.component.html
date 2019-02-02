@@ -3,8 +3,14 @@
   <div class="fiche de jeu">
         <app-list-view #games></app-list-view>
   </div>
+  <modal id = "simpleGame">
+      <div class="modal">
+        <app-simple-generator class = "modal-body"></app-simple-generator>
+      </div>
+       <div class="modal-background"></div>
+  </modal>
   <div class="menuBar">
-    <button mat-raised-button (click)="openSimpleDialog()">Créer un jeu simple</button>
+    <button  (click)="openSimpleDialog('simpleGame')">Créer un jeu simple</button>
     <button (click)="openFreeDialog()">Créer un jeu libre</button>
   </div>
 </div>

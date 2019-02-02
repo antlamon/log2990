@@ -1,8 +1,6 @@
 import { Component, ViewChild, AfterViewInit } from "@angular/core";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
-import { MatDialog} from "@angular/material";
-import { SimpleGeneratorComponent } from "../simple-generator/simple-generator.component";
-import { FreeGeneratorComponent } from "../free-generator/free-generator.component";
+import { ModalService } from '../../modal.service';
 
 @Component({
   selector: "app-admin-menu",
@@ -18,24 +16,14 @@ export class AdminMenuComponent implements AfterViewInit {
     this.games.isAdminMode = true;
   }
 
-  public constructor(public dialog:MatDialog) {}
+  public constructor(private modalService:ModalService) {}
 
-  public openSimpleDialog() {
-    const dialogRef = this.dialog.open(SimpleGeneratorComponent, {
-      width: '500px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+  public openSimpleDialog(id:string) {
+    this.modalService.open(id);
   }
 
-  public openFreeDialog() {
-    const dialogRef = this.dialog.open(FreeGeneratorComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
+  public openFreeDialog(id:string) {
+    this.modalService.close(id);
   }
 
 }

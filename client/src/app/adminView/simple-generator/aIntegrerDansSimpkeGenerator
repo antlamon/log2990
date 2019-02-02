@@ -1,0 +1,58 @@
+import { Component, OnInit, ElementRef, Input, } from "@angular/core";
+import { ModalService } from '../_services';
+
+@Component({
+  selector: "app-simple-generator",
+  templateUrl: "./simple-generator.component.html",
+  styleUrls: ["./simple-generator.component.css"],
+})
+
+export class SimpleGeneratorComponent implements OnInit {
+
+  @Input() id: string;
+  private element: any;
+  
+  public constructor(private modalService: ModalService, private el: ElementRef) {
+    this.element = el.nativeElement;
+    }
+
+
+  public ngOnInit(): void {
+
+    let modal = this;
+
+        // ensure id attribute exists
+        if (!this.id) {
+            console.error('modal must have an id');
+            return;
+
+        }
+        // move element to bottom of page (just before </body>) so it can be displayed above everything else
+        document.body.appendChild(this.element);
+
+        // close modal on background click
+        this.element.addEventListener('click', function (e: any) {
+            if (e.target.className === 'modal') {
+                modal.close();
+            }
+          });
+
+        // add self (this modal instance) to the modal service so it's accessible from controllers
+        this.modalService.add(this);
+
+  }
+
+  open(): void {
+        this.element.style.display = 'block';
+        document.body.classList.add('modal-open');
+    }
+  
+
+  public submit(): void {}
+  
+  public close(): void {
+        this.element.style.display = 'none';
+        document.body.classList.remove('modal-open');
+  }
+
+}
