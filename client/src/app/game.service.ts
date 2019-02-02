@@ -15,6 +15,7 @@ export class GameService {
   private readonly FREE_URL: string = this.GAMES_URL + "/free";
 
   public constructor(private http: HttpClient) {
+    
   }
 
   public getSimpleGames():  Observable<IGame[]> {
@@ -42,7 +43,6 @@ export class GameService {
         'Content-Type':  'application/json'
       })
     };
-
     this.http.post<IGame>(this.SIMPLE_URL, game, httpOptions).subscribe();
   }
   
@@ -58,8 +58,16 @@ export class GameService {
     this.http.post<IGame>(this.FREE_URL, game, httpOptions).subscribe();
   }
 
-  public deleteSimpleGame(game: IGame): void {
-    // return this.http.delete(this.SIMPLE_URL, game);
+  public deleteSimpleGame(game: IGame): Observable<{}> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    const url = this.SIMPLE_URL+ "?name=" + game.name;
+
+    return this.http.delete(url, httpOptions);
   }
 
   public deleteFreeGame(game: IGame): void {

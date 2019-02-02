@@ -1,6 +1,8 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { GameService } from '../game.service';
 import { IGame } from '../../../../common/models/game';
+import { SocketService } from '../socket.service';
+import { SocketsEvents } from "../../../../common/communication/SocketsEvents";
 
 @Component({
   selector: 'app-list-view',
@@ -14,8 +16,9 @@ export class ListViewComponent implements OnInit {
   public freeGames: IGame[];
   @Input() isAdminMode: Boolean;
 
-  constructor(private gameService: GameService) {
+  constructor(private gameService: GameService, private socket:SocketService) {
     this.isAdminMode = false;
+    this.socket.addEvent(SocketsEvents.UPDATE_SIMPLES_GAMES, this.getSimpleGames.bind(this));
   }
 
   ngOnInit() {
@@ -30,9 +33,15 @@ export class ListViewComponent implements OnInit {
         .subscribe((response: IGame[]) => this.simpleGames = response);
   }
 
+  public deleteSimpleGames(game: IGame): void {
+    this.gameService.deleteSimpleGame(game).subscribe();
+  }
+
   public getFreeGames(): void {
     this.gameService.getFreeGames()
         .subscribe((response: IGame[]) => this.freeGames = response);
   }
+
+  
 
 }
