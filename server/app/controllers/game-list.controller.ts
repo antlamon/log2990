@@ -2,8 +2,7 @@ import { NextFunction, Request, RequestHandler, Response, Router } from "express
 import { inject, injectable } from "inversify";
 import {GameListService} from "../services/game-list.service";
 import * as multer from "multer";
-import { TYPES } from "../types";
-import { Message } from "../../../common/communication/message";
+import { TYPES } from "../types";g
 
 @injectable()
 export class GameListController {
