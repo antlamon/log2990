@@ -1,16 +1,19 @@
-import { expect } from "chai";
+import chai = require("chai");
+import spies = require("chai-spies");
 import { readFileSync } from "fs";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 import { ImageService } from "./image.service";
 
-describe ( "imageService tests", () => {
+const expect: Chai.ExpectStatic = chai.expect;
+chai.use(spies);
 
+describe ( "imageService tests", () => {
     const convertService: ConvertImage = new ConvertImage();
     const service: ImageService = new ImageService(convertService);
     const path1: string = "./app/documents/image_test_1.bmp";
     const path2: string = "./app/documents/image_test_2.bmp";
     const path3: string = "./app/documents/image1.bmp";
-    const path4: string = "./app/documents/image7diff.bmp";
+    const path4: string = "./app/documents/image_result.bmp";
 
     describe("Detect black pixel function", () => {
 
@@ -92,30 +95,34 @@ describe ( "imageService tests", () => {
 
     describe("Counting the differences", () => {
 
-        it("Should return the correct number of differences", async (done) => {
-            const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
-            const image4: ImageBMP = convertService.bufferToImageBMP(readFileSync(path4));
-            const image: ImageBMP = service.compareData(image1, image4);
-            expect(service.getNbDifferences(image)).to.equal(7);
+        it("Should return the correct number of differences", async (done: MochaDone) => {
+            const image: ImageBMP = convertService.bufferToImageBMP(readFileSync(path4));
+            expect(service.getNbDifferences(image)).to.equal(4);
             done();
         });
 
     });
-    describe("Getting different image", () => {
-        it("Should create an result.bmp file", async () => {
 
-            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path4)).body).to.equal("success");
+    describe("Getting different image", () => {
+        const sandbox: ChaiSpies.Sandbox = chai.spy.sandbox();
+
+        afterEach(() => {
+            sandbox.restore();
+        });
+
+        it("Should create an result.bmp file", async () => {
+            sandbox.on(service, "getNbDifferences", () => 7);
+            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("success");
         });
 
         it("Should return a string with a error message for the format", () => {
-
             const buffer: Buffer = readFileSync("./app/documents/image_wrongformat.bmp");
             expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.
                 equal("Les images ne sont pas dans le bon format");
 
         });
         it("Should return an error for wrong number of differences", () => {
-
+            sandbox.on(service, "getNbDifferences", () => 3);
             expect(service.getDifferentImage("name", readFileSync(path1), readFileSync(path2)).body).to.equal("Il n'y a pas 7 différences");
         });
     });

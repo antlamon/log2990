@@ -74,5 +74,4 @@ export class GameListService {
 
         return(message);
     }
-
 }
