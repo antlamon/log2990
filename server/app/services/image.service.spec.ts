@@ -6,7 +6,7 @@ import { ImageService } from "./image.service";
 describe ( "imageService tests", () => {
 
     const convertService: ConvertImage = new ConvertImage();
-    const service: ImageService = new ImageService( convertService);
+    const service: ImageService = new ImageService(convertService);
     const path1: string = "./app/documents/image_test_1.bmp";
     const path2: string = "./app/documents/image_test_2.bmp";
     const path3: string = "./app/documents/image1.bmp";
@@ -111,8 +111,8 @@ describe ( "imageService tests", () => {
         it("Should return a string with a error message for the format", () => {
 
             const buffer: Buffer = readFileSync("./app/documents/image_wrongformat.bmp");
-            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.equal("Les images ne sont pas dans le bon format");
-
+            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body)
+            .to.equal("Les images ne sont pas dans le bon format");
         });
         it("Should return an error for wrong number of differences", () => {
 

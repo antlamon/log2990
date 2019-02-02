@@ -1,10 +1,9 @@
-import { writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { Message } from "../../../common/communication/message";
 import { TYPES } from "../types";
-import { ConvertImage, ImageBMP, Pixel,  } from "./convertImage.service";
-import { readFileSync } from "fs";
+import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 
 @injectable()
 export class ImageService {
@@ -19,7 +18,7 @@ export class ImageService {
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
-            if(this.getNbDifferences(imagesCompared) !== 7) {
+            if (this.getNbDifferences(imagesCompared) !== 7) {
                 throw Error("Il n'y a pas 7 différences");
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
@@ -37,7 +36,7 @@ export class ImageService {
             };
         }
     }
-    
+
     public getNbDifferences(image: ImageBMP): number {
         
         const pixels: Pixel[][] = image.pixels;
@@ -54,7 +53,7 @@ export class ImageService {
                     unused.push([x,y]);
                     while(unused.length > 0) {
                         let hasNext: boolean = false;
-                        const current: [number, number]  = unused[unused.length-1];                     
+                        const current: [number, number]  = unused[unused.length-1];
                         for(let i: number = current[0]-1; i <= current[0]+1; i++ ) {
                             for(let j: number = current[1]-1; j <= current[1]+1; j++ ) {
                                 if(i >= 0 && i < image.height && j >= 0 && j < image.width && this.isBlackPixel(pixels[i][j]) && !this.contains(visited, [i,j]) && !this.contains(unused,[i,j])) {
@@ -72,16 +71,16 @@ export class ImageService {
             }
         }
         return diffCount;
-        
     }
 
     public contains(array: [number, number][], item: [number, number]): boolean {
 
         for(let i:number = 0; i < array.length; i++) {
-            if(array[i][0] === item[0] && array[i][1] == item[1]) {
+            if (array[i][0] === item[0] && array[i][1] === item[1]) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -143,8 +142,8 @@ export class ImageService {
     public isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
     }
-    public imageToString64(path:string):  string{
-        return "data:image/bmp;base64," + readFileSync(path).toString('base64');
-    }
 
+    public imageToString64(path: string):  string {
+        return "data:image/bmp;base64," + readFileSync(path).toString("base64");
+    }
 }

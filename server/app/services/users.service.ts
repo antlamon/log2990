@@ -1,28 +1,33 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import * as SocketIO from "socket.io";
-import { IUser } from "./IUser";
-type Socket = SocketIO.Socket;
+
+export interface User {
+    username: string;
+    socketId: string;
+}
 
 @injectable()
 export class UsersManager {
-    public users: IUser[];
+
+    public users: User[];
 
     public constructor() {
         this.users = [];
     }
 
-    public addUser(userSocket: Socket): void {
-        this.users.push({ username: "--", socket: userSocket });
-        userSocket.on("disconnect", () => {
-            this.removeUser(userSocket.client.id);
-        });
+    public addUser(socketId: string): void {
+        this.users.push(
+            {
+                username: "--",
+                socketId: socketId,
+            });
     }
-    public setUserName(username: string, socketId: string): boolean {
+
+    public setUserName(username: string | null, socketId: string | null): boolean {
         if (username === null || socketId === null) {
             return false;
         }
-        const index: number = this.users.findIndex((x: IUser) => x.socket.client.id === socketId);
+        const index: number = this.users.findIndex((x: User) => x.socketId === socketId);
         if (index === -1) {
             return false;
         }
@@ -30,8 +35,9 @@ export class UsersManager {
 
         return true;
     }
-    private removeUser(socketId: string): boolean {
-        const index: number = this.users.findIndex((x: IUser) => x.socket.client.id === socketId);
+
+    public removeUser(socketId: string): boolean {
+        const index: number = this.users.findIndex((x: User) => x.socketId === socketId);
         if (index === -1) {
             return false;
         }
@@ -40,26 +46,18 @@ export class UsersManager {
         return true;
     }
 
-    public getUser(username: string): IUser {
-        const index: number = this.users.findIndex((x: IUser) => x.username === username);
+    public getUser(username: string): User | null {
+        const index: number = this.users.findIndex((x: User) => x.username === username);
         if (index === -1) {
-            return this.users[index];
+            return null;
         }
 
         return this.users[index];
     }
-    public userExist(username: string): boolean {
-        const index: number = this.users.findIndex((x: IUser) => x.username === username);
-        if (index === -1) {
-            return false;
-        }
 
-        return true;
-    }
-    public emitEvent(event: string): void {
-        this.users.forEach((user: IUser) => {
-            user.socket.emit(event);
-        });
+    public userExist(username: string): boolean {
+        const index: number = this.users.findIndex((x: User) => x.username === username);
+
+        return index !== -1;
     }
 }
-export let usersManagerInstance: UsersManager = new UsersManager();
