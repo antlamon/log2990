@@ -1,13 +1,29 @@
-<div class="simpleViewForm" id="simpleViewForm">
-    <div>
-      <h1>Créer un jeu point de vue simple</h1>
-      <p>Format d'image: bitmap 24-bit (640x480)</p>
-    </div>
-
+<div class = "simpleViewForm">
+<h1 mat-dialog-title>Créer un jeu point de vue simple</h1>
+<div mat-dialog-content>
+    <p>Format d'image: bitmap 24-bit (640x480)</p>
     <form id="formSV">
-    <div class="form-grid">
-      <div>
-        <p id="gameNameLabel">Nom du jeu</p>
+      <div class="form-grid">
+        <div>
+          <p id="gameNameLabel">Nom du jeu</p>
+        </div>
+        <div class="rightColumn">
+          <input mat-input type="text" class="textInput" value="" id="gameName">
+        </div>
+        <div>
+          <p id="originalFileLabel">Image originale</p>
+        </div>
+        <div class="rightColumn">
+          <input type="file" name="file" id="originalFile" class="uploader" (change)="onOriginalFileChange($event)">
+          <label for="originalFile">Choisir un fichier </label>
+        </div>
+        <div>
+          <p id="modifiedFileLabel">Image modifiée</p>
+        </div>
+        <div class="rightColumn">
+          <input type="file" name="file" id="modifiedFile" class="uploader" (change)="onModifiedFileChange($event)">
+          <label for="modifiedFile">Choisir un fichier </label>
+        </div>
       </div>
       <div class="rightColumn">
         <input type="text" class="textInput" id="gameName">
@@ -34,4 +50,11 @@
     </div>
 
     </form>
+  </div>
+<div mat-dialog-actions>
+  <div>
+    <button type="submit" id="submitButton" (click)="submit()">Soumettre </button>
+    <button (click)="close()"> Annuler </button>
+  </div>
+</div>
 </div>

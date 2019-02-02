@@ -35,9 +35,16 @@ export class GameListController {
             });
         });
 
-        router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.getSimpleGames().then((simpleGames) => {
-                res.json(simpleGames);
+        router.delete("/simple", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.deleteSimpleGame(req.query.name);
+            console.log("a game has been deleted: " );
+                res.json(req.body);
+             
+        });
+
+       router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.getSimpleGames().then((simpleGames)=>{
+               res.json(simpleGames);
             });
         });
 

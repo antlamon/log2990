@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { Router} from "@angular/router";
 import { GameService } from "src/app/game.service";
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: "app-free-generator",
@@ -9,14 +9,15 @@ import { GameService } from "src/app/game.service";
 })
 export class FreeGeneratorComponent implements OnInit {
 
-  public constructor(private router: Router, private gameService: GameService) {
+  public constructor( private gameService: GameService,
+    private dialogRef: MatDialogRef<FreeGeneratorComponent>) {
   }
 
   public ngOnInit() {
   }
 
   public submit() {
-    // submit form ... TODO
+    // submit form ... TODO sprint 2
     let newGame = {name: "NouveauJeu", imageURL: "nouveauTest.bmp", 
                     solo:{first: 9999, second: 9999, third: 9999}, 
                     multi:{first: 9999, second: 9999, third: 9999}};//for tests
@@ -26,7 +27,7 @@ export class FreeGeneratorComponent implements OnInit {
   }
 
   public close() {
-    this.router.navigate(["admin"]); // go back to admin home
+    this.dialogRef.close();
   }
 
 }
