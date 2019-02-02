@@ -20,6 +20,14 @@ export class GameListService {
         return GAMES;
     }
 
+    public deleteSimpleGame(game: IGame): void {
+        var index = GAMES.findIndex(i => i.name === game.name); 
+        if (index !== -1) {
+            GAMES.splice(index, 1);
+        } 
+        
+    }
+
     public async getFreeGames(): Promise<IGame[]> {
         for(let i:number=0; i < GAMES.length;i++)
         {
