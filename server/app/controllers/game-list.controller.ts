@@ -59,16 +59,6 @@ export class GameListController {
                 res.json(game);
             });
         });
-        router.get("/delete/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteSimpleGame(req.query.name).then((message :Message)=>{
-                res.json(message);
-            });
-        });
-        router.get("/delete/free", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteFreeGame(req.query.name).then((message :Message)=>{
-                res.json(message);
-            });
-        });
 
         return router;
     }
