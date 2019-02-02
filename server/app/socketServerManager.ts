@@ -21,4 +21,8 @@ export class SocketServerManager {
             });
         });
     }
+
+    public emitEvent(event: string): void {
+        this.socketServer.emit(event);
+    }
 }
