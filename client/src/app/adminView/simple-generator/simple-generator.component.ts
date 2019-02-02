@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { GameService } from "src/app/game.service";
 import { MatDialogRef } from '@angular/material';
-// import {ISolo} from "../../../../../common/models/game";
+import {ISolo} from "../../../../../common/models/game";
 
 @Component({
   selector: "app-simple-generator",
@@ -103,10 +103,12 @@ export class SimpleGeneratorComponent implements OnInit {
     
 
     if(this.correctModifiedFile == true && this.correctOriginalFile == true && this.isValidGameName(gameName)){
-      let newGame = {name: gameName, imageURL: "nouveauTest.bmp", 
-                    solo:{first: 9999, second: 9999, third: 9999}, 
-                    multi:{first: 9999, second: 9999, third: 9999}};//for tests
-      this.gameService.createSimpleGame(newGame);
+      const file1: File = (document.getElementById("originalFile") as HTMLInputElement).files[0];
+    const file2: File = (document.getElementById("modifiedFile") as HTMLInputElement).files[0];
+
+    const newGame: ISolo = {name: gameName, originalImage: file1, modifiedImage: file2 };
+
+    this.gameService.createSimpleGame(newGame);
       console.log("tentative de creer un jeu ... ");
       this.close();
     }      
