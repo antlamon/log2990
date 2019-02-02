@@ -3,7 +3,6 @@ import { inject, injectable } from "inversify";
 import {GameListService} from "../services/game-list.service";
 import * as multer from "multer";
 import { TYPES } from "../types";
-import { Message } from "../../../common/communication/message";
 
 @injectable()
 export class GameListController {
@@ -57,16 +56,6 @@ export class GameListController {
         router.post("/free", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.addFreeGame(req.body).then((game) => {
                 res.json(game);
-            });
-        });
-        router.get("/delete/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteSimpleGame(req.query.name).then((message :Message)=>{
-                res.json(message);
-            });
-        });
-        router.get("/delete/free", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteFreeGame(req.query.name).then((message :Message)=>{
-                res.json(message);
             });
         });
 
