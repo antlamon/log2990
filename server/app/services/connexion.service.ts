@@ -1,7 +1,8 @@
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { usersManagerInstance } from "./users.service";
+import { TYPES } from "../types";
+import { UsersManager } from "./users.service";
 
 @injectable()
 export class ConnexionService {
@@ -17,6 +18,8 @@ export class ConnexionService {
         return tryRegex.test(nom);
     }
 
+    public constructor(@inject(TYPES.UserManager) private userManager: UsersManager) {}
+
     public async addName(newName: string, id: string): Promise<Message> {
         if (!ConnexionService.isCorrectLength(newName)) {
             return {title: ERROR_ID, body: "Name is not the correct length it must be between "
@@ -26,12 +29,16 @@ export class ConnexionService {
             return {title: ERROR_ID, body: "Name must contain only alpha numerics"};
         }
         // Checker si dans liste
-        if (usersManagerInstance.userExist(newName)) {
+        if (this.userManager.userExist(newName)) {
             return {title: ERROR_ID, body: "Name was already taken"};
         }
 
         // Mock-data
-        usersManagerInstance.setUserName(newName, id);
-        return {title: BASE_ID, body: "The name" + newName + " was added to the list of names"};
+        this.userManager.setUserName(newName, id);
+
+        return {
+            title: BASE_ID,
+            body: `The name ${newName} was added to the list of names`,
+        };
     }
 }

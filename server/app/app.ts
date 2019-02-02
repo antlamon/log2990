@@ -5,10 +5,8 @@ import * as express from "express";
 import { inject, injectable } from "inversify";
 import * as logger from "morgan";
 import { ConnexionController } from "./controllers/connexion.controller";
-import { DateController } from "./controllers/date.controller";
 import { GameListController } from "./controllers/game-list.controller";
 import { ImageController } from "./controllers/image.controller";
-import { IndexController } from "./controllers/index.controller";
 import { TYPES } from "./types";
 
 @injectable()
@@ -18,8 +16,6 @@ export class Application {
     public app: express.Application;
 
     public constructor(
-            @inject(TYPES.IndexController) private indexController: IndexController,
-            @inject(TYPES.DateController) private dateController: DateController,
             @inject(TYPES.ConnexionController)private connexionController: ConnexionController,
             @inject(TYPES.ImageController) private imageController: ImageController,
             @inject(TYPES.GameListController) private gameListController: GameListController) {
@@ -38,10 +34,8 @@ export class Application {
     }
 
     public bindRoutes(): void {
-        // Notre application utilise le routeur de notre API `Index`
+        // Notre application utilise le routeur de notre API
         this.app.use("/api/connexion", this.connexionController.router);
-        this.app.use("/api/index", this.indexController.router);
-        this.app.use("/api/date/", this.dateController.router);
         this.app.use(this.imageController.url, this.imageController.router);
         this.app.use("/api/gameList", this.gameListController.router);
         this.errorHandeling();

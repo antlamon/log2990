@@ -1,8 +1,7 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
-import * as SocketIO from "socket.io";
+import { Socket } from "socket.io";
 import { IUser } from "./IUser";
-type Socket = SocketIO.Socket;
 
 @injectable()
 export class UsersManager {
@@ -62,4 +61,3 @@ export class UsersManager {
         });
     }
 }
-export let usersManagerInstance: UsersManager = new UsersManager();

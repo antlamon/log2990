@@ -1,5 +1,4 @@
-import * as SocketIO from "socket.io";
-type Socket= SocketIO.Socket;
+import { Socket } from "socket.io";
 export interface IUser {
     username: string;
     socket: Socket;
