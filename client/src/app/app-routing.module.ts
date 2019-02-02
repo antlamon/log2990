@@ -7,8 +7,7 @@ import {InitialComponent} from "./initial/initial.component";
 import { ListViewComponent } from "./list-view/list-view.component";
 
 const routes: Routes = [
-  {
-    path: "admin",
+  { path: 'admin',
     component: AdminMenuComponent,
     children: [
       { path: "freegen", component: FreeGeneratorComponent } as Route,

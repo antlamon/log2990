@@ -35,23 +35,28 @@ export class GameService {
 
   public createSimpleGame(game: ISolo): void {
 
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+        
+    //     'Content-Type':  'multipart/form-data',
+    //     'Accept':'application/json'
+    //   })
+    // };
+    const form: FormData = new FormData();
+    form.append("name", game.name)
+    form.append("originalImage", game.originalImage, game.originalImage.name);
+    form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
+    this.http.post<ISolo>(this.SIMPLE_URL, form).subscribe();
+  }
+
+  public createFreeGame(game: IGame): void {
+
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
       })
     };
-
-    this.http.post<ISolo>(this.SIMPLE_URL, game, httpOptions).subscribe();
-  }
-
-  public createFreeGame(game: IGame): void {
-
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-    //     'Content-Type':  'application/json'
-    //   })
-    // };
-    this.http.post<IGame>(this.FREE_URL, game).subscribe((message) => console.log(message));
+    this.http.post<IGame>(this.FREE_URL, JSON.stringify(game), httpOptions).subscribe();
   }
 
   public deleteSimpleGame(game: IGame): void {

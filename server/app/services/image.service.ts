@@ -6,7 +6,7 @@ import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel,  } from "./convertImage.service";
 
 @injectable()
-export class ImageService {
+export class ImageService  {
 
     public static readonly IMAGE_HEIGHT: number = 480;
     public static readonly IMAGE_WIDTH: number = 640;
@@ -24,8 +24,8 @@ export class ImageService {
             if (this.getNbDifferences(imagesCompared) !== ImageService.NUM_DIFF) {
                 throw Error("Il n'y a pas 7 différences");
             }
-            this.convertImage.imageBMPtoBuffer(imagesCompared, originalBuffer);
-            writeFileSync(`./app/documents/${newImageName}.bmp`, originalBuffer);
+            this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
+            writeFileSync(`./app/documents/${newImageName}.bmp`, modifiedBuffer);
 
             return {
                 title: "Images compared",

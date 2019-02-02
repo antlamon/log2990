@@ -1,34 +1,37 @@
-<div class="simpleViewForm">
+<div class="simpleViewForm" id="simpleViewForm">
     <div>
       <h1>Créer un jeu point de vue simple</h1>
       <p>Format d'image: bitmap 24-bit (640x480)</p>
     </div>
-  
+
+    <form id="formSV">
     <div class="form-grid">
       <div>
-        <p>Nom du jeu</p>
+        <p id="gameNameLabel">Nom du jeu</p>
       </div>
       <div class="rightColumn">
-        <input type="text" name="name" id="name"class = "textInput">
+        <input type="text" class="textInput" id="gameName">
       </div>
       <div>
-        <p>Image originale</p>
+        <p id="originalFileLabel">Image originale</p>
       </div>
       <div class="rightColumn">
-        <input type="file" name="file" id="fileOrigin" class = "uploader">
-        <label for="fileOrigin">Choisir un fichier </label>
+        <input type="file" name="file" id="originalFile" class="uploader" (change)="onOriginalFileChange($event)">
+        <label for="originalFile">Choisir un fichier </label>
       </div>
       <div>
-        <p>Image modifiée</p>
+        <p id="modifiedFileLabel">Image modifiée</p>
       </div>
       <div class="rightColumn">
-        <input type="file" name="file" id="fileModified" class = "uploader">
-        <label for="fileModified">Choisir un fichier </label>
+        <input type="file" name="file" id="modifiedFile" class="uploader" (change)="onModifiedFileChange($event)">
+        <label for="modifiedFile">Choisir un fichier </label>
       </div>
-  
     </div>
+    
     <div>
-      <button (click) = "submit()">Soumettre </button>
+      <button type="submit" id="submitButton" (click)="submit()" >Soumettre </button>
       <button (click) = "close()"> Annuler </button>
     </div>
-  </div>
+
+    </form>
+</div>

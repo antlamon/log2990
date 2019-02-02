@@ -9,7 +9,7 @@ export interface IGame {
 
 export interface ISolo {
 
-    name: String;
+    name: string;
     originalImage: File;
     modifiedImage: File;
 }
