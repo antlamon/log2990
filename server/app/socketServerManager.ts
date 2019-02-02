@@ -15,7 +15,10 @@ export class SocketServerManager {
     public startServer(server: Server): void {
         this.socketServer = SocketIO(server);
         this.socketServer.on("connect", (socket: Socket) => {
-            this.userManager.addUser(socket);
+            this.userManager.addUser(socket.id);
+            socket.on("disonnect", () => {
+                this.userManager.removeUser(socket.id);
+            });
         });
     }
 }
