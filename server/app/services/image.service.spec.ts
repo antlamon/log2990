@@ -10,11 +10,12 @@ chai.use(spies);
 describe ( "imageService tests", () => {
     const convertService: ConvertImage = new ConvertImage();
     const service: ImageService = new ImageService(convertService);
-    const path1: string = "./app/documents/image_test_1.bmp";
-    const path2: string = "./app/documents/image_test_2.bmp";
-    const path3: string = "./app/documents/image1.bmp";
-    const path4: string = "./app/documents/image_result.bmp";
-    const path5: string = "./app/documents/expectedImage.bmp";
+    const path1: string = "./app/documents/test-images/image_test_1.bmp";
+    const path2: string = "./app/documents/test-images/image_test_2.bmp";
+    const path3: string = "./app/documents/test-images/wrong_size_image.bmp";
+    const path4: string = "./app/documents/test-images/image_result.bmp";
+    const path5: string = "./app/documents/test-images/expectedImage.bmp";
+    const path6: string = "./app/documents/test-images/image_wrongformat.bmp";
 
     describe("Detect black pixel function", () => {
 
@@ -113,11 +114,11 @@ describe ( "imageService tests", () => {
 
         it("Should create an result.bmp file", async () => {
             sandbox.on(service, "getNbDifferences", () => 7);
-            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("success");
+            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("createdImage");
         });
 
         it("Should return a string with a error message for the format", () => {
-            const buffer: Buffer = readFileSync("./app/documents/image_wrongformat.bmp");
+            const buffer: Buffer = readFileSync(path6);
             expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.
                 equal("Les images ne sont pas dans le bon format");
 

@@ -28,6 +28,6 @@ container.bind(TYPES.GameListController).to(GameListController);
 container.bind(TYPES.GameListService).to(GameListService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
-container.bind(TYPES.SocketServerManager).to(SocketServerManager);
+container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();
 
 export { container };

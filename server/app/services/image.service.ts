@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import { Message } from "../../../common/communication/message";
+import { Message, ERROR_ID,BASE_ID } from "../../../common/communication/message";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 
@@ -28,13 +28,13 @@ export class ImageService {
             writeFileSync(`./app/documents/differences-images/${newImageName}.bmp`, modifiedBuffer);
 
             return {
-                title: newImageName,
-                body: "success",
+                title: BASE_ID,
+                body: newImageName,
             };
 
         } catch (error) {
             return {
-                title: "Images compared",
+                title: ERROR_ID,
                 body: error.message,
             };
         }
