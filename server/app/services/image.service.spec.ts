@@ -35,19 +35,19 @@ describe ( "imageService tests", () => {
         });
 
     });
-    describe("Contains fonction tests", () =>{
+    describe("Contains fonction tests", () => {
         it("Should contain the data", () => {
-            expect(service.contains([[0,1],[1,2],[2,3]], [1, 2])).to.be.true;
+            expect(service.contains([[0, 1], [1, 0], [-1, 1]], [1, 0])).to.equal(true);
 
         });
         it("Should not contain the data", () => {
 
-            expect(service.contains([[0,1],[1,2],[2,3]], [1, 3])).to.be.false;
+            expect(service.contains([[0, 1], [1, 0], [-1, 1]], [1, -1])).to.equal(false);
         });
 
     });
     describe("Comparing data tests", () => {
-        
+
         it("Should return the expected image with the enlarged pixels", () => {
 
             const image1: ImageBMP = convertService.bufferToImageBMP(readFileSync(path1));
@@ -65,7 +65,7 @@ describe ( "imageService tests", () => {
             }
             expect(same).to.equal(true);
         });
-       
+
         it("Should return a white image when comparing with the same image", () => {
 
             const image2: ImageBMP = convertService.bufferToImageBMP(readFileSync(path2));
@@ -88,7 +88,6 @@ describe ( "imageService tests", () => {
             expect(() => service.compareData(image1, image3)).to.throw(Error);
         });
 
-
     });
 
     describe("Counting the differences", () => {
@@ -102,7 +101,7 @@ describe ( "imageService tests", () => {
         });
 
     });
-        describe("Getting different image", () => {
+    describe("Getting different image", () => {
         it("Should create an result.bmp file", async () => {
 
             expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path4)).body).to.equal("success");
@@ -111,8 +110,9 @@ describe ( "imageService tests", () => {
         it("Should return a string with a error message for the format", () => {
 
             const buffer: Buffer = readFileSync("./app/documents/image_wrongformat.bmp");
-            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body)
-            .to.equal("Les images ne sont pas dans le bon format");
+            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.
+                equal("Les images ne sont pas dans le bon format");
+
         });
         it("Should return an error for wrong number of differences", () => {
 

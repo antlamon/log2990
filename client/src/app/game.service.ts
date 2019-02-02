@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IGame } from "../../../common/models/game";
+import { IGame, ISolo } from "../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -33,19 +33,21 @@ export class GameService {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
 
+  public createSimpleGame(game: ISolo): void {
 
-  public createSimpleGame(game: IGame): void {
-
-    console.log("envoi de la requete au serveur...");
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json'
-      })
-    };
-
-    this.http.post<IGame>(this.SIMPLE_URL, game, httpOptions).subscribe();
+    // const httpOptions = {
+    //   headers: new HttpHeaders({
+        
+    //     'Content-Type':  'multipart/form-data',
+    //     'Accept':'application/json'
+    //   })
+    // };
+    const form: FormData = new FormData();
+    form.append("name", game.name)
+    form.append("originalImage", game.originalImage, game.originalImage.name);
+    form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
+    this.http.post<ISolo>(this.SIMPLE_URL, form).subscribe();
   }
-  
 
   public createFreeGame(game: IGame): void {
 
@@ -54,8 +56,7 @@ export class GameService {
         'Content-Type':  'application/json'
       })
     };
-
-    this.http.post<IGame>(this.FREE_URL, game, httpOptions).subscribe();
+    this.http.post<IGame>(this.FREE_URL, JSON.stringify(game), httpOptions).subscribe();
   }
 
   public deleteSimpleGame(game: IGame): void {
