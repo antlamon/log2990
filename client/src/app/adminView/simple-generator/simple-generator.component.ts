@@ -16,8 +16,8 @@ export class SimpleGeneratorComponent implements OnInit {
   private readonly IMAGE_HEIGHT: number = 480; 
   private readonly MIN_LENGTH: number = 3;
   private readonly MAX_LENGTH: number = 15;
-  // private readonly WIDTH_OFFSET: number = 18;
-  // private readonly HEIGHT_OFFSET: number = 22;
+  private readonly WIDTH_OFFSET: number = 18;
+  private readonly HEIGHT_OFFSET: number = 22;
   
   public constructor(private gameService: GameService,
     private dialogRef: MatDialogRef<SimpleGeneratorComponent>) {
@@ -33,46 +33,46 @@ export class SimpleGeneratorComponent implements OnInit {
   }
   
   public onModifiedFileChange(event: any): void {
-    // let filenameModified: string = (document.getElementById("modifiedFile") as HTMLInputElement).value; 
-    // const reader = new FileReader();
+    let filenameModified: string = (document.getElementById("modifiedFile") as HTMLInputElement).value; 
+    const reader = new FileReader();
 
-    // if(event.target.files && event.target.files.length && this.checkModifiedExtension(filenameModified)) {
-    //   const [file] = event.target.files;
-    //   reader.readAsArrayBuffer(file);
+    if(event.target.files && event.target.files.length && this.checkModifiedExtension(filenameModified)) {
+      const [file] = event.target.files;
+      reader.readAsArrayBuffer(file);
       
-    //   reader.onload = () => {
-    //     let buffer: ArrayBuffer= reader.result as ArrayBuffer;
-    //     let bmpWidth = new DataView(buffer); 
-    //     let bmpHeight = new DataView(buffer); 
+      reader.onload = () => {
+        let buffer: ArrayBuffer= reader.result as ArrayBuffer;
+        let bmpWidth = new DataView(buffer); 
+        let bmpHeight = new DataView(buffer); 
 
-    //     if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
-    //       this.correctModifiedFile = true;
-    //     }
-    //   };
-    // }
-    // else { 
-    //   this.correctModifiedFile = false; }
+        if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
+          this.correctModifiedFile = true;
+        }
+      };
+    }
+    else { 
+      this.correctModifiedFile = false; }
   }
 
   public onOriginalFileChange(event: any){
-    // let filenameOriginal: string = (document.getElementById("originalFile") as HTMLInputElement).value; 
-    // const reader = new FileReader();
+    let filenameOriginal: string = (document.getElementById("originalFile") as HTMLInputElement).value; 
+    const reader = new FileReader();
 
-    // if(event.target.files && event.target.files.length && this.checkOriginalExtension(filenameOriginal)) {
-    //   const [file] = event.target.files;
-    //   reader.readAsArrayBuffer(file);
+    if(event.target.files && event.target.files.length && this.checkOriginalExtension(filenameOriginal)) {
+      const [file] = event.target.files;
+      reader.readAsArrayBuffer(file);
       
-    //   reader.onload = () => {
-    //     let buffer: ArrayBuffer = reader.result as ArrayBuffer;
-    //     let bmpWidth = new DataView(buffer); 
-    //     let bmpHeight = new DataView(buffer); 
+      reader.onload = () => {
+        let buffer: ArrayBuffer = reader.result as ArrayBuffer;
+        let bmpWidth = new DataView(buffer); 
+        let bmpHeight = new DataView(buffer); 
 
-    //     if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
-    //       this.correctOriginalFile = true;
-    //     }
-    //   };
-    // }
-    // else{ this.correctOriginalFile = false; }
+        if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
+          this.correctOriginalFile = true;
+        }
+      };
+    }
+    else{ this.correctOriginalFile = false; }
   }
 
   public submit(): void {
