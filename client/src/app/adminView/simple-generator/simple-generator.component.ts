@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { Router} from "@angular/router";
 import { GameService } from "src/app/game.service";
+import { MatDialogRef } from '@angular/material';
 
 @Component({
   selector: "app-simple-generator",
   templateUrl: "./simple-generator.component.html",
-  styleUrls: ["./simple-generator.component.css"]
+  styleUrls: ["./simple-generator.component.css"],
 })
 
 export class SimpleGeneratorComponent implements OnInit {
@@ -19,7 +19,9 @@ export class SimpleGeneratorComponent implements OnInit {
   private readonly WIDTH_OFFSET: number = 18;
   private readonly HEIGHT_OFFSET: number = 22;
   
-  public constructor(private router: Router,private gameService: GameService) {}
+  public constructor(private gameService: GameService,
+    private dialogRef: MatDialogRef<SimpleGeneratorComponent>) {
+    }
 
   public correctModifiedFile: boolean = false;
   public correctOriginalFile: boolean = false;
@@ -113,13 +115,13 @@ export class SimpleGeneratorComponent implements OnInit {
                     multi:{first: 9999, second: 9999, third: 9999}};//for tests
       this.gameService.createSimpleGame(newGame);
       console.log("tentative de creer un jeu ... ");
-      //this.close();
+      this.close();
     }      
   }
 
   
   public close(): void {
-    this.router.navigate(['admin']); // go back to admin home
+    this.dialogRef.close();
   }
 
   public checkBmpDimensions(width: number, height: number): boolean {

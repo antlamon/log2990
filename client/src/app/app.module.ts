@@ -1,6 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-
 import { AppComponent } from "./app.component";
 import { HttpClientModule } from "@angular/common/http";
 import { InitialComponent } from "./initial/initial.component";
@@ -12,6 +11,8 @@ import { FormsModule } from "@angular/forms";
 import { IndexService } from "./index.service";
 import { ListViewComponent } from './list-view/list-view.component';
 import {SocketService} from "./socket.service";
+import { MatDialogModule } from "@angular/material";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -19,14 +20,21 @@ import {SocketService} from "./socket.service";
     InitialComponent,
     AdminMenuComponent,
     FreeGeneratorComponent,
+    ListViewComponent,
     SimpleGeneratorComponent,
-    ListViewComponent
+    
   ],
   imports: [
     FormsModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    MatDialogModule,
+    BrowserAnimationsModule,
+  ],
+  entryComponents: [
+    SimpleGeneratorComponent,
+    FreeGeneratorComponent,
   ],
   providers: [IndexService, SocketService],
   bootstrap: [AppComponent]
