@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IGame, ISolo } from "../../../common/models/game";
+import { IGame } from "../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -28,26 +28,21 @@ export class GameService {
         return of(result as T);
     };
   }
-
   public getFreeGames(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
+  public createSimpleGame(game: IGame): void {
 
-  public createSimpleGame(game: ISolo): void {
+    console.log("envoi de la requete au serveur...");
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
 
-    // const httpOptions = {
-    //   headers: new HttpHeaders({
-        
-    //     'Content-Type':  'multipart/form-data',
-    //     'Accept':'application/json'
-    //   })
-    // };
-    const form: FormData = new FormData();
-    form.append("name", game.name)
-    form.append("originalImage", game.originalImage, game.originalImage.name);
-    form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
-    this.http.post<ISolo>(this.SIMPLE_URL, form).subscribe();
+    this.http.post<IGame>(this.SIMPLE_URL, game, httpOptions).subscribe();
   }
+  
 
   public createFreeGame(game: IGame): void {
 
@@ -56,15 +51,30 @@ export class GameService {
         'Content-Type':  'application/json'
       })
     };
-    this.http.post<IGame>(this.FREE_URL, JSON.stringify(game), httpOptions).subscribe();
+
+    this.http.post<IGame>(this.FREE_URL, game, httpOptions).subscribe();
   }
 
-  public deleteSimpleGame(game: IGame): void {
-    // return this.http.delete(this.SIMPLE_URL, game);
+  public deleteSimpleGame(game: IGame): Observable<{}> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    const url = this.SIMPLE_URL+ "?name=" + game.name;
+
+    return this.http.delete(url, httpOptions);
   }
 
-  public deleteFreeGame(game: IGame): void {
-    // return this.http.delete(this.FREE_URL, game);
+  public deleteFreeGame(game: IGame): Observable<{}> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json'
+      })
+    };
+    const url = this.SIMPLE_URL+ "?name=" + game.name;
+
+     return this.http.delete(url, httpOptions);
   }
 
 }

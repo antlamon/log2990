@@ -16,7 +16,7 @@
                       </div>
                       <div class="game-card-buttons" *ngIf="isAdminMode">
                         <div class ="game-card-button-container"><button>RÉINITIALISER</button></div>
-                        <div class ="game-card-button-container"><button>SUPPRIMER</button></div>
+                        <div class ="game-card-button-container"><button  (click) = "deleteSimpleGames(game)">SUPPRIMER</button></div>
                       </div>
                 </div>
                 <div class ="game-card-right-content">
@@ -50,7 +50,7 @@
                       </div>
                       <div class="game-card-buttons" *ngIf="isAdminMode">
                         <div class ="game-card-button-container"><button>RÉINITIALISER</button></div>
-                        <div class ="game-card-button-container"><button>SUPPRIMER</button></div>
+                        <div class ="game-card-button-container" ><button>SUPPRIMER</button></div>
                       </div>
                 </div>
                 <div class ="game-card-right-content">

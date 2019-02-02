@@ -1,6 +1,8 @@
 import { Component, ViewChild, AfterViewInit } from "@angular/core";
-import { Router, ActivatedRoute} from "@angular/router";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
+import { MatDialog} from "@angular/material";
+import { SimpleGeneratorComponent } from "../simple-generator/simple-generator.component";
+import { FreeGeneratorComponent } from "../free-generator/free-generator.component";
 
 @Component({
   selector: "app-admin-menu",
@@ -16,16 +18,24 @@ export class AdminMenuComponent implements AfterViewInit {
     this.games.isAdminMode = true;
   }
 
-  public constructor(private router: Router, private route: ActivatedRoute) {
+  public constructor(public dialog:MatDialog) {}
 
+  public openSimpleDialog() {
+    const dialogRef = this.dialog.open(SimpleGeneratorComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
-  public openFreeViewForm() {
-    this.router.navigate(["freegen"], {relativeTo: this.route});
-  }
+  public openFreeDialog() {
+    const dialogRef = this.dialog.open(FreeGeneratorComponent);
 
-  public openSimpleViewForm() {
-    this.router.navigate(["simplegen"], {relativeTo: this.route});
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }
