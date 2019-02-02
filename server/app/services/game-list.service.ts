@@ -44,7 +44,7 @@ export class GameListService {
         SIMPLEGAMES.splice(index, 1);
         this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
 
-        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimer` };
+        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
     public async deleteFreeGame(gameName: string): Promise<Message> {
         const index: number = FREEGAMES.findIndex((x: IGame) => x.name === gameName);
@@ -54,7 +54,7 @@ export class GameListService {
         FREEGAMES.splice(index, 1);
         this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
 
-        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimer` };
+        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
 
     public async addSimpleGame(newGame: ISolo, originalBuffer: Buffer, modifiedBuffer: Buffer): Promise<Message> {
