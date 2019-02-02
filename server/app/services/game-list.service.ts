@@ -63,7 +63,8 @@ export class GameListService {
         const name: string = newGame.name;
         const message: Message = this.imageService.getDifferentImage(name, originalBuffer, modifiedBuffer);
         writeFileSync("./app/documents/original"+name+".bmp", originalBuffer);
-        const game: IGame = {name: message.title, imageURL: "./app/documents/original"+ name +".bmp", solo: {first: 1, second: 2,third: 3}, multi:  {first: 1, second: 2,third: 3} }
+        const game: IGame = {name: message.title, imageURL: this.imageService.imageToString64("./app/documents/original"+ name +".bmp"),
+         solo: {first: 1, second: 2,third: 3}, multi:  {first: 1, second: 2,third: 3} }
         SIMPLEGAMES.push(game);
         return(message);
     }

@@ -28,7 +28,7 @@ export class ImageService {
             writeFileSync(`./app/documents/${newImageName}.bmp`, modifiedBuffer);
 
             return {
-                title: "Images compared",
+                title: newImageName,
                 body: "success",
             };
 
