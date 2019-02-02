@@ -21,7 +21,9 @@ export class AdminMenuComponent implements AfterViewInit {
   public constructor(public dialog:MatDialog) {}
 
   public openSimpleDialog() {
-    const dialogRef = this.dialog.open(SimpleGeneratorComponent);
+    const dialogRef = this.dialog.open(SimpleGeneratorComponent, {
+      width: '500px'
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
