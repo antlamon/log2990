@@ -1,37 +1,63 @@
 import { injectable, inject } from "inversify";
 import "reflect-metadata";
 import { IGame } from "../../../common/models/game";
-import { GAMES } from "../mock-games";
+import { GAMESSIMPLE,GAMESFREE } from "../mock-games";
 import { ImageService } from "./image.service";
 import { TYPES } from "../types";
+import { Message, ERROR_ID,BASE_ID } from "../../../common/communication/message";
+import {SocketsEvents} from "../../../common/communication/SocketsEvents"
+import { usersManagerInstance } from "./users.service";
+
 
 @injectable()
 export class GameListService {
 
     public constructor(@inject(TYPES.ImageService)private imageService: ImageService){
-        for(let i:number=0; i < GAMES.length;i++)
+        //for sprint1, load the image as string64. Will be changed for a database
+        for(let i:number=0; i < GAMESSIMPLE.length;i++)
         {
-              GAMES[i].imageURL =  this.imageService.imageToString64(GAMES[i].imageURL);
+            GAMESSIMPLE[i].imageURL =  this.imageService.imageToString64(GAMESSIMPLE[i].imageURL);
         }
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
-        return GAMES;
+        return GAMESSIMPLE;
     }
 
     public async getFreeGames(): Promise<IGame[]> {
-        return GAMES;
+        return GAMESFREE;
     }
 
     public async addSimpleGame(newGame: IGame): Promise<IGame>{
 
-        GAMES.push(newGame);
+        GAMESSIMPLE.push(newGame);
         return(newGame);
     }
 
     public async addFreeGame(newGame: IGame): Promise<IGame>{
-        GAMES.push(newGame);//mock-data for sprint1 
+        //Not implemented for sprint1
+        GAMESFREE.push(newGame);//mock-data for sprint1 
         return(newGame);
+    }
+    public async deleteSimpleGame(gameName:string): Promise<Message> {
+        const index: number = GAMESSIMPLE.findIndex((x: IGame) => x.name ===gameName);
+        if (index === -1) {
+            return {title:ERROR_ID,body:"Le jeu ${gameName} n'existe pas"};
+        }
+        GAMESSIMPLE.splice(index, 1);
+        usersManagerInstance.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
+
+        return {title:BASE_ID,body:"Le jeu ${gameName} a été supprimer"};;
+    }
+    public async deleteFreeGame(gameName:string): Promise<Message> {
+        const index: number = GAMESFREE.findIndex((x: IGame) => x.name ===gameName);
+        if (index === -1) {
+            return {title:ERROR_ID,body:"Le jeu ${gameName} n'existe pas"};
+        }
+        GAMESFREE.splice(index, 1);
+        usersManagerInstance.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
+
+        return {title:BASE_ID,body:"Le jeu ${gameName} a été supprimer"};;
     }
 
 }
