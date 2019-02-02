@@ -25,7 +25,7 @@ export class ImageService {
                 throw Error("Il n'y a pas 7 différences");
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
-            writeFileSync(`./app/documents/${newImageName}.bmp`, modifiedBuffer);
+            writeFileSync(`./app/documents/differences-images/${newImageName}.bmp`, modifiedBuffer);
 
             return {
                 title: newImageName,

@@ -8,7 +8,7 @@ import { TYPES } from "../types";
 import { Message, ERROR_ID,BASE_ID } from "../../../common/communication/message";
 import { IGame, ISolo } from "../../../common/models/game";
 
-import { writeFileSync } from "fs";
+//import { writeFileSync } from "fs";
 
 
 @injectable()
@@ -16,6 +16,7 @@ export class GameListService {
 
 
     public constructor(@inject(TYPES.ImageService)private imageService: ImageService){
+        
         //for sprint1, load the image as string64. Will be changed for a database
         for(let i:number=0; i < SIMPLEGAMES.length;i++)
         {
@@ -62,9 +63,11 @@ export class GameListService {
     public async addSimpleGame(newGame: ISolo, originalBuffer: Buffer, modifiedBuffer: Buffer): Promise<Message> {
         const name: string = newGame.name;
         const message: Message = this.imageService.getDifferentImage(name, originalBuffer, modifiedBuffer);
-        writeFileSync("./app/documents/original"+name+".bmp", originalBuffer);
-        const game: IGame = {name: message.title, imageURL: this.imageService.imageToString64("./app/documents/original"+ name +".bmp"),
+        //for mock-data, will be changed when database is implemented
+        //writeFileSync("./app/documents/mock-images/"+name+".bmp", originalBuffer);
+        const game: IGame = {name: message.title, imageURL: modifiedBuffer.toString("base64"),
          solo: {first: 1, second: 2,third: 3}, multi:  {first: 1, second: 2,third: 3} }
+
         SIMPLEGAMES.push(game);
         return(message);
     }
