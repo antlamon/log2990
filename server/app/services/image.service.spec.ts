@@ -11,6 +11,7 @@ describe ( "imageService tests", () => {
     const path2: string = "./app/documents/image_test_2.bmp";
     const path3: string = "./app/documents/image1.bmp";
     const path4: string = "./app/documents/image7diff.bmp";
+    const path5: string = "./app/documents/expectedImage.bmp";
 
     describe("Detect black pixel function", () => {
 
@@ -55,7 +56,7 @@ describe ( "imageService tests", () => {
 
             const pixels: Pixel[][] = service.compareData(image1, image2).pixels;
             let same: boolean = true;
-            const expectedPixels: Pixel[][] = convertService.bufferToImageBMP(readFileSync("./app/documents/expectedImage.bmp")).pixels;
+            const expectedPixels: Pixel[][] = convertService.bufferToImageBMP(readFileSync(path5)).pixels;
             for (let i: number = 0; i < image1.height; i++) {
                 for (let j: number = 0; j < image1.width; j++) {
                     if (!service.comparePixel(pixels[i][j], expectedPixels[i][j])) {
