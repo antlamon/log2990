@@ -68,5 +68,4 @@ export class GameListService {
         SIMPLEGAMES.push(game);
         return(message);
     }
-
 }
