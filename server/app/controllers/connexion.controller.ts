@@ -5,6 +5,7 @@ import { ConnexionService } from "../services/connexion.service";
 import { TYPES } from "../types";
 @injectable()
 export class ConnexionController {
+    public readonly URL: string = "/api/connexion";
 
     public constructor(@inject(TYPES.ConnexionService) private connexionService: ConnexionService) { }
 

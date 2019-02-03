@@ -3,6 +3,7 @@ import { IGame, ISolo } from "../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Message } from "../../../common/communication/message";
 
 
 @Injectable({
@@ -38,7 +39,7 @@ export class GameService {
     form.append("name", game.name)
     form.append("originalImage", game.originalImage, game.originalImage.name);
     form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
-    this.http.post<ISolo>(this.SIMPLE_URL, form).subscribe();
+    this.http.post<Message>(this.SIMPLE_URL, form).subscribe();
   }
   
 
@@ -50,7 +51,7 @@ export class GameService {
       })
     };
 
-    this.http.post<IGame>(this.FREE_URL, game, httpOptions).subscribe();
+    this.http.post<Message>(this.FREE_URL, game, httpOptions).subscribe();
   }
 
   public deleteSimpleGame(game: IGame): Observable<{}> {

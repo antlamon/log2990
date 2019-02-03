@@ -6,7 +6,6 @@ import { inject, injectable } from "inversify";
 import * as logger from "morgan";
 import { ConnexionController } from "./controllers/connexion.controller";
 import { GameListController } from "./controllers/game-list.controller";
-import { ImageController } from "./controllers/image.controller";
 import { TYPES } from "./types";
 
 @injectable()
@@ -17,7 +16,6 @@ export class Application {
 
     public constructor(
             @inject(TYPES.ConnexionController)private connexionController: ConnexionController,
-            @inject(TYPES.ImageController) private imageController: ImageController,
             @inject(TYPES.GameListController) private gameListController: GameListController) {
         this.app = express();
         this.config();
@@ -35,9 +33,9 @@ export class Application {
 
     public bindRoutes(): void {
         // Notre application utilise le routeur de notre API
-        this.app.use("/api/connexion", this.connexionController.router);
-        this.app.use(this.imageController.url, this.imageController.router);
-        this.app.use("/api/gameList", this.gameListController.router);
+        this.app.use(this.connexionController.URL, this.connexionController.router);
+        //this.app.use(this.imageController.URL, this.imageController.router);
+        this.app.use(this.gameListController.URL, this.gameListController.router);
         this.errorHandeling();
     }
 

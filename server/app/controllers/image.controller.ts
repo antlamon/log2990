@@ -8,7 +8,7 @@ import { TYPES } from "../types";
 @injectable()
 export class ImageController {
 
-    public readonly url: string = "/api/gamelist/smple";
+    public readonly URL: string = "/api/gamelist/simple";
     private upload: RequestHandler;
 
     public constructor(@inject(TYPES.ImageService) private imageService: ImageService) {

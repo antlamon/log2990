@@ -30,7 +30,6 @@ export class ImageService {
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
             writeFileSync(PATHS.DIFFERENCES_IMAGES_PATH + `${newImageName}.bmp`, modifiedBuffer);
-
             return {
                 title: BASE_ID,
                 body: newImageName,
@@ -46,33 +45,36 @@ export class ImageService {
 
     public getNbDifferences(image: ImageBMP): number {
         const pixels: Pixel[][] = image.pixels;
-        const visited: [number, number][] = [];
-        const unused: [number, number][] = [];
-        let diffCount: number = 0;
-        for (let x: number = 0; x < image.height; x++) {
-            for (let y: number = 0; y < image.width; y++) {
-                if (this.isBlackPixel(pixels[x][y]) && !this.contains(visited, [x, y])) {
-                    diffCount += 1;
-                    unused.push([x, y]);
-                    while (unused.length > 0) {
-                        let hasNext: boolean = false;
-                        const current: [number, number]  = unused[unused.length - 1];
-                        for (let i: number = current[0] - 1; i <= current[0] + 1; i++ ) {
-                            for (let j: number = current[1] - 1; j <= current[1] + 1; j++ ) {
-                                if (i >= 0 && i < image.height && j >= 0 && j < image.width &&
-                                    this.isBlackPixel(pixels[i][j]) && !this.contains(visited, [i, j]) && !this.contains(unused, [i, j])) {
-                                    unused.push([i, j]);
-                                    hasNext = true; }
-                            }
-                        }
-                        if (!hasNext) {
-                            visited.push(unused[unused.length - 1]);
-                            unused.pop(); }
-                    }
+        let visited: boolean[][]=[];
+        for (let y: number = 0; y<pixels.length; ++y) {
+            visited.push(new Array(pixels[0].length).fill(true));
+            for (let x: number = 0; x < pixels[0].length; ++x) {
+                if(this.isBlackPixel(pixels[y][x])) {
+                    visited[y][x]=false;
                 }
-        }}
-
+            }
+        }  
+        let diffCount: number = 0;
+        for (let y: number = 0; y<pixels.length; ++y) {
+            for (let x: number = 0; x < pixels[0].length; ++x) {
+                if (!visited[y][x]) {
+                    diffCount++;
+                    this.explorePixel(visited,y,x);
+                }
+            }
+        }
         return diffCount;
+    }
+    private explorePixel(visited: boolean[][], posY:number, posX:number): void
+    {
+        visited[posY][posX] = true;
+        for(let i: number = posY - 1 ; i<= posY + 1;++i) {
+            for(let j: number = posX - 1 ; j<= posX + 1;++j){
+                if(i>=0 && j>=0 && i<visited.length && j<visited[0].length && !visited[i][j]){
+                    this.explorePixel(visited,i,j);
+                }
+            }
+        }
     }
 
     public contains(array: [number, number][], item: [number, number]): boolean {

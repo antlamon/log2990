@@ -9,6 +9,7 @@ import { TYPES } from "../types";
 export class GameListController {
 
     private upload: RequestHandler;
+    public readonly URL: string = "/api/gameList";
 
     public constructor(@inject(TYPES.GameListService) private gameListService: GameListService) {
         this.upload = multer().fields([
