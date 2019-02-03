@@ -33,7 +33,7 @@ const mockedSimpleGame: ISolo = {
 };
 
 const mockedErrorGame: ISolo = {
-    name: "testSimpleGame",
+    name: "error",
     originalImage: {} as File,
     modifiedImage: {} as File,
 };
