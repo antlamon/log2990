@@ -51,7 +51,7 @@ export class GameListService {
     public async deleteFreeGame(gameName: string): Promise<Message> {
         const index: number = FREEGAMES.findIndex((x: IGame) => x.name === gameName);
         if (index === -1) {
-            return { title: ERROR_ID, body: `Le jeu ${gameName} n'existe pas` };
+            return { title: ERROR_ID, body: `Le jeu ${gameName} n'existe pas!` };
         }
         FREEGAMES.splice(index, 1);
         this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);

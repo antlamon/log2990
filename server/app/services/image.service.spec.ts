@@ -1,9 +1,9 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import { readFileSync } from "fs";
+import { PATHS } from "../path";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 import { ImageService } from "./image.service";
-import { PATHS } from "../path";
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -16,7 +16,7 @@ describe ( "imageService tests", () => {
     const path3: string = PATHS.TEST_IMAGES_PATH + "/wrong_size_image.bmp";
     const path4: string = PATHS.TEST_IMAGES_PATH + "image_result.bmp";
     const path5: string = PATHS.TEST_IMAGES_PATH + "expectedImage.bmp";
-    const path6: string = PATHS.TEST_IMAGES_PATH + "image_wrongformat.bmp"
+    const path6: string = PATHS.TEST_IMAGES_PATH + "image_wrongformat.bmp";
 
     describe("Detect black pixel function", () => {
 
@@ -126,7 +126,8 @@ describe ( "imageService tests", () => {
         });
         it("Should return an error for wrong number of differences", () => {
             sandbox.on(service, "getNbDifferences", () => 3);
-            expect(service.getDifferencesImage("name", readFileSync(path1), readFileSync(path2)).body).to.equal(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
+            expect(service.getDifferencesImage("name", readFileSync(path1), readFileSync(path2)).body)
+            .to.equal(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
         });
     });
 
