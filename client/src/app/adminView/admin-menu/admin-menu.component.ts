@@ -23,7 +23,7 @@ export class AdminMenuComponent implements AfterViewInit {
   }
 
   public openFreeDialog(id: string) {
-    this.modalService.close(id);
+    this.modalService.open(id);
   }
 
 }

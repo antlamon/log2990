@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, OnDestroy, Input } from "@angular/core";
 import { GameService } from "src/app/game.service";
-// import { MatDialogRef } from '@angular/material';
 import { ModalService } from "src/app/modal.service";
 
 @Component({
@@ -24,7 +23,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
   @Input() id: string;
   
   public constructor(private gameService: GameService,
-    private modalService: ModalService, private el: ElementRef) {
+    private modalService: ModalService, public el: ElementRef) {
       this.element = el.nativeElement;
     }
 
@@ -35,7 +34,6 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     let modal = this;
-
     if(!this.id){
       console.error("modal must have an id");
       return;
@@ -153,7 +151,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   }
 
-  public close(): void{
+  public close(): void {
     this.element.style.display = 'none';
     document.body.classList.remove('modal-open');
 

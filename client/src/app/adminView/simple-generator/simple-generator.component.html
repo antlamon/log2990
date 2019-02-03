@@ -1,6 +1,6 @@
 <div class = "simpleViewForm">
-<h1 mat-dialog-title>Créer un jeu point de vue simple</h1>
-<div mat-dialog-content>
+<h1>Créer un jeu point de vue simple</h1>
+<div>
     <p>Format d'image: bitmap 24-bit (640x480)</p>
     <form id="formSV">
       <div class="form-grid">
@@ -8,7 +8,7 @@
           <p id="gameNameLabel">Nom du jeu</p>
         </div>
         <div class="rightColumn">
-          <input mat-input type="text" class="textInput" value="" id="gameName">
+          <input type="text" class="textInput" value="" id="gameName">
         </div>
         <div>
           <p id="originalFileLabel">Image originale</p>
@@ -27,7 +27,7 @@
       </div>
     </form>
   </div>
-<div mat-dialog-actions>
+<div >
   <div class="buttons">
     <button type="submit" id="submitButton" (click)="submit()">Soumettre </button>
     <button (click)="close()"> Annuler </button>
