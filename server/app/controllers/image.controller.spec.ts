@@ -38,7 +38,7 @@ describe("Image Controller", () => {
 
     it("Should return image with difference created", (done: MochaDone) => {
         supertest(app)
-        .post("/api/gamelist/smple")
+        .post("/api/gamelist/simple")
         .field("name", "test")
         .attach("originalImage", path1)
         .attach("modifiedImage", path2)

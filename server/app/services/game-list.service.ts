@@ -62,16 +62,13 @@ export class GameListService {
     public async addSimpleGame(newGame: ISolo, originalBuffer: Buffer, modifiedBuffer: Buffer): Promise<Message> {
         const name: string = newGame.name;
         const message: Message = this.imageService.getDifferencesImage(name, originalBuffer, modifiedBuffer);
-        console.log("return diff");
         //for mock-data, will be changed when database is implemented
         if(message.title!=ERROR_ID)
         {
             //for mock-data, will be changed when database is implemented
-            console.log("doit adder le jeu");
             const game: IGame = {name: message.body, imageURL:"data:image/bmp;base64,"+ originalBuffer.toString("base64"),
             solo: this.top3RandomOrder(), multi:  this.top3RandomOrder() }
             SIMPLEGAMES.push(game);
-            console.log("on emit");
             this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
         }
         else
