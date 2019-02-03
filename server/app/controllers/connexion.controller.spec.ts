@@ -1,3 +1,4 @@
+// tslint:disable:no-magic-numbers
 import { expect } from "chai";
 import supertest = require("supertest");
 import { Message } from "../../../common/communication/message";
@@ -11,7 +12,7 @@ const mockedAddName: Message = {
 };
 
 const mockedConnexionService: Object = {
-    addName: () => Promise.resolve(mockedAddName),
+    addName: async () => Promise.resolve(mockedAddName),
 };
 
 describe("Connexion Controller", () => {

@@ -6,11 +6,11 @@ import { UsersManager } from "./users.service";
 
 @injectable()
 export class ConnexionService {
-    public static readonly MIN_LENGTH: number = 3;
-    public static readonly MAX_LENGTH: number = 10;
+    public static readonly MIN_USERNAME_LENGTH: number = 3;
+    public static readonly MAX_USERNAME_LENGTH: number = 10;
 
     public static isCorrectLength(nom: string): boolean {
-        return nom.length <= this.MAX_LENGTH && nom.length >= this.MIN_LENGTH;
+        return nom.length <= this.MAX_USERNAME_LENGTH && nom.length >= this.MIN_USERNAME_LENGTH;
     }
     public static containOnlyAlphaNumeric(nom: string): boolean {
         const tryRegex: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
@@ -22,18 +22,17 @@ export class ConnexionService {
 
     public async addName(newName: string, id: string): Promise<Message> {
         if (!ConnexionService.isCorrectLength(newName)) {
-            return {title: ERROR_ID, body: "Name is not the correct length it must be between "
-                    + ConnexionService.MIN_LENGTH + " and " + ConnexionService.MAX_LENGTH};
+            return {title: ERROR_ID, body: `The name is not the correct length must be between
+            ${ConnexionService.MIN_USERNAME_LENGTH} and ${ConnexionService.MAX_USERNAME_LENGTH}`};
         }
         if (!ConnexionService.containOnlyAlphaNumeric(newName)) {
             return {title: ERROR_ID, body: "Name must contain only alpha numerics"};
         }
-        // Checker si dans liste
+
         if (this.userManager.userExist(newName)) {
             return {title: ERROR_ID, body: "Name was already taken"};
         }
 
-        // Mock-data
         this.userManager.setUserName(newName, id);
 
         return {

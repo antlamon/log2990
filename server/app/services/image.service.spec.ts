@@ -3,6 +3,7 @@ import spies = require("chai-spies");
 import { readFileSync } from "fs";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 import { ImageService } from "./image.service";
+import { PATHS } from "../path";
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -10,12 +11,12 @@ chai.use(spies);
 describe ( "imageService tests", () => {
     const convertService: ConvertImage = new ConvertImage();
     const service: ImageService = new ImageService(convertService);
-    const path1: string = "./app/documents/test-images/image_test_1.bmp";
-    const path2: string = "./app/documents/test-images/image_test_2.bmp";
-    const path3: string = "./app/documents/test-images/wrong_size_image.bmp";
-    const path4: string = "./app/documents/test-images/image_result.bmp";
-    const path5: string = "./app/documents/test-images/expectedImage.bmp";
-    const path6: string = "./app/documents/test-images/image_wrongformat.bmp";
+    const path1: string = PATHS.TEST_IMAGES_PATH + "image_test_1.bmp";
+    const path2: string = PATHS.TEST_IMAGES_PATH + "image_test_2.bmp";
+    const path3: string = PATHS.TEST_IMAGES_PATH + "/wrong_size_image.bmp";
+    const path4: string = PATHS.TEST_IMAGES_PATH + "image_result.bmp";
+    const path5: string = PATHS.TEST_IMAGES_PATH + "expectedImage.bmp";
+    const path6: string = PATHS.TEST_IMAGES_PATH + "image_wrongformat.bmp"
 
     describe("Detect black pixel function", () => {
 
@@ -114,18 +115,18 @@ describe ( "imageService tests", () => {
 
         it("Should create an result.bmp file", async () => {
             sandbox.on(service, "getNbDifferences", () => 7);
-            expect(service.getDifferentImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("createdImage");
+            expect(service.getDifferencesImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("createdImage");
         });
 
         it("Should return a string with a error message for the format", () => {
             const buffer: Buffer = readFileSync(path6);
-            expect(service.getDifferentImage("name", readFileSync(path1), buffer).body).to.
-                equal("Les images ne sont pas dans le bon format");
+            expect(service.getDifferencesImage("name", readFileSync(path1), buffer).body).to.
+                equal(ConvertImage.ERROR_MESSAGE_WRONG_FORMAT);
 
         });
         it("Should return an error for wrong number of differences", () => {
             sandbox.on(service, "getNbDifferences", () => 3);
-            expect(service.getDifferentImage("name", readFileSync(path1), readFileSync(path2)).body).to.equal("Il n'y a pas 7 différences");
+            expect(service.getDifferencesImage("name", readFileSync(path1), readFileSync(path2)).body).to.equal(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
         });
     });
 

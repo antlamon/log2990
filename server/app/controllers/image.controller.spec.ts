@@ -7,14 +7,14 @@ import { container } from "../inversify.config";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 
+const path1: string = "./app/documents/test-images/image_test_1.bmp";
+const path2: string = "./app/documents/test-images/image_test_2.bmp";
+
 const mockedGetDiffenrenceData: Message = {
     title: "Image created",
     body: "Image with difference created",
 };
 
-// const mockedImageService: Object = {
-//     getDifferentImage: () => mockedGetDiffenrenceData,
-// };
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -41,8 +41,8 @@ describe("Image Controller", () => {
         supertest(app)
         .post("/api/gamelist/smple")
         .field("name", "test")
-        .attach("originalImage", "./app/documents/image_test_1.bmp")
-        .attach("modifiedImage", "./app/documents/image_test_2.bmp")
+        .attach("originalImage", path1)
+        .attach("modifiedImage", path2)
         .expect(200)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedGetDiffenrenceData, "Image differences not created");

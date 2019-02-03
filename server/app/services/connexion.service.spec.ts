@@ -14,13 +14,13 @@ describe("Connexion service", () => {
         it("A empty string should return false", () => {
             expect(ConnexionService.isCorrectLength("")).to.equal(false);
         });
-        it("A string under " + ConnexionService.MIN_LENGTH + " char should return false", () => {
+        it("A string under " + ConnexionService.MIN_USERNAME_LENGTH + " char should return false", () => {
             expect(ConnexionService.isCorrectLength("aa")).to.equal(false);
         });
-        it("A string above " + ConnexionService.MAX_LENGTH + " char should return false", () => {
+        it("A string above " + ConnexionService.MAX_USERNAME_LENGTH + " char should return false", () => {
             expect(ConnexionService.isCorrectLength("aaaaaaaaaaa")).to.equal(false);
         });
-        it("A string between " + ConnexionService.MIN_LENGTH + "and" + ConnexionService.MAX_LENGTH + " should return true", () => {
+        it("A string between " + ConnexionService.MIN_USERNAME_LENGTH + "and" + ConnexionService.MAX_USERNAME_LENGTH + " should return true", () => {
             expect(ConnexionService.isCorrectLength("aaaaa")).to.equal(true);
         });
     });
@@ -60,9 +60,9 @@ describe("Connexion service", () => {
             });
         });
 
-        it("A username longer than: " + ConnexionService.MAX_LENGTH + " should return an ERROR MESSAGE", () => {
+        it("A username longer than: " + ConnexionService.MAX_USERNAME_LENGTH + " should return an ERROR MESSAGE", () => {
             let username: string = "";
-            for (let i: number = 0; i < ConnexionService.MAX_LENGTH + 1; ++i) {
+            for (let i: number = 0; i < ConnexionService.MAX_USERNAME_LENGTH + 1; ++i) {
                 username += "a";
             }
             service.addName(username, "").then((message: Message) => {
@@ -70,9 +70,9 @@ describe("Connexion service", () => {
             });
         });
 
-        it("A username shorter than: " + ConnexionService.MIN_LENGTH + " should return an ERROR MESSAGE", () => {
+        it("A username shorter than: " + ConnexionService.MIN_USERNAME_LENGTH + " should return an ERROR MESSAGE", () => {
             let username: string = "";
-            for (let i: number = 0; i < ConnexionService.MIN_LENGTH - 1; ++i) {
+            for (let i: number = 0; i < ConnexionService.MIN_USERNAME_LENGTH - 1; ++i) {
                 username += "a";
             }
             service.addName(username, "").then((message: Message) => {
@@ -82,7 +82,7 @@ describe("Connexion service", () => {
 
         it("A username containing non alphanumerics char should return an ERROR MESSAGE", () => {
             let username: string = "";
-            for (let i: number = 0; i < ConnexionService.MIN_LENGTH; ++i) {
+            for (let i: number = 0; i < ConnexionService.MIN_USERNAME_LENGTH; ++i) {
                 username += "@";
             }
             service.addName(username, "").then((message: Message) => {
@@ -92,7 +92,7 @@ describe("Connexion service", () => {
 
         it("A string containing both alpha numerics char and non alpha numerics char should return false", () => {
             let username: string = "";
-            for (let i: number = 0; i < ConnexionService.MIN_LENGTH - 1; ++i) {
+            for (let i: number = 0; i < ConnexionService.MIN_USERNAME_LENGTH - 1; ++i) {
                 username += "a";
             }
             username += "@";
@@ -104,7 +104,7 @@ describe("Connexion service", () => {
         it("A username of regular length and contianing only alphanumerics char should return a BASIC MESSAGE", () => {
             sandbox.on(userManager, "userExist", () => false);
             let username: string = "";
-            for (let i: number = 0; i < ConnexionService.MAX_LENGTH; ++i) {
+            for (let i: number = 0; i < ConnexionService.MAX_USERNAME_LENGTH; ++i) {
                 username += "a";
             }
             service.addName(username, "").then((message: Message) => {
@@ -115,7 +115,7 @@ describe("Connexion service", () => {
         it("An already used username should return an ERROR MESSAGE", () => {
             sandbox.on(userManager, "userExist", () => true);
             let username: string = "";
-            for (let i: number = 0; i < ConnexionService.MAX_LENGTH; ++i) {
+            for (let i: number = 0; i < ConnexionService.MAX_USERNAME_LENGTH; ++i) {
                 username += "a";
             }
             service.addName(username, "").then((message: Message) => {

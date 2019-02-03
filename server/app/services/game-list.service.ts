@@ -13,7 +13,8 @@ import {SocketServerManager} from "../socketServerManager"
 export class GameListService {
     public constructor( @inject(TYPES.ImageService) private imageService: ImageService,
                         @inject(TYPES.SocketServerManager) private socketController: SocketServerManager) {
-        // for sprint1, load the image as string64. Will be changed for a database
+
+        // for sprint1, load the image as string64. Will be changed later for a database
         for (const simpleGame of SIMPLEGAMES) {
             simpleGame.imageURL = this.imageService.imageToString64(simpleGame.imageURL);
         }
@@ -59,10 +60,11 @@ export class GameListService {
 
     public async addSimpleGame(newGame: ISolo, originalBuffer: Buffer, modifiedBuffer: Buffer): Promise<Message> {
         const name: string = newGame.name;
-        const message: Message = this.imageService.getDifferentImage(name, originalBuffer, modifiedBuffer);
+        const message: Message = this.imageService.getDifferencesImage(name, originalBuffer, modifiedBuffer);
         //for mock-data, will be changed when database is implemented
         if(message.title!=ERROR_ID)
         {
+            //for mock-data, will be changed when database is implemented
             const game: IGame = {name: message.body, imageURL:"data:image/bmp;base64,"+ originalBuffer.toString("base64"),
             solo: {first: 1, second: 2,third: 3}, multi:  {first: 1, second: 2,third: 3} }
             SIMPLEGAMES.push(game);

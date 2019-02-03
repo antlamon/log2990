@@ -1,7 +1,8 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from "express";
 import { inject, injectable } from "inversify";
-import {GameListService} from "../services/game-list.service";
 import * as multer from "multer";
+import { Message } from "../../../common/communication/message";
+import {GameListService} from "../services/game-list.service";
 import { TYPES } from "../types";
 
 @injectable()
@@ -24,10 +25,10 @@ export class GameListController {
         const router: Router = Router();
 
         router.post("/simple", this.upload, (req: Request, res: Response, next: NextFunction) => {
-            
+
             console.log(req.body);
             const originalBuffer: Buffer = req.files["originalImage"][0].buffer;
-            
+
             const modifiedBuffer: Buffer = req.files["modifiedImage"][0].buffer;
             this.gameListService.addSimpleGame(req.body, originalBuffer, modifiedBuffer).then((game) => {
                 res.json(game);
@@ -35,14 +36,18 @@ export class GameListController {
         });
 
         router.delete("/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteSimpleGame(req.query.name);
-            console.log("a game has been deleted: " );
-                res.json(req.body);
-             
+            this.gameListService.deleteSimpleGame(req.query.name).then((response: Message) => {
+                res.json(response);
+            });
+        });
+        router.delete("/free", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.deleteFreeGame(req.query.name).then((response: Message) => {
+                res.json(response);
+            });
         });
 
-       router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.getSimpleGames().then((simpleGames)=>{
+        router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.getSimpleGames().then((simpleGames) => {
                res.json(simpleGames);
             });
         });

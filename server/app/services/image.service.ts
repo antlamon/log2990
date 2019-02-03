@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import { Message, ERROR_ID,BASE_ID } from "../../../common/communication/message";
+import { Message, BASE_ID, ERROR_ID } from "../../../common/communication/message";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 
@@ -14,15 +14,17 @@ export class ImageService {
     public static readonly ENLARGE_LENGHT: number = 3;
     public static readonly ENLARGE_MAX_DIST: number = 4;
 
+    public static readonly ERROR_MESSAGE_NOT_7_ERRORS= "The given images did not have 7 differences";
+
     public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
-    public getDifferentImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
+    public getDifferencesImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
         try {
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
             if (this.getNbDifferences(imagesCompared) !== ImageService.NUM_DIFF) {
-                throw Error("Il n'y a pas 7 différences");
+                throw Error(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
             writeFileSync(`./app/documents/differences-images/${newImageName}.bmp`, modifiedBuffer);
