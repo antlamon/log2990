@@ -30,7 +30,7 @@ export class ImageController {
             const name: string = req.body["name"];
             const originalBuffer: Buffer = req.files["originalImage"][0].buffer;
             const modifiedBuffer: Buffer = req.files["modifiedImage"][0].buffer;
-            const message: Message = this.imageService.getDifferentImage(name, originalBuffer, modifiedBuffer);
+            const message: Message = this.imageService.getDifferencesImage(name, originalBuffer, modifiedBuffer);
             res.json(message);
         });
 

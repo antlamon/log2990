@@ -25,7 +25,7 @@ describe("Image Controller", () => {
     before(() => {
         container.snapshot();
         const service: ImageService = container.get<ImageService>(TYPES.ImageService);
-        sandbox.on(service, "getDifferentImage", () => mockedGetDiffenrenceData);
+        sandbox.on(service, "getDifferencesImage", () => mockedGetDiffenrenceData);
         sandbox.on(service, "imageToString64", () => "");
         container.rebind(TYPES.ImageService).toConstantValue(service);
         app = container.get<Application>(TYPES.Application).app;

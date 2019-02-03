@@ -38,7 +38,7 @@ const mockedErrorGame: ISolo = {
     modifiedImage: {} as File,
 };
 
-const mockedGetDifferentImage = (imageName: string): Message => {
+const mockedgetDifferencesImage = (imageName: string): Message => {
     if (imageName === "testSimpleGame") {
         return mockedNewImageMessage;
     } else {
@@ -59,7 +59,7 @@ describe("GameList service", () => {
         container.snapshot();
         imageService = container.get<ImageService>(TYPES.ImageService);
         const sockerController: SocketServerManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
-        sandbox.on(imageService, "getDifferentImage", mockedGetDifferentImage);
+        sandbox.on(imageService, "getDifferencesImage", mockedgetDifferencesImage);
         sandbox.on(imageService, "imageToString64", () => "");
         sandbox.on(sockerController, "emitEvent", () => null);
         container.rebind(TYPES.ImageService).toConstantValue(imageService);
