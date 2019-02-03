@@ -1,16 +1,15 @@
 <div class="adminPage">
   <div class = "emptyBox"></div>
-  <div class="fiche de jeu">
+  <!-- <div class="fiche de jeu">
         <app-list-view #games></app-list-view>
-  </div>
-  <modal id = "simpleGame">
-      <div class="modal">
-        <app-simple-generator class = "modal-body"></app-simple-generator>
-      </div>
-       <div class="modal-background"></div>
-  </modal>
+  </div> -->
+    
+  <app-simple-generator id="simpleModal" class ="modal-body">
+  </app-simple-generator>
+
+    
   <div class="menuBar">
-    <button  (click)="openSimpleDialog('simpleGame')">Créer un jeu simple</button>
+    <button  (click)="openSimpleDialog('simpleModal')">Créer un jeu simple</button>
     <button (click)="openFreeDialog()">Créer un jeu libre</button>
   </div>
 </div>

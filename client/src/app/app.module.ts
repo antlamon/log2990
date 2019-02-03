@@ -14,7 +14,7 @@ import {SocketService} from "./socket.service";
 import {MatCardModule} from '@angular/material/card';
 import { MatDialogModule } from "@angular/material";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ModalComponent } from "./adminView/simple-generator/_directives/modal.component";
+// import { ModalComponent } from "./adminView/simple-generator/_directives/modal.component";
 import { ModalService } from "./modal.service";
 
 @NgModule({
@@ -25,9 +25,7 @@ import { ModalService } from "./modal.service";
     FreeGeneratorComponent,
     ListViewComponent,
     SimpleGeneratorComponent,
-    ModalComponent,
-    ModalService,
-    
+    // ModalComponent,
   ],
   imports: [
     FormsModule,
@@ -42,7 +40,11 @@ import { ModalService } from "./modal.service";
     SimpleGeneratorComponent,
     FreeGeneratorComponent,
   ],
-  providers: [IndexService, SocketService],
+  providers: [
+    IndexService, 
+    SocketService, 
+    ModalService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

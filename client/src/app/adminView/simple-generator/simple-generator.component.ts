@@ -1,6 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, OnDestroy, Input } from "@angular/core";
 import { GameService } from "src/app/game.service";
-import { MatDialogRef } from '@angular/material';
+// import { MatDialogRef } from '@angular/material';
+import { ModalService } from "src/app/modal.service";
 
 @Component({
   selector: "app-simple-generator",
@@ -8,19 +9,23 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ["./simple-generator.component.css"],
 })
 
-export class SimpleGeneratorComponent implements OnInit {
+export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   private readonly FILE_FORMAT: string = "bmp";
   
-  private readonly IMAGE_WIDTH: number = 640;
-  private readonly IMAGE_HEIGHT: number = 480;
-  private readonly MIN_LENGTH: number = 3;
-  private readonly MAX_LENGTH: number = 15;
-  private readonly WIDTH_OFFSET: number = 18;
+  private readonly IMAGE_WIDTH: number   = 640;
+  private readonly IMAGE_HEIGHT: number  = 480;
+  private readonly MIN_LENGTH: number    = 3;
+  private readonly MAX_LENGTH: number    = 15;
+  private readonly WIDTH_OFFSET: number  = 18;
   private readonly HEIGHT_OFFSET: number = 22;
+
+  private element: any;
+  @Input() id: string;
   
   public constructor(private gameService: GameService,
-    private dialogRef: MatDialogRef<SimpleGeneratorComponent>) {
+    private modalService: ModalService, private el: ElementRef) {
+      this.element = el.nativeElement;
     }
 
   public correctModifiedFile: boolean = false;
@@ -29,6 +34,27 @@ export class SimpleGeneratorComponent implements OnInit {
  
 
   public ngOnInit(): void {
+    let modal = this;
+
+    if(!this.id){
+      console.error("modal must have an id");
+      return;
+    }
+    
+    document.body.appendChild(this.element);
+
+    this.element.addEventListener("click", function(e: any) {
+      if(e.target.className === "modal"){
+        modal.submit();  
+      }
+    });
+
+    this.modalService.add(this);
+  }
+
+  public ngOnDestroy(): void{
+    this.modalService.remove(this.id);
+    this.element.remove();
 
   }
   
@@ -115,13 +141,22 @@ export class SimpleGeneratorComponent implements OnInit {
                     multi:{first: 9999, second: 9999, third: 9999}};//for tests
       this.gameService.createSimpleGame(newGame);
       console.log("tentative de creer un jeu ... ");
-      this.close();
+      this.element.style.display = "none";
+      document.body.classList.remove('modal-open');
+
     }      
   }
 
-  
-  public close(): void {
-    this.dialogRef.close();
+  public open(): void {
+    this.element.style.display = "block";
+    document.body.classList.add("modal-open");
+
+  }
+
+  public close(): void{
+    this.element.style.display = 'none';
+    document.body.classList.remove('modal-open');
+
   }
 
   public checkBmpDimensions(width: number, height: number): boolean {
@@ -146,6 +181,7 @@ export class SimpleGeneratorComponent implements OnInit {
     let check = name.match(/^[a-zA-Z0-9]+$/i);
     return check == null ? false : check[0].length == name.length;
   }
+
 
 }
 

@@ -16,13 +16,13 @@ export class AdminMenuComponent implements AfterViewInit {
     this.games.isAdminMode = true;
   }
 
-  public constructor(private modalService:ModalService) {}
+  public constructor(private modalService: ModalService) {}
 
-  public openSimpleDialog(id:string) {
+  public openSimpleDialog(id: string) {
     this.modalService.open(id);
   }
 
-  public openFreeDialog(id:string) {
+  public openFreeDialog(id: string) {
     this.modalService.close(id);
   }
 

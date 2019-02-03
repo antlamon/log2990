@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { Message } from "../../../common/communication/message";
 import { IndexService } from "./index.service";
 
+import './adminView/simple-generator/_content/modal.less';
+
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
