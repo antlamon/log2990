@@ -38,7 +38,7 @@ const mockedErrorGame: ISolo = {
     modifiedImage: {} as File,
 };
 
-const mockedgetDifferencesImage = (imageName: string): Message => {
+const mockedgetDifferencesImage: (arg: string) => Message = (imageName: string): Message => {
     if (imageName === "testSimpleGame") {
         return mockedNewImageMessage;
     } else {
@@ -51,13 +51,11 @@ chai.use(spies);
 
 describe("GameList service", () => {
     let service: GameListService;
-    let imageService: ImageService;
-    let sandbox: ChaiSpies.Sandbox;
+    const sandbox: ChaiSpies.Sandbox = chai.spy.sandbox();
 
     before(() => {
-        sandbox = chai.spy.sandbox();
         container.snapshot();
-        imageService = container.get<ImageService>(TYPES.ImageService);
+        const imageService: ImageService = container.get<ImageService>(TYPES.ImageService);
         const sockerController: SocketServerManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
         sandbox.on(imageService, "getDifferencesImage", mockedgetDifferencesImage);
         sandbox.on(imageService, "imageToString64", () => "");
