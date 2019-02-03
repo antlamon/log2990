@@ -15,7 +15,6 @@ const mockedGetDiffenrenceData: Message = {
     body: "Image with difference created",
 };
 
-
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 

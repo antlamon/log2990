@@ -8,6 +8,7 @@ import { TYPES } from "../types";
 import { ImageService } from "./image.service";
 import {SocketsEvents} from "../../../common/communication/socketsEvents";
 import {SocketServerManager} from "../socketServerManager"
+import { ITop3 } from "../../../common/models/top3";
 
 @injectable()
 export class GameListService {
@@ -45,7 +46,7 @@ export class GameListService {
         SIMPLEGAMES.splice(index, 1);
         this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
 
-        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimer` };
+        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
     public async deleteFreeGame(gameName: string): Promise<Message> {
         const index: number = FREEGAMES.findIndex((x: IGame) => x.name === gameName);
@@ -55,7 +56,7 @@ export class GameListService {
         FREEGAMES.splice(index, 1);
         this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
 
-        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimer` };
+        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
 
     public async addSimpleGame(newGame: ISolo, originalBuffer: Buffer, modifiedBuffer: Buffer): Promise<Message> {
@@ -66,7 +67,7 @@ export class GameListService {
         {
             //for mock-data, will be changed when database is implemented
             const game: IGame = {name: message.body, imageURL:"data:image/bmp;base64,"+ originalBuffer.toString("base64"),
-            solo: {first: 1, second: 2,third: 3}, multi:  {first: 1, second: 2,third: 3} }
+            solo: this.top3RandomOrder(), multi:  this.top3RandomOrder() }
             SIMPLEGAMES.push(game);
             this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
         }
@@ -76,5 +77,18 @@ export class GameListService {
         }
 
         return (message);
+    }
+    public top3RandomOrder(): ITop3 {
+
+        let scores: number[] = [];
+        for(let i: number = 0; i < 3; i++) {
+            scores.push(this.randomNumberGenerator(500,1000))
+        }
+        scores.sort();
+        return {first: scores[0], second: scores[1], third: scores[2]}
+    }
+    public randomNumberGenerator(min: number,max: number ): number // min and max included
+    {
+        return Math.floor(Math.random()*(max-min+1)+min);
     }
 }

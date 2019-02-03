@@ -115,7 +115,7 @@ describe ( "imageService tests", () => {
 
         it("Should create an result.bmp file", async () => {
             sandbox.on(service, "getNbDifferences", () => 7);
-            expect(service.getDifferencesImage("createdImage", readFileSync(path1), readFileSync(path2)).body).to.equal("createdImage");
+            expect(service.getDifferencesImage("testImage", readFileSync(path1), readFileSync(path2)).body).to.equal("testImage");
         });
 
         it("Should return a string with a error message for the format", () => {

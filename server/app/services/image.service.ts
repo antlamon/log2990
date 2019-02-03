@@ -4,6 +4,7 @@ import "reflect-metadata";
 import { Message, BASE_ID, ERROR_ID } from "../../../common/communication/message";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
+import { PATHS } from "../path";
 
 @injectable()
 export class ImageService {
@@ -14,7 +15,8 @@ export class ImageService {
     public static readonly ENLARGE_LENGHT: number = 3;
     public static readonly ENLARGE_MAX_DIST: number = 4;
 
-    public static readonly ERROR_MESSAGE_NOT_7_ERRORS= "The given images did not have 7 differences";
+    public static readonly ERROR_MESSAGE_NOT_7_ERRORS = "The given images did not have 7 differences";
+    public static readonly ERROR_MESSAGE_SIZE_NOT_COMPATIBLE = "The size of the two images are not compatibles";
 
     public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
@@ -27,7 +29,7 @@ export class ImageService {
                 throw Error(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
-            writeFileSync(`./app/documents/differences-images/${newImageName}.bmp`, modifiedBuffer);
+            writeFileSync(PATHS.DIFFERENCES_IMAGES_PATH + `${newImageName}.bmp`, modifiedBuffer);
 
             return {
                 title: BASE_ID,
@@ -90,7 +92,7 @@ export class ImageService {
         const differentPixels: [number, number][] = [];
         if (image1.height !== image2.height || image1.width !== image2.width
              || image1.height !== ImageService.IMAGE_HEIGHT || image1.width !== ImageService.IMAGE_WIDTH) {
-            throw Error("La taille des deux images n'est pas la bonne");
+            throw Error(ImageService.ERROR_MESSAGE_SIZE_NOT_COMPATIBLE);
         }
         for (let i: number = 0; i < image1.height; i++) {
             pixels[i] = [];
