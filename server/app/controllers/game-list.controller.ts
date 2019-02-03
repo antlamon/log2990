@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
-import { GameListService } from "../services/game-list.service";
+import { GameListService, MulterFile } from "../services/game-list.service";
 import { TYPES } from "../types";
 
 @injectable()
@@ -27,10 +27,18 @@ export class GameListController {
         const router: Router = Router();
 
         router.post("/simple", this.upload, (req: Request, res: Response, next: NextFunction) => {
-            const originalBuffer: Buffer = req.files["originalImage"][0].buffer;
 
-            const modifiedBuffer: Buffer = req.files["modifiedImage"][0].buffer;
-            this.gameListService.addSimpleGame(req.body, originalBuffer, modifiedBuffer).then((game: Message) => {
+            const originalFile: MulterFile = {
+                buffer: req.files["originalImage"][0].buffer,
+                fileName: req.files["originalImage"][0].originalname,
+            };
+
+            const modifiedFile: MulterFile = {
+                buffer: req.files["modifiedImage"][0].buffer,
+                fileName: req.files["modifiedImage"][0].originalname,
+            };
+
+            this.gameListService.addSimpleGame(req.body, originalFile, modifiedFile).then((game: Message) => {
                 res.json(game);
             });
         });
