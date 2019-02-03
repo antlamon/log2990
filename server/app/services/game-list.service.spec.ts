@@ -145,7 +145,7 @@ describe("GameList service", () => {
             });
 
             it("Deleting a free game that doesnt exist should return a relevant message", async () => {
-                service.deleteSimpleGame("freeGame").then((message: Message) => {
+                service.deleteFreeGame("freeGame").then((message: Message) => {
                     expect(message.body).to.equal("Le jeu freeGame n'existe pas!");
                 });
             });
