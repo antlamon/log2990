@@ -10,6 +10,7 @@ export class SocketService {
     try {
       this.socket = ClientSocketIO("http://localhost:3000/");
     } catch (e) {
+      alert("Server is not available at the moment.");
     }
   }
   public getSocketId(): string {
