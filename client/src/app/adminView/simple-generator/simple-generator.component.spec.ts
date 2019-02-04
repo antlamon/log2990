@@ -7,7 +7,7 @@ import { InitialComponent } from "src/app/initial/initial.component";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { ModalService } from "src/app/modal.service";
+import { ModalService } from "src/app/services/modal.service";
  
 describe("SimpleGeneratorComponent", () => {
   let component: SimpleGeneratorComponent;

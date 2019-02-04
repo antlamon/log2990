@@ -1,6 +1,6 @@
 import { Component, ViewChild, AfterViewInit } from "@angular/core";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
-import { ModalService } from '../../modal.service';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: "app-admin-menu",

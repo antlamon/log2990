@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { IGame, ISolo } from "../../../common/models/game";
+import { IGame, ISolo } from "../../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Message } from "../../../common/communication/message";
+import { Message } from "../../../../common/communication/message";
 
 
 @Injectable({

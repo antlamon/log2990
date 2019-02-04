@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, OnDestroy, Input } from "@angular/core";
-import { GameService } from "src/app/game.service";
+import { GameService } from "src/app/services/game.service";
 import {ISolo} from "../../../../../common/models/game";
-import { ModalService } from "src/app/modal.service";
+import { ModalService } from "src/app/services/modal.service";
 
 @Component({
   selector: "app-simple-generator",

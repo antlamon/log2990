@@ -9,7 +9,7 @@ import { InitialComponent } from "src/app/initial/initial.component";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
-import { ModalService } from "../../modal.service";
+import { ModalService } from "../../services/modal.service";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;

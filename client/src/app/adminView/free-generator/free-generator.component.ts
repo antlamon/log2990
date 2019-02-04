@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, Input, OnDestroy } from "@angular/core";
-import { GameService } from "src/app/game.service";
-import { ModalService } from "src/app/modal.service";
+import { GameService } from "src/app/services/game.service";
+import { ModalService } from "src/app/services/modal.service";
 
 @Component({
   selector: "app-free-generator",
