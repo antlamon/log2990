@@ -3,21 +3,18 @@
     border: 2px solid gray;
     top: 50%;
     left: 50%;
-    margin-top: -275px; /* Negative half of height. */
-    margin-left: -250px; /* Negative half of width. */
+    margin-top: -275px;
+    margin-left: -250px; 
     width: 500px;
-    height: 550px;
+    height: 567px;
     display: flex;
     flex-direction: column;
     background: #f4f7f8;
     border-radius: 8px;
 	font-family: Georgia, "Times New Roman", Times, serif;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
-      
-    /* enables scrolling for tall modals */
     overflow: auto;
     position: fixed;
-
     z-index: 1000;
 }
 
@@ -104,17 +101,18 @@ button:focus,  .uploader + label:focus{
 }
 
 .form-background {
-    /* modal background fixed across whole screen */
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-  
-    /* semi-transparent black  */
     background-color: black;
     opacity: 0.75;
-        
-    /* z-index must be below .modal and above everything else  */
-     z-index: 900;
+    z-index: 900;
+  }
+
+  .errorsDiv {
+      display: flex;
+      flex-direction: column;
+      color: red;
   }

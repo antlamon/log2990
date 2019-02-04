@@ -107,27 +107,29 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
   }
 
   public submit(): void {
+    this.clearErrorMessages();
     let gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
     
     if( !this.isValidGameName(gameName) ){
       console.log("Nom de jeu invalide");
       (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
+      this.showErrorMessage("Nom de jeu invalide");
     } else {
       (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "black";
     }
-    
 
     if( this.correctModifiedFile == false ){
       console.log("Fichier de jeu modifié invalide");
       (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red";
+      this.showErrorMessage("Fichier de jeu modifié invalide");
     } else {
       (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "black";
     }
     
-
     if(this.correctOriginalFile == false){
       console.log("Fichier de jeu original invalide");
-      (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red"; 
+      (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red";
+      this.showErrorMessage("Fichier de jeu original invalide");
     } else {
       (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black";
     }
@@ -180,6 +182,19 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
     return check == null ? false : check[0].length == name.length;
   }
 
+  public showErrorMessage(error: string): void{
+    var errorBox = document.createElement("span");
+    var errorMessage = document.createTextNode(error);
+    errorBox.appendChild(errorMessage);
+    document.getElementById("errorsMessages").appendChild(errorBox);
+  }
+
+  public clearErrorMessages(): void{
+    var errors = document.getElementById("errorsMessages");
+    while (errors.hasChildNodes()) {   
+      errors.removeChild(errors.firstChild); 
+    }      
+  }
 
 }
 
