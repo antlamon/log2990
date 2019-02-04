@@ -11,8 +11,7 @@ import { ModalService } from "src/app/modal.service";
 
 export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
-  private readonly FILE_FORMAT: string = "bmp";
-  
+  private readonly FILE_FORMAT: string   = "bmp";
   private readonly IMAGE_WIDTH: number   = 640;
   private readonly IMAGE_HEIGHT: number  = 480;
   private readonly MIN_LENGTH: number    = 3;
@@ -22,9 +21,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   private element: any;
   @Input() id: string;
-  
-  public constructor(private gameService: GameService,
-    private modalService: ModalService, public el: ElementRef) {
+
+  public constructor(private gameService: GameService, private modalService: ModalService, public el: ElementRef) {
       this.element = el.nativeElement;
     }
 
@@ -35,112 +33,103 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     let modal = this;
-    if(!this.id){
+    if (!this.id) {
       console.error("modal must have an id");
+
       return;
     }
-    
+
     document.body.appendChild(this.element);
 
     this.element.addEventListener("click", function(e: any) {
-      if(e.target.className === "modal"){
-        modal.submit();  
+      if (e.target.className === "modal") {
+        modal.submit();
       }
     });
 
     this.modalService.add(this);
   }
 
-  public ngOnDestroy(): void{
+  public ngOnDestroy(): void {
     this.modalService.remove(this.id);
     this.element.remove();
 
   }
-  
-  public onModifiedFileChange(event: any): void {
-    let filenameModified: string = (document.getElementById("modifiedFile") as HTMLInputElement).value; 
-    const reader = new FileReader();
 
-    if(event.target.files && event.target.files.length && this.checkModifiedExtension(filenameModified)) {
+  public onModifiedFileChange(event: any): void {
+    const filenameModified: string = (document.getElementById("modifiedFile") as HTMLInputElement).value;
+    const reader: FileReader = new FileReader();
+
+    if (event.target.files && event.target.files.length && this.checkModifiedExtension(filenameModified)) {
       const [file] = event.target.files;
       reader.readAsArrayBuffer(file);
-      
-      reader.onload = () => {
-        let buffer: ArrayBuffer= reader.result as ArrayBuffer;
-        let bmpWidth = new DataView(buffer); 
-        let bmpHeight = new DataView(buffer); 
 
-        if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
+      reader.onload = () => {
+        const buffer: ArrayBuffer = reader.result as ArrayBuffer;
+        const bmpWidth: DataView = new DataView(buffer);
+        const bmpHeight: DataView = new DataView(buffer);
+
+        if (bmpWidth.getUint32(this.WIDTH_OFFSET, true) === this.IMAGE_WIDTH
+           && bmpHeight.getUint32(this.HEIGHT_OFFSET, true) === this.IMAGE_HEIGHT) {
           this.correctModifiedFile = true;
         }
       };
+    } else {
+      this.correctModifiedFile = false;
     }
-    else { 
-      this.correctModifiedFile = false; }
   }
 
-  public onOriginalFileChange(event: any){
-    let filenameOriginal: string = (document.getElementById("originalFile") as HTMLInputElement).value; 
-    const reader = new FileReader();
+  public onOriginalFileChange(event: any): void {
+    const filenameOriginal: string = (document.getElementById("originalFile") as HTMLInputElement).value;
+    const reader: FileReader = new FileReader();
 
-    if(event.target.files && event.target.files.length && this.checkOriginalExtension(filenameOriginal)) {
+    if (event.target.files && event.target.files.length && this.checkOriginalExtension(filenameOriginal)) {
       const [file] = event.target.files;
       reader.readAsArrayBuffer(file);
-      
-      reader.onload = () => {
-        let buffer: ArrayBuffer = reader.result as ArrayBuffer;
-        let bmpWidth = new DataView(buffer); 
-        let bmpHeight = new DataView(buffer); 
 
-        if(bmpWidth.getUint32(this.WIDTH_OFFSET,true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET,true) == this.IMAGE_HEIGHT){
+      reader.onload = () => {
+        const buffer: ArrayBuffer = reader.result as ArrayBuffer;
+        const bmpWidth: DataView = new DataView(buffer);
+        const bmpHeight: DataView = new DataView(buffer);
+
+        if (bmpWidth.getUint32(this.WIDTH_OFFSET, true) === this.IMAGE_WIDTH
+           && bmpHeight.getUint32(this.HEIGHT_OFFSET, true) === this.IMAGE_HEIGHT) {
           this.correctOriginalFile = true;
         }
       };
+    } else {
+      this.correctOriginalFile = false;
     }
-    else{ this.correctOriginalFile = false; }
   }
 
   public submit(): void {
     this.clearErrorMessages();
-    let gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
-    
-    if( !this.isValidGameName(gameName) ){
-      console.log("Nom de jeu invalide");
-      (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
+    const gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
+
+    if ( !this.isValidGameName(gameName)) {
       this.showErrorMessage("Nom de jeu invalide");
-    } else {
-      (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "black";
     }
 
-    if( this.correctModifiedFile == false ){
-      console.log("Fichier de jeu modifié invalide");
-      (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red";
+    if( this.correctModifiedFile === false ) {
       this.showErrorMessage("Fichier de jeu modifié invalide");
-    } else {
-      (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "black";
     }
-    
-    if(this.correctOriginalFile == false){
-      console.log("Fichier de jeu original invalide");
-      (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red";
+
+    if (this.correctOriginalFile === false) {
       this.showErrorMessage("Fichier de jeu original invalide");
-    } else {
-      (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black";
     }
-    
 
-    if(this.correctModifiedFile == true && this.correctOriginalFile == true && this.isValidGameName(gameName)){
+    if (this.correctModifiedFile === true && this.correctOriginalFile === true && this.isValidGameName(gameName)) {
       const file1: File = (document.getElementById("originalFile") as HTMLInputElement).files[0];
-    const file2: File = (document.getElementById("modifiedFile") as HTMLInputElement).files[0];
+      const file2: File = (document.getElementById("modifiedFile") as HTMLInputElement).files[0];
 
-    const newGame: ISolo = {name: gameName, originalImage: file1, modifiedImage: file2 };
+      const newGame: ISolo = {name: gameName, originalImage: file1, modifiedImage: file2 };
 
-    this.gameService.createSimpleGame(newGame);
+      this.gameService.createSimpleGame(newGame);
       console.log("tentative de creer un jeu ... ");
       this.element.style.display = "none";
-      document.body.classList.remove('modal-open');
+      document.body.classList.remove("modal-open");
 
-    }      
+    }
   }
 
   public open(): void {
@@ -150,24 +139,25 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
   }
 
   public close(): void {
-    this.element.style.display = 'none';
-    document.body.classList.remove('modal-open');
+    this.element.style.display = "none";
+    document.body.classList.remove("modal-open");
 
   }
 
   public checkBmpDimensions(width: number, height: number): boolean {
-    return (width == this.IMAGE_WIDTH && height == this.IMAGE_HEIGHT);
+    return (width === this.IMAGE_WIDTH && height === this.IMAGE_HEIGHT);
   }
 
- 
   public checkOriginalExtension(filename: string): boolean {
-    let extensionOriginal = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
-    return (extensionOriginal == this.FILE_FORMAT);
+    const extensionOriginal: string = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+
+    return (extensionOriginal === this.FILE_FORMAT);
   }
 
   public checkModifiedExtension(filename: string): boolean {
-    let extensionModified = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
-    return (extensionModified == this.FILE_FORMAT);
+    const extensionModified: string = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+
+    return (extensionModified === this.FILE_FORMAT);
   }
 
   public isValidGameName(name: string): boolean {
@@ -175,24 +165,23 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
   }
 
   public containOnlyAlphaNumeric(name: string): boolean {
-    let check = name.match(/^[a-zA-Z0-9]+$/i);
-    return check == null ? false : check[0].length == name.length;
+    const check: RegExpMatchArray = name.match(/^[a-zA-Z0-9]+$/i);
+
+    return check == null ? false : check[0].length === name.length;
   }
 
-  public showErrorMessage(error: string): void{
-    var errorBox = document.createElement("span");
-    var errorMessage = document.createTextNode(error);
+  public showErrorMessage(error: string): void {
+    const errorBox: HTMLSpanElement = document.createElement("span");
+    const errorMessage: Text = document.createTextNode(error);
     errorBox.appendChild(errorMessage);
     document.getElementById("errorsMessages").appendChild(errorBox);
   }
 
-  public clearErrorMessages(): void{
-    var errors = document.getElementById("errorsMessages");
-    while (errors.hasChildNodes()) {   
-      errors.removeChild(errors.firstChild); 
-    }      
+  public clearErrorMessages(): void {
+    const errors: HTMLElement = document.getElementById("errorsMessages");
+    while (errors.hasChildNodes()) {
+      errors.removeChild(errors.firstChild);
+    }
   }
 
 }
-
-

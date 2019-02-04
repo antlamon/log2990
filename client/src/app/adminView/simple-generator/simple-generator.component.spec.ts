@@ -8,7 +8,7 @@ import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "src/app/modal.service";
- 
+
 describe("SimpleGeneratorComponent", () => {
   let component: SimpleGeneratorComponent;
   let fixture: ComponentFixture<SimpleGeneratorComponent>;
