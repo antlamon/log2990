@@ -1,17 +1,24 @@
 .freeViewForm{
-    padding: 10px;
+    padding: 20px;
     border: 2px solid gray;
-    width: 400px;
+    top: 50%;
+    left: 50%;
+    margin-top: -275px; /* Negative half of height. */
+    margin-left: -250px; /* Negative half of width. */
+    width: 500px;
+    height: 550px;
     display: flex;
     flex-direction: column;
-    background-color: rgb(243, 243, 243);
+    background: #f4f7f8;
+    border-radius: 8px;
+	font-family: Georgia, "Times New Roman", Times, serif;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
+      
+    /* enables scrolling for tall modals */
+    overflow: auto;
     position: fixed;
-    top:10%;
-    width: 100%;
-}
-input {
-    border: 1px solid rgb(48, 46, 46);
+
+    z-index: 1000; 
 }
 .form-grid {
     display: grid;
@@ -19,20 +26,63 @@ input {
     grid-template-columns: 30% 30%;
 }
 
+
 button {
-    background-color: #f4f7f7;
-    background-image: linear-gradient(#a8a8a8,#e7ebeb);
-    margin: 4px;
-    border-radius: 12px;
+    position: relative;
+	display: block;
+	padding: 19px 39px 18px 39px;
+	color: #FFF;
+	margin: 0 auto;
+	background: #485f91;
+	font-size: 18px;
+	text-align: center;
+	font-style: normal;
+	width: 100%;
+	border: 1px solid #1e1f42;
+	border-width: 1px 1px 3px;
+	margin-bottom: 10px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.24), 0 1px 3px 0 rgba(0,0,0,0.19);
 }
-button:hover {
+button:hover{
    cursor: pointer;
-   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
+   background: #3c3653;
+   box-shadow: 0 4px 6px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
 }
 button:focus{
     outline:0;
+}
+input{
+    border-color: black;
+    border-width: 1px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    background: rgba(255,255,255,.1);
+    background-color: #e8eeef;
+    color:#8a97a0;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+	border: none;
+	border-radius: 4px;
+	font-size: 15px;
+}
+input:focus{
+    background: #d2d9dd;
 }
 
 .rightColumn{
     align-self: center;
 }
+
+.form-background {
+    /* modal background fixed across whole screen */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  
+    /* semi-transparent black  */
+    background-color: black;
+    opacity: 0.75;
+        
+    /* z-index must be below .modal and above everything else  */
+     z-index: 700;
+  }

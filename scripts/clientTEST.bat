@@ -1,3 +1,3 @@
 cd ..
 cd client
-npm start
+npm test
