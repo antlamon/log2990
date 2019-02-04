@@ -1,5 +1,5 @@
 import { IndexService } from "./index.service";
-import { Message } from "../../../../common/communication/message";
+import { Message, BASE_ID } from "../../../../common/communication/message";
 import { TestHelper } from "../../test.helper";
 
 // tslint:disable-next-line:no-any Used to mock the http call
@@ -14,15 +14,16 @@ describe("IndexService", () => {
     });
 
     it("should return expected message (HttpClient called once)", () => {
-        const expectedMessage: Message = { body: "Hello", title: "World" };
+
+        const expectedMessage: Message = { body: "The name testname was added to the list of names", title: BASE_ID };
 
         httpClientSpy.get.and.returnValue(TestHelper.asyncData(expectedMessage));
 
         // check the content of the mocked call
-        indexService.basicGet().subscribe(
+        indexService.connect("testname").subscribe(
             (response: Message) => {
-                expect(response.title).toEqual(expectedMessage.title, "Title check");
-                expect(response.body).toEqual(expectedMessage.body, "body check");
+                expect(response.title).toEqual(expectedMessage.title, BASE_ID);
+                expect(response.body).toEqual(expectedMessage.body, "The name testname was added to the list of names");
             },
             fail
         );
