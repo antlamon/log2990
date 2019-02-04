@@ -229,7 +229,7 @@
     ],
     "max-func-body-length": [
       true,
-      30,
+      32,
       {
         "ignore-parameters-to-function-regex": "describe",
         "ignore-comments": true
