@@ -6,13 +6,13 @@ import { catchError } from "rxjs/operators";
 
 import { Message } from "../../../../common/communication/message";
 import {SocketService} from "./socket.service";
-import {BASE_SERVER_PATH} from "../global/constants";
+import { BASE_SERVER_PATH } from "../global/constants";
 
 @Injectable()
 export class IndexService {
 
-    private readonly BASE_URL: string = BASE_SERVER_PATH + "/api/index";
-    private readonly CONNECT_URL: string = BASE_SERVER_PATH + "/api/connexion";
+    private readonly BASE_URL: string = BASE_SERVER_PATH + "api/index";
+    private readonly CONNECT_URL: string = BASE_SERVER_PATH + "api/connexion";
     public constructor(private http: HttpClient, private socketService: SocketService) { }
     public basicGet(): Observable<Message> {
         return this.http.get<Message>(this.BASE_URL).pipe(

@@ -2,7 +2,7 @@ import Axios, { AxiosResponse } from "axios";
 import chai = require("chai");
 import spies = require("chai-spies");
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { IGame, ISolo } from "../../../common/models/game";
+import { IGame, ISimpleForm } from "../../../common/models/game";
 import { container } from "../inversify.config";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socketServerManager";
@@ -27,13 +27,13 @@ const mockedGame: IGame = {
     multi: { first: 1, second: 2, third: 3 },
 };
 
-const mockedSimpleGame: ISolo = {
+const mockedSimpleGame: ISimpleForm = {
     name: "testSimpleGame",
     originalImage: {} as File,
     modifiedImage: {} as File,
 };
 
-const mockedErrorGame: ISolo = {
+const mockedErrorGame: ISimpleForm = {
     name: "error",
     originalImage: {} as File,
     modifiedImage: {} as File,

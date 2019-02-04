@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as ClientSocketIO from "socket.io-client";
+import {BASE_SERVER_PATH} from "../global/constants";
 type Socket = SocketIOClient.Socket;
 @Injectable({
   providedIn: "root"
@@ -8,7 +9,7 @@ export class SocketService {
   private readonly socket: Socket;
   public constructor() {
     try {
-      this.socket = ClientSocketIO("http://localhost:3000/");
+      this.socket = ClientSocketIO(BASE_SERVER_PATH);
     } catch (e) {
       alert("Server is not available at the moment.");
     }
