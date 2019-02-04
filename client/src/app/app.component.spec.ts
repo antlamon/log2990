@@ -2,7 +2,7 @@
 // tslint:disable:no-floating-promises pour le before each
 import { TestBed, async, ComponentFixture } from "@angular/core/testing";
 import { AppComponent } from "./app.component";
-import { IndexService } from "./index.service";
+import { IndexService } from "./services/index.service";
 import { HttpClientModule } from "@angular/common/http";
 import { InitialComponent } from './initial/initial.component';
 import {FormsModule} from "@angular/forms";

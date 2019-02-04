@@ -1,7 +1,7 @@
 import { Component, OnInit, Input} from '@angular/core';
-import { GameService } from '../game.service';
+import { GameService } from '../services/game.service';
 import { IGame } from '../../../../common/models/game';
-import { SocketService } from '../socket.service';
+import { SocketService } from '../services/socket.service';
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 
 @Component({

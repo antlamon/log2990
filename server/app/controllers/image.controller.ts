@@ -1,14 +1,16 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import * as multer from "multer";
-import { Message } from "../../../common/communication/message";
+import { ERROR_ID, Message } from "../../../common/communication/message";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 
 @injectable()
 export class ImageController {
 
-    public readonly URL: string = "/api/image/generation";
+    public static readonly URL: string = "/api/image/generation";
+    public static readonly NAME_PARAMETER_ERROR: string = "The name parameter must not be empty";
+    public static readonly INVALID_PARAMETERS_ERROR: string = "The request's parameters are missing or invalid";
     private upload: RequestHandler;
 
     public constructor(@inject(TYPES.ImageService) private imageService: ImageService) {
@@ -27,10 +29,27 @@ export class ImageController {
         const router: Router = Router();
 
         router.post("/", this.upload, (req: Request, res: Response, next: NextFunction) => {
-            const name: string = req.body["name"];
-            const originalBuffer: Buffer = req.files["originalImage"][0].buffer;
-            const modifiedBuffer: Buffer = req.files["modifiedImage"][0].buffer;
-            const message: Message = this.imageService.getDifferencesImage(name, originalBuffer, modifiedBuffer);
+            let message: Message;
+            try {
+                const name: string = req.body["name"];
+                const originalBuffer: Buffer = req.files["originalImage"][0].buffer;
+                const modifiedBuffer: Buffer = req.files["modifiedImage"][0].buffer;
+                if (name) {
+                    message = this.imageService.getDifferencesImage(name, originalBuffer, modifiedBuffer);
+                } else {
+                    res.status(400);
+                    message = {
+                        title: ERROR_ID,
+                        body: ImageController.NAME_PARAMETER_ERROR,
+                    };
+                }
+            } catch (error) {
+                res.status(400);
+                message = {
+                    title: ERROR_ID,
+                    body: ImageController.INVALID_PARAMETERS_ERROR,
+                };
+            }
             res.json(message);
         });
 

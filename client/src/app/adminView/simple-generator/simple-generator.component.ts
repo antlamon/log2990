@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, OnDestroy, Input } from "@angular/core";
-import { GameService } from "src/app/game.service";
-import { ISolo } from "../../../../../common/models/game";
-import { ModalService } from "src/app/modal.service";
+import { GameService } from "src/app/services/game.service";
+import {ISimpleForm} from "../../../../../common/models/game";
+import { ModalService } from "src/app/services/modal.service";
 
 @Component({
   selector: "app-simple-generator",
@@ -12,7 +12,6 @@ import { ModalService } from "src/app/modal.service";
 export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   private readonly FILE_FORMAT: string = "bmp";
-
   private readonly IMAGE_WIDTH: number = 640;
   private readonly IMAGE_HEIGHT: number = 480;
   private readonly MIN_LENGTH: number = 3;
@@ -63,8 +62,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
           }
         }
       };
-    }
-    else {
+    } else {
       if (fileId == "originalFile") {
         this.originalFileIsOK = false;
       } else {
@@ -99,7 +97,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
       const file1: File = (document.getElementById("originalFile") as HTMLInputElement).files[0];
       const file2: File = (document.getElementById("modifiedFile") as HTMLInputElement).files[0];
 
-      const newGame: ISolo = { name: gameName, originalImage: file1, modifiedImage: file2 };
+      const newGame: ISimpleForm = { name: gameName, originalImage: file1, modifiedImage: file2 };
 
       this.gameService.createSimpleGame(newGame);
       
@@ -115,8 +113,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
   }
 
   public close(): void {
-    this.element.style.display = 'none';
-    document.body.classList.remove('modal-open');
+    this.element.style.display = "none";
+    document.body.classList.remove("modal-open");
 
   }
 
@@ -169,5 +167,3 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
   }
 
 }
-
-

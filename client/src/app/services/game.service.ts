@@ -1,17 +1,17 @@
 import { Injectable } from "@angular/core";
-import { IGame, ISolo } from "../../../common/models/game";
+import { IGame, ISimpleForm } from "../../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Message } from "../../../common/communication/message";
-
+import { Message } from "../../../../common/communication/message";
+import { BASE_SERVER_PATH } from "../global/constants";
 
 @Injectable({
   providedIn: "root"
 })
 export class GameService {
 
-  private readonly GAMES_URL: string = "http://localhost:3000/api/gameList";
+  private readonly GAMES_URL: string = BASE_SERVER_PATH +"api/gameList";
   private readonly SIMPLE_URL: string = this.GAMES_URL + "/simple";
   private readonly FREE_URL: string = this.GAMES_URL + "/free";
 
@@ -32,7 +32,7 @@ export class GameService {
   public getFreeGames(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
-  public createSimpleGame(game: ISolo): void {
+  public createSimpleGame(game: ISimpleForm): void {
 
     console.log("envoi de la requete au serveur...");
     const form: FormData = new FormData();

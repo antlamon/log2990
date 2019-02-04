@@ -4,7 +4,7 @@ import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
-import { IGame, ISolo } from "../../../common/models/game";
+import { IGame, ISimpleForm } from "../../../common/models/game";
 import { ITop3 } from "../../../common/models/top3";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socketServerManager";
@@ -60,7 +60,7 @@ export class GameListService {
         return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
 
-    public async addSimpleGame(newGame: ISolo, originalImage: MulterFile, modifiedImage: MulterFile): Promise<Message> {
+    public async addSimpleGame(newGame: ISimpleForm, originalImage: MulterFile, modifiedImage: MulterFile): Promise<Message> {
         const form: FormData = new FormData();
         form.append("name", newGame.name);
         form.append("originalImage", originalImage.buffer, originalImage.fileName);

@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {IndexService} from "../index.service";
+import {IndexService} from "../services/index.service";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
 import { Router} from "@angular/router";
 
@@ -14,7 +14,6 @@ export class InitialComponent implements OnInit {
 
   public constructor(private indexService: IndexService, private router: Router) {
     this.username = ""; // invalid name
-    // Mock values for testing
   }
 
   public ngOnInit() {

@@ -7,7 +7,7 @@ export interface IGame {
     multi: ITop3;
 }
 
-export interface ISolo {
+export interface ISimpleForm {
 
     name: string;
     originalImage: File;
