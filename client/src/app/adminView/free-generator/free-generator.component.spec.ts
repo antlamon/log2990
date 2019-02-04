@@ -6,6 +6,9 @@ import { SimpleGeneratorComponent } from "../simple-generator/simple-generator.c
 import { InitialComponent } from "src/app/initial/initial.component";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { ModalService } from "src/app/modal.service";
+
 
 describe("FreeGeneratorComponent", () => {
   let component: FreeGeneratorComponent;
@@ -20,7 +23,8 @@ describe("FreeGeneratorComponent", () => {
         InitialComponent,
         ListViewComponent
        ],
-      imports: [ AppRoutingModule, FormsModule ]
+      imports: [ AppRoutingModule, FormsModule,HttpClientModule ],
+      providers: [ModalService]
     })
     .compileComponents();
   }));

@@ -9,6 +9,7 @@ import { InitialComponent } from "src/app/initial/initial.component";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { ModalService } from "../../modal.service";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
@@ -29,6 +30,7 @@ describe("AdminMenuComponent", () => {
         FormsModule,
         HttpClientModule
       ],
+      providers: [ModalService,FreeGeneratorComponent]
     })
     .compileComponents();
   }));

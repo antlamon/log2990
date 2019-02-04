@@ -4,6 +4,8 @@ import { InitialComponent } from "./initial.component";
 import {FormsModule} from "@angular/forms";
 import {IndexService} from '../index.service';
 import { HttpClientModule } from "@angular/common/http";
+import { AppRoutingModule } from "../app-routing.module";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("Test for the class InitialComponent using functions related to the connexion", () => {
   let component: InitialComponent;
@@ -12,8 +14,8 @@ describe("Test for the class InitialComponent using functions related to the con
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ InitialComponent ],
-      imports: [ FormsModule, HttpClientModule ],
-      providers: [ IndexService ],
+      imports: [ FormsModule, RouterTestingModule,HttpClientModule ],
+      providers: [ IndexService, AppRoutingModule ], 
     })
       .compileComponents();
   }));
