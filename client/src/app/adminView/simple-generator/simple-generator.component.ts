@@ -88,24 +88,19 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
         }
       });
     } else {
-      if (!this.fileValidator.isValidGameName(gameName)) {
-        (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Nom de jeu invalide.");
-      } else {
-        (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "black";
-      }
-      if (!this.modifiedFileIsOK) {
-        (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Fichier de jeu modifié invalide.");
-      } else {
-        (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "black";
-      }
-      if (!this.originalFileIsOK) {
-        (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Fichier de jeu original invalide.");
-      } else {
-        (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black";
-      }
+      this.validity(this.fileValidator.isValidGameName(gameName), "gameNameLabel", "Nom de jeu invalide.");
+      this.validity(this.modifiedFileIsOK, "modifiedFileLabel", "Fichier de jeu modifié invalide.");
+      this.validity(this.originalFileIsOK, "originalFileLabel", "Fichier de jeu original invalide.");
+    }
+  }
+
+  private validity(condition: boolean, id: string, errorMessage: string ): void {
+
+    if (condition) {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
+    } else {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "red";
+      this.showErrorMessage(errorMessage);
     }
   }
 
