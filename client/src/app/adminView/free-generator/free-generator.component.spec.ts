@@ -9,7 +9,6 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "src/app/services/modal.service";
 
-
 describe("FreeGeneratorComponent", () => {
   let component: FreeGeneratorComponent;
   let fixture: ComponentFixture<FreeGeneratorComponent>;
@@ -22,11 +21,13 @@ describe("FreeGeneratorComponent", () => {
         SimpleGeneratorComponent,
         InitialComponent,
         ListViewComponent
-       ],
-      imports: [ AppRoutingModule, FormsModule,HttpClientModule ],
+      ],
+      imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService]
     })
-    .compileComponents();
+      .compileComponents().then(() => { }, (error: Error) => {
+        console.error(error);
+      });
   }));
 
   beforeEach(() => {

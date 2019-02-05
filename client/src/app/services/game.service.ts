@@ -33,15 +33,17 @@ export class GameService {
   public getFreeGames(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
+  public createSimpleGame(game: ISimpleForm): Observable<Message> {
 
-  public createSimpleGame(game: ISimpleForm): void {
-
-    console.log("envoi de la requete au serveur...");
     const form: FormData = new FormData();
     form.append("name", game.name);
     form.append("originalImage", game.originalImage, game.originalImage.name);
     form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
-    this.http.post<Message>(this.SIMPLE_URL, form).subscribe();
+
+    return this.http.post<Message>(this.SIMPLE_URL, form).pipe(
+      catchError(this.handleError<Message>("createSimpleGame"))
+    );
+
   }
 
   public createFreeGame(game: IGame): void {

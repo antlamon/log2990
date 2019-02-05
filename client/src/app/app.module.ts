@@ -9,12 +9,13 @@ import { SimpleGeneratorComponent } from "./adminView/simple-generator/simple-ge
 import { AppRoutingModule } from "./app-routing.module";
 import { FormsModule } from "@angular/forms";
 import { IndexService } from "./services/index.service";
-import { ListViewComponent } from './list-view/list-view.component';
+import { ListViewComponent } from "./list-view/list-view.component";
 import {SocketService} from "./services/socket.service";
-import {MatCardModule} from '@angular/material/card';
+import {MatCardModule} from "@angular/material/card";
 import { MatDialogModule } from "@angular/material";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ModalService } from "./services/modal.service";
+import { FileValidatorService } from "./services/file-validator.service";
 
 @NgModule({
   declarations: [
@@ -39,9 +40,10 @@ import { ModalService } from "./services/modal.service";
     FreeGeneratorComponent,
   ],
   providers: [
-    IndexService, 
-    SocketService, 
-    ModalService
+    IndexService,
+    SocketService,
+    ModalService,
+    FileValidatorService,
   ],
   bootstrap: [AppComponent]
 })

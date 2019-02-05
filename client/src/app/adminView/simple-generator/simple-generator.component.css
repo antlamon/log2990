@@ -100,6 +100,11 @@ button:focus,  .uploader + label:focus{
     background: #d2d9dd;
 }
 
+#modifiedFileName, #originalFileName {
+    font-size: 10px;
+
+}
+
 .form-background {
     position: fixed;
     top: 0;

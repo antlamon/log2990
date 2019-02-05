@@ -8,18 +8,18 @@ export class ModalService {
         this.modals.push(modal);
     }
 
-    remove(id: string) {
+    public remove(id: string): void {
         // remove modal from array of active modals
-        this.modals = this.modals.filter(x => x.id !== id);
+        this.modals = this.modals.filter((x) => x.id !== id);
     }
 
-    open(id: string) {
+    public open(id: string): void {
         // open modal specified by id
         let modal: IModal = this.modals.filter(x => x.id === id)[0];
         modal.open();
     }
 
-    close(id: string) {
+    public close(id: string): void {
         // close modal specified by id
         let modal: IModal = this.modals.filter(x => x.id === id)[0];
         modal.close();

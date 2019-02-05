@@ -5,11 +5,11 @@ import { ListViewComponent } from "./list-view/list-view.component";
 import {InitialComponent} from "./initial/initial.component";
 
 const routes: Routes = [
-  { path: 'admin',
+  { path: "admin",
     component: AdminMenuComponent,
   },
   { path: "games", component: ListViewComponent },
-  {path:"", component:InitialComponent },
+  {path: "", component: InitialComponent },
 ];
 
 @NgModule({

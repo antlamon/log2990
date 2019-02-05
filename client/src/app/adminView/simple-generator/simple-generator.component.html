@@ -12,16 +12,18 @@
         </div>
         <div>
           <p id="originalFileLabel">Image originale</p>
+          <p id = "originalFileName">Aucun fichier choisi.</p>
         </div>
         <div class="rightColumn">
-          <input type="file" name="file" id="originalFile" class="uploader" (change)="onFileChange($event,'originalFile')">
+          <input type="file" name="file" id="originalFile" class="uploader" (change)="onFileChange($event,'originalFile', 'originalFileName')">
           <label for="originalFile">Choisir un fichier </label>
         </div>
         <div>
-          <p id="modifiedFileLabel">Image modifiée</p>
+          <p id = "modifiedFileLabel"> Image modifiée </p>
+          <p id = "modifiedFileName"> Aucun fichier choisi. </p>
         </div>
         <div class="rightColumn">
-          <input type="file" name="file" id="modifiedFile" class="uploader" (change)="onFileChange($event,'modifiedFile')">
+          <input type="file" name="file" id="modifiedFile" class="uploader" (change)="onFileChange($event,'modifiedFile', 'modifiedFileName')">
           <label for="modifiedFile">Choisir un fichier </label>
         </div>
       </div>
