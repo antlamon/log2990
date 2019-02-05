@@ -6,7 +6,7 @@ import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/messag
 import { IGame, ISimpleForm } from "../../../common/models/game";
 import { container } from "../inversify.config";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
-import { SocketServerManager } from "../socketServerManager";
+import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { GameListService, MulterFile } from "./game-list.service";
 import { ImageService } from "./image.service";

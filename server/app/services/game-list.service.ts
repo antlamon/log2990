@@ -7,7 +7,7 @@ import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { IGame, ISimpleForm } from "../../../common/models/game";
 import { ITop3 } from "../../../common/models/top3";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
-import { SocketServerManager } from "../socketServerManager";
+import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { ImageService } from "./image.service";
 

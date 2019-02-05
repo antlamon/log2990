@@ -9,7 +9,7 @@ import { ConvertImage } from "./services/convertImage.service";
 import { GameListService } from "./services/game-list.service";
 import { ImageService } from "./services/image.service";
 import { UsersManager } from "./services/users.service";
-import { SocketServerManager } from "./socketServerManager";
+import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
 
 const container: Container = new Container();

@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
 import { Application } from "./app";
 import { container } from "./inversify.config";
-import { SocketServerManager } from "./socketServerManager";
+import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
 
 @injectable()
