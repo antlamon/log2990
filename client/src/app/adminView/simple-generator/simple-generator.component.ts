@@ -14,8 +14,8 @@ import { IModal } from "src/app/models/modal";
 
 export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
-  private readonly WIDTH_OFFSET: number;
-  private readonly HEIGHT_OFFSET: number;
+  private readonly WIDTH_OFFSET: number = 18;
+  private readonly HEIGHT_OFFSET: number = 22;
 
   private modifiedFileIsOK: boolean;
   private originalFileIsOK: boolean;
@@ -27,8 +27,6 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   public constructor(private gameService: GameService, private fileValidator: FileValidatorService,
                      private modalService: ModalService, public el: ElementRef) {
     this.element = el.nativeElement;
-    this.WIDTH_OFFSET = 18;
-    this.HEIGHT_OFFSET = 22;
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
   }
@@ -115,19 +113,19 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     }
   }
 
-  open(): void {
+  public open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-  close(): void {
+  public close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
   }
 
   private initModal(): void {
-   this.modalRef = this;
+    this.modalRef = this;
 
     document.body.appendChild(this.element);
 
