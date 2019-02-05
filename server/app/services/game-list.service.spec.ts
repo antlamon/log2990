@@ -1,3 +1,4 @@
+import { fail } from "assert";
 import Axios, { AxiosResponse } from "axios";
 import chai = require("chai");
 import spies = require("chai-spies");
@@ -69,23 +70,32 @@ describe("GameList service", () => {
 
     describe("Getting games", () => {
         it("Getting simple games should return SIMPLEGAMES", async () => {
-            service.getSimpleGames().then((games: IGame[]) => {
-                expect(games).to.eql(SIMPLEGAMES);
-            });
+            service.getSimpleGames().then(
+                (games: IGame[]) => {
+                    expect(games).to.eql(SIMPLEGAMES);
+                },
+                () => fail(),
+            );
         });
 
         it("Getting free games should return FREEGAMES", async () => {
-            service.getFreeGames().then((games: IGame[]) => {
-                expect(games).to.eql(FREEGAMES);
-            });
+            service.getFreeGames().then(
+                (games: IGame[]) => {
+                    expect(games).to.eql(FREEGAMES);
+                },
+                () => fail(),
+            );
         });
     });
 
     describe("Adding games", () => {
         it("Adding a free game should return the game", async () => {
-            service.addFreeGame(mockedGame).then((message: IGame) => {
-                expect(message).to.eql(mockedGame);
-            });
+            service.addFreeGame(mockedGame).then(
+                (message: IGame) => {
+                    expect(message).to.eql(mockedGame);
+                },
+                () => fail(),
+            );
         });
 
         describe("Adding simple games", () => {
@@ -100,9 +110,12 @@ describe("GameList service", () => {
                         data: mockedNewImageMessage,
                     } as AxiosResponse;
                 });
-                service.addSimpleGame(mockedSimpleGame, mockedMulterFile, mockedMulterFile).then((message: Message) => {
-                    expect(message).to.eql(mockedNewImageMessage);
-                });
+                service.addSimpleGame(mockedSimpleGame, mockedMulterFile, mockedMulterFile).then(
+                    (message: Message) => {
+                        expect(message).to.eql(mockedNewImageMessage);
+                    },
+                    () => fail(),
+                );
             });
 
             it("Falling to add a simple game should return an error message", async () => {
@@ -111,9 +124,12 @@ describe("GameList service", () => {
                         data: mockedErrorMessage,
                     } as AxiosResponse;
                 });
-                service.addSimpleGame(mockedErrorGame, mockedMulterFile, mockedMulterFile).then((message: Message) => {
-                    expect(message).to.eql(mockedErrorMessage);
-                });
+                service.addSimpleGame(mockedErrorGame, mockedMulterFile, mockedMulterFile).then(
+                    (message: Message) => {
+                        expect(message).to.eql(mockedErrorMessage);
+                    },
+                    () => fail(),
+                );
             });
         });
     });
@@ -128,15 +144,21 @@ describe("GameList service", () => {
                     multi: { first: 1, second: 2, third: 3 },
                 };
                 SIMPLEGAMES.push(simpleGame);
-                service.deleteSimpleGame("simpleGame").then((message: Message) => {
-                    expect(message.body).to.equal("Le jeu simpleGame a été supprimé");
-                });
+                service.deleteSimpleGame("simpleGame").then(
+                    (message: Message) => {
+                        expect(message.body).to.equal("Le jeu simpleGame a été supprimé");
+                    },
+                    () => fail(),
+                );
             });
 
             it("Deleting a simple game that doesnt exist should return a relevant message", async () => {
-                service.deleteSimpleGame("simpleGame").then((message: Message) => {
-                    expect(message.body).to.equal("Le jeu simpleGame n'existe pas!");
-                });
+                service.deleteSimpleGame("simpleGame").then(
+                    (message: Message) => {
+                        expect(message.body).to.equal("Le jeu simpleGame n'existe pas!");
+                    },
+                    () => fail(),
+                );
             });
         });
 
@@ -149,15 +171,21 @@ describe("GameList service", () => {
                     multi: { first: 1, second: 2, third: 3 },
                 };
                 FREEGAMES.push(freeGame);
-                service.deleteFreeGame("freeGame").then((message: Message) => {
-                    expect(message.body).to.equal("Le jeu freeGame a été supprimé");
-                });
+                service.deleteFreeGame("freeGame").then(
+                    (message: Message) => {
+                        expect(message.body).to.equal("Le jeu freeGame a été supprimé");
+                    },
+                    () => fail(),
+                );
             });
 
             it("Deleting a free game that doesnt exist should return a relevant message", async () => {
-                service.deleteFreeGame("freeGame").then((message: Message) => {
-                    expect(message.body).to.equal("Le jeu freeGame n'existe pas!");
-                });
+                service.deleteFreeGame("freeGame").then(
+                    (message: Message) => {
+                        expect(message.body).to.equal("Le jeu freeGame n'existe pas!");
+                    },
+                    () => fail(),
+                );
             });
         });
     });

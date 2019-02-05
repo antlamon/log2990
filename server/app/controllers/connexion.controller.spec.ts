@@ -28,7 +28,7 @@ describe("Connexion Controller", () => {
         container.restore();
     });
 
-    it("Should return added message", (done: MochaDone) => {
+    it("Should return added message", (done: Mocha.Done) => {
         supertest(app)
         .get("/api/connexion")
         .expect("Content-Type", /json/)

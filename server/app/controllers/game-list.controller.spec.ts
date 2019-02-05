@@ -13,6 +13,7 @@ import { TYPES } from "../types";
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
+const HTTP_OK: number = 200;
 
 const mockedMessage: Message = {
     title: BASE_ID,
@@ -39,12 +40,12 @@ describe("Game list controller", () => {
         container.rebind(TYPES.ImageService).toConstantValue(imageService);
 
         const gameListService: GameListService = container.get<GameListService>(TYPES.GameListService);
-        sandbox.on(gameListService, "addSimpleGame", () => Promise.resolve(mockedMessage));
-        sandbox.on(gameListService, "addFreeGame", () => Promise.resolve(mockedGame));
-        sandbox.on(gameListService, "getSimpleGame", () => Promise.resolve(SIMPLEGAMES));
-        sandbox.on(gameListService, "getFreeGame", () => Promise.resolve(FREEGAMES));
-        sandbox.on(gameListService, "deleteSimpleGame", () => Promise.resolve(mockedMessage));
-        sandbox.on(gameListService, "deleteFreeGame", () => Promise.resolve(mockedMessage));
+        sandbox.on(gameListService, "addSimpleGame", async() => Promise.resolve(mockedMessage));
+        sandbox.on(gameListService, "addFreeGame", async() => Promise.resolve(mockedGame));
+        sandbox.on(gameListService, "getSimpleGame", async() => Promise.resolve(SIMPLEGAMES));
+        sandbox.on(gameListService, "getFreeGame", async() => Promise.resolve(FREEGAMES));
+        sandbox.on(gameListService, "deleteSimpleGame", async() => Promise.resolve(mockedMessage));
+        sandbox.on(gameListService, "deleteFreeGame", async() => Promise.resolve(mockedMessage));
         container.rebind(TYPES.GameListService).toConstantValue(gameListService);
 
         app = container.get<Application>(TYPES.Application).app;
@@ -55,66 +56,66 @@ describe("Game list controller", () => {
         container.restore();
     });
 
-    it("Post to simple should create a new game", (done: MochaDone) => {
+    it("Post to simple should create a new game", (done: Mocha.Done) => {
         supertest(app)
         .post(baseURL + "simple")
         .field("name", "testGame")
         .attach("originalImage", PATHS.TEST_IMAGES_PATH + "image_test_1.bmp")
         .attach("modifiedImage", PATHS.TEST_IMAGES_PATH + "image_test_2.bmp")
-        .expect(200)
+        .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedMessage);
             done(error);
         });
     });
 
-    it("Delete to simple should delete a game", (done: MochaDone) => {
+    it("Delete to simple should delete a game", (done: Mocha.Done) => {
         supertest(app)
         .delete(baseURL + "simple")
         .query({name: mockedGame.name})
-        .expect(200)
+        .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedMessage);
             done(error);
         });
     });
 
-    it("Delete to free should delete a game", (done: MochaDone) => {
+    it("Delete to free should delete a game", (done: Mocha.Done) => {
         supertest(app)
         .delete(baseURL + "free")
         .query({name: mockedGame.name})
-        .expect(200)
+        .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedMessage);
             done(error);
         });
     });
 
-    it("Get to simple should get SIMPLEGAMES", (done: MochaDone) => {
+    it("Get to simple should get SIMPLEGAMES", (done: Mocha.Done) => {
         supertest(app)
         .get(baseURL + "simple")
-        .expect(200)
+        .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(SIMPLEGAMES);
             done(error);
         });
     });
 
-    it("Get to free should get FREEGAMES", (done: MochaDone) => {
+    it("Get to free should get FREEGAMES", (done: Mocha.Done) => {
         supertest(app)
         .get(baseURL + "free")
-        .expect(200)
+        .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(FREEGAMES);
             done(error);
         });
     });
 
-    it("Post to free should create a new game", (done: MochaDone) => {
+    it("Post to free should create a new game", (done: Mocha.Done) => {
         supertest(app)
         .post(baseURL + "free")
         .field("name", "testGame")
-        .expect(200)
+        .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedGame);
             done(error);

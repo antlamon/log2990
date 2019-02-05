@@ -12,9 +12,13 @@ export class ConnexionController {
     public get router(): Router {
         const router: Router = Router();
         router.get("/", (req: Request, res: Response, next: NextFunction) => {
-            this.connexionService.addName(req.query.name, req.query.id).then((message: Message) => {
-                res.json(message);
-            });
+            this.connexionService.addName(req.query.name, req.query.id).then(
+                (message: Message) => {
+                    res.json(message);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
         });
 
         return router;
