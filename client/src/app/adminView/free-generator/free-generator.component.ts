@@ -55,14 +55,14 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.close();
   }
 
-   open(): void {
+  public open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-   close(): void {
-    this.element.style.display = 'none';
-    document.body.classList.remove('modal-open');
+  public close(): void {
+    this.element.style.display = "none";
+    document.body.classList.remove("modal-open");
   }
 }

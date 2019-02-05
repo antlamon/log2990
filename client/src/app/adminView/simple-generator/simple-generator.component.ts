@@ -17,15 +17,18 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   private readonly WIDTH_OFFSET: number = 18;
   private readonly HEIGHT_OFFSET: number = 22;
 
-  private modifiedFileIsOK: boolean = false;
-  private originalFileIsOK: boolean = false;
+  private modifiedFileIsOK: boolean;
+  private originalFileIsOK: boolean;
 
   private element: HTMLElement;
   @Input() public id: string;
+  private modalRef: SimpleGeneratorComponent;
 
   public constructor(private gameService: GameService, private fileValidator: FileValidatorService,
                      private modalService: ModalService, public el: ElementRef) {
     this.element = el.nativeElement;
+    this.modifiedFileIsOK = false;
+    this.originalFileIsOK = false;
   }
 
   public ngOnInit(): void {
@@ -38,6 +41,24 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   }
 
+  private onFileLoaded(fileId: string, reader: FileReader): void {
+
+    const buffer: ArrayBuffer = reader.result as ArrayBuffer;
+    const bmp: DataView = new DataView(buffer);
+    const width: number = bmp.getUint32(this.WIDTH_OFFSET, true);
+    const height: number = bmp.getUint32(this.HEIGHT_OFFSET, true);
+    if (this.fileValidator.dimensionsAreValid(width, height)) {
+      if (fileId === "originalFile") {
+        this.originalFileIsOK = true;
+      } else {
+        if (fileId === "modifiedFile") {
+          this.modifiedFileIsOK = true;
+        }
+      }
+    }
+
+  }
+
   public onFileChange(event: any, fileId: string, labelId: string): void {
 
     const fileName: string = (document.getElementById(fileId) as HTMLInputElement).value;
@@ -47,19 +68,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
       const [file] = event.target.files;
       reader.readAsArrayBuffer(file);
       reader.onload = () => {
-        const buffer: ArrayBuffer = reader.result as ArrayBuffer;
-        const bmp: DataView = new DataView(buffer);
-        const width: number = bmp.getUint32(this.WIDTH_OFFSET, true);
-        const height: number = bmp.getUint32(this.HEIGHT_OFFSET, true);
-        if (this.fileValidator.dimensionsAreValid(width, height)) {
-          if (fileId === "originalFile") {
-            this.originalFileIsOK = true;
-          } else {
-            if (fileId === "modifiedFile") {
-              this.modifiedFileIsOK = true;
-            }
-          }
-        }
+        this.onFileLoaded(fileId, reader);
       };
     } else {
       if (fileId === "originalFile") {
@@ -88,46 +97,41 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
         }
       });
     } else {
-      if (!this.fileValidator.isValidGameName(gameName)) {
-        (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Nom de jeu invalide.");
-      } else {
-        (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "black";
-      }
-      if (!this.modifiedFileIsOK) {
-        (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Fichier de jeu modifié invalide.");
-      } else {
-        (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "black";
-      }
-      if (!this.originalFileIsOK) {
-        (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Fichier de jeu original invalide.");
-      } else {
-        (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black";
-      }
+      this.validity(this.fileValidator.isValidGameName(gameName), "gameNameLabel", "Nom de jeu invalide.");
+      this.validity(this.modifiedFileIsOK, "modifiedFileLabel", "Fichier de jeu modifié invalide.");
+      this.validity(this.originalFileIsOK, "originalFileLabel", "Fichier de jeu original invalide.");
     }
   }
 
-  open(): void {
+  private validity(condition: boolean, id: string, errorMessage: string ): void {
+
+    if (condition) {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
+    } else {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "red";
+      this.showErrorMessage(errorMessage);
+    }
+  }
+
+  public open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-  close(): void {
+  public close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
   }
 
   private initModal(): void {
-    const modal: SimpleGeneratorComponent = this;
+    this.modalRef = this;
 
     document.body.appendChild(this.element);
 
-    this.element.addEventListener("click",  (event: Event) => {
+    this.element.addEventListener("click", (event: Event) => {
       if (event.constructor.name === "modal") {
-        modal.submit();
+        this.modalRef.submit();
       }
     });
 

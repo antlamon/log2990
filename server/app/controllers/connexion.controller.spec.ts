@@ -38,7 +38,7 @@ describe("Connexion Controller", () => {
     });
 
     it("Should return added message", (done: Mocha.Done) => {
-        sandbox.on(mockedConnexionService, "addName", () => Promise.resolve(mockedAddName));
+        sandbox.on(mockedConnexionService, "addName", async () => Promise.resolve(mockedAddName));
         supertest(app)
         .get("/api/connexion")
         .expect("Content-Type", /json/)
@@ -50,7 +50,7 @@ describe("Connexion Controller", () => {
     });
 
     it("Should return added message from promise rejection", (done: Mocha.Done) => {
-        sandbox.on(mockedConnexionService, "addName", () => Promise.reject(mockedAddName));
+        sandbox.on(mockedConnexionService, "addName", async () => Promise.reject(mockedAddName));
         supertest(app)
         .get("/api/connexion")
         .expect("Content-Type", /json/)

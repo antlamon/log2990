@@ -1,18 +1,18 @@
+import chai = require("chai");
+import spies = require("chai-spies");
 import * as SocketClientIO from "socket.io-client";
 import { container } from "../inversify.config";
 import { Server } from "../server";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 import { SocketServerManager } from "./socketServerManager";
-import chai = require("chai");
-import spies = require("chai-spies");
 const expect: Chai.ExpectStatic = chai.expect;
 const SERVER_URL: string = "http://localhost:3000/";
-const CONNEXION_DELAY:number =100;
+const CONNEXION_DELAY: number = 100;
 chai.use(spies);
 describe("Test for the socketServerManager", () => {
 
-    let sandbox: ChaiSpies.Sandbox = chai.spy.sandbox();
+    const sandbox: ChaiSpies.Sandbox = chai.spy.sandbox();
     let mockClientSocket: SocketIOClient.Socket;
     let testManager: SocketServerManager;
     let server: Server;
@@ -25,7 +25,6 @@ describe("Test for the socketServerManager", () => {
         testManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
         server = container.get<Server>(TYPES.Server);
         server.init();
-
 
         mockClientSocket = SocketClientIO.connect(SERVER_URL);
         mockClientSocket.on("connect", () => {
@@ -57,7 +56,7 @@ describe("Test for the socketServerManager", () => {
         setTimeout(() => {
             expect(testManager["userManager"].users.length).to.equal(0);
             done();
-        }, CONNEXION_DELAY);
+        },         CONNEXION_DELAY);
     });
 
 });

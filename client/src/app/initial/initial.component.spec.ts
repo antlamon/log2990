@@ -33,21 +33,21 @@ describe("InitialComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  describe("test for the function connect",()=>{
-    it("should change view if response is valid", ()=>{
-      spyOn(component["indexService"],"connect").and.callFake((username:string):Observable<Message>=>{
-        return of({title:BASE_ID,body:"test-message"});
+  describe("test for the function connect", () => {
+    it("should change view if response is valid", () => {
+      spyOn(component["indexService"], "connect").and.callFake((username: string): Observable<Message> => {
+        return of({title: BASE_ID, body: "test-message"});
       });
-      let navigateSpy = spyOn((<any>component).router, 'navigate');
+      const navigateSpy = spyOn((component as any).router, "navigate");
       component.connect("test123");
-      expect(navigateSpy).toHaveBeenCalledWith(['games']);
+      expect(navigateSpy).toHaveBeenCalledWith(["games"]);
     });
 
-    it("should not change view if reponse is not valid", ()=>{
-      spyOn(component["indexService"],"connect").and.callFake((username:string):Observable<Message>=>{
-        return of({title:ERROR_ID,body:"test-message"});
+    it("should not change view if reponse is not valid", () => {
+      spyOn(component["indexService"], "connect").and.callFake((username: string): Observable<Message> => {
+        return of({title: ERROR_ID, body: "test-message"});
       });
-      let navigateSpy = spyOn((<any>component).router, 'navigate');
+      const navigateSpy = spyOn((component as any).router, "navigate");
       component.connect("test123");
       expect(navigateSpy).toHaveBeenCalledTimes(0);
     });
