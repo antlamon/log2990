@@ -22,22 +22,22 @@ export class ConnexionService {
 
     public async addName(newName: string, id: string): Promise<Message> {
         if (!ConnexionService.isCorrectLength(newName)) {
-            return {title: ERROR_ID, body: `The name is not the correct length must be between
-            ${ConnexionService.MIN_USERNAME_LENGTH} and ${ConnexionService.MAX_USERNAME_LENGTH}`};
+            return {title: ERROR_ID, body: `Le nom n'est pas de la bonne taile entre
+            ${ConnexionService.MIN_USERNAME_LENGTH} et ${ConnexionService.MAX_USERNAME_LENGTH}`};
         }
         if (!ConnexionService.containOnlyAlphaNumeric(newName)) {
-            return {title: ERROR_ID, body: "Name must contain only alpha numerics"};
+            return {title: ERROR_ID, body: "Le nom doit contenir seulement des charactères alphanumériques"};
         }
 
         if (this.userManager.userExist(newName)) {
-            return {title: ERROR_ID, body: "Name was already taken"};
+            return {title: ERROR_ID, body: "Nom déjà choisi"};
         }
 
         this.userManager.setUserName(newName, id);
 
         return {
             title: BASE_ID,
-            body: `The name ${newName} was added to the list of names`,
+            body: `Le nom ${newName} a été ajouté à la liste de noms`,
         };
     }
 }

@@ -92,38 +92,38 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
       const newGame: ISimpleForm = { name: gameName, originalImage: file1, modifiedImage: file2 };
       this.gameService.createSimpleGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
-          this.showErrorMessage("The operation was canceled: ");
+          this.showErrorMessage("L'opération a été annulée: ");
           this.showErrorMessage(message.body);
         } else {
           this.close();
         }
       });
     } else {
-      if (!this.fileValidator.isValidGameName(gameName)) {
-        (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Nom de jeu invalide.");
-      }
-      if (!this.modifiedFileIsOK) {
-        (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Fichier de jeu modifié invalide.");
-      }
-      if (!this.originalFileIsOK) {
-        (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red";
-        this.showErrorMessage("Fichier de jeu original invalide.");
-      }
+      this.validity(this.fileValidator.isValidGameName(gameName), "gameNameLabel", "Nom de jeu invalide.");
+      this.validity(this.modifiedFileIsOK, "modifiedFileLabel", "Fichier de jeu modifié invalide.");
+      this.validity(this.originalFileIsOK, "originalFileLabel", "Fichier de jeu original invalide.");
     }
   }
 
-  public open(): void {
+  private validity(condition: boolean, id: string, errorMessage: string ): void {
+
+    if (condition) {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
+    } else {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "red";
+      this.showErrorMessage(errorMessage);
+    }
+  }
+
+  open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-  public close(): void {
+  close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
-
   }
 
   private initModal(): void {

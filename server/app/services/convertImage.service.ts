@@ -3,7 +3,7 @@ import "reflect-metadata";
 
 @injectable()
 export class ConvertImage {
-  public static readonly ERROR_MESSAGE_WRONG_FORMAT: string = "Images are in the wrong format";
+  public static readonly ERROR_MESSAGE_WRONG_FORMAT: string = "Les images ne sont pas dans le bon format";
   public readonly VALID_BIT_COUNT: number = 24;
 
   public bufferToImageBMP(buffer: Buffer): ImageBMP {
