@@ -141,7 +141,7 @@ describe("Connexion service", () => {
             service.addName(username, "").then(
                 (message: Message) => {
                     expect(message.title).to.equal(ERROR_ID);
-                    expect(message.body).to.equal("Name was already taken");
+                    expect(message.body).to.equal("Nom déjà choisi");
                 },
                 () => fail(),
             );
