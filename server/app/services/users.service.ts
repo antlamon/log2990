@@ -27,6 +27,7 @@ export class UsersManager {
         if (username === null || socketId === null) {
             return false;
         }
+        console.log(this.users);
         const index: number = this.users.findIndex((x: User) => x.socketId === socketId);
         if (index === -1) {
             return false;
@@ -57,7 +58,6 @@ export class UsersManager {
 
     public userExist(username: string): boolean {
         const index: number = this.users.findIndex((x: User) => x.username === username);
-
         return index !== -1;
     }
 }
