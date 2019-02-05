@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, OnDestroy, Input } from "@angular/core";
 import { GameService } from "src/app/services/game.service";
 import {ISimpleForm} from "../../../../../common/models/game";
 import { ModalService } from "src/app/services/modal.service";
+import { IModal } from "src/app/models/modal";
 
 @Component({
   selector: "app-simple-generator",
@@ -9,7 +10,7 @@ import { ModalService } from "src/app/services/modal.service";
   styleUrls: ["./simple-generator.component.css"],
 })
 
-export class SimpleGeneratorComponent implements OnInit, OnDestroy {
+export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   private readonly FILE_FORMAT: string = "bmp";
   private readonly IMAGE_WIDTH: number = 640;
@@ -106,13 +107,13 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public open(): void {
+   open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-  public close(): void {
+   close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
 

@@ -1,7 +1,9 @@
-export class ModalService {
-    private modals: any[] = [];
+import { IModal } from "../models/modal";
 
-    add(modal: any) {
+export class ModalService {
+    private modals: IModal[] = [];
+
+    add(modal: IModal) {
         // add modal to array of active modals
         this.modals.push(modal);
     }
@@ -13,13 +15,13 @@ export class ModalService {
 
     open(id: string) {
         // open modal specified by id
-        let modal: any = this.modals.filter(x => x.id === id)[0];
+        let modal: IModal = this.modals.filter(x => x.id === id)[0];
         modal.open();
     }
 
     close(id: string) {
         // close modal specified by id
-        let modal: any = this.modals.filter(x => x.id === id)[0];
+        let modal: IModal = this.modals.filter(x => x.id === id)[0];
         modal.close();
     }
 }
