@@ -1,6 +1,6 @@
-export interface IModal{
-    id:string;
-    open():void;
-    close():void;
+export interface IModal {
+    id: string;
+    open(): void;
+    close(): void;
 
 }

@@ -14,18 +14,23 @@ import { IModal } from "src/app/models/modal";
 
 export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
-  private readonly WIDTH_OFFSET: number = 18;
-  private readonly HEIGHT_OFFSET: number = 22;
+  private readonly WIDTH_OFFSET: number;
+  private readonly HEIGHT_OFFSET: number;
 
-  private modifiedFileIsOK: boolean = false;
-  private originalFileIsOK: boolean = false;
+  private modifiedFileIsOK: boolean;
+  private originalFileIsOK: boolean;
 
   private element: HTMLElement;
   @Input() public id: string;
+  private modalRef: SimpleGeneratorComponent;
 
   public constructor(private gameService: GameService, private fileValidator: FileValidatorService,
                      private modalService: ModalService, public el: ElementRef) {
     this.element = el.nativeElement;
+    this.WIDTH_OFFSET = 18;
+    this.HEIGHT_OFFSET = 22;
+    this.modifiedFileIsOK = false;
+    this.originalFileIsOK = false;
   }
 
   public ngOnInit(): void {
@@ -38,6 +43,24 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   }
 
+  private onFileLoaded(fileId: string, reader: FileReader): void {
+
+    const buffer: ArrayBuffer = reader.result as ArrayBuffer;
+    const bmp: DataView = new DataView(buffer);
+    const width: number = bmp.getUint32(this.WIDTH_OFFSET, true);
+    const height: number = bmp.getUint32(this.HEIGHT_OFFSET, true);
+    if (this.fileValidator.dimensionsAreValid(width, height)) {
+      if (fileId === "originalFile") {
+        this.originalFileIsOK = true;
+      } else {
+        if (fileId === "modifiedFile") {
+          this.modifiedFileIsOK = true;
+        }
+      }
+    }
+
+  }
+
   public onFileChange(event: any, fileId: string, labelId: string): void {
 
     const fileName: string = (document.getElementById(fileId) as HTMLInputElement).value;
@@ -47,19 +70,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
       const [file] = event.target.files;
       reader.readAsArrayBuffer(file);
       reader.onload = () => {
-        const buffer: ArrayBuffer = reader.result as ArrayBuffer;
-        const bmp: DataView = new DataView(buffer);
-        const width: number = bmp.getUint32(this.WIDTH_OFFSET, true);
-        const height: number = bmp.getUint32(this.HEIGHT_OFFSET, true);
-        if (this.fileValidator.dimensionsAreValid(width, height)) {
-          if (fileId === "originalFile") {
-            this.originalFileIsOK = true;
-          } else {
-            if (fileId === "modifiedFile") {
-              this.modifiedFileIsOK = true;
-            }
-          }
-        }
+        this.onFileLoaded(fileId, reader);
       };
     } else {
       if (fileId === "originalFile") {
@@ -103,26 +114,26 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     }
   }
 
-   open(): void {
+  public open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-   close(): void {
+  public close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
 
   }
 
   private initModal(): void {
-    const modal: SimpleGeneratorComponent = this;
+   this.modalRef = this;
 
     document.body.appendChild(this.element);
 
-    this.element.addEventListener("click",  (event: Event) => {
+    this.element.addEventListener("click", (event: Event) => {
       if (event.constructor.name === "modal") {
-        modal.submit();
+        this.modalRef.submit();
       }
     });
 

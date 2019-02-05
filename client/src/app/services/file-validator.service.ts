@@ -29,7 +29,7 @@ export class FileValidatorService {
 
   public containOnlyAlphaNumeric(name: string): boolean {
     const check: RegExpMatchArray = name.match(/^[a-zA-Z0-9]+$/i);
-    
+
     return check === null ? false : check[0].length === name.length;
   }
 
