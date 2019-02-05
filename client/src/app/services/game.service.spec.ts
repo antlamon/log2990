@@ -1,9 +1,9 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject } from "@angular/core/testing";
 
-import { GameService } from './game.service';
-import { HttpClientModule } from '@angular/common/http';
+import { GameService } from "./game.service";
+import { HttpClientModule } from "@angular/common/http";
 
-describe('GameService', () => {
+describe("GameService", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ HttpClientModule ],
@@ -11,7 +11,7 @@ describe('GameService', () => {
     });
   });
 
-  it('should be created', inject([GameService], (service: GameService) => {
+  it("should be created", inject([GameService], (service: GameService) => {
     expect(service).toBeTruthy();
   }));
 });

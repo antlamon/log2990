@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ListViewComponent } from './list-view.component';
-import { HttpClientModule } from '@angular/common/http';
+import { ListViewComponent } from "./list-view.component";
+import { HttpClientModule } from "@angular/common/http";
 
-describe('ListViewComponent', () => {
+describe("ListViewComponent", () => {
   let component: ListViewComponent;
   let fixture: ComponentFixture<ListViewComponent>;
 
@@ -12,7 +12,9 @@ describe('ListViewComponent', () => {
       imports: [HttpClientModule],
       declarations: [ ListViewComponent ]
     })
-    .compileComponents();
+    .compileComponents().then(() => {}, (error: Error) => {
+      console.error(error);
+    });
   }));
 
   beforeEach(() => {
@@ -21,7 +23,7 @@ describe('ListViewComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

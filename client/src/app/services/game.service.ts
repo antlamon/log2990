@@ -11,7 +11,7 @@ import { BASE_SERVER_PATH } from "../global/constants";
 })
 export class GameService {
 
-  private readonly GAMES_URL: string = BASE_SERVER_PATH +"api/gameList";
+  private readonly GAMES_URL: string = BASE_SERVER_PATH + "api/gameList";
   private readonly SIMPLE_URL: string = this.GAMES_URL + "/simple";
   private readonly FREE_URL: string = this.GAMES_URL + "/free";
 
@@ -32,22 +32,24 @@ export class GameService {
   public getFreeGames(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
-  public createSimpleGame(game: ISimpleForm): void {
+  public createSimpleGame(game: ISimpleForm): Observable<Message> {
 
-    console.log("envoi de la requete au serveur...");
     const form: FormData = new FormData();
-    form.append("name", game.name)
+    form.append("name", game.name);
     form.append("originalImage", game.originalImage, game.originalImage.name);
     form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
-    this.http.post<Message>(this.SIMPLE_URL, form).subscribe();
+
+    return this.http.post<Message>(this.SIMPLE_URL, form).pipe(
+      catchError(this.handleError<Message>("createSimpleGame"))
+    );
+
   }
-  
 
   public createFreeGame(game: IGame): void {
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        "Content-Type":  "application/json"
       })
     };
 
@@ -57,10 +59,10 @@ export class GameService {
   public deleteSimpleGame(game: IGame): Observable<{}> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        "Content-Type":  "application/json"
       })
     };
-    const url = this.SIMPLE_URL+ "?name=" + game.name;
+    const url: string = this.SIMPLE_URL + "?name=" + game.name;
 
     return this.http.delete(url, httpOptions);
   }
@@ -68,12 +70,12 @@ export class GameService {
   public deleteFreeGame(game: IGame): Observable<{}> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json'
+        "Content-Type":  "application/json"
       })
     };
-    const url = this.SIMPLE_URL+ "?name=" + game.name;
+    const url: string = this.SIMPLE_URL + "?name=" + game.name;
 
-     return this.http.delete(url, httpOptions);
+    return this.http.delete(url, httpOptions);
   }
 
 }

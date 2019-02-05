@@ -38,8 +38,8 @@ export class GameListController {
                 fileName: req.files["modifiedImage"][0].originalname,
             };
 
-            this.gameListService.addSimpleGame(req.body, originalFile, modifiedFile).then((game: Message) => {
-                res.json(game);
+            this.gameListService.addSimpleGame(req.body, originalFile, modifiedFile).then((message: Message) => {
+                res.json(message);
             });
         });
 

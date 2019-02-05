@@ -30,9 +30,11 @@ describe("AdminMenuComponent", () => {
         FormsModule,
         HttpClientModule
       ],
-      providers: [ModalService,FreeGeneratorComponent]
+      providers: [ModalService, FreeGeneratorComponent]
     })
-    .compileComponents();
+    .compileComponents().then(() => {}, (error: Error) => {
+      console.error(error);
+    });
   }));
 
   beforeEach(() => {

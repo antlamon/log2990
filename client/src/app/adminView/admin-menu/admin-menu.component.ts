@@ -1,6 +1,6 @@
 import { Component, ViewChild, AfterViewInit } from "@angular/core";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
-import { ModalService } from '../../services/modal.service';
+import { ModalService } from "../../services/modal.service";
 
 @Component({
   selector: "app-admin-menu",
@@ -9,20 +9,20 @@ import { ModalService } from '../../services/modal.service';
 })
 
 export class AdminMenuComponent implements AfterViewInit {
-  
-  @ViewChild(ListViewComponent) games: ListViewComponent;
-  
-  ngAfterViewInit(): void {
+
+  @ViewChild(ListViewComponent) public games: ListViewComponent;
+
+  public ngAfterViewInit(): void {
     this.games.isAdminMode = true;
   }
 
   public constructor(private modalService: ModalService) {}
 
-  public openSimpleDialog(id: string) {
+  public openSimpleDialog(id: string): void {
     this.modalService.open(id);
   }
 
-  public openFreeDialog(id: string) {
+  public openFreeDialog(id: string): void {
     this.modalService.open(id);
   }
 
