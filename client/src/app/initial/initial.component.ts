@@ -16,7 +16,7 @@ export class InitialComponent implements OnInit {
     this.username = ""; // invalid name
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
   }
   public connect(username: string): void {
     this.indexService.connect(this.username).subscribe((message: Message) => {

@@ -11,8 +11,8 @@ const HTTP_BADREQUEST: number = 400;
 export class ImageController {
 
     public static readonly URL: string = "/api/image/generation";
-    public static readonly NAME_PARAMETER_ERROR: string = "The name parameter must not be empty";
-    public static readonly INVALID_PARAMETERS_ERROR: string = "The request's parameters are missing or invalid";
+    public static readonly NAME_PARAMETER_ERROR: string = "Le paramètre du nom ne doit pas être vide";
+    public static readonly INVALID_PARAMETERS_ERROR: string = "Les paramètres de la requete sont absents ou invalides";
     private upload: RequestHandler;
 
     public constructor(@inject(TYPES.ImageService) private imageService: ImageService) {

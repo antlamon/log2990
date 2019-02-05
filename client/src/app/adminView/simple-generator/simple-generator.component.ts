@@ -81,7 +81,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
       const newGame: ISimpleForm = { name: gameName, originalImage: file1, modifiedImage: file2 };
       this.gameService.createSimpleGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
-          this.showErrorMessage("The operation was canceled: ");
+          this.showErrorMessage("L'opération a été annulée: ");
           this.showErrorMessage(message.body);
         } else {
           this.close();
@@ -91,28 +91,33 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
       if (!this.fileValidator.isValidGameName(gameName)) {
         (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
         this.showErrorMessage("Nom de jeu invalide.");
+      } else {
+        (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "black";
       }
       if (!this.modifiedFileIsOK) {
         (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red";
         this.showErrorMessage("Fichier de jeu modifié invalide.");
+      } else {
+        (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "black";
       }
       if (!this.originalFileIsOK) {
         (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red";
         this.showErrorMessage("Fichier de jeu original invalide.");
+      } else {
+        (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "black";
       }
     }
   }
 
-   open(): void {
+  open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-   close(): void {
+  close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
-
   }
 
   private initModal(): void {

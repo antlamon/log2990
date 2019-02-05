@@ -15,8 +15,8 @@ export class ImageService {
     public static readonly ENLARGE_LENGHT: number = 3;
     public static readonly ENLARGE_MAX_DIST: number = 4;
 
-    public static readonly ERROR_MESSAGE_NOT_7_ERRORS: string = "The given images did not have 7 differences";
-    public static readonly ERROR_MESSAGE_SIZE_NOT_COMPATIBLE: string = "The size of the two images are not compatibles";
+    public static readonly ERROR_MESSAGE_NOT_7_ERRORS: string = "Les images n'ont pas 7 différences";
+    public static readonly ERROR_MESSAGE_SIZE_NOT_COMPATIBLE: string = "La taille des deux images n'est pas compatible";
 
     public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
