@@ -57,7 +57,7 @@ export class UsersManager {
 
     public userExist(username: string): boolean {
         const index: number = this.users.findIndex((x: User) => x.username === username);
-        
+
         return index !== -1;
     }
 }
