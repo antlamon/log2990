@@ -2,13 +2,14 @@ import { Component, OnInit, ElementRef, Input, OnDestroy } from "@angular/core";
 import { GameService } from "src/app/services/game.service";
 import { ModalService } from "src/app/services/modal.service";
 import { IGame } from "../../../../../common/models/game";
+import { IModal } from "src/app/models/modal";
 
 @Component({
   selector: "app-free-generator",
   templateUrl: "./free-generator.component.html",
   styleUrls: ["./free-generator.component.css"]
 })
-export class FreeGeneratorComponent implements OnInit, OnDestroy {
+export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   private modalRef: FreeGeneratorComponent;
 
@@ -54,14 +55,14 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy {
     this.close();
   }
 
-  public open(): void {
+   open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-  public close(): void {
-    this.element.style.display = "none";
-    document.body.classList.remove("modal-open");
+   close(): void {
+    this.element.style.display = 'none';
+    document.body.classList.remove('modal-open');
   }
 }

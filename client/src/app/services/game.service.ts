@@ -18,7 +18,7 @@ export class GameService {
   public constructor(private http: HttpClient) {
   }
 
-  public getSimpleGames():  Observable<IGame[]> {
+  public getSimpleGames(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.SIMPLE_URL).pipe(
       catchError(this.handleError<IGame[]>("getSimpleGames"))
     );
@@ -26,9 +26,10 @@ export class GameService {
 
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
     return (error: Error): Observable<T> => {
-        return of(result as T);
+      return of(result as T);
     };
   }
+
   public getFreeGames(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
@@ -49,7 +50,7 @@ export class GameService {
 
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-Type":  "application/json"
+        "Content-Type": "application/json"
       })
     };
 
@@ -59,7 +60,7 @@ export class GameService {
   public deleteSimpleGame(game: IGame): Observable<{}> {
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-Type":  "application/json"
+        "Content-Type": "application/json"
       })
     };
     const url: string = this.SIMPLE_URL + "?name=" + game.name;
@@ -70,12 +71,11 @@ export class GameService {
   public deleteFreeGame(game: IGame): Observable<{}> {
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-Type":  "application/json"
+        "Content-Type": "application/json"
       })
     };
     const url: string = this.SIMPLE_URL + "?name=" + game.name;
 
     return this.http.delete(url, httpOptions);
   }
-
 }

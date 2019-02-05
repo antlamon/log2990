@@ -4,6 +4,7 @@ import { ISimpleForm } from "../../../../../common/models/game";
 import { ModalService } from "src/app/services/modal.service";
 import { Message, ERROR_ID } from "../../../../../common/communication/message";
 import { FileValidatorService } from "src/app/services/file-validator.service";
+import { IModal } from "src/app/models/modal";
 
 @Component({
   selector: "app-simple-generator",
@@ -11,7 +12,7 @@ import { FileValidatorService } from "src/app/services/file-validator.service";
   styleUrls: ["./simple-generator.component.css"],
 })
 
-export class SimpleGeneratorComponent implements OnInit, OnDestroy {
+export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   private readonly WIDTH_OFFSET: number = 18;
   private readonly HEIGHT_OFFSET: number = 22;
@@ -102,13 +103,13 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
     }
   }
 
-  public open(): void {
+   open(): void {
     this.element.style.display = "block";
     document.body.classList.add("modal-open");
 
   }
 
-  public close(): void {
+   close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
 
@@ -142,5 +143,4 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
       errors.removeChild(errors.firstChild);
     }
   }
-
 }

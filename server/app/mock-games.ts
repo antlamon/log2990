@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 import { IGame } from "../../common/models/game";
 import { PATHS } from "./path";
 export const SIMPLEGAMES: IGame[] = [

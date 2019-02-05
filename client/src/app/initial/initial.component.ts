@@ -31,7 +31,6 @@ export class InitialComponent implements OnInit {
   private showErrorMessage(message: string): void {
     const errorBox: HTMLElement = document.getElementById(this.MESSAGE_BOX_ID) as HTMLElement;
 
-    // DEMANDER POUR JQUERY
     errorBox.textContent = message;
     errorBox.style.opacity = "1";
   }

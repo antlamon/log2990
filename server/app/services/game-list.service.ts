@@ -13,8 +13,11 @@ import { ImageService } from "./image.service";
 
 @injectable()
 export class GameListService {
-    public constructor(@inject(TYPES.ImageService) private imageService: ImageService,
-        @inject(TYPES.SocketServerManager) private socketController: SocketServerManager) {
+    public static readonly MIN_TIME_TOP_3: number = 500;
+    public static readonly MAX_TIME_TOP_3: number = 1000;
+
+    public constructor( @inject(TYPES.ImageService) private imageService: ImageService,
+                        @inject(TYPES.SocketServerManager) private socketController: SocketServerManager) {
 
         // for sprint1, load the image as string64. Will be changed later for a database
         for (const simpleGame of SIMPLEGAMES) {
@@ -39,6 +42,7 @@ export class GameListService {
 
         return (newGame);
     }
+
     public async deleteSimpleGame(gameName: string): Promise<Message> {
         const index: number = SIMPLEGAMES.findIndex((x: IGame) => x.name === gameName);
         if (index === -1) {
@@ -49,6 +53,7 @@ export class GameListService {
 
         return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
+
     public async deleteFreeGame(gameName: string): Promise<Message> {
         const index: number = FREEGAMES.findIndex((x: IGame) => x.name === gameName);
         if (index === -1) {
@@ -83,25 +88,27 @@ export class GameListService {
             SIMPLEGAMES.push(game);
             this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
         } else {
-            console.log(message.body);
+            console.error(message.body);
         }
 
         return (message);
     }
-    public top3RandomOrder(): ITop3 {
 
+    public top3RandomOrder(): ITop3 {
         const scores: number[] = [];
         for (let i: number = 0; i < 3; i++) {
-            scores.push(this.randomNumberGenerator(500, 1000));
+            scores.push(this.randomNumberGenerator(GameListService.MIN_TIME_TOP_3, GameListService.MAX_TIME_TOP_3));
         }
         scores.sort();
 
         return { first: scores[0], second: scores[1], third: scores[2] };
     }
+
     public randomNumberGenerator(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
 }
+
 export interface MulterFile {
     buffer: Buffer;
     fileName: string;

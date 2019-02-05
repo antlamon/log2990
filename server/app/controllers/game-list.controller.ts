@@ -38,39 +38,63 @@ export class GameListController {
                 fileName: req.files["modifiedImage"][0].originalname,
             };
 
-            this.gameListService.addSimpleGame(req.body, originalFile, modifiedFile).then((message: Message) => {
-                res.json(message);
-            });
+            this.gameListService.addSimpleGame(req.body, originalFile, modifiedFile).then(
+                (game: Message) => {
+                    res.json(game);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
         });
 
         router.delete("/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteSimpleGame(req.query.name).then((response: Message) => {
-                res.json(response);
-            });
+            this.gameListService.deleteSimpleGame(req.query.name).then(
+                (response: Message) => {
+                    res.json(response);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
         });
 
         router.delete("/free", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteFreeGame(req.query.name).then((response: Message) => {
-                res.json(response);
-            });
+            this.gameListService.deleteFreeGame(req.query.name).then(
+                (response: Message) => {
+                    res.json(response);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
         });
 
         router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.getSimpleGames().then((simpleGames: IGame[]) => {
-                res.json(simpleGames);
-            });
+            this.gameListService.getSimpleGames().then(
+                (simpleGames: IGame[]) => {
+                    res.json(simpleGames);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
         });
 
         router.get("/free", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.getFreeGames().then((freeGames: IGame[]) => {
-                res.json(freeGames);
-            });
+            this.gameListService.getFreeGames().then(
+                (freeGames: IGame[]) => {
+                    res.json(freeGames);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
         });
 
         router.post("/free", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.addFreeGame(req.body).then((game: IGame) => {
-                res.json(game);
-            });
+            this.gameListService.addFreeGame(req.body).then(
+                (game: IGame) => {
+                    res.json(game);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
         });
 
         return router;
