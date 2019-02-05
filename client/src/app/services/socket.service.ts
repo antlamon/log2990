@@ -6,7 +6,7 @@ type Socket = SocketIOClient.Socket;
   providedIn: "root"
 })
 export class SocketService {
-  private readonly socket: Socket;
+  private socket: Socket;
   public constructor() {
     try {
       this.socket = ClientSocketIO(BASE_SERVER_PATH);

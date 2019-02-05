@@ -9,7 +9,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { Observable, of } from "rxjs";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
 
-describe("Test for the class InitialComponent using functions related to the connexion", () => {
+describe("InitialComponent", () => {
   let component: InitialComponent;
   let fixture: ComponentFixture<InitialComponent>;
 

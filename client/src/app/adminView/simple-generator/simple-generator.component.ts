@@ -11,42 +11,26 @@ import { ModalService } from "src/app/services/modal.service";
 
 export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
-  private readonly FILE_FORMAT: string   = "bmp";
-  private readonly IMAGE_WIDTH: number   = 640;
-  private readonly IMAGE_HEIGHT: number  = 480;
-  private readonly MIN_LENGTH: number    = 3;
-  private readonly MAX_LENGTH: number    = 15;
-  private readonly WIDTH_OFFSET: number  = 18;
+  private readonly FILE_FORMAT: string = "bmp";
+  private readonly IMAGE_WIDTH: number = 640;
+  private readonly IMAGE_HEIGHT: number = 480;
+  private readonly MIN_LENGTH: number = 3;
+  private readonly MAX_LENGTH: number = 15;
+  private readonly WIDTH_OFFSET: number = 18;
   private readonly HEIGHT_OFFSET: number = 22;
+
+  private modifiedFileIsOK: boolean = false;
+  private originalFileIsOK: boolean = false;
 
   private element: any;
   @Input() id: string;
 
   public constructor(private gameService: GameService, private modalService: ModalService, public el: ElementRef) {
-      this.element = el.nativeElement;
-    }
-
-  public correctModifiedFile: boolean = false;
-  public correctOriginalFile: boolean = false;
-
-
+    this.element = el.nativeElement;
+  }
 
   public ngOnInit(): void {
-    let modal = this;
-    if (!this.id) {
-      console.error("modal must have an id");
-
-    }
-
-    document.body.appendChild(this.element);
-
-    this.element.addEventListener("click", function(e: any) {
-      if (e.target.className === "modal") {
-        modal.submit();
-      }
-    });
-
-    this.modalService.add(this);
+    this.initModal();
   }
 
   public ngOnDestroy(): void {
@@ -55,78 +39,69 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   }
 
-  public onModifiedFileChange(event: any): void {
-    const filenameModified: string = (document.getElementById("modifiedFile") as HTMLInputElement).value;
-    const reader: FileReader = new FileReader();
+  public onFileChange(event: any, fileId: string): void {
+    let fileName: string = (document.getElementById(fileId) as HTMLInputElement).value;
+    const reader = new FileReader();
 
-    if (event.target.files && event.target.files.length && this.checkModifiedExtension(filenameModified)) {
+    if (event.target.files && event.target.files.length && this.fileExtensionIsOK(fileName)) {
       const [file] = event.target.files;
       reader.readAsArrayBuffer(file);
 
       reader.onload = () => {
-        const buffer: ArrayBuffer = reader.result as ArrayBuffer;
-        const bmpWidth: DataView = new DataView(buffer);
-        const bmpHeight: DataView = new DataView(buffer);
+        let buffer: ArrayBuffer = reader.result as ArrayBuffer;
+        let bmpWidth = new DataView(buffer);
+        let bmpHeight = new DataView(buffer);
 
-        if (bmpWidth.getUint32(this.WIDTH_OFFSET, true) === this.IMAGE_WIDTH
-           && bmpHeight.getUint32(this.HEIGHT_OFFSET, true) === this.IMAGE_HEIGHT) {
-          this.correctModifiedFile = true;
+        if (this.dimensionsAreValid(bmpWidth,bmpHeight)) {
+          if (fileId == "originalFile") {
+            this.originalFileIsOK = true;
+          } else {
+            if (fileId == "modifiedFile") {
+              this.modifiedFileIsOK = true;
+            }
+          }
         }
       };
     } else {
-      this.correctModifiedFile = false;
-    }
-  }
-
-  public onOriginalFileChange(event: any): void {
-    const filenameOriginal: string = (document.getElementById("originalFile") as HTMLInputElement).value;
-    const reader: FileReader = new FileReader();
-
-    if (event.target.files && event.target.files.length && this.checkOriginalExtension(filenameOriginal)) {
-      const [file] = event.target.files;
-      reader.readAsArrayBuffer(file);
-
-      reader.onload = () => {
-        const buffer: ArrayBuffer = reader.result as ArrayBuffer;
-        const bmpWidth: DataView = new DataView(buffer);
-        const bmpHeight: DataView = new DataView(buffer);
-
-        if (bmpWidth.getUint32(this.WIDTH_OFFSET, true) === this.IMAGE_WIDTH
-           && bmpHeight.getUint32(this.HEIGHT_OFFSET, true) === this.IMAGE_HEIGHT) {
-          this.correctOriginalFile = true;
+      if (fileId == "originalFile") {
+        this.originalFileIsOK = false;
+      } else {
+        if (fileId == "modifiedFile") {
+          this.modifiedFileIsOK = false;
         }
-      };
-    } else {
-      this.correctOriginalFile = false;
+      }
     }
   }
 
-  public submit(): void {
+  private submit(): void {
     this.clearErrorMessages();
-    const gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
+    let gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
 
-    if ( !this.isValidGameName(gameName)) {
+    if (!this.isValidGameName(gameName)) {
+      (document.getElementById("gameNameLabel") as HTMLParagraphElement).style.color = "red";
       this.showErrorMessage("Nom de jeu invalide");
-    }
+    } 
 
-    if( this.correctModifiedFile === false ) {
+    if (!this.modifiedFileIsOK) {
+      (document.getElementById("modifiedFileLabel") as HTMLParagraphElement).style.color = "red";
       this.showErrorMessage("Fichier de jeu modifié invalide");
-    }
+    } 
 
-    if (this.correctOriginalFile === false) {
+    if (!this.originalFileIsOK) {
+      (document.getElementById("originalFileLabel") as HTMLParagraphElement).style.color = "red";
       this.showErrorMessage("Fichier de jeu original invalide");
-    }
+    } 
 
-    if (this.correctModifiedFile === true && this.correctOriginalFile === true && this.isValidGameName(gameName)) {
+
+    if (this.modifiedFileIsOK && this.originalFileIsOK && this.isValidGameName(gameName)) {
       const file1: File = (document.getElementById("originalFile") as HTMLInputElement).files[0];
       const file2: File = (document.getElementById("modifiedFile") as HTMLInputElement).files[0];
 
-    const newGame: ISimpleForm = {name: gameName, originalImage: file1, modifiedImage: file2 };
+      const newGame: ISimpleForm = { name: gameName, originalImage: file1, modifiedImage: file2 };
 
       this.gameService.createSimpleGame(newGame);
-      console.log("tentative de creer un jeu ... ");
-      this.element.style.display = "none";
-      document.body.classList.remove("modal-open");
+      
+      this.close();
 
     }
   }
@@ -143,41 +118,49 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
 
   }
 
-  public checkBmpDimensions(width: number, height: number): boolean {
-    return (width === this.IMAGE_WIDTH && height === this.IMAGE_HEIGHT);
+  private initModal() {
+    let modal = this;
+
+    document.body.appendChild(this.element);
+
+    this.element.addEventListener("click", function (event: any) {
+      if (event.target.className === "modal") {
+        modal.submit();
+      }
+    });
+
+    this.modalService.add(this);
+
   }
 
-  public checkOriginalExtension(filename: string): boolean {
-    const extensionOriginal: string = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
-
-    return (extensionOriginal === this.FILE_FORMAT);
+  private dimensionsAreValid(bmpWidth: DataView, bmpHeight: DataView): boolean {
+    return (bmpWidth.getUint32(this.WIDTH_OFFSET, true) == this.IMAGE_WIDTH && bmpHeight.getUint32(this.HEIGHT_OFFSET, true) == this.IMAGE_HEIGHT);
   }
 
-  public checkModifiedExtension(filename: string): boolean {
-    const extensionModified: string = filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
 
-    return (extensionModified === this.FILE_FORMAT);
+  public fileExtensionIsOK(fileName: string): boolean {
+    const extension: string = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
+    return (extension === this.FILE_FORMAT);
   }
 
-  public isValidGameName(name: string): boolean {
+  private isValidGameName(name: string): boolean {
     return name.length < this.MAX_LENGTH && name.length > this.MIN_LENGTH && this.containOnlyAlphaNumeric(name);
   }
 
-  public containOnlyAlphaNumeric(name: string): boolean {
-    const check: RegExpMatchArray = name.match(/^[a-zA-Z0-9]+$/i);
-
-    return check == null ? false : check[0].length === name.length;
+  private containOnlyAlphaNumeric(name: string): boolean {
+    let check = name.match(/^[a-zA-Z0-9]+$/i);
+    return check == null ? false : check[0].length == name.length;
   }
 
-  public showErrorMessage(error: string): void {
-    const errorBox: HTMLSpanElement = document.createElement("span");
-    const errorMessage: Text = document.createTextNode(error);
+  private showErrorMessage(error: string): void {
+    var errorBox = document.createElement("span");
+    var errorMessage = document.createTextNode(error);
     errorBox.appendChild(errorMessage);
     document.getElementById("errorsMessages").appendChild(errorBox);
   }
 
-  public clearErrorMessages(): void {
-    const errors: HTMLElement = document.getElementById("errorsMessages");
+  private clearErrorMessages(): void {
+    let errors = document.getElementById("errorsMessages");
     while (errors.hasChildNodes()) {
       errors.removeChild(errors.firstChild);
     }
