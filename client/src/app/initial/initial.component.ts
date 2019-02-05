@@ -24,7 +24,6 @@ export class InitialComponent implements OnInit {
         this.showErrorMessage(message.body);
       }
       if (message.title === BASE_ID) {
-        console.log(message);
         this.router.navigate(["games"]);
       }
     });
