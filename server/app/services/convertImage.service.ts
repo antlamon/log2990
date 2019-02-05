@@ -35,6 +35,7 @@ export class ConvertImage {
   private getPixels(header: BMPHeader, buffer: Buffer): ImageBMP {
     const imageBMP: ImageBMP = {
       header: header,
+      // tslint:disable-next-line:no-magic-numbers
       stride: Math.floor((header.infoHeader.biBitCount * header.infoHeader.biWidth + 31) / 32) * 4,
       width: header.infoHeader.biWidth,
       height: header.infoHeader.biHeight,
@@ -58,6 +59,7 @@ export class ConvertImage {
     return imageBMP;
   }
 
+  // tslint:disable:no-magic-numbers
   private getHeader(buffer: Buffer): BMPHeader {
     return {
       fileHeader: {
@@ -82,6 +84,7 @@ export class ConvertImage {
       },
     };
   }
+  // tslint:enable
 }
 
 export interface BMPHeader {

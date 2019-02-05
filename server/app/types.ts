@@ -1,3 +1,4 @@
+// tslint:disable-next-line:typedef
 const TYPES =  {
         Server: Symbol("Server"),
         Application: Symbol("Application"),

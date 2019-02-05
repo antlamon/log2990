@@ -8,6 +8,9 @@ import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 import { ImageController } from "./image.controller";
 
+const HTTP_OK: number = 200;
+const HTTP_BADREQUEST: number = 400;
+
 const path1: string = "./app/documents/test-images/image_test_1.bmp";
 const path2: string = "./app/documents/test-images/image_test_2.bmp";
 
@@ -47,39 +50,39 @@ describe("Image Controller", () => {
         sandbox.restore();
     });
 
-    it("Should return image with difference created", (done: MochaDone) => {
+    it("Should return image with difference created", (done: Mocha.Done) => {
         supertest(app)
         .post("/api/image/generation")
         .field("name", "test")
         .attach("originalImage", path1)
         .attach("modifiedImage", path2)
-        .expect(200)
+        .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedGetDiffenrenceData, "Image differences not created");
             done(error);
         });
     });
 
-    it("Should return image with difference created", (done: MochaDone) => {
+    it("Should return image with difference created", (done: Mocha.Done) => {
         supertest(app)
         .post("/api/image/generation")
         .field("name", "")
         .attach("originalImage", path1)
         .attach("modifiedImage", path2)
-        .expect(400)
+        .expect(HTTP_BADREQUEST)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedNoNameError);
             done(error);
         });
     });
 
-    it("Should return image with difference created", (done: MochaDone) => {
+    it("Should return image with difference created", (done: Mocha.Done) => {
         supertest(app)
         .post("/api/image/generation")
         .field("name", "test")
         .attach("originalImage", "")
         .attach("modifiedImage", "")
-        .expect(400)
+        .expect(HTTP_BADREQUEST)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedInvalidParameterError);
             done(error);

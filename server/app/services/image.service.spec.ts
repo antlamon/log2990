@@ -98,9 +98,10 @@ describe ( "imageService tests", () => {
 
     describe("Counting the differences", () => {
 
-        it("Should return the correct number of differences", async (done: MochaDone) => {
+        it("Should return the correct number of differences", async (done: Mocha.Done) => {
+            const NB_DIFFERENCES: number = 4;
             const image: ImageBMP = convertService.bufferToImageBMP(readFileSync(path4));
-            expect(service.getNbDifferences(image)).to.equal(4);
+            expect(service.getNbDifferences(image)).to.equal(NB_DIFFERENCES);
             done();
         });
 
@@ -114,7 +115,8 @@ describe ( "imageService tests", () => {
         });
 
         it("Should create an result.bmp file", async () => {
-            sandbox.on(service, "getNbDifferences", () => 7);
+            const NB_DIFFERENCES: number = 7;
+            sandbox.on(service, "getNbDifferences", () => NB_DIFFERENCES);
             expect(service.getDifferencesImage("testImage", readFileSync(path1), readFileSync(path2)).body).to.equal("testImage");
         });
 

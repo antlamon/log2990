@@ -5,6 +5,8 @@ import { ERROR_ID, Message } from "../../../common/communication/message";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 
+const HTTP_BADREQUEST: number = 400;
+
 @injectable()
 export class ImageController {
 
@@ -37,14 +39,14 @@ export class ImageController {
                 if (name) {
                     message = this.imageService.getDifferencesImage(name, originalBuffer, modifiedBuffer);
                 } else {
-                    res.status(400);
+                    res.status(HTTP_BADREQUEST);
                     message = {
                         title: ERROR_ID,
                         body: ImageController.NAME_PARAMETER_ERROR,
                     };
                 }
             } catch (error) {
-                res.status(400);
+                res.status(HTTP_BADREQUEST);
                 message = {
                     title: ERROR_ID,
                     body: ImageController.INVALID_PARAMETERS_ERROR,
