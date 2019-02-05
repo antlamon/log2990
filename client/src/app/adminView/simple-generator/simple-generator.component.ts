@@ -36,7 +36,6 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
     if (!this.id) {
       console.error("modal must have an id");
 
-      return;
     }
 
     document.body.appendChild(this.element);
@@ -183,5 +182,4 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy {
       errors.removeChild(errors.firstChild);
     }
   }
-
 }

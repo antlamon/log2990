@@ -40,6 +40,7 @@ describe("SimpleGeneratorComponent", () => {
     fixture = TestBed.createComponent(SimpleGeneratorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.id="tempId";
   });
 
   it("should create", () => {
