@@ -15,7 +15,7 @@
           <p id = "originalFileName">Aucun fichier choisi.</p>
         </div>
         <div class="rightColumn">
-          <input type="file" name="file" id="originalFile" class="uploader" (change)="onFileChange($event,'originalFile', 'originalFileName')">
+          <input type="file" name="file" id="originalFile" class="uploader" (change)="onFileChange($event.target.file[0],'originalFile', 'originalFileName')">
           <label for="originalFile">Choisir un fichier </label>
         </div>
         <div>
@@ -23,7 +23,7 @@
           <p id = "modifiedFileName"> Aucun fichier choisi. </p>
         </div>
         <div class="rightColumn">
-          <input type="file" name="file" id="modifiedFile" class="uploader" (change)="onFileChange($event,'modifiedFile', 'modifiedFileName')">
+          <input type="file" name="file" id="modifiedFile" class="uploader" (change)="onFileChange($event.target.file[0],'modifiedFile', 'modifiedFileName')">
           <label for="modifiedFile">Choisir un fichier </label>
         </div>
       </div>

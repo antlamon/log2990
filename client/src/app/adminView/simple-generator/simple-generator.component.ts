@@ -59,17 +59,17 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   }
 
-  public onFileChange(event: any, fileId: string, labelId: string): void {
+  public onFileChange(file: File, fileId: string, labelId: string): boolean {
 
     const fileName: string = (document.getElementById(fileId) as HTMLInputElement).value;
     (document.getElementById(labelId) as HTMLParagraphElement).textContent = fileName;
     const reader: FileReader = new FileReader();
-    if (event.target.files && event.target.files.length && this.fileValidator.fileExtensionIsOK(fileName)) {
-      const [file] = event.target.files;
+    if (file  && file.type === "image/bmp") {
       reader.readAsArrayBuffer(file);
       reader.onload = () => {
         this.onFileLoaded(fileId, reader);
       };
+      return true;
     } else {
       if (fileId === "originalFile") {
         this.originalFileIsOK = false;
@@ -78,10 +78,11 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
           this.modifiedFileIsOK = false;
         }
       }
+      return false;
     }
   }
 
-  public submit(): void {
+  public submit(): boolean {
     this.clearErrorMessages();
     const gameName: string = (document.getElementById("gameName") as HTMLInputElement).value;
     if (this.modifiedFileIsOK && this.originalFileIsOK && this.fileValidator.isValidGameName(gameName)) {
@@ -92,7 +93,9 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
         if (message.title === ERROR_ID) {
           this.showErrorMessage("L'opération a été annulée: ");
           this.showErrorMessage(message.body);
+          return false;
         } else {
+          return true;
           this.close();
         }
       });
@@ -100,6 +103,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
       this.validity(this.fileValidator.isValidGameName(gameName), "gameNameLabel", "Nom de jeu invalide.");
       this.validity(this.modifiedFileIsOK, "modifiedFileLabel", "Fichier de jeu modifié invalide.");
       this.validity(this.originalFileIsOK, "originalFileLabel", "Fichier de jeu original invalide.");
+      return false;
     }
   }
 
