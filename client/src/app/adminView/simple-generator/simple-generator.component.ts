@@ -14,13 +14,14 @@ import { IModal } from "src/app/models/modal";
 
 export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
-  private readonly WIDTH_OFFSET: number = 18;
-  private readonly HEIGHT_OFFSET: number = 22;
   public readonly ID_MODIFIED_FILE: string = "modifiedFile";
+  public readonly ID_MODIFIED_FILENAME: string = "modifiedFileName";
   public readonly ID_ORIGINAL_FILE: string = "originalFile";
+  public readonly ID_ORIGINAL_FILENAME: string = "originalFileName";
   public readonly VALID_FILE_EXTENSION: string = "image/bmp";
 
-
+  private readonly WIDTH_OFFSET: number = 18;
+  private readonly HEIGHT_OFFSET: number = 22;
   private modifiedFileIsOK: boolean;
   private originalFileIsOK: boolean;
 
@@ -30,7 +31,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   public gameName: string;
 
   public constructor(private gameService: GameService, private fileValidator: FileValidatorService,
-    private modalService: ModalService, public el: ElementRef) {
+                     private modalService: ModalService, public el: ElementRef) {
     this.element = el.nativeElement;
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
@@ -53,34 +54,35 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     const bmp: DataView = new DataView(buffer);
     const width: number = bmp.getUint32(this.WIDTH_OFFSET, true);
     const height: number = bmp.getUint32(this.HEIGHT_OFFSET, true);
-    if (this.fileValidator.dimensionsAreValid(width, height)) {
-      return true;
-    }
-    return false;
+
+    return this.fileValidator.dimensionsAreValid(width, height);
   }
 
-  public onFileChange(file: File, fileId: string, labelId: string): boolean {
+  public onFileChange(file: File, fileId: string, labelId: string): void {
 
-    const fileName: string = (document.getElementById(fileId) as HTMLInputElement).value;
+    const fileName: string = file.name;
     (document.getElementById(labelId) as HTMLParagraphElement).textContent = fileName;
-    let validFile: boolean = false;
     const reader: FileReader = new FileReader();
     if (file && file.type === this.VALID_FILE_EXTENSION) {
+      let validFile: boolean = false;
       reader.readAsArrayBuffer(file);
       reader.onload = () => {
         validFile = this.onFileLoaded(reader);
+        this.updateValidFiles(fileId, validFile);
       };
-      return true;
+    } else {
+      this.updateValidFiles(fileId, false);
     }
+  }
+
+  private updateValidFiles(fileId: string, value: boolean): void {
     if (fileId === this.ID_ORIGINAL_FILE) {
-      this.originalFileIsOK = validFile;
+      this.originalFileIsOK = value;
     } else {
       if (fileId === this.ID_MODIFIED_FILE) {
-        this.modifiedFileIsOK = validFile;
+        this.modifiedFileIsOK = value;
       }
     }
-    return false;
-
   }
 
   public submit(): boolean {
@@ -95,6 +97,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
           this.showErrorMessage(message.body);
         } else {
           this.close();
+
           return true;
         }
       });
@@ -108,8 +111,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   private resetForm(): void {
-    document.getElementById(this.ID_ORIGINAL_FILE).textContent = "Aucun fichier choisi.";
-    document.getElementById(this.ID_MODIFIED_FILE).textContent = "Aucun fichier choisi.";
+    document.getElementById(this.ID_ORIGINAL_FILENAME).textContent = "Aucun fichier choisi.";
+    document.getElementById(this.ID_MODIFIED_FILENAME).textContent = "Aucun fichier choisi.";
     this.gameName = "";
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;

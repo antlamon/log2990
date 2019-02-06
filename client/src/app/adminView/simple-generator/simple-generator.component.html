@@ -12,7 +12,7 @@
         </div>
         <div>
           <p id="originalFileLabel">Image originale</p>
-          <p id = "originalFileName">Aucun fichier choisi.</p>
+          <p id = {{ID_ORIGINAL_FILENAME}}>Aucun fichier choisi.</p>
         </div>
         <div class="rightColumn">
           <input  type="file" name="file" id={{ID_ORIGINAL_FILE}} class="uploader" (change)="onFileChange($event.target.files[0],'originalFile', 'originalFileName')">
@@ -20,7 +20,7 @@
         </div>
         <div>
           <p id = "modifiedFileLabel"> Image modifiée </p>
-          <p id = "modifiedFileName"> Aucun fichier choisi. </p>
+          <p id = {{ID_MODIFIED_FILENAME}}> Aucun fichier choisi. </p>
         </div>
         <div class="rightColumn">
           <input  type="file" name="file" id={{ID_MODIFIED_FILE}} class="uploader" (change)="onFileChange($event.target.files[0],'modifiedFile', 'modifiedFileName')">

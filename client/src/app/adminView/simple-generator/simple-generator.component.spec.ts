@@ -13,6 +13,7 @@ import { GameService } from "src/app/services/game.service";
 import { By } from "@angular/platform-browser";
 
 describe("SimpleGeneratorComponent", () => {
+  const LOADING_FILE_DELAY: number = 50;
   let component: SimpleGeneratorComponent;
   let fixture: ComponentFixture<SimpleGeneratorComponent>;
 
@@ -25,12 +26,12 @@ describe("SimpleGeneratorComponent", () => {
         InitialComponent,
         ListViewComponent
       ],
-      imports: [ AppRoutingModule, FormsModule, HttpClientModule ],
+      imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService, FileValidatorService, GameService]
     })
-    .compileComponents().then(() => {}, (error: Error) => {
-      console.error(error);
-    });
+      .compileComponents().then(() => { }, (error: Error) => {
+        console.error(error);
+      });
   }));
 
   beforeEach(async () => {
@@ -46,32 +47,54 @@ describe("SimpleGeneratorComponent", () => {
   });
 
   it("file change event should arrive in handler", () => {
-    const input  = fixture.debugElement.query(By.css("input[type=file]")).nativeElement;
+    const input: Element = fixture.debugElement.query(By.css("input[type=file]")).nativeElement;
 
     spyOn(component, "onFileChange");
 
     input.dispatchEvent(new Event("change"));
 
     expect(component.onFileChange).toHaveBeenCalled();
-});
-
-/*
-it('should call onFileLoaded when input is changed for required files', () => {
-
-  const fakeChangeEvent = new Event('change');
-
-  let input  = fixture.debugElement.query(By.css('input[type=file]')).nativeElement;
-
-  spyOn(component, 'onFileChange');
-
-  input.dispatchEvent(new Event('change'));
-
-  component.onFileChange(event, 'fileId' , 'labelId');
-
-  fixture.whenStable().then(() => {
-    expect(component.onFileLoaded).toHaveBeenCalledWith(fakeChangeEvent, 0, true);
-    expect(targ.files.length).toBeGreaterThan(0); //  this is always zero because i can't add to targ.files (readonly FileList)
   });
-});*/
 
+  it("On file change with originalImage should return true", (done: DoneFn) => {
+    const mockedFile: File = new File(["data:image/bmp;base64,somedata"], "originalImage", {
+      type: "image/bmp"
+    });
+
+    spyOn(component["fileValidator"], "dimensionsAreValid").and.returnValue(true);
+    component.onFileChange(mockedFile, "originalFile", "originalFileName");
+    setTimeout(
+      () => {
+        expect(component["originalFileIsOK"]).toEqual(true);
+        done();
+      },
+      LOADING_FILE_DELAY);
+  });
+
+  it("On file change with modifiedImage should return true", (done: DoneFn) => {
+    const mockedFile: File = new File(["data:image/bmp;base64,somedata"], "modifiedImage", {
+      type: "image/bmp"
+    });
+
+    spyOn(component["fileValidator"], "dimensionsAreValid").and.returnValue(true);
+    component.onFileChange(mockedFile, "modifiedFile", "modifiedFileName");
+    setTimeout(
+      () => {
+        expect(component["modifiedFileIsOK"]).toEqual(true);
+        done();
+      },
+      LOADING_FILE_DELAY);
+  });
+
+  it("On file change with not bmp file should return false", () => {
+    const mockedFile: File = new File(["data:image/bmp;base64,somedata"], "originalImage");
+    component.onFileChange(mockedFile, "originalFile", "originalFileName");
+    expect(component["originalFileIsOK"]).toEqual(false);
+  });
+
+  it("On file change with not bmp file should return false", () => {
+    const mockedFile: File = new File(["data:image/bmp;base64,somedata"], "modifiedImage");
+    component.onFileChange(mockedFile, "modifiedFile", "modifiedFileName");
+    expect(component["modifiedFileIsOK"]).toEqual(false);
+  });
 });

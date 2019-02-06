@@ -18,6 +18,7 @@ export class InitialComponent implements OnInit {
 
   public ngOnInit(): void {
   }
+
   public connect(username: string): void {
     this.indexService.connect(this.username).subscribe((message: Message) => {
       if (message.title === ERROR_ID ) {
@@ -28,6 +29,7 @@ export class InitialComponent implements OnInit {
       }
     });
   }
+
   private showErrorMessage(message: string): void {
     const errorBox: HTMLElement = document.getElementById(this.MESSAGE_BOX_ID) as HTMLElement;
 

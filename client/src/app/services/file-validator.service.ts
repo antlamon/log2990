@@ -5,7 +5,6 @@ import { Injectable } from "@angular/core";
 })
 export class FileValidatorService {
 
-  private readonly FILE_FORMAT: string = "bmp";
   private readonly IMAGE_WIDTH: number = 640;
   private readonly IMAGE_HEIGHT: number = 480;
   private readonly MIN_LENGTH: number = 3;
@@ -15,12 +14,6 @@ export class FileValidatorService {
 
   public dimensionsAreValid(bmpWidth: number, bmpHeight: number): boolean {
     return (bmpWidth === this.IMAGE_WIDTH && bmpHeight === this.IMAGE_HEIGHT);
-  }
-
-  public fileExtensionIsOK(fileName: string): boolean {
-    const extension: string = fileName.slice((fileName.lastIndexOf(".") - 1 >>> 0) + 2);
-
-    return (extension === this.FILE_FORMAT);
   }
 
   public isValidGameName(name: string): boolean {

@@ -47,7 +47,7 @@ export class GameService {
   }
 
   public createFreeGame(game: IGame): void {
-
+    // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
@@ -58,6 +58,7 @@ export class GameService {
   }
 
   public deleteSimpleGame(game: IGame): Observable<{}> {
+    // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
@@ -69,6 +70,7 @@ export class GameService {
   }
 
   public deleteFreeGame(game: IGame): Observable<{}> {
+    // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"

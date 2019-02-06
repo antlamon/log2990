@@ -16,6 +16,7 @@ describe("Test for the socketServerManager", () => {
     let mockClientSocket: SocketIOClient.Socket;
     let testManager: SocketServerManager;
     let server: Server;
+    let nbUser: number;
 
     before((done: Mocha.Done) => {
         container.snapshot();
@@ -25,7 +26,7 @@ describe("Test for the socketServerManager", () => {
         testManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
         server = container.get<Server>(TYPES.Server);
         server.init();
-
+        nbUser = testManager["userManager"].users.length;
         mockClientSocket = SocketClientIO.connect(SERVER_URL);
         mockClientSocket.on("connect", () => {
             done();
@@ -41,7 +42,7 @@ describe("Test for the socketServerManager", () => {
     });
 
     it("Should send the socket id to the userManager once a socket connect", () => {
-        expect(testManager["userManager"].users.length).to.equal(1);
+        expect(testManager["userManager"].users.length).to.equal(nbUser + 1);
     });
 
     it("The function emit event should emit only once by socket", (done: Mocha.Done) => {
@@ -52,9 +53,10 @@ describe("Test for the socketServerManager", () => {
     });
 
     it("Should the socket disconnect, the user must be removed from userManger", (done: Mocha.Done) => {
+        nbUser = testManager["userManager"].users.length;
         mockClientSocket.disconnect();
         setTimeout(() => {
-            expect(testManager["userManager"].users.length).to.equal(0);
+            expect(testManager["userManager"].users.length).to.equal(nbUser - 1);
             done();
         },         CONNEXION_DELAY);
     });

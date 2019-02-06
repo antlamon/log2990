@@ -38,7 +38,8 @@ describe("InitialComponent", () => {
       spyOn(component["indexService"], "connect").and.callFake((username: string): Observable<Message> => {
         return of({title: BASE_ID, body: "test-message"});
       });
-      const navigateSpy = spyOn((component as any).router, "navigate");
+      // tslint:disable-next-line:no-any
+      const navigateSpy: jasmine.Spy = spyOn((component as any).router, "navigate");
       component.connect("test123");
       expect(navigateSpy).toHaveBeenCalledWith(["games"]);
     });
@@ -47,10 +48,10 @@ describe("InitialComponent", () => {
       spyOn(component["indexService"], "connect").and.callFake((username: string): Observable<Message> => {
         return of({title: ERROR_ID, body: "test-message"});
       });
-      const navigateSpy = spyOn((component as any).router, "navigate");
+      // tslint:disable-next-line:no-any
+      const navigateSpy: jasmine.Spy = spyOn((component as any).router, "navigate");
       component.connect("test123");
       expect(navigateSpy).toHaveBeenCalledTimes(0);
     });
   });
-
 });

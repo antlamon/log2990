@@ -45,18 +45,6 @@ describe("FileValidatorService", () => {
     expect(service).toBeTruthy();
   }));
 
-  describe("Test for the functions fileExtensionIsOK", () => {
-    it("A .jpeg should return false", () => {
-      expect(component.fileExtensionIsOK("testFile.jpeg")).toEqual(false);
-    });
-    it("A .bmp should return true", () => {
-      expect(component.fileExtensionIsOK("testFile.bmp")).toEqual(true);
-    });
-    it("An empty value should return false", () => {
-      expect(component.fileExtensionIsOK("")).toEqual(false);
-    });
-  });
-
   describe("Test for the function checkBmpDimensions", () => {
     it("A bmp that is smaller than 640x480 should return false", () => {
       expect(component.dimensionsAreValid(SMALLER_WIDTH, SMALLER_HEIGHT)).toEqual(false);

@@ -75,4 +75,5 @@ import "zone.js/dist/zone";  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 // To fix socket-user incompatibility with angular version
+// tslint:disable-next-line:no-any
 (window as any).global = window;
