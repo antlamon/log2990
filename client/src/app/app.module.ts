@@ -16,6 +16,7 @@ import { MatDialogModule } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ModalService } from "./services/modal.service";
 import { FileValidatorService } from "./services/file-validator.service";
+import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { FileValidatorService } from "./services/file-validator.service";
     FreeGeneratorComponent,
     ListViewComponent,
     SimpleGeneratorComponent,
+    Scene3DComponent,
   ],
   imports: [
     FormsModule,
