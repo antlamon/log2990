@@ -18,6 +18,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   private readonly HEIGHT_OFFSET: number = 22;
   public readonly ID_MODIFIED_FILE: string= "modifiedFile";
   public readonly ID_ORIGINAL_FILE: string= "originalFile";
+  public readonly VALID_FILE_EXTENSION: string = "image/bmp";
 
 
   private modifiedFileIsOK: boolean;
@@ -68,12 +69,11 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     const fileName: string = (document.getElementById(fileId) as HTMLInputElement).value;
     (document.getElementById(labelId) as HTMLParagraphElement).textContent = fileName;
     const reader: FileReader = new FileReader();
-    if (file  && file.type === "image/bmp") {
+    if (file  && file.type === this.VALID_FILE_EXTENSION) {
       reader.readAsArrayBuffer(file);
       reader.onload = () => {
         this.onFileLoaded(fileId, reader);
       };
-      
       return true;
     } else {
       if (fileId === this.ID_ORIGINAL_FILE) {
