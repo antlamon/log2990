@@ -24,6 +24,10 @@ export class GameService {
     );
   }
 
+  public getSimpleGame(name: string){
+    
+  }
+
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
     return (error: Error): Observable<T> => {
       return of(result as T);
