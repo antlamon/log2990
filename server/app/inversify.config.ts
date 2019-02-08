@@ -9,6 +9,7 @@ import { ConvertImage } from "./services/convertImage.service";
 import { GameListService } from "./services/game-list.service";
 import { ImageService } from "./services/image.service";
 import { UsersManager } from "./services/users.service";
+import { SocketIdentificationManager } from "./socket/socketIdentificationManager";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
 
@@ -29,5 +30,7 @@ container.bind(TYPES.GameListService).to(GameListService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();
+
+container.bind(TYPES.SocketIdentificationManager).to(SocketIdentificationManager);
 
 export { container };

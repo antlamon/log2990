@@ -11,6 +11,7 @@ const TYPES =  {
         GameListController: Symbol.for("GameListController"),
         UserManager: Symbol("UserManager"),
         SocketServerManager: Symbol("SocketServerManager"),
+        SocketIdentificationManager: Symbol("SocketIdentificationManager"),
 };
 
 export  { TYPES };
