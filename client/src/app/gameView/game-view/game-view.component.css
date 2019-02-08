@@ -1,0 +1,63 @@
+
+
+.chrono {
+    position: absolute;
+    top: 180px;
+    left: 1450px;
+    font-size: 25px;
+}
+
+.compteur {
+    position: absolute;
+    top: 180px;
+    left: 260px;
+    font-size: 25px;
+}
+
+.messages{
+    position: absolute;
+    width: 800px;
+    height: 220px;
+    top: 810px;
+    left: 560px;
+    background-color: darkkhaki;
+}
+
+.gameTitle{
+    position: absolute;
+    display: inline-block;
+    left: 820px;
+    top: 50px;
+    font-size: 50px;
+    width: 300px;
+    background-color: chartreuse;
+    text-align: center;
+}
+
+.divGames {
+    position: absolute;
+    top: 210px;
+    left: 260px;
+    width: 1400px;
+    height: 600px;
+    background-color: cadetblue;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.gameImage {
+    width: 640px;
+    height: 520px;
+    background-color: orange;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+}
+.mockImages {
+    width: 640px;
+    height: 480px;
+    background-color: forestgreen;
+}
