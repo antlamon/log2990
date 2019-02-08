@@ -3,6 +3,7 @@ import { GameService } from "../services/game.service";
 import { IGame } from "../../../../common/models/game";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
+import { Router} from "@angular/router";
 
 @Component({
   selector: "app-list-view",
@@ -16,7 +17,8 @@ export class ListViewComponent implements OnInit {
   public freeGames: IGame[];
   @Input() public isAdminMode: Boolean;
 
-  public constructor(private gameService: GameService, private socket: SocketService) {
+  public constructor(private gameService: GameService, private socket: SocketService,
+    private router: Router) {
     this.isAdminMode = false;
     this.socket.addEvent(SocketsEvents.UPDATE_SIMPLES_GAMES, this.getSimpleGames.bind(this));
   }
@@ -41,6 +43,11 @@ export class ListViewComponent implements OnInit {
   public getFreeGames(): void {
     this.gameService.getFreeGames()
         .subscribe((response: IGame[]) => this.freeGames = response);
+  }
+
+  public playSelectedSimpleGame(game: IGame): void {
+    const name: string = game.name;
+    this.router.navigate(["game/" + name]);
   }
 
 }
