@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ModalService } from "./services/modal.service";
 import { FileValidatorService } from "./services/file-validator.service";
 import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
+import { RenderService } from "./scene3D/scene3-d/render.service";
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
     SocketService,
     ModalService,
     FileValidatorService,
+    RenderService,
   ],
   bootstrap: [AppComponent]
 })
