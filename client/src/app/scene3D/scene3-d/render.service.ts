@@ -53,7 +53,7 @@ export class RenderService {
   
   private createCube() {
     
-    const init: number = 100;
+    const init: number = 50;
 
     const geometry = new THREE.BoxGeometry(init, init, init);
 
@@ -68,7 +68,7 @@ export class RenderService {
   }
   private createCone() {
     
-    const init: number = 100;
+    const init: number = 50;
 
     const geometry = new THREE.ConeGeometry(init, init);
 
@@ -129,28 +129,44 @@ export class RenderService {
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
   }
 
-  public initialize(container: HTMLDivElement, rotationX: number, rotationY: number) {
+  public initialize(container: HTMLDivElement) {
+    
+    this.container = container;
     
     this.generateMap();
-    const scen: Game3D = {backColor: 0x0FFFF1, numObj: 1, objects: [{type: "cone",
-      color: 0xFF0000,
-      position: { x: 5, y: 12, z: 3},
-      size: 1.5,
-      rotation: {x: 0, y: 0, z: 2}}] };
-    
-    //const intial: number = 10;
-
-    this.container = container;
-    this.rotationSpeedX = rotationX;
-    this.rotationSpeedY = rotationY;
-
+    const scen: Game3D = {backColor: 0x0FFFF1, numObj: 1, objects: []};
 
     this.createScene();
     this.scene.background = new THREE.Color(scen.backColor);
+    const noObj: number = Math.floor(this.random(10,200));
+    for(let i = 0; i < noObj; i++) {
+      const obj: Objet3D = {type: "cube",
+        color: 0xFF0000,
+        position: { x: this.random(0,200), y: this.random(0,200), z: this.random(0,200)},
+        size: 0.5,
+        rotation: {x: this.random(0,360), y: this.random(0,360), z: this.random(0,360)}};
+      let valid: Boolean = true;
+      for(let i = 0; i < scen.objects.length; i++) {
+        if(Math.pow(scen.objects[i].position.x-obj.position.x,2)+ Math.pow(obj.position.y-scen.objects[i].position.y,2) + Math.pow(obj.position.z-scen.objects[i].position.z,2)
+          < Math.pow(43,2)) {
+          valid = false;
+          }
+      }
+      if(valid) {
+        scen.objects.push(obj);
+
+        this.createShape(obj);
+      }
+    }
     
-    this.createShape(scen.objects[0]);
     this.initStats();
     // console.log(this.scene);
     this.startRenderingLoop();
+  }
+
+  public random(min: number, max: number): number {
+
+    return Math.random() * (max - min + 1) + min;
+
   }
 }

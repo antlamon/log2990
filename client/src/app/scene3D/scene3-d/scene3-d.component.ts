@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, HostListener } from '@angular/core';
 import {RenderService} from './render.service';
 
 @Component({
@@ -19,18 +19,12 @@ export class Scene3DComponent implements AfterViewInit {
   @ViewChild('container')
   private containerRef: ElementRef;
 
-  @Input()
-  public rotationSpeedX = 0.01;
-
-  @Input()
-  public rotationSpeedY = 0.01;
-
   @HostListener('window:resize', ['$event'])
   public onResize() {
     this.renderService.onResize();
   }
 
   public ngAfterViewInit() {
-    this.renderService.initialize(this.container, this.rotationSpeedX, this.rotationSpeedY);
+    this.renderService.initialize(this.container);
   }
 }
