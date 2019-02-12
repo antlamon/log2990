@@ -38,8 +38,10 @@ const mock3DGame: Game3D = {
     name: "string",
     numObj: 13,
     objects: [obj3D],
-    backColor: 0,
-}
+    backColor: 0,    
+    solo: {first:222, second: 223, third: 21312},
+    multi: {first:222, second: 223, third: 21312}
+};
 
 
 const expect: Chai.ExpectStatic = chai.expect;
@@ -64,8 +66,7 @@ describe("Game3D generator service", () => {
             expect(service.createRandom3DGame(mockBadGameType)).to.throw(TYPE_ERROR);
         });
         it("Should return random 3D geometric game", async () => {
-            expect(typeof(service.createRandom3DGame(mockBadGameType))).to.eql(typeof(mock3DGame));
+            expect(typeof(service.createRandom3DGame(mockGeometric))).to.eql(typeof(mock3DGame));
         });
     });
-
 });

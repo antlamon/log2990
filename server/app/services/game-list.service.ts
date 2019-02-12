@@ -71,6 +71,7 @@ export class GameListService {
         if( newGame.name === "" ) {
             return {title: "INVALID GAME FORM", body: "The 3D name can't be empty"};
         } else {
+            this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
             FREEGAMES.push(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database
             return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};
         }
