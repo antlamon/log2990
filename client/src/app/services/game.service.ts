@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { IGame, ISimpleForm } from "../../../../common/models/game";
+import { IGame, ISimpleForm, IGame3DForm } from "../../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Message } from "../../../../common/communication/message";
 import { BASE_SERVER_PATH } from "../global/constants";
+import { Game3D } from "../../../../common/models/game3D";
 
 @Injectable({
   providedIn: "root"
@@ -30,8 +31,8 @@ export class GameService {
     };
   }
 
-  public getFreeGames(): Observable<IGame[]> {
-    return this.http.get<IGame[]>(this.FREE_URL);
+  public getFreeGames(): Observable<Game3D[]> {
+    return this.http.get<Game3D[]>(this.FREE_URL);
   }
   public createSimpleGame(game: ISimpleForm): Observable<Message> {
 
@@ -46,14 +47,13 @@ export class GameService {
 
   }
 
-  public createFreeGame(game: IGame): void {
+  public createFreeGame(game: IGame3DForm): void {
     // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
     };
-
     this.http.post<Message>(this.FREE_URL, game, httpOptions).subscribe();
   }
 

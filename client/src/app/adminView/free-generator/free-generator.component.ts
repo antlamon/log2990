@@ -1,8 +1,8 @@
 import { Component, OnInit, ElementRef, Input, OnDestroy } from "@angular/core";
 import { GameService } from "src/app/services/game.service";
 import { ModalService } from "src/app/services/modal.service";
-import { IGame } from "../../../../../common/models/game";
 import { IModal } from "src/app/models/modal";
+import { IGame3DForm } from "../../../../../common/models/game";
 
 @Component({
   selector: "app-free-generator",
@@ -44,13 +44,13 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   }
   public submit(): void {
-    // submit form ...sprint 2
-    const newGame: IGame  = {
-      name: "NouveauJeu", imageURL: "nouveauTest.bmp",
-      solo: { first: 9999, second: 9999, third: 9999 },
-      multi: { first: 9999, second: 9999, third: 9999 }
-    }; // for tests
-
+    //mock 3D game
+    const newGame: IGame3DForm = {
+      name: "new 3D game",
+      objectType: "geometric",
+      objectQty: 10,
+      modifications: {add: true, delete: true, color: true} 
+    };
     this.gameService.createFreeGame(newGame);
     this.close();
   }
