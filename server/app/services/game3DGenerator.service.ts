@@ -1,20 +1,28 @@
-import {injectable } from "inversify";
+import { injectable } from "inversify";
 import { Game3D } from "../../../common/models/game3D";
 import { IGame3DForm } from "../../../common/models/game";
 import { Objet3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
+import { Message } from "../../../common/communication/message";
 
 @injectable()
 export class Game3DGeneratorService {
 
-    private readonly minimumContrast: number = 0x00000F;
+    private readonly MINIMUM_CONTRAST: number = 0x00000F;
+    private readonly TYPE_ERROR: Error = {
+        name: "Invalid game3D type: ",
+        message: "The type chosen for the new 3D game is not valid. "
+    };
 
     public createRandom3DGame(form: IGame3DForm): Game3D {
         if ( form.objectType === "geometric" ) {
-            console.log(this.createRandom3DGame(form)); // testing
             return this.generateGeometryGame(form);
         } else {
-            return this.generateThemeGame(form);
+            if ( form.objectType === "themed" ) {
+                return this.generateThemeGame(form);
+            } else {
+                throw this.TYPE_ERROR;
+            }
         }
     }
 
@@ -25,7 +33,7 @@ export class Game3DGeneratorService {
         // tslint:disable-next-line:typedef
         for (let i = 0; i < form.objectQty; i++) {
             randomObjects.push(this.generateRandom3Dobject());
-            while(!this.isEnoughContrast(backGroundColor, randomObjects[i].color)){
+            while (!this.isEnoughContrast(backGroundColor, randomObjects[i].color)) {
                 backGroundColor = this.randomNumber(0x0F0F0F, 0xFFFFFF);
             }
         }
@@ -34,7 +42,7 @@ export class Game3DGeneratorService {
             name: form.name,
             numObj: form.objectQty,
             objects: randomObjects,
-            backColor: backGroundColor, 
+            backColor: backGroundColor,
         };
     }
 
@@ -42,7 +50,7 @@ export class Game3DGeneratorService {
         //we want positive values, check for min and max
         let max: number;
         let min: number;
-        if(backGroundColor > objColor ){
+        if (backGroundColor > objColor) {
             max = backGroundColor;
             min = objColor;
         } else {
@@ -50,24 +58,24 @@ export class Game3DGeneratorService {
             min = backGroundColor;
         }
 
-        return (max - min) >= this.minimumContrast;
+        return (max - min) >= this.MINIMUM_CONTRAST;
     }
 
     private generateRandom3Dobject(): Objet3D {
         return {
             type: this.randomShape(),
             color: this.randomNumber(0x000000, 0xFFFFFF),
-            position: { 
-                        x: this.randomNumber(0,200),
-                        y: this.randomNumber(0,200),
-                        z: this.randomNumber(0,200),
-                    },
-            size: this.randomNumber(0.5,1.5), // scale between 50% and 150% of a reference size
+            position: {
+                x: this.randomNumber(0, 200),
+                y: this.randomNumber(0, 200),
+                z: this.randomNumber(0, 200),
+            },
+            size: this.randomNumber(0.5, 1.5), // scale between 50% and 150% of a reference size
             rotation: {
-                        x: this.randomNumber(0,360), 
-                        y: this.randomNumber(0,360), 
-                        z: this.randomNumber(0,360)
-                    },
+                x: this.randomNumber(0, 360),
+                y: this.randomNumber(0, 360),
+                z: this.randomNumber(0, 360)
+            },
         };
     }
     private randomShape(): string {
