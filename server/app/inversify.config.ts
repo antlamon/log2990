@@ -11,6 +11,7 @@ import { ImageService } from "./services/image.service";
 import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
+import { Game3DGeneratorService } from "./services/game3Dgenerator.service";
 
 const container: Container = new Container();
 
@@ -26,6 +27,8 @@ container.bind(TYPES.ConnexionController).to(ConnexionController);
 
 container.bind(TYPES.GameListController).to(GameListController);
 container.bind(TYPES.GameListService).to(GameListService);
+
+container.bind(TYPES.Game3DGeneratorService).to(Game3DGeneratorService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();
