@@ -3,8 +3,7 @@ import { Game3D } from "../../../common/models/game3D";
 import { IGame3DForm } from "../../../common/models/game";
 import { Objet3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
-import { Message } from "../../../common/communication/message";
-
+import { ITop3 } from "../../../common/models/top3";
 @injectable()
 export class Game3DGeneratorService {
 
@@ -42,7 +41,9 @@ export class Game3DGeneratorService {
             name: form.name,
             numObj: form.objectQty,
             objects: randomObjects,
-            backColor: backGroundColor,
+            backColor: backGroundColor,       
+            solo: this.top3RandomOrder(),
+            multi: this.top3RandomOrder(),
         };
     }
 
@@ -84,7 +85,16 @@ export class Game3DGeneratorService {
     }
     private randomNumber(min: number, max: number): number {
         // tslint:disable-next-line:no-magic-numbers
-        return Math.random() * (max - min + 1) + min;
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    public top3RandomOrder(): ITop3 {
+        const scores: number[] = [];
+        for (let i: number = 0; i < 3; i++) {
+            scores.push(this.randomNumber(700, 1000));
+        }
+        scores.sort();
+
+        return { first: scores[0], second: scores[1], third: scores[2] };
     }
 
     private generateThemeGame(form: IGame3DForm): Game3D {

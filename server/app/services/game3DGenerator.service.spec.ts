@@ -38,8 +38,10 @@ const mock3DGame: Game3D = {
     name: "string",
     numObj: 13,
     objects: [obj3D],
-    backColor: 0,
-}
+    backColor: 0,    
+    solo: {first:222, second: 223, third: 21312},
+    multi: {first:222, second: 223, third: 21312}
+};
 
 
 const expect: Chai.ExpectStatic = chai.expect;
