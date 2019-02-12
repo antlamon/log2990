@@ -64,8 +64,7 @@ describe("Game3D generator service", () => {
             expect(service.createRandom3DGame(mockBadGameType)).to.throw(TYPE_ERROR);
         });
         it("Should return random 3D geometric game", async () => {
-            expect(typeof(service.createRandom3DGame(mockBadGameType))).to.eql(typeof(mock3DGame));
+            expect(typeof(service.createRandom3DGame(mockGeometric))).to.eql(typeof(mock3DGame));
         });
     });
-
 });
