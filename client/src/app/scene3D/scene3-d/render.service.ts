@@ -44,6 +44,7 @@ export class RenderService {
   private createShape(obj: Objet3D) {
     
     const shape: THREE.Mesh = this.map.get(obj.type).clone();
+    
     shape.position.x = obj.position.x;
     shape.position.y = obj.position.y;
     shape.position.z = obj.position.z;
@@ -51,7 +52,7 @@ export class RenderService {
     shape.rotation.x = obj.rotation.x;
     shape.rotation.y = obj.rotation.y;
     shape.rotation.z = obj.rotation.z;
-    shape.material = new THREE.MeshBasicMaterial({ color: obj.color });
+    shape.material = new THREE.MeshBasicMaterial({ polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits:1, color: obj.color });
     this.scene.add(shape);
   }
   
@@ -59,9 +60,7 @@ export class RenderService {
 
     const geometry = new THREE.BoxGeometry(this.init, this.init, this.init);
 
-    const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-
-    const cube = new THREE.Mesh(geometry, material);
+    const cube = new THREE.Mesh(geometry);
  
     this.map.set("cube", cube);
   }
@@ -70,9 +69,7 @@ export class RenderService {
 
     const geometry = new THREE.CylinderGeometry(this.init, this.init);
 
-    const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-
-    const cylindre = new THREE.Mesh(geometry, material);
+    const cylindre = new THREE.Mesh(geometry);
 
     this.map.set("cylindre", cylindre);
   }
@@ -80,9 +77,7 @@ export class RenderService {
     
     const geometry = new THREE.TetrahedronGeometry(this.init);
 
-    const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-
-    const tetrahedron = new THREE.Mesh(geometry, material);
+    const tetrahedron = new THREE.Mesh(geometry);
     
     this.map.set("tetrahedron", tetrahedron);
   }
@@ -90,19 +85,15 @@ export class RenderService {
     
     const geometry = new THREE.SphereGeometry(this.init);
 
-    const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-
-    const sphere = new THREE.Mesh(geometry, material);
+    const sphere = new THREE.Mesh(geometry);
     
     this.map.set("sphere", sphere);
   }
   private createCone() {
     
-    const geometry = new THREE.ConeGeometry(this.init, this.init);
+    const geometry = new THREE.ConeGeometry(this.init, this.init, 50);
 
-    const material = new THREE.MeshBasicMaterial({ color: 0xFFFFFF });
-
-    const cone = new THREE.Mesh(geometry, material);
+    const cone = new THREE.Mesh(geometry);
     
     this.map.set("cone", cone);
   }
@@ -110,7 +101,8 @@ export class RenderService {
   private createScene() {
     /* Scene */
     this.scene = new THREE.Scene();
-    this.light = new THREE.DirectionalLight();
+    this.light = new THREE.DirectionalLight(0xffffff, 1.0);
+    this.light.position.set(1000,100,0);
     this.scene.add(this.light);
     /* Camera */
     const aspectRatio = this.getAspectRatio();
@@ -170,7 +162,7 @@ export class RenderService {
     this.scene.background = new THREE.Color(scen.backColor);
     const noObj: number = Math.floor(this.random(10,200));
     for(let i = 0; i < noObj; i++) {
-      const obj: Objet3D = {type: "tetrahedron",
+      const obj: Objet3D = {type: "cube",
         color: 0xFF0000,
         position: { x: this.random(-300,300), y: this.random(-300,300), z: this.random(-300,300)},
         size: 0.5,

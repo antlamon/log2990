@@ -3,7 +3,7 @@ import { Game3D } from "../../../common/models/game3D";
 import { IGame3DForm } from "../../../common/models/game";
 import { Objet3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
-import { Message } from "../../../common/communication/message";
+//import { Message } from "../../../common/communication/message";
 
 @injectable()
 export class Game3DGeneratorService {
