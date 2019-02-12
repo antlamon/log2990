@@ -134,7 +134,7 @@ export class RenderService {
     this.container = container;
     
     this.generateMap();
-    const scen: Game3D = {backColor: 0x0FFFF1, numObj: 1, objects: []};
+    const scen: Game3D = {name: "newFKGSCENE", backColor: 0x0FFFF1, numObj: 1, objects: []};
 
     this.createScene();
     this.scene.background = new THREE.Color(scen.backColor);
