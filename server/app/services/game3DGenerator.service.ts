@@ -11,7 +11,6 @@ export class Game3DGeneratorService {
 
     public createRandom3DGame(form: IGame3DForm): Game3D {
         if ( form.objectType === "geometric" ) {
-            console.log(this.createRandom3DGame(form)); // testing
             return this.generateGeometryGame(form);
         } else {
             return this.generateThemeGame(form);
