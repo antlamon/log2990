@@ -2,21 +2,20 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { Game3D } from "../../../../../common/models/game3D"
 import { Objet3D } from "../../../../../common/models/objet3D"
-import { GameService } from 'src/app/services/game.service';
 
 // import Stats = require('stats.js');
 
 @Injectable()
 export class RenderService {
 
-  constructor(private gameService: GameService) {};
+
 
   private container: HTMLDivElement;
 
   private camera: THREE.PerspectiveCamera;
 
   // private stats: Stats;
-  public games: Game3D[];
+
 
   private renderer: THREE.WebGLRenderer;
 
@@ -102,9 +101,10 @@ export class RenderService {
     this.map.set("cone", cone);
   }
 
-  private createScene() {
+  private createScene(scene: Game3D) {
     /* Scene */
     this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(scene.backColor);
     this.light = new THREE.DirectionalLight(0xffffff, 1.0);
     this.light.position.set(1000,100,0);
     this.scene.add(this.light);
@@ -117,6 +117,7 @@ export class RenderService {
       this.farClippingPane
     );
     this.camera.position.z = this.cameraZ;
+    this.scene.add(this.camera);
 
   }
 
@@ -155,29 +156,20 @@ export class RenderService {
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
   }
 
-  public initialize(container: HTMLDivElement) {
+  public initialize(container: HTMLDivElement, scen: Game3D) {
     
     this.container = container;
 
     this.generateMap();
-   
-    this.gameService.getFreeGames()
-        .subscribe((response: Game3D[]) => this.games = response);
+    
+    this.createScene(scen);
     
 
-    console.log(this.games);
-
-    const scen: Game3D = this.games[1];
-    this.createScene();
-    this.scene.background = new THREE.Color(scen.backColor);
-
     for(let j = 0; j < scen.objects.length; j++ ) {
-      console.log(scen.objects[j].type);
       this.createShape(scen.objects[j]);
     }
    
     this.initStats();
-    // console.log(this.scene);
     this.startRenderingLoop();
   }
 
