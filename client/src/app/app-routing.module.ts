@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   { path: "games", component: ListViewComponent },
   {path: "", component: InitialComponent },
-  {path: "view3D", component: Scene3DComponent},
+  {path: "view3D", component: Scene3DComponent}
 ];
 
 @NgModule({

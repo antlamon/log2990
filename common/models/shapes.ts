@@ -1,9 +1,5 @@
-export enum Shapes {
-    Cube = "cube",
-    Cone = "cone",
-    Sphere = "sphere",
-    Cylinder = "cylinder",
-    Pyramid = "pyramid"
-}
+export const Shapes: string[] = [
+    "cube", "cone", "cylinder", "sphere", "tetrahedron"
+]
 
 export const SHAPES_SIZE = 5;

@@ -28,12 +28,24 @@ export class Game3DGeneratorService {
     private generateGeometryGame(form: IGame3DForm): Game3D {
 
         const randomObjects: Objet3D[] = [];
-        let backGroundColor: number = this.randomNumber(0x0F0F0F, 0xFFFFFF); // we go for pale colors
+        let backGroundColor: number = this.randomInt(0x0F0F0F, 0xFFFFFF); // we go for pale colors
         // tslint:disable-next-line:typedef
         for (let i = 0; i < form.objectQty; i++) {
             randomObjects.push(this.generateRandom3Dobject());
+            //objet non un dessus des autres
+    //   for(let i = 0; i < scen.objects.length; i++) {
+    //     if(Math.pow(scen.objects[i].position.x-obj.position.x,2)+ Math.pow(obj.position.y-scen.objects[i].position.y,2) + Math.pow(obj.position.z-scen.objects[i].position.z,2)
+    //       < Math.pow(43,2)) {
+    //       valid = false;
+    //       }
+    //   }
+    //   if(valid) {
+    //     scen.objects.push(obj);
+
+    //     this.createShape(obj);
+    //   }
             while (!this.isEnoughContrast(backGroundColor, randomObjects[i].color)) {
-                backGroundColor = this.randomNumber(0x0F0F0F, 0xFFFFFF);
+                backGroundColor = this.randomInt(0x0F0F0F, 0xFFFFFF);
             }
         }
 
@@ -65,32 +77,37 @@ export class Game3DGeneratorService {
     private generateRandom3Dobject(): Objet3D {
         return {
             type: this.randomShape(),
-            color: this.randomNumber(0x000000, 0xFFFFFF),
+            color: this.randomInt(0x000000, 0xFFFFFF),
             position: {
-                x: this.randomNumber(0, 200),
-                y: this.randomNumber(0, 200),
-                z: this.randomNumber(0, 200),
+                x: this.randomInt(0, 200),
+                y: this.randomInt(0, 200),
+                z: this.randomInt(0, 200),
             },
             size: this.randomNumber(0.5, 1.5), // scale between 50% and 150% of a reference size
             rotation: {
-                x: this.randomNumber(0, 360),
-                y: this.randomNumber(0, 360),
-                z: this.randomNumber(0, 360)
+                x: this.randomInt(0, 360),
+                y: this.randomInt(0, 360),
+                z: this.randomInt(0, 360)
             },
         };
     }
     private randomShape(): string {
-        let index: number = this.randomNumber(0, SHAPES_SIZE);
+        let index: number = this.randomInt(0, SHAPES_SIZE-1);
         return Shapes[index];
     }
-    private randomNumber(min: number, max: number): number {
+    private randomInt(min: number, max: number): number {
         // tslint:disable-next-line:no-magic-numbers
-        return Math.floor(Math.random() * (max - min + 1) + min);
+        return Math.floor(this.randomNumber(min, max));
     }
+    private randomNumber(min: number, max: number): number {
+
+        return (Math.random() * (max - min + 1) + min);
+    }
+    
     public top3RandomOrder(): ITop3 {
         const scores: number[] = [];
         for (let i: number = 0; i < 3; i++) {
-            scores.push(this.randomNumber(700, 1000));
+            scores.push(this.randomInt(700, 1000));
         }
         scores.sort();
 

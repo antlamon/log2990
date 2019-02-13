@@ -19,12 +19,12 @@ const mockBadGameType: IGame3DForm = {
     modifications: {add: true, delete: true, color: true} 
 };
 
-// const mockGeometric: IGame3DForm = {
-//     name: "heres my new game",
-//     objectType: "geometric",
-//     objectQty: 13,
-//     modifications: {add: true, delete: true, color: true} 
-// };
+const mockGeometric: IGame3DForm = {
+    name: "heres my new game",
+    objectType: "geometric",
+    objectQty: 13,
+    modifications: {add: true, delete: true, color: true} 
+};
 
 const obj3D: Objet3D = {
     type: "string",

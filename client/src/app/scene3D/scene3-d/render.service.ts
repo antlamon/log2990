@@ -2,18 +2,22 @@ import { Injectable } from '@angular/core';
 import * as THREE from 'three';
 import { Game3D } from "../../../../../common/models/game3D"
 import { Objet3D } from "../../../../../common/models/objet3D"
+import { GameService } from 'src/app/services/game.service';
 
 // import Stats = require('stats.js');
 
 @Injectable()
 export class RenderService {
 
+  constructor(private gameService: GameService) {};
+
   private container: HTMLDivElement;
 
   private camera: THREE.PerspectiveCamera;
 
   // private stats: Stats;
-  
+  public games: Game3D[];
+
   private renderer: THREE.WebGLRenderer;
 
   private scene: THREE.Scene;
@@ -71,7 +75,7 @@ export class RenderService {
 
     const cylindre = new THREE.Mesh(geometry);
 
-    this.map.set("cylindre", cylindre);
+    this.map.set("cylinder", cylindre);
   }
   private createTetrahedron() {
     
@@ -154,40 +158,24 @@ export class RenderService {
   public initialize(container: HTMLDivElement) {
     
     this.container = container;
-    
-    this.generateMap();
-    const scen: Game3D = {
-      name: "newFKGSCENE", 
-      backColor: 0x0FFFF1, 
-      numObj: 1, 
-      objects: [],
-      solo: {first:222, second: 223, third: 21312},
-      multi: {first:222, second: 223, third: 21312},
-    };
 
+    this.generateMap();
+   
+    this.gameService.getFreeGames()
+        .subscribe((response: Game3D[]) => this.games = response);
+    
+
+    console.log(this.games);
+
+    const scen: Game3D = this.games[1];
     this.createScene();
     this.scene.background = new THREE.Color(scen.backColor);
-    const noObj: number = Math.floor(this.random(10,200));
-    for(let i = 0; i < noObj; i++) {
-      const obj: Objet3D = {type: "cube",
-        color: 0xFF0000,
-        position: { x: this.random(-300,300), y: this.random(-300,300), z: this.random(-300,300)},
-        size: 0.5,
-        rotation: {x: this.random(0,360), y: this.random(0,360), z: this.random(0,360)}};
-      let valid: Boolean = true;
-      for(let i = 0; i < scen.objects.length; i++) {
-        if(Math.pow(scen.objects[i].position.x-obj.position.x,2)+ Math.pow(obj.position.y-scen.objects[i].position.y,2) + Math.pow(obj.position.z-scen.objects[i].position.z,2)
-          < Math.pow(43,2)) {
-          valid = false;
-          }
-      }
-      if(valid) {
-        scen.objects.push(obj);
 
-        this.createShape(obj);
-      }
+    for(let j = 0; j < scen.objects.length; j++ ) {
+      console.log(scen.objects[j].type);
+      this.createShape(scen.objects[j]);
     }
-    
+   
     this.initStats();
     // console.log(this.scene);
     this.startRenderingLoop();
