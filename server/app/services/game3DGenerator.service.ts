@@ -7,6 +7,8 @@ import { ITop3 } from "../../../common/models/top3";
 @injectable()
 export class Game3DGeneratorService {
 
+    private static id: number = 1;
+
     private readonly MINIMUM_CONTRAST: number = 0x00000F;
     private readonly TYPE_ERROR: Error = {
         name: "Invalid game3D type: ",
@@ -51,6 +53,7 @@ export class Game3DGeneratorService {
 
         return {
             name: form.name,
+            id: Game3DGeneratorService.id++,
             numObj: form.objectQty,
             objects: randomObjects,
             backColor: backGroundColor,       
@@ -88,22 +91,23 @@ export class Game3DGeneratorService {
                 x: this.randomInt(0, 360),
                 y: this.randomInt(0, 360),
                 z: this.randomInt(0, 360)
-            },
+            }
         };
     }
     private randomShape(): string {
-        let index: number = this.randomInt(0, SHAPES_SIZE-1);
+        const index: number = this.randomInt(0, SHAPES_SIZE-1);
         return Shapes[index];
     }
+
     private randomInt(min: number, max: number): number {
-        // tslint:disable-next-line:no-magic-numbers
         return Math.floor(this.randomNumber(min, max));
     }
+
     private randomNumber(min: number, max: number): number {
 
-        return (Math.random() * (max - min + 1) + min);
+        return Math.random() * (max - min + 1) + min;
     }
-    
+
     public top3RandomOrder(): ITop3 {
         const scores: number[] = [];
         for (let i: number = 0; i < 3; i++) {
@@ -117,4 +121,5 @@ export class Game3DGeneratorService {
     private generateThemeGame(form: IGame3DForm): Game3D {
         return this.generateGeometryGame(form); // for now... themed 3Dgame not implemented yet
     }
+
 }

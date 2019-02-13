@@ -3,13 +3,17 @@ import * as THREE from 'three';
 import { Game3D } from "../../../../../common/models/game3D"
 import { Objet3D } from "../../../../../common/models/objet3D"
 import { GameService } from 'src/app/services/game.service';
+import { SocketService } from 'src/app/services/socket.service';
+import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 
 // import Stats = require('stats.js');
 
 @Injectable()
 export class RenderService {
 
-  constructor(private gameService: GameService) {};
+  constructor(private gameService: GameService, private socket: SocketService) {
+    this.socket.addEvent(SocketsEvents.UPDATE_FREE_GAMES, this.getGames.bind(this));
+  };
 
   private container: HTMLDivElement;
 
@@ -26,7 +30,7 @@ export class RenderService {
 
   private light: THREE.Light;
   
-  private init = 50;
+  private initSize = 50;
 
   private fieldOfView = 75;
 
@@ -35,7 +39,11 @@ export class RenderService {
   private farClippingPane = 3000;
 
   public map: Map<string, THREE.Mesh>;
-
+  
+  public getGames(): void {
+    this.gameService.getFreeGames()
+        .subscribe((response: Game3D[]) => this.games = response);
+  }
   private generateMap() {
     this.map = new Map();
     this.createCube();
@@ -62,7 +70,7 @@ export class RenderService {
   
   private createCube() {
 
-    const geometry = new THREE.BoxGeometry(this.init, this.init, this.init);
+    const geometry = new THREE.BoxGeometry(this.initSize, this.initSize, this.initSize);
 
     const cube = new THREE.Mesh(geometry);
  
@@ -71,7 +79,7 @@ export class RenderService {
 
   private createCylindre() {
 
-    const geometry = new THREE.CylinderGeometry(this.init, this.init);
+    const geometry = new THREE.CylinderGeometry(this.initSize, this.initSize);
 
     const cylindre = new THREE.Mesh(geometry);
 
@@ -79,7 +87,7 @@ export class RenderService {
   }
   private createTetrahedron() {
     
-    const geometry = new THREE.TetrahedronGeometry(this.init);
+    const geometry = new THREE.TetrahedronGeometry(this.initSize);
 
     const tetrahedron = new THREE.Mesh(geometry);
     
@@ -87,7 +95,7 @@ export class RenderService {
   }
   private createSphere() {
     
-    const geometry = new THREE.SphereGeometry(this.init);
+    const geometry = new THREE.SphereGeometry(this.initSize);
 
     const sphere = new THREE.Mesh(geometry);
     
@@ -95,7 +103,7 @@ export class RenderService {
   }
   private createCone() {
     
-    const geometry = new THREE.ConeGeometry(this.init, this.init, 50);
+    const geometry = new THREE.ConeGeometry(this.initSize, this.initSize, 50);
 
     const cone = new THREE.Mesh(geometry);
     
@@ -108,6 +116,10 @@ export class RenderService {
     this.light = new THREE.DirectionalLight(0xffffff, 1.0);
     this.light.position.set(1000,100,0);
     this.scene.add(this.light);
+    
+
+  }
+  private createCamera() {
     /* Camera */
     const aspectRatio = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
@@ -164,15 +176,13 @@ export class RenderService {
     this.gameService.getFreeGames()
         .subscribe((response: Game3D[]) => this.games = response);
     
-
-    console.log(this.games);
-
     const scen: Game3D = this.games[1];
     this.createScene();
+    this.createCamera();
+
     this.scene.background = new THREE.Color(scen.backColor);
 
     for(let j = 0; j < scen.objects.length; j++ ) {
-      console.log(scen.objects[j].type);
       this.createShape(scen.objects[j]);
     }
    
