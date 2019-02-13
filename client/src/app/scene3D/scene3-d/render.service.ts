@@ -9,7 +9,6 @@ import { Objet3D } from "../../../../../common/models/objet3D"
 export class RenderService {
 
 
-
   private container: HTMLDivElement;
 
   private camera: THREE.PerspectiveCamera;
@@ -25,7 +24,7 @@ export class RenderService {
 
   private light: THREE.Light;
   
-  private init = 50;
+  private initSize = 50;
 
   private fieldOfView = 75;
 
@@ -34,7 +33,8 @@ export class RenderService {
   private farClippingPane = 3000;
 
   public map: Map<string, THREE.Mesh>;
-
+  
+  
   private generateMap() {
     this.map = new Map();
     this.createCube();
@@ -61,7 +61,7 @@ export class RenderService {
   
   private createCube() {
 
-    const geometry = new THREE.BoxGeometry(this.init, this.init, this.init);
+    const geometry = new THREE.BoxGeometry(this.initSize, this.initSize, this.initSize);
 
     const cube = new THREE.Mesh(geometry);
  
@@ -70,7 +70,7 @@ export class RenderService {
 
   private createCylindre() {
 
-    const geometry = new THREE.CylinderGeometry(this.init, this.init);
+    const geometry = new THREE.CylinderGeometry(this.initSize, this.initSize);
 
     const cylindre = new THREE.Mesh(geometry);
 
@@ -78,7 +78,7 @@ export class RenderService {
   }
   private createTetrahedron() {
     
-    const geometry = new THREE.TetrahedronGeometry(this.init);
+    const geometry = new THREE.TetrahedronGeometry(this.initSize);
 
     const tetrahedron = new THREE.Mesh(geometry);
     
@@ -86,7 +86,7 @@ export class RenderService {
   }
   private createSphere() {
     
-    const geometry = new THREE.SphereGeometry(this.init);
+    const geometry = new THREE.SphereGeometry(this.initSize);
 
     const sphere = new THREE.Mesh(geometry);
     
@@ -94,7 +94,7 @@ export class RenderService {
   }
   private createCone() {
     
-    const geometry = new THREE.ConeGeometry(this.init, this.init, 50);
+    const geometry = new THREE.ConeGeometry(this.initSize, this.initSize, 50);
 
     const cone = new THREE.Mesh(geometry);
     
@@ -108,6 +108,10 @@ export class RenderService {
     this.light = new THREE.DirectionalLight(0xffffff, 1.0);
     this.light.position.set(1000,100,0);
     this.scene.add(this.light);
+    
+
+  }
+  private createCamera() {
     /* Camera */
     const aspectRatio = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
@@ -161,9 +165,9 @@ export class RenderService {
     this.container = container;
 
     this.generateMap();
-    
+
     this.createScene(scen);
-    
+    this.createCamera();
 
     for(let j = 0; j < scen.objects.length; j++ ) {
       this.createShape(scen.objects[j]);
