@@ -82,9 +82,9 @@ export class Game3DGeneratorService {
             type: this.randomShape(),
             color: this.randomInt(0x000000, 0xFFFFFF),
             position: {
-                x: this.randomInt(0, 200),
-                y: this.randomInt(0, 200),
-                z: this.randomInt(0, 200),
+                x: this.randomInt(-200, 200),
+                y: this.randomInt(-200, 200),
+                z: this.randomInt(-200, 300),
             },
             size: this.randomNumber(0.5, 1.5), // scale between 50% and 150% of a reference size
             rotation: {

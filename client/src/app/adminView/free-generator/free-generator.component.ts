@@ -3,7 +3,6 @@ import { GameService } from "src/app/services/game.service";
 import { ModalService } from "src/app/services/modal.service";
 import { IModal } from "src/app/models/modal";
 import { IGame3DForm } from "../../../../../common/models/game";
-import { Router } from "@angular/router";
 
 @Component({
   selector: "app-free-generator",
@@ -17,9 +16,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   private element: HTMLElement;
   @Input() public id: string;
 
-  public constructor(private router: Router,
-    private gameService: GameService,
-                     public el: ElementRef, private modal: ModalService) {
+  public constructor(private gameService: GameService, public el: ElementRef, private modal: ModalService) {
       this.element = el.nativeElement;
   }
 
@@ -55,7 +52,6 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     };
     this.gameService.createFreeGame(newGame);
     this.close();
-    this.router.navigate(["view3D"]);
   }
 
   public open(): void {

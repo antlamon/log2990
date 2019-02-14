@@ -20,11 +20,11 @@ export class RenderService {
 
   private scene: THREE.Scene;
 
-  private cameraZ = 400;
+  private cameraZ = 500;
 
   private light: THREE.Light;
   
-  private initSize = 50;
+  private initSize = 5;
 
   private fieldOfView = 75;
 
@@ -51,11 +51,11 @@ export class RenderService {
     shape.position.x = obj.position.x;
     shape.position.y = obj.position.y;
     shape.position.z = obj.position.z;
-    shape.scale.set(obj.size,obj.size, obj.size);
+    shape.scale.set(this.initSize*obj.size,this.initSize*obj.size, this.initSize*obj.size);
     shape.rotation.x = obj.rotation.x;
     shape.rotation.y = obj.rotation.y;
     shape.rotation.z = obj.rotation.z;
-    shape.material = new THREE.MeshBasicMaterial({ polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits:1, color: obj.color });
+    shape.material = new THREE.MeshPhongMaterial({color: obj.color }); 
     this.scene.add(shape);
   }
   
@@ -105,10 +105,11 @@ export class RenderService {
     /* Scene */
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(scene.backColor);
-    this.light = new THREE.DirectionalLight(0xffffff, 1.0);
-    this.light.position.set(1000,100,0);
+    this.createCamera();
+    this.scene.add( new THREE.HemisphereLight( 0x606060, 0x404040 ) );
+    this.light = new THREE.DirectionalLight( 0xffffff );
+    this.light.position.set( 0, 0, 1 );
     this.scene.add(this.light);
-    
 
   }
   private createCamera() {
@@ -131,6 +132,8 @@ export class RenderService {
 
   private startRenderingLoop() {
     this.renderer = new THREE.WebGLRenderer();
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.BasicShadowMap;
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
 
@@ -167,7 +170,7 @@ export class RenderService {
     this.generateMap();
 
     this.createScene(scen);
-    this.createCamera();
+    console.log(scen);
 
     for(let j = 0; j < scen.objects.length; j++ ) {
       this.createShape(scen.objects[j]);
