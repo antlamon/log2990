@@ -36,6 +36,7 @@ const obj3D: Objet3D = {
 
 const mock3DGame: Game3D = {
     name: "string",
+    id: 0,
     numObj: 13,
     objects: [obj3D],
     backColor: 0,    

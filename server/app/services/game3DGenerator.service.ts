@@ -33,18 +33,20 @@ export class Game3DGeneratorService {
         let backGroundColor: number = this.randomInt(0x0F0F0F, 0xFFFFFF); // we go for pale colors
         // tslint:disable-next-line:typedef
         for (let i = 0; i < form.objectQty; i++) {
-            randomObjects.push(this.generateRandom3Dobject());
-            //objet non un dessus des autres
-    //   for(let i = 0; i < scen.objects.length; i++) {
-    //     if(Math.pow(scen.objects[i].position.x-obj.position.x,2)+ Math.pow(obj.position.y-scen.objects[i].position.y,2) + Math.pow(obj.position.z-scen.objects[i].position.z,2)
-    //       < Math.pow(43,2)) {
-    //       valid = false;
-    //       }
-    //   }
-    //   if(valid) {
-    //     scen.objects.push(obj);
-
-    //     this.createShape(obj);
+            const obj: Objet3D = this.generateRandom3Dobject();
+            
+            let valid: boolean = true;
+            for(let i = 0; i < randomObjects.length; i++) {
+                if(Math.pow(randomObjects[i].position.x-obj.position.x,2)+ Math.pow(obj.position.y-randomObjects[i].position.y,2) + Math.pow(obj.position.z-randomObjects[i].position.z,2)
+                < Math.pow(43,2)) {
+                valid = false;
+                }
+            }
+            if(valid) {
+                randomObjects.push(obj);
+            } else {
+                i--;
+            }
     //   }
             while (!this.isEnoughContrast(backGroundColor, randomObjects[i].color)) {
                 backGroundColor = this.randomInt(0x0F0F0F, 0xFFFFFF);
@@ -82,11 +84,11 @@ export class Game3DGeneratorService {
             type: this.randomShape(),
             color: this.randomInt(0x000000, 0xFFFFFF),
             position: {
-                x: this.randomInt(0, 200),
-                y: this.randomInt(0, 200),
-                z: this.randomInt(0, 200),
+                x: this.randomInt(-300, 300),
+                y: this.randomInt(-300, 300),
+                z: this.randomInt(-300, 300),
             },
-            size: this.randomNumber(0.5, 1.5), // scale between 50% and 150% of a reference size
+            size: this.randomDecimal(0.5, 1.5), // scale between 50% and 150% of a reference size
             rotation: {
                 x: this.randomInt(0, 360),
                 y: this.randomInt(0, 360),
@@ -101,6 +103,12 @@ export class Game3DGeneratorService {
 
     private randomInt(min: number, max: number): number {
         return Math.floor(this.randomNumber(min, max));
+    }
+
+    private randomDecimal(min: number, max: number): number {
+
+        return Math.random() + min;
+        
     }
 
     private randomNumber(min: number, max: number): number {
