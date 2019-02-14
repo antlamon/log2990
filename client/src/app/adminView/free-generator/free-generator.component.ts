@@ -3,6 +3,7 @@ import { GameService } from "src/app/services/game.service";
 import { ModalService } from "src/app/services/modal.service";
 import { IModal } from "src/app/models/modal";
 import { IGame3DForm } from "../../../../../common/models/game";
+import { FileValidatorService } from "src/app/services/file-validator.service";
 
 @Component({
   selector: "app-free-generator",
@@ -16,8 +17,17 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   private element: HTMLElement;
   @Input() public id: string;
 
-  public constructor(private gameService: GameService, public el: ElementRef, private modal: ModalService) {
+  public gameName: string;
+
+  public noObj: string;
+
+  public constructor(
+    private gameService: GameService,
+    private fileValidator: FileValidatorService,
+    public el: ElementRef, private modal: ModalService) {
       this.element = el.nativeElement;
+      this.gameName = "";
+      this.noObj = "";
   }
 
   public ngOnInit(): void {
@@ -43,15 +53,21 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   }
   public submit(): void {
-    //mock 3D game
-    const newGame: IGame3DForm = {
-      name: "new 3D game",
-      objectType: "geometric",
-      objectQty: 10,
-      modifications: {add: true, delete: true, color: true} 
-    };
-    this.gameService.createFreeGame(newGame);
-    this.close();
+    this.clearErrorMessages();
+    
+    if(this.fileValidator.isValidGameName(this.gameName)) {
+      const newGame: IGame3DForm = {
+        name: "new 3D game",
+        objectType: "geometric",
+        objectQty: 150,
+        modifications: {add: true, delete: true, color: true} 
+      };
+      this.gameService.createFreeGame(newGame);
+      this.close();
+    } else {
+      this.validity(this.fileValidator.isValidGameName(this.gameName), "gameNameLabel", "Nom de jeu invalide.");
+
+    }
   }
 
   public open(): void {
@@ -63,5 +79,28 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   public close(): void {
     this.element.style.display = "none";
     document.body.classList.remove("modal-open");
+  }
+
+  private validity(condition: boolean, id: string, errorMessage: string): void {
+
+    if (condition) {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
+    } else {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "red";
+      this.showErrorMessage(errorMessage);
+    }
+  }
+  private showErrorMessage(error: string): void {
+    const errorBox: HTMLElement = document.createElement("span");
+    const errorMessage: Text = document.createTextNode(error);
+    errorBox.appendChild(errorMessage);
+    document.getElementById("errorsMessages").appendChild(errorBox);
+  }
+
+  private clearErrorMessages(): void {
+    const errors: HTMLElement = document.getElementById("errorsMessages");
+    while (errors.hasChildNodes()) {
+      errors.removeChild(errors.firstChild);
+    }
   }
 }
