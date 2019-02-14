@@ -8,6 +8,7 @@ import { Objet3D } from "../../../../../common/models/objet3D"
 @Injectable()
 export class RenderService {
 
+  public static readonly NB_SEGMENTS: number = 50; //to have circular objects
 
   private container: HTMLDivElement;
 
@@ -24,7 +25,7 @@ export class RenderService {
 
   private light: THREE.Light;
   
-  private initSize = 5;
+  private initSize = 20;
 
   private fieldOfView = 75;
 
@@ -51,7 +52,7 @@ export class RenderService {
     shape.position.x = obj.position.x;
     shape.position.y = obj.position.y;
     shape.position.z = obj.position.z;
-    shape.scale.set(this.initSize*obj.size,this.initSize*obj.size, this.initSize*obj.size);
+    shape.scale.set(obj.size,obj.size, obj.size);
     shape.rotation.x = obj.rotation.x;
     shape.rotation.y = obj.rotation.y;
     shape.rotation.z = obj.rotation.z;
@@ -70,7 +71,7 @@ export class RenderService {
 
   private createCylindre() {
 
-    const geometry = new THREE.CylinderGeometry(this.initSize, this.initSize);
+    const geometry = new THREE.CylinderGeometry(this.initSize, this.initSize, this.initSize, RenderService.NB_SEGMENTS);
 
     const cylindre = new THREE.Mesh(geometry);
 
@@ -86,7 +87,7 @@ export class RenderService {
   }
   private createSphere() {
     
-    const geometry = new THREE.SphereGeometry(this.initSize);
+    const geometry = new THREE.SphereGeometry(this.initSize, RenderService.NB_SEGMENTS,RenderService.NB_SEGMENTS);
 
     const sphere = new THREE.Mesh(geometry);
     
@@ -94,7 +95,7 @@ export class RenderService {
   }
   private createCone() {
     
-    const geometry = new THREE.ConeGeometry(this.initSize, this.initSize, 50);
+    const geometry = new THREE.ConeGeometry(this.initSize, this.initSize, RenderService.NB_SEGMENTS);
 
     const cone = new THREE.Mesh(geometry);
     
