@@ -169,9 +169,8 @@ export class RenderService {
     this.container = container;
 
     this.generateMap();
-
     this.createScene(scen);
-    console.log(scen);
+    
 
     for(let j = 0; j < scen.originalObjects.length; j++ ) {
       this.createShape(scen.originalObjects[j]);
