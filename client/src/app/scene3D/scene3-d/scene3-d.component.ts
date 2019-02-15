@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, HostListener, Input} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import {RenderService} from './render.service';
 import { Game3D } from "../../../../../common/models/game3D";
 
@@ -11,12 +11,16 @@ import { Game3D } from "../../../../../common/models/game3D";
 export class Scene3DComponent implements AfterViewInit {
 
   @Input() game: Game3D;
+  @Input() isCardMode: boolean;
+  public imageBase64: string;
 
-  public constructor(private renderService: RenderService) {};
+  public constructor(private renderService: RenderService) {
+    this.isCardMode = false;
+  };
 
 
   private get container(): HTMLDivElement {
-    return this.containerRef.nativeElement;
+      return this.containerRef.nativeElement;
   }
 
   @ViewChild('container')
@@ -26,8 +30,15 @@ export class Scene3DComponent implements AfterViewInit {
   public onResize() {
     this.renderService.onResize();
   }
+
   public ngAfterViewInit() {
     this.renderService.initialize(this.container, this.game);
+    this.imageBase64 = ((this.container as any).children[0] as HTMLCanvasElement).toDataURL();
+    if(this.isCardMode){
+      this.container.style.display = "none";
+    } else {
+      this.container.style.display = "block";
+    }
   }
 
 }
