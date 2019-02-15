@@ -69,7 +69,7 @@ export class GameService {
     return this.http.delete(url, httpOptions);
   }
 
-  public deleteFreeGame(game: IGame): Observable<{}> {
+  public deleteFreeGame(game: Game3D): Observable<{}> {
     // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
