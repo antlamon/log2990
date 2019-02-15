@@ -62,7 +62,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       const newGame: IGame3DForm = {
         name: "new 3D game",
         objectType: "geometric",
-        objectQty: 150,
+        objectQty: 10,
         modifications: {add: true, delete: true, color: true} 
       };
       this.gameService.createFreeGame(newGame);

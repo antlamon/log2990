@@ -9,7 +9,7 @@ import { Game3DGeneratorService } from "./game3Dgenerator.service";
 
 const TYPE_ERROR: Error = {
     name: "Invalid game3D type: ",
-    message: "The type chosen for the new 3D game is not valid. "
+    message: "The type chosen for the new 3D game is not valid."
 };
 
 const mockBadGameType: IGame3DForm = {
@@ -38,7 +38,8 @@ const mock3DGame: Game3D = {
     name: "string",
     id: 0,
     numObj: 13,
-    objects: [obj3D],
+    originalObjects: [obj3D],
+    modifiedObjects: [],
     backColor: 0,    
     solo: {first:222, second: 223, third: 21312},
     multi: {first:222, second: 223, third: 21312}

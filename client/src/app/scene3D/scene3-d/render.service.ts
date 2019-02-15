@@ -8,7 +8,7 @@ import { Objet3D } from "../../../../../common/models/objet3D"
 @Injectable()
 export class RenderService {
 
-  public static readonly NB_SEGMENTS: number = 50; //to have circular objects
+  public static readonly NB_SEGMENTS: number = 50; //to have circular originalObjects
 
   private container: HTMLDivElement;
 
@@ -173,8 +173,8 @@ export class RenderService {
     this.createScene(scen);
     console.log(scen);
 
-    for(let j = 0; j < scen.objects.length; j++ ) {
-      this.createShape(scen.objects[j]);
+    for(let j = 0; j < scen.originalObjects.length; j++ ) {
+      this.createShape(scen.originalObjects[j]);
     }
    
     this.initStats();

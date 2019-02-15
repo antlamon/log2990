@@ -9,7 +9,7 @@ export class FileValidatorService {
   private readonly IMAGE_HEIGHT: number = 480;
   private readonly MIN_LENGTH: number = 3;
   private readonly MAX_LENGTH: number = 15;
-  private readonly MIN_OBJ: number = 50;
+  private readonly MIN_OBJ: number = 10;
   private readonly MAX_OBJ: number = 200;
 
   public constructor() { }

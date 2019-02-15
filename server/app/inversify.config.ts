@@ -12,6 +12,8 @@ import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
 import { Game3DGeneratorService } from "./services/game3Dgenerator.service";
+import { Game3DModificatorService } from "./services/game3DModificator.service";
+import { ObjectGeneratorService } from "./services/objectGenerator.service";
 
 const container: Container = new Container();
 
@@ -29,6 +31,8 @@ container.bind(TYPES.GameListController).to(GameListController);
 container.bind(TYPES.GameListService).to(GameListService);
 
 container.bind(TYPES.Game3DGeneratorService).to(Game3DGeneratorService);
+container.bind(TYPES.Game3DModificatorService).to(Game3DModificatorService);
+container.bind(TYPES.ObjectGeneratorService).to(ObjectGeneratorService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();

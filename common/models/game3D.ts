@@ -6,7 +6,8 @@ export interface Game3D{
     name: string,
     id: number,
     numObj: number,
-    objects: Objet3D[]
+    originalObjects: Objet3D[],
+    modifiedObjects: Objet3D[],
     backColor: number,
     solo: ITop3,
     multi: ITop3
