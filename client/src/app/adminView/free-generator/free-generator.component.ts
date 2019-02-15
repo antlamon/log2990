@@ -17,8 +17,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   private element: HTMLElement;
   @Input() public id: string;
 
-  public gameName: string;
-
+  public gameNam: string;
+  
   public noObj: string;
 
   public constructor(
@@ -26,7 +26,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     private fileValidator: FileValidatorService,
     public el: ElementRef, private modal: ModalService) {
       this.element = el.nativeElement;
-      this.gameName = "";
+      this.gameNam = "";
       this.noObj = "";
   }
 
@@ -55,7 +55,10 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   public submit(): void {
     this.clearErrorMessages();
     
-    if(this.fileValidator.isValidGameName(this.gameName)) {
+    if(this.fileValidator.isValidGameName(this.gameNam) &&
+        this.fileValidator.isValidObjNb(this.noObj) &&
+        this.hasType() && 
+        this.hasModifications()) {
       const newGame: IGame3DForm = {
         name: "new 3D game",
         objectType: "geometric",
@@ -65,9 +68,22 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       this.gameService.createFreeGame(newGame);
       this.close();
     } else {
-      this.validity(this.fileValidator.isValidGameName(this.gameName), "gameNameLabel", "Nom de jeu invalide.");
-
+      this.validity(this.fileValidator.isValidGameName(this.gameNam), "gameName", "Nom de jeu invalide.");
+      this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 50 et 200");
+      this.validity(this.hasType(),"typeObj", "Les objets doivent avoir un type");
+      this.validity(this.hasModifications(),"typeModif", "Il faut choisir au moins un type de modifications");
     }
+  }
+  public hasModifications(): boolean {
+    (document.getElementById("typeModif") as HTMLOListElement);
+    return true;
+
+  }
+
+  public hasType(): boolean {
+
+    (document.getElementById("typeObj") as HTMLOListElement);
+    return true;
   }
 
   public open(): void {
@@ -94,11 +110,11 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     const errorBox: HTMLElement = document.createElement("span");
     const errorMessage: Text = document.createTextNode(error);
     errorBox.appendChild(errorMessage);
-    document.getElementById("errorsMessages").appendChild(errorBox);
+    document.getElementById("errorMessages").appendChild(errorBox);
   }
 
   private clearErrorMessages(): void {
-    const errors: HTMLElement = document.getElementById("errorsMessages");
+    const errors: HTMLElement = document.getElementById("errorMessages");
     while (errors.hasChildNodes()) {
       errors.removeChild(errors.firstChild);
     }

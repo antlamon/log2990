@@ -5,10 +5,10 @@
     <form id="formSV">
       <div class="form-grid">
         <div>
-          <p id="gameNameLabel">Nom du jeu</p>
+          <p id="gameName">Nom du jeu</p>
         </div>
         <div class="rightColumn">
-          <input [(ngModel)]="gameName" placeholder="Nom du jeu" name="gameNAME"/>
+          <input [(ngModel)]="gameNam" placeholder="Nom du jeu" name="gameNAM"/>
         </div>
         <div>
           <p id="typeObj">Type d'objets</p>
@@ -40,7 +40,7 @@
       <button type="submit" id="submitButton" (click)="submit()">Soumettre </button>
       <button (click)="close()"> Annuler </button>
     </div>
-    <div id="errorsMessages" class="errorsDiv"></div>
+    <div id="errorMessages" class="errorsDiv"></div>
   </div>
 </div>
 <div class="form-background"></div>
