@@ -1,7 +1,7 @@
 import { Server } from "http";
 import { injectable } from "inversify";
 import * as SocketIO from "socket.io";
-import { NewGameMessage, Point } from "../../../common/communication/socketMessages";
+import { NewGameMessage, Point } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { container } from "../inversify.config";
 import { ConvertImage } from "../services/convertImage.service";
@@ -21,7 +21,7 @@ export class SocketIdentificationManager {
             const identificationService: IdentificationService =
                 new IdentificationService(convertService, data.originalImagePath, data.modifiedImagePath, data.differencesImagePath);
             this.socketServer.on(SocketsEvents.CHECK_DIFFERENCE, (point: Point, fn: Function) => {
-                fn(identificationService.getDifference(point.x, point.y));
+                fn(identificationService.getDifference(point));
             });
         });
     }
