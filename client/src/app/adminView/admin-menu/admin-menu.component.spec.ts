@@ -10,6 +10,7 @@ import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "../../services/modal.service";
+import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
@@ -23,7 +24,8 @@ describe("AdminMenuComponent", () => {
         FreeGeneratorComponent,
         SimpleGeneratorComponent,
         InitialComponent,
-        ListViewComponent
+        ListViewComponent,
+        Scene3DComponent
       ],
       imports: [
         AppRoutingModule,
@@ -32,9 +34,7 @@ describe("AdminMenuComponent", () => {
       ],
       providers: [ModalService, FreeGeneratorComponent]
     })
-    .compileComponents().then(() => {}, (error: Error) => {
-      console.error(error);
-    });
+    .compileComponents();
   }));
 
   beforeEach(() => {
