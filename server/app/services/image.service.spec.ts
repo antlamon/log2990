@@ -1,6 +1,7 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import { readFileSync } from "fs";
+import { BASE_ID } from "../../../common/communication/message";
 import { PATHS } from "../path";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 import { ImageService } from "./image.service";
@@ -13,7 +14,7 @@ describe ( "imageService tests", () => {
     const service: ImageService = new ImageService(convertService);
     const path1: string = PATHS.TEST_IMAGES_PATH + "image_test_1.bmp";
     const path2: string = PATHS.TEST_IMAGES_PATH + "image_test_2.bmp";
-    const path3: string = PATHS.TEST_IMAGES_PATH + "/wrong_size_image.bmp";
+    const path3: string = PATHS.TEST_IMAGES_PATH + "wrong_size_image.bmp";
     const path4: string = PATHS.TEST_IMAGES_PATH + "image_result.bmp";
     const path5: string = PATHS.TEST_IMAGES_PATH + "expectedImage.bmp";
     const path6: string = PATHS.TEST_IMAGES_PATH + "image_wrongformat.bmp";
@@ -117,7 +118,7 @@ describe ( "imageService tests", () => {
         it("Should create an result.bmp file", async () => {
             const NB_DIFFERENCES: number = 7;
             sandbox.on(service, "getNbDifferences", () => NB_DIFFERENCES);
-            expect(service.getDifferencesImage("testImage", readFileSync(path1), readFileSync(path2)).body).to.equal("testImage");
+            expect(service.getDifferencesImage("testImage", readFileSync(path1), readFileSync(path2)).title).to.equal(BASE_ID);
         });
 
         it("Should return a string with a error message for the format", () => {

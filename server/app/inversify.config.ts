@@ -6,6 +6,7 @@ import { ImageController } from "./controllers/image.controller";
 import { Server } from "./server";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
+import { DatabaseService } from "./services/database.service";
 import { GameListService } from "./services/game-list.service";
 import { ImageService } from "./services/image.service";
 import { UsersManager } from "./services/users.service";
@@ -29,5 +30,5 @@ container.bind(TYPES.GameListService).to(GameListService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();
-
+container.bind(TYPES.DatabaseService).to(DatabaseService).inSingletonScope();
 export { container };

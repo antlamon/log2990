@@ -13,3 +13,8 @@ export interface ISimpleForm {
     originalImage: File;
     modifiedImage: File;
 }
+export interface IFullGame {
+    card: IGame;
+    imgDiffURL: string;
+    imgCmpURL: string;
+}

@@ -2,17 +2,25 @@ import { fail } from "assert";
 import Axios, { AxiosResponse } from "axios";
 import chai = require("chai");
 import spies = require("chai-spies");
+import { Collection, Db, WriteOpResult } from "mongodb";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { IGame, ISimpleForm } from "../../../common/models/game";
+import { IFullGame, IGame, ISimpleForm } from "../../../common/models/game";
 import { container } from "../inversify.config";
-import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
+import { FREEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { GameListService, MulterFile } from "./game-list.service";
 import { ImageService } from "./image.service";
 
+// tslint:disable-next-line:typedef
+const mongoMock = require("mongo-mock");
+mongoMock.max_delay = 0;
+// tslint:disable-next-line:typedef
+const mongoClient = mongoMock.MongoClient;
+
+let mockCollection: Collection;
 const mockedNewImageMessage: Message = {
-    title: BASE_ID,
+    title: BASE_ID, // Title is error_id to not add the game to the databse
     body: "newImageName",
 };
 
@@ -26,6 +34,11 @@ const mockedGame: IGame = {
     imageURL: "",
     solo: { first: 1, second: 2, third: 3 },
     multi: { first: 1, second: 2, third: 3 },
+};
+const mockedFullGame: IFullGame = {
+    card: mockedGame,
+    imgDiffURL: " ",
+    imgCmpURL: " ",
 };
 
 const mockedSimpleGame: ISimpleForm = {
@@ -44,15 +57,13 @@ const mockedMulterFile: MulterFile = {
     buffer: Buffer.alloc(0),
     fileName: "test",
 };
-
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
-
 describe("GameList service", () => {
     let service: GameListService;
     const sandbox: ChaiSpies.Sandbox = chai.spy.sandbox();
 
-    before(() => {
+    before((done: Mocha.Done) => {
         container.snapshot();
         const imageService: ImageService = container.get<ImageService>(TYPES.ImageService);
         const sockerController: SocketServerManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
@@ -60,9 +71,17 @@ describe("GameList service", () => {
         sandbox.on(sockerController, "emitEvent", () => null);
         container.rebind(TYPES.ImageService).toConstantValue(imageService);
         container.rebind(TYPES.SocketServerManager).toConstantValue(sockerController);
+        container.rebind(TYPES.GameListService).to(GameListService);
         service = container.get<GameListService>(TYPES.GameListService);
+        // tslint:disable-next-line:typedef
+        mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db ) => {
+            mockCollection = db.collection(GameListService.SIMPLE_COLLECTION);
+            service["simpleCollection"] = mockCollection;
+            service["simpleCollection"].insert(mockedFullGame).then( (res: WriteOpResult) => {
+                done();
+            });
+        });
     });
-
     after(() => {
         container.restore();
         sandbox.restore();
@@ -72,7 +91,7 @@ describe("GameList service", () => {
         it("Getting simple games should return SIMPLEGAMES", async () => {
             service.getSimpleGames().then(
                 (games: IGame[]) => {
-                    expect(games).to.eql(SIMPLEGAMES);
+                    expect(games[0]).to.eql(mockedFullGame.card);
                 },
                 () => fail(),
             );
@@ -81,7 +100,7 @@ describe("GameList service", () => {
         it("Getting free games should return FREEGAMES", async () => {
             service.getFreeGames().then(
                 (games: IGame[]) => {
-                    expect(games).to.eql(FREEGAMES);
+                    expect(games).to.eql([]);
                 },
                 () => fail(),
             );
@@ -92,7 +111,7 @@ describe("GameList service", () => {
         it("Adding a free game should return the game", async () => {
             service.addFreeGame(mockedGame).then(
                 (message: IGame) => {
-                    expect(message).to.eql(mockedGame);
+                    expect(message.name).to.eql(mockedGame.name);
                 },
                 () => fail(),
             );
@@ -104,7 +123,7 @@ describe("GameList service", () => {
                 sandbox.restore(Axios, "post");
             });
 
-            it("Adding a simple game should return the game", async () => {
+            it("Adding a simple game should return a valid message", async () => {
                 sandbox.on(Axios, "post", () => {
                     return {
                         data: mockedNewImageMessage,
@@ -136,29 +155,19 @@ describe("GameList service", () => {
 
     describe("Deleting games", () => {
         describe("Deleting simple games", () => {
-            it("Deleting a simple game should return a relevant message", async () => {
-                const simpleGame: IGame = {
-                    name: "simpleGame",
-                    imageURL: "",
-                    solo: { first: 1, second: 2, third: 3 },
-                    multi: { first: 1, second: 2, third: 3 },
-                };
-                SIMPLEGAMES.push(simpleGame);
-                service.deleteSimpleGame("simpleGame").then(
+            it("Deleting a simple game should return a relevant message",  async () => {
+                service.deleteSimpleGame("testSimpleGame").then(
                     (message: Message) => {
-                        expect(message.body).to.equal("Le jeu simpleGame a été supprimé");
-                    },
-                    () => fail(),
-                );
+                        expect(message.body).to.equal("Le jeu testSimpleGame a été supprimé!");
+                    });
             });
 
-            it("Deleting a simple game that doesnt exist should return a relevant message", async () => {
-                service.deleteSimpleGame("simpleGame").then(
+            it("Deleting a simple game that doesnt exist should return a relevant message",  (done: Mocha.Done) => {
+                service.deleteSimpleGame("simpleGame3").then(
                     (message: Message) => {
-                        expect(message.body).to.equal("Le jeu simpleGame n'existe pas!");
-                    },
-                    () => fail(),
-                );
+                        expect(message.body).to.equal("Le jeu simpleGame3 n'existe pas!");
+                        done();
+                    });
             });
         });
 
@@ -179,13 +188,12 @@ describe("GameList service", () => {
                 );
             });
 
-            it("Deleting a free game that doesnt exist should return a relevant message", async () => {
+            it("Deleting a free game that doesnt exist should return a relevant message", (done: Mocha.Done) => {
                 service.deleteFreeGame("freeGame").then(
                     (message: Message) => {
                         expect(message.body).to.equal("Le jeu freeGame n'existe pas!");
-                    },
-                    () => fail(),
-                );
+                        done();
+                    });
             });
         });
     });
