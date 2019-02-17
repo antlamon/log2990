@@ -41,4 +41,33 @@ describe("FreeGeneratorComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  describe("Test for the function hasModification", () => {
+    it("hasModifications should return false if no modification selected", () => {
+      expect(component.hasModifications()).toEqual(false);
+    });
+    it("hasModifications should return true if a modification is selected", () => {
+      component["modification"][0] = true;
+      expect(component.hasModifications()).toEqual(true);
+    });
+  });
+  describe("Test for the function changeModif", () => {
+    it("changeModif should not modifiy an modification if index out of bounds", () => {
+      const oldModi: boolean[] = component["modification"];
+      component.changeModif(-1);
+      component.changeModif(component.nbModification);
+      expect(oldModi).toEqual(component["modification"]);
+    });
+    it("changeModif should modify the slectd modification if index is valid", () => {
+      component.changeModif(0);
+      expect(component["modification"][0]).toEqual(true);
+    });
+  });
+  describe("Test for the function changetype", () => {
+    it("changetype should modify the selectedtype", () => {
+      component.changeType("newType");
+      expect(component["selectedType"]).toEqual("newType");
+    });
+  });
+
 });
