@@ -13,3 +13,5 @@ export interface Game3D{
     multi: ITop3
 
 }
+export const GEOMETRIC_TYPE_NAME: string = "geometric";
+export const THEMATIC_TYPE_NAME: string = "thematic";
