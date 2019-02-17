@@ -12,7 +12,7 @@ import { FileValidatorService } from "src/app/services/file-validator.service";
   styleUrls: ["./free-generator.component.css"]
 })
 export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
-  public gameNam: string;
+  public gameName: string;
   public noObj: string;
   @Input() public id: string;
   public nbModification: number = 3;
@@ -29,7 +29,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     private fileValidator: FileValidatorService,
     public el: ElementRef, private modal: ModalService) {
       this.element = el.nativeElement;
-      this.gameNam = "";
+      this.gameName = "";
       this.noObj = "";
       this.modification = new Array(this.nbModification).fill(false);
       this.type1 = GEOMETRIC_TYPE_NAME;
@@ -62,19 +62,19 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   public submit(): void {
     this.clearErrorMessages();
 
-    if (this.fileValidator.isValidGameName(this.gameNam) &&
+    if (this.fileValidator.isValidGameName(this.gameName) &&
         this.fileValidator.isValidObjNb(this.noObj) &&
         this.hasModifications()) {
       const newGame: IGame3DForm = {
-        name: "new 3D game",
+        name: this.gameName,
         objectType: this.selectedType,
-        objectQty: 10,
+        objectQty: +this.noObj,
         modifications: {add: this.modification[0], delete: this.modification[1], color: this.modification[this.nbModification - 1]}
       };
       this.gameService.createFreeGame(newGame);
       this.close();
     } else {
-      this.validity(this.fileValidator.isValidGameName(this.gameNam), "gameName", "Nom de jeu invalide.");
+      this.validity(this.fileValidator.isValidGameName(this.gameName), "gameName", "Nom de jeu invalide.");
       this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 50 et 200");
       this.validity(this.hasModifications(), "typeModif", "Il faut choisir au moins un type de modifications");
     }
@@ -101,6 +101,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   public close(): void {
     this.element.style.display = "none";
+    this.resetForm();
     document.body.classList.remove("modal-open");
   }
 
@@ -125,5 +126,9 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     while (errors.hasChildNodes()) {
       errors.removeChild(errors.firstChild);
     }
+  }
+  private resetForm(): void {
+    this.noObj = "";
+    this.gameName = "";
   }
 }

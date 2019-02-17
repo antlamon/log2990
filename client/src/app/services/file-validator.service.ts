@@ -34,6 +34,7 @@ export class FileValidatorService {
   }
   public isValidObjNb(nbObj: string): boolean {
     const nb: number = +nbObj;
+
     return this.containOnlyNumeric(nbObj) && nb <= this.MAX_OBJ && nb >= this.MIN_OBJ;
   }
 }
