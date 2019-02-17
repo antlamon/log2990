@@ -76,7 +76,7 @@ export class GameService {
         "Content-Type": "application/json"
       })
     };
-    const url: string = this.SIMPLE_URL + "?name=" + game.name;
+    const url: string = this.FREE_URL + "?name=" + game.name;
 
     return this.http.delete(url, httpOptions);
   }

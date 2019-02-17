@@ -45,4 +45,9 @@ export class ListViewComponent implements OnInit {
         .subscribe((response: Game3D[]) => this.freeGames = response);
   }
 
+  public deleteFreeGames(game: Game3D): void {
+    // faudra afficher le message
+    this.gameService.deleteFreeGame(game).subscribe();
+  }
+
 }

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { Scene3DComponent } from "./scene3-d.component";
+import { RenderService } from "./render.service";
 
 describe("Scene3DComponent", () => {
   let component: Scene3DComponent;
@@ -8,7 +9,8 @@ describe("Scene3DComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ Scene3DComponent ]
+      declarations: [ Scene3DComponent ],
+      providers: [RenderService]
     })
     .compileComponents();
   }));
@@ -19,7 +21,4 @@ describe("Scene3DComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
 });
