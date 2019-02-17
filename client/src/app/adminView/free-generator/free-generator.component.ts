@@ -3,6 +3,7 @@ import { GameService } from "src/app/services/game.service";
 import { ModalService } from "src/app/services/modal.service";
 import { IModal } from "src/app/models/modal";
 import { IGame3DForm } from "../../../../../common/models/game";
+import { GEOMETRIC_TYPE_NAME, THEMATIC_TYPE_NAME } from "../../../../../common/models/game3D";
 import { FileValidatorService } from "src/app/services/file-validator.service";
 
 @Component({
@@ -11,15 +12,17 @@ import { FileValidatorService } from "src/app/services/file-validator.service";
   styleUrls: ["./free-generator.component.css"]
 })
 export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
+  public gameNam: string;
+  public noObj: string;
+  @Input() public id: string;
+  public nbModification: number = 3;
+  public type1: string;
+  public type2: string;
 
   private modalRef: FreeGeneratorComponent;
-
   private element: HTMLElement;
-  @Input() public id: string;
-
-  public gameNam: string;
-  
-  public noObj: string;
+  private modification: boolean[];
+  private selectedType: string;
 
   public constructor(
     private gameService: GameService,
@@ -28,6 +31,10 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       this.element = el.nativeElement;
       this.gameNam = "";
       this.noObj = "";
+      this.modification = new Array(this.nbModification).fill(false);
+      this.type1 = GEOMETRIC_TYPE_NAME;
+      this.type2 = THEMATIC_TYPE_NAME;
+      this.selectedType = this.type1;
   }
 
   public ngOnInit(): void {
@@ -54,36 +61,36 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
   public submit(): void {
     this.clearErrorMessages();
-    
-    if(this.fileValidator.isValidGameName(this.gameNam) &&
+
+    if (this.fileValidator.isValidGameName(this.gameNam) &&
         this.fileValidator.isValidObjNb(this.noObj) &&
-        this.hasType() && 
         this.hasModifications()) {
       const newGame: IGame3DForm = {
         name: "new 3D game",
-        objectType: "geometric",
+        objectType: this.selectedType,
         objectQty: 10,
-        modifications: {add: true, delete: true, color: true} 
+        modifications: {add: this.modification[0], delete: this.modification[1], color: this.modification[this.nbModification - 1]}
       };
       this.gameService.createFreeGame(newGame);
       this.close();
     } else {
       this.validity(this.fileValidator.isValidGameName(this.gameNam), "gameName", "Nom de jeu invalide.");
       this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 50 et 200");
-      this.validity(this.hasType(),"typeObj", "Les objets doivent avoir un type");
-      this.validity(this.hasModifications(),"typeModif", "Il faut choisir au moins un type de modifications");
+      this.validity(this.hasModifications(), "typeModif", "Il faut choisir au moins un type de modifications");
     }
   }
   public hasModifications(): boolean {
-    (document.getElementById("typeModif") as HTMLOListElement);
-    return true;
+    return this.modification.includes(true);
 
   }
+  public changeModif( nModif: number): void {
+    if (nModif >= 0 && nModif < this.nbModification) {
+      this.modification[nModif] = !this.modification[nModif];
+    }
+  }
 
-  public hasType(): boolean {
-
-    (document.getElementById("typeObj") as HTMLOListElement);
-    return true;
+  public changeType(newType: string): void {
+    this.selectedType = newType;
   }
 
   public open(): void {

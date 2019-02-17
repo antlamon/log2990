@@ -18,3 +18,5 @@ export interface Scene3D{
     objects: Objet3D[],
     backColor: number
 }
+export const GEOMETRIC_TYPE_NAME: string = "geometric";
+export const THEMATIC_TYPE_NAME: string = "thematic";
