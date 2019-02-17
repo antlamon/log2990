@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { TYPES } from "../types"
-import { Game3D } from "../../../common/models/game3D";
+import { Game3D, Scene3D } from "../../../common/models/game3D";
 import { IGame3DForm } from "../../../common/models/game";
 import { Objet3D } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
@@ -56,14 +56,15 @@ export class Game3DGeneratorService {
                 backGroundColor = this.objectGenerator.randomInt(0x0F0F0F, 0xFFFFFF);
             }
         }
-
+        const scene: Scene3D = { modified: false,
+            objects: randomObjects,
+            numObj: form.objectQty,
+            backColor: backGroundColor }
         return {
             name: form.name,
             id: Game3DGeneratorService.id++,
-            numObj: form.objectQty,
-            originalObjects: randomObjects,
-            modifiedObjects: this.game3DModificator.createModifScene(randomObjects, form.objectType, form.modifications),
-            backColor: backGroundColor,       
+            originalScene: scene,
+            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications),    
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
         };

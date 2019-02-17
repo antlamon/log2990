@@ -4,7 +4,7 @@ import { IGame3DForm } from "../../../common/models/game";
 import { container } from "../inversify.config";
 import { Objet3D } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
-import { Game3D } from "../../../common/models/game3D";
+import { Game3D, Scene3D } from "../../../common/models/game3D";
 import { Game3DGeneratorService } from "./game3Dgenerator.service";
 
 const TYPE_ERROR: Error = {
@@ -32,15 +32,20 @@ const obj3D: Objet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0}
-}
+};
+
+const mockScene: Scene3D = {
+    modified: false,
+    backColor: 0x00000,
+    objects: [obj3D],
+    numObj: 1
+};
 
 const mock3DGame: Game3D = {
     name: "string",
     id: 0,
-    numObj: 13,
-    originalObjects: [obj3D],
-    modifiedObjects: [],
-    backColor: 0,    
+    originalScene: mockScene,
+    modifiedScene: mockScene,  
     solo: {first:222, second: 223, third: 21312},
     multi: {first:222, second: 223, third: 21312}
 };

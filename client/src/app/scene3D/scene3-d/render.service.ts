@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as THREE from 'three';
-import { Game3D } from "../../../../../common/models/game3D"
+import { Scene3D } from "../../../../../common/models/game3D"
 import { Objet3D } from "../../../../../common/models/objet3D"
 
 // import Stats = require('stats.js');
@@ -102,7 +102,7 @@ export class RenderService {
     this.map.set("cone", cone);
   }
 
-  private createScene(scene: Game3D) {
+  private createScene(scene: Scene3D) {
     /* Scene */
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(scene.backColor);
@@ -164,7 +164,7 @@ export class RenderService {
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
   }
 
-  public initialize(container: HTMLDivElement, scen: Game3D) {
+  public initialize(container: HTMLDivElement, scen: Scene3D) {
     
     this.container = container;
 
@@ -172,8 +172,8 @@ export class RenderService {
     this.createScene(scen);
     
 
-    for(let j = 0; j < scen.originalObjects.length; j++ ) {
-      this.createShape(scen.originalObjects[j]);
+    for(let j = 0; j < scen.objects.length; j++ ) {
+      this.createShape(scen.objects[j]);
     }
    
     this.initStats();

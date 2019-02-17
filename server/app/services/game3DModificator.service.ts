@@ -2,6 +2,7 @@ import { injectable, inject } from "inversify";
 import { TYPES } from "../types"
 import { Objet3D } from "../../../common/models/objet3D";
 import { ObjectGeneratorService } from "./objectGenerator.service";
+import { Scene3D } from "../../../common/models/game3D";
 
 
 @injectable()
@@ -14,15 +15,15 @@ export class Game3DModificatorService {
 
     public constructor(@inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
-    public createModifScene(originalObjects: Objet3D[], typeObj: string, 
-        typeModif:  {add: boolean, delete: boolean, color: boolean}): Objet3D[] {
+    public createModifScene(originalScene: Scene3D, typeObj: string, 
+        typeModif:  {add: boolean, delete: boolean, color: boolean}): Scene3D {
         
         const modifiedObjects: Objet3D[] = [];
-        const indexModif: number[] = this.randomIndex(originalObjects.length);
+        const indexModif: number[] = this.randomIndex(originalScene.objects.length);
         
-        for(let i: number = 0; i < originalObjects.length; i++) {
+        for(let i: number = 0; i < originalScene.objects.length; i++) {
 
-            let newObj: Objet3D | null = originalObjects[i];
+            let newObj: Objet3D | null = originalScene.objects[i];
 
             for(let no of indexModif) {
                 if(no === i) {                  
@@ -33,7 +34,11 @@ export class Game3DModificatorService {
                 modifiedObjects.push(newObj);
             }
         }
-        return modifiedObjects;
+        return {modified: true,
+                numObj: modifiedObjects.length,
+                objects: modifiedObjects,
+                backColor: originalScene.backColor };
+
     }
     
     private createDifference(obj: Objet3D, objects: Objet3D[], typeObj: string, typeModif:  {add: boolean, delete: boolean, color: boolean}): Objet3D | null {

@@ -5,11 +5,16 @@ export interface Game3D{
 
     name: string,
     id: number,
-    numObj: number,
-    originalObjects: Objet3D[],
-    modifiedObjects: Objet3D[],
-    backColor: number,
+    originalScene: Scene3D,
+    modifiedScene: Scene3D,
     solo: ITop3,
     multi: ITop3
 
+}
+
+export interface Scene3D{
+    modified: boolean,
+    numObj: number,
+    objects: Objet3D[],
+    backColor: number
 }

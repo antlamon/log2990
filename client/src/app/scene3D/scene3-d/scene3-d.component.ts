@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, HostListener, Input } from '@angular/core';
 import {RenderService} from './render.service';
-import { Game3D } from "../../../../../common/models/game3D";
+import { Scene3D } from "../../../../../common/models/game3D";
 
 @Component({
   selector: 'app-scene3-d-component',
@@ -10,7 +10,7 @@ import { Game3D } from "../../../../../common/models/game3D";
 
 export class Scene3DComponent implements AfterViewInit {
 
-  @Input() game: Game3D;
+  @Input() game: Scene3D;
   @Input() isCardMode: boolean;
   public imageBase64: string;
 
