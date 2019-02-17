@@ -63,7 +63,7 @@ const obj3D8: Objet3D = {
 }
 
 const typeGeometric: string = "geometric";
-const typeTexture: string = "textural";
+const typeTexture: string = "themed";
 
 const mockTypeModifAdd: {add: boolean, delete: boolean, color: boolean} = {add: true, delete: false, color: false};
 const mockTypeModifDelete: {add: boolean, delete: boolean, color: boolean} = {add: false, delete: true, color: false};
