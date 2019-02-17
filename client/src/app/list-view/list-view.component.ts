@@ -3,7 +3,7 @@ import { GameService } from "../services/game.service";
 import { IGame } from "../../../../common/models/game";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-import { Game3D, Scene3D } from "../../../../common/models/game3D";
+import { Game3D } from "../../../../common/models/game3D";
 
 @Component({
   selector: "app-list-view",
@@ -14,7 +14,7 @@ import { Game3D, Scene3D } from "../../../../common/models/game3D";
 export class ListViewComponent implements OnInit {
 
   public simpleGames: IGame[];
-  public freeGames: Scene3D[];
+  public freeGames: Game3D[];
   @Input() public isAdminMode: Boolean;
 
   public constructor(private gameService: GameService, private socket: SocketService) {
@@ -42,11 +42,13 @@ export class ListViewComponent implements OnInit {
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe((response: Game3D[]) => {
-          for(let res of response) {
-            this.freeGames.push(res.originalScene);
-          }
-        });
+        .subscribe((response: Game3D[]) => this.freeGames = response
+        // {
+        //   this.freeGames = [];
+        //   for(let res of response) {
+        //     this.freeGames.push(res.originalScene);
+        //   }}
+        );
   }
 
   public deleteFreeGames(game: Game3D): void {
