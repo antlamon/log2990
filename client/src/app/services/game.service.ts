@@ -54,8 +54,7 @@ export class GameService {
         "Content-Type": "application/json"
       })
     };
-    this.http.post<Message>(this.FREE_URL, game, httpOptions).pipe(
-      catchError(this.handleError<Message>("createSimpleGame")));
+    this.http.post<Message>(this.FREE_URL, game, httpOptions).subscribe();
   }
 
   public deleteSimpleGame(game: IGame): Observable<{}> {
