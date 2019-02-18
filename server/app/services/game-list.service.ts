@@ -32,6 +32,12 @@ export class GameListService {
         return SIMPLEGAMES;
     }
 
+    public async getSimpleGame(gameId: number): Promise<IGame> {
+        const index: number = SIMPLEGAMES.findIndex((x: IGame) => x.id === gameId);
+
+       return SIMPLEGAMES[index];
+    }
+
     public async getFreeGames(): Promise<IGame[]> {
         return FREEGAMES;
     }

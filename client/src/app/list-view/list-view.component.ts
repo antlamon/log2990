@@ -46,8 +46,8 @@ export class ListViewComponent implements OnInit {
   }
 
   public playSelectedSimpleGame(game: IGame): void {
-    const name: string = game.name;
-    this.router.navigate(["game/" + name]);
+    this.router.navigate(["simple-game/" + game.id]);
+    // this.gameService.getSimpleGame(game).subscribe
   }
 
 }

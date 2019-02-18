@@ -10,6 +10,8 @@ import { IModal } from "src/app/models/modal";
   styleUrls: ["./free-generator.component.css"]
 })
 export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
+  
+  public GAME_ID: number = 1;
 
   private modalRef: FreeGeneratorComponent;
 
@@ -46,11 +48,12 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   public submit(): void {
     // submit form ...sprint 2
     const newGame: IGame  = {
+      id: 999,
       name: "NouveauJeu", imageURL: "nouveauTest.bmp",
       solo: { first: 9999, second: 9999, third: 9999 },
       multi: { first: 9999, second: 9999, third: 9999 }
     }; // for tests
-
+    this.GAME_ID ++;
     this.gameService.createFreeGame(newGame);
     this.close();
   }

@@ -24,8 +24,12 @@ export class GameService {
     );
   }
 
-  public getSimpleGame(name: string){
-    
+  public getSimpleGame(id: number): Observable<IGame> {
+    const url: string = this.SIMPLE_URL + "?id=" + id;
+    (console as Console).log(url)
+    return this.http.get<IGame>(url).pipe(
+      catchError(this.handleError<IGame>("getSimpleGame"))
+    );
   }
 
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
@@ -37,9 +41,11 @@ export class GameService {
   public getFreeGames(): Observable<IGame[]> {
     return this.http.get<IGame[]>(this.FREE_URL);
   }
+
   public createSimpleGame(game: ISimpleForm): Observable<Message> {
 
     const form: FormData = new FormData();
+    form.append("id", String(game.id));
     form.append("name", game.name);
     form.append("originalImage", game.originalImage, game.originalImage.name);
     form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
@@ -68,7 +74,7 @@ export class GameService {
         "Content-Type": "application/json"
       })
     };
-    const url: string = this.SIMPLE_URL + "?name=" + game.name;
+    const url: string = this.SIMPLE_URL + "?id=" + game.id;
 
     return this.http.delete(url, httpOptions);
   }
@@ -80,7 +86,7 @@ export class GameService {
         "Content-Type": "application/json"
       })
     };
-    const url: string = this.SIMPLE_URL + "?name=" + game.name;
+    const url: string = this.SIMPLE_URL + "?id=" + game.id;
 
     return this.http.delete(url, httpOptions);
   }
