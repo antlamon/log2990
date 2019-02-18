@@ -18,6 +18,7 @@ import { ModalService } from "./services/modal.service";
 import { FileValidatorService } from "./services/file-validator.service";
 import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 import { RenderService } from "./scene3D/scene3-d/render.service";
+import { Game3DComponent } from './scene3D/game3-d/game3-d.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { RenderService } from "./scene3D/scene3-d/render.service";
     ListViewComponent,
     SimpleGeneratorComponent,
     Scene3DComponent,
+    Game3DComponent,
   ],
   imports: [
     FormsModule,

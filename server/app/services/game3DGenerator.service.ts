@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { TYPES } from "../types"
-import { Game3D, Scene3D } from "../../../common/models/game3D";
+import { Game3D, Scene3D, GEOMETRIC_TYPE_NAME, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IGame3DForm } from "../../../common/models/game";
 import { Objet3D } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
@@ -22,13 +22,15 @@ export class Game3DGeneratorService {
     @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
     public createRandom3DGame(form: IGame3DForm): Game3D {
-        if ( form.objectType === "geometric" ) {
+        this.formValidator(form);
+        if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             return this.generateGeometryGame(form);
-        } else if ( form.objectType === "themed" ) {
+        } else if ( form.objectType === THEMATIC_TYPE_NAME) {
             return this.generateThemeGame(form);
         } else {
             throw this.TYPE_ERROR;
         }
+        
     }
 
     private generateGeometryGame(form: IGame3DForm): Game3D {
@@ -99,5 +101,15 @@ export class Game3DGeneratorService {
     private generateThemeGame(form: IGame3DForm): Game3D {
         return this.generateGeometryGame(form); // for now... themed 3Dgame not implemented yet
     }
+    private formValidator(form: IGame3DForm): void {
+        if(form.objectQty<10 || form.objectQty>200) {
+            throw Error("Le nombre d'objets doit être entre 10 et 200");
+        } else if(form.modifications.add === false && form.modifications.delete === false && form.modifications.color === false) {
+            throw Error("Il faut choisir au moins une modification");
+        } else {
+            return;
+        } 
+    }
+
 
 }

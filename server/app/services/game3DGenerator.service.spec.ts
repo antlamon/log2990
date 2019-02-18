@@ -4,7 +4,7 @@ import { IGame3DForm } from "../../../common/models/game";
 import { container } from "../inversify.config";
 import { Objet3D } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
-import { Game3D, Scene3D } from "../../../common/models/game3D";
+import { Game3D, Scene3D, THEMATIC_TYPE_NAME, GEOMETRIC_TYPE_NAME } from "../../../common/models/game3D";
 import { Game3DGeneratorService } from "./game3Dgenerator.service";
 
 const TYPE_ERROR: Error = {
@@ -21,7 +21,25 @@ const mockBadGameType: IGame3DForm = {
 
 const mockGeometric: IGame3DForm = {
     name: "heres my new game",
-    objectType: "geometric",
+    objectType: GEOMETRIC_TYPE_NAME,
+    objectQty: 13,
+    modifications: {add: true, delete: true, color: true} 
+};
+const mockThematic: IGame3DForm = {
+    name: "heres my new game",
+    objectType: THEMATIC_TYPE_NAME,
+    objectQty: 13,
+    modifications: {add: true, delete: true, color: true} 
+};
+const mockBadNb: IGame3DForm = {
+    name: "heres my new game",
+    objectType: THEMATIC_TYPE_NAME,
+    objectQty: 13,
+    modifications: {add: true, delete: true, color: true} 
+};
+const mockBadModifs: IGame3DForm = {
+    name: "heres my new game",
+    objectType: THEMATIC_TYPE_NAME,
     objectQty: 13,
     modifications: {add: true, delete: true, color: true} 
 };
@@ -70,10 +88,33 @@ describe("Game3D generator service", () => {
 
     describe(" Creating a random 3D game should accept only geometric or themed game type", () => {
         it("Should throw a type error when random type is sent", async () => {
-            expect(service.createRandom3DGame(mockBadGameType)).to.throw(TYPE_ERROR);
+            try {
+                service.createRandom3DGame(mockBadGameType);
+            } catch(error) {
+                expect(error.message).to.eql(TYPE_ERROR.message);
+            }
         });
         it("Should return random 3D geometric game", async () => {
             expect(typeof(service.createRandom3DGame(mockGeometric))).to.eql(typeof(mock3DGame));
+        });
+        it("Should return random 3D thematic game", async () => {
+            expect(typeof(service.createRandom3DGame(mockThematic))).to.eql(typeof(mock3DGame));
+        });
+    });
+    describe("Should validate the number of objects and the modifications", () => {
+        it("Should throw an error for missing modifications  ", async () => {
+            try{
+                service.createRandom3DGame(mockBadModifs);
+            }   catch(error) {
+                expect(error.message).to.eql("Il faut choisir au moins une modification");
+            }
+        });
+        it("Should throw an error for the wrong number of objects", async () => {
+            try {
+                service.createRandom3DGame(mockBadNb);
+            } catch (error) {
+                expect(error.message).to.eql("Le nombre d'objets doit être entre 10 et 200");
+            }
         });
     });
 });

@@ -75,7 +75,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       this.close();
     } else {
       this.validity(this.fileValidator.isValidGameName(this.gameName), "gameName", "Nom de jeu invalide.");
-      this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 50 et 200");
+      this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 10 et 200");
       this.validity(this.hasModifications(), "typeModif", "Il faut choisir au moins un type de modifications");
     }
   }
