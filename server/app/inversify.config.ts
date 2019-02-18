@@ -7,13 +7,13 @@ import { Server } from "./server";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
 import { GameListService } from "./services/game-list.service";
+import { Game3DModificatorService } from "./services/game3DModificator.service";
+import { Game3DGeneratorService } from "./services/game3Dgenerator.service";
 import { ImageService } from "./services/image.service";
+import { ObjectGeneratorService } from "./services/objectGenerator.service";
 import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
-import { Game3DGeneratorService } from "./services/game3Dgenerator.service";
-import { Game3DModificatorService } from "./services/game3DModificator.service";
-import { ObjectGeneratorService } from "./services/objectGenerator.service";
 
 const container: Container = new Container();
 

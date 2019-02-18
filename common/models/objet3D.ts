@@ -5,3 +5,5 @@ export interface Objet3D {
     size: number,
     rotation: {x: number, y: number, z: number}
 }
+
+export const INITIAL_OBJECT_SIZE: number = 20;

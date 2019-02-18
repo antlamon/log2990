@@ -1,7 +1,7 @@
 import chai = require("chai");
 import spies = require("chai-spies");
-import { container } from "../inversify.config";
 import { Objet3D } from "../../../common/models/objet3D";
+import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -10,8 +10,8 @@ const obj3D: Objet3D = {
     color: 0,
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
-    rotation: {x: 0, y: 0, z: 0}
-}
+    rotation: {x: 0, y: 0, z: 0},
+};
 
 const MIN: number = 12;
 const MAX: number = 20;
@@ -35,7 +35,7 @@ describe("object generator service", () => {
 
     describe("Function shoud return a number in the given interval", () => {
         it("Should return a number in the interval", async () => {
-            expect(service.randomInt(MIN, MAX)).to.be.greaterThan(MIN-1).and.lessThan(MAX+1);
+            expect(service.randomInt(MIN, MAX)).to.be.greaterThan(MIN - 1).and.lessThan(MAX + 1);
         });
     });
     describe("Generating an object should be randomized", () => {

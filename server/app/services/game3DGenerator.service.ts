@@ -1,9 +1,9 @@
-import { injectable, inject } from "inversify";
-import { TYPES } from "../types"
-import { Game3D, Scene3D, GEOMETRIC_TYPE_NAME, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+import { inject, injectable } from "inversify";
 import { IGame3DForm } from "../../../common/models/game";
+import { Game3D, GEOMETRIC_TYPE_NAME, Scene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { Objet3D } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
+import { TYPES } from "../types";
 import { Game3DModificatorService } from "./game3DModificator.service";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -15,11 +15,11 @@ export class Game3DGeneratorService {
     private readonly MINIMUM_CONTRAST: number = 0x00000F;
     private readonly TYPE_ERROR: Error = {
         name: "Invalid game3D type: ",
-        message: "The type chosen for the new 3D game is not valid."
+        message: "The type chosen for the new 3D game is not valid.",
     };
 
-    public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService, 
-    @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
+    public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
+                       @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
     public createRandom3DGame(form: IGame3DForm): Game3D {
         this.formValidator(form);
@@ -30,50 +30,37 @@ export class Game3DGeneratorService {
         } else {
             throw this.TYPE_ERROR;
         }
-        
     }
 
     private generateGeometryGame(form: IGame3DForm): Game3D {
 
         const randomObjects: Objet3D[] = [];
         let backGroundColor: number = this.objectGenerator.randomInt(0x0F0F0F, 0xFFFFFF); // we go for pale colors
-        // tslint:disable-next-line:typedef
-        for (let i = 0; i < form.objectQty; i++) {
-            const obj: Objet3D = this.objectGenerator.generateRandom3Dobject();
-            
-            let valid: boolean = true;
-            for(let i = 0; i < randomObjects.length; i++) {
-                if(Math.pow(randomObjects[i].position.x-obj.position.x,2)+ Math.pow(obj.position.y-randomObjects[i].position.y,2) + Math.pow(obj.position.z-randomObjects[i].position.z,2)
-                < Math.pow(43,2)) {
-                valid = false;
-                }
-            }
-            if(valid) {
-                randomObjects.push(obj);
-            } else {
-                i--;
-            }
-    //   }
+        for (let i: number = 0; i < form.objectQty; i++) {
+            const obj: Objet3D = this.objectGenerator.generateRandom3Dobject(randomObjects);
+            randomObjects.push(obj);
             while (!this.isEnoughContrast(backGroundColor, randomObjects[i].color)) {
                 backGroundColor = this.objectGenerator.randomInt(0x0F0F0F, 0xFFFFFF);
             }
         }
         const scene: Scene3D = { modified: false,
-            objects: randomObjects,
-            numObj: form.objectQty,
-            backColor: backGroundColor }
+                                 objects: randomObjects,
+                                 numObj: form.objectQty,
+                                 backColor: backGroundColor,
+                                };
+
         return {
             name: form.name,
             id: Game3DGeneratorService.id++,
             originalScene: scene,
-            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications),    
+            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications),
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
         };
     }
 
     private isEnoughContrast(backGroundColor: number, objColor: number): boolean {
-        //we want positive values, check for min and max
+        // we want positive values, check for min and max
         let max: number;
         let min: number;
         if (backGroundColor > objColor) {
@@ -86,7 +73,6 @@ export class Game3DGeneratorService {
 
         return (max - min) >= this.MINIMUM_CONTRAST;
     }
-
 
     public top3RandomOrder(): ITop3 {
         const scores: number[] = [];
@@ -102,14 +88,13 @@ export class Game3DGeneratorService {
         return this.generateGeometryGame(form); // for now... themed 3Dgame not implemented yet
     }
     private formValidator(form: IGame3DForm): void {
-        if(form.objectQty<10 || form.objectQty>200) {
+        if (form.objectQty < 10 || form.objectQty > 200) {
             throw Error("Le nombre d'objets doit être entre 10 et 200");
-        } else if(form.modifications.add === false && form.modifications.delete === false && form.modifications.color === false) {
+        } else if (!form.modifications.add && !form.modifications.delete && !form.modifications.color) {
             throw Error("Il faut choisir au moins une modification");
         } else {
             return;
-        } 
+        }
     }
-
 
 }

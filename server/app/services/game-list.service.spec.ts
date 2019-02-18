@@ -4,13 +4,13 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IGame, ISimpleForm } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { container } from "../inversify.config";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { GameListService, MulterFile } from "./game-list.service";
 import { ImageService } from "./image.service";
-import { Game3D } from "../../../common/models/game3D";
 
 const mockedNewImageMessage: Message = {
     title: BASE_ID,

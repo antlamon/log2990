@@ -3,9 +3,9 @@ import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { GameListService, MulterFile } from "../services/game-list.service";
 import { TYPES } from "../types";
-import { Game3D } from "../../../common/models/game3D";
 
 @injectable()
 export class GameListController {
@@ -47,7 +47,6 @@ export class GameListController {
                     res.json(error);
                 });
         });
-
 
         router.post("/free", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.addFreeGame(req.body).then(

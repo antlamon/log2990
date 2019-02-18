@@ -3,16 +3,15 @@ import FormData = require("form-data");
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { Game3D } from "../../../common/models/game3D";
-import { Game3DGeneratorService } from "./game3Dgenerator.service";
+import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { ITop3 } from "../../../common/models/top3";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
-import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
+import { Game3DGeneratorService } from "./game3Dgenerator.service";
 import { ImageService } from "./image.service";
-
 
 @injectable()
 export class GameListService {
@@ -66,13 +65,13 @@ export class GameListService {
     }
 
     public async addFreeGame(newGame: IGame3DForm): Promise<Message> {
-        //validate the form
-        //if not valid... to be completed.. function implemented for testing
+        // validate the form
+        // if not valid... to be completed.. function implemented for testing
         try {
             this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
             FREEGAMES.push(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database
             return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};
-            } catch(error) {
+            } catch (error) {
                 return {title: "Erreur", body: error.message};
             }
     }
