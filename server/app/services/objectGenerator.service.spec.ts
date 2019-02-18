@@ -13,6 +13,7 @@ const obj3D: Objet3D = {
     rotation: {x: 0, y: 0, z: 0},
 };
 
+const mockObjects: Objet3D[] = [obj3D];
 const MIN: number = 12;
 const MAX: number = 20;
 
@@ -40,7 +41,7 @@ describe("object generator service", () => {
     });
     describe("Generating an object should be randomized", () => {
         it("Should return a valid object", async () => {
-            expect(typeof(service.generateRandom3Dobject())).to.eql(typeof(obj3D));
+            expect(typeof(service.generateRandom3Dobject(mockObjects))).to.eql(typeof(obj3D));
         });
     });
 });
