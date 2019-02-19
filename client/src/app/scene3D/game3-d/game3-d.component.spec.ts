@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { Game3DComponent } from './game3-d.component';
+import { Game3DComponent } from "./game3-d.component";
 
-describe('Game3DComponent', () => {
+describe("Game3DComponent", () => {
   let component: Game3DComponent;
   let fixture: ComponentFixture<Game3DComponent>;
 
@@ -19,7 +19,7 @@ describe('Game3DComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

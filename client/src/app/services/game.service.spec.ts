@@ -94,7 +94,7 @@ describe("GameService", () => {
         };
         httpSpy.delete.and.returnValue(TestHelper.asyncData(expectedMessage));
         gameService.deleteFreeGame(mocked3DGame).subscribe(
-            (response: Message) => { 
+            (response: Message) => {
                 expect(response).toEqual(expectedMessage);
             }
         );

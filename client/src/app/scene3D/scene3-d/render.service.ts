@@ -16,23 +16,22 @@ export class RenderService {
 
   // private stats: Stats;
 
-
   private renderer: THREE.WebGLRenderer;
 
   private scene: THREE.Scene;
 
-  private cameraZ = 500;
+  private cameraZ: number = 500;
 
   private light: THREE.Light;
 
-  private fieldOfView = 75;
+  private fieldOfView: number = 75;
 
-  private nearClippingPane = 1;
+  private nearClippingPane: number = 1;
 
-  private farClippingPane = 3000;
+  private farClippingPane: number = 3000;
 
   public map: Map<string, THREE.Mesh>;
-  
+
   private generateMap(): void {
     this.map = new Map();
     this.createCube();

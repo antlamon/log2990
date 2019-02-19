@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: 'app-game3-d',
-  templateUrl: './game3-d.component.html',
-  styleUrls: ['./game3-d.component.css']
+  selector: "app-game3-d",
+  templateUrl: "./game3-d.component.html",
+  styleUrls: ["./game3-d.component.css"]
 })
 export class Game3DComponent implements OnInit {
 
-  constructor() { }
+  public constructor() { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 }

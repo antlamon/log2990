@@ -12,7 +12,7 @@ describe("ListViewComponent", () => {
     TestBed.configureTestingModule({
 
       imports: [HttpClientModule],
-      declarations: [ 
+      declarations: [
         ListViewComponent,
         Scene3DComponent
        ]
