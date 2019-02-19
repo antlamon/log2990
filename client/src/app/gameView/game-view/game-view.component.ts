@@ -8,6 +8,7 @@ import { IGame } from "../../../../../common/models/game";
   styleUrls: ['./game-view.component.css']
 })
 export class GameViewComponent implements OnInit {
+  
   public simpleGame: IGame;
   
   constructor(private gameService: GameService) { }
@@ -18,8 +19,7 @@ export class GameViewComponent implements OnInit {
 
   public getSimpleGame(): void {
     this.gameService.getSimpleGame(999)
-        .subscribe((response: IGame) => this.simpleGame = response);
-    (console as Console).log(this.simpleGame);
+        .then((response: IGame) => this.simpleGame = response[0] );
   }
 
 }

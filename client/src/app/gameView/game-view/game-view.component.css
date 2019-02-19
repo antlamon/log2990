@@ -2,44 +2,41 @@
 
 .chrono {
     position: absolute;
-    top: 170px;
-    left: 1450px;
+    top: 200px;
+    right: 215px;
     font-size: 25px;
 }
 
 .compteur {
     position: absolute;
     top: 170px;
-    left: 260px;
+    right: 190px;
     font-size: 25px;
 }
 
 .messages{
     position: absolute;
-    width: 800px;
-    height: 210px;
-    top: 810px;
-    left: 560px;
+    width: 400px;
+    height: 600px;
+    top: 250px;
+    right: 30px;
     background-color: darkkhaki;
 }
 
 .gameTitle{
+
     position: absolute;
     display: inline-block;
-    left: 820px;
-    top: 30px;
     font-size: 50px;
-    width: 300px;
-    background-color: chartreuse;
+    width: 500px;
     text-align: center;
 }
 
 .divGames {
     position: absolute;
-    top: 200px;
-    left: 260px;
-    width: 1400px;
-    height: 600px;
+    top: 150px;
+    width: 1480px;
+    height: 700px;
     background-color: cadetblue;
     display: flex;
     flex-direction: row;

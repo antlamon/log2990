@@ -1,16 +1,16 @@
 <div class="gameTitle">
-  <p>{{game.name}}</p>
+  <p>{{simpleGame?.name}}</p>
 </div>
 <div class="chrono">Temps restant: 00:00</div>
 <div class="compteur">Différences trouvées: 0</div>
 <div class="divGames">
   <div class="gameImage">
     <p>Image originale:</p>
-    <div class="mockImages"><img class ="game-card-img" src={{game.imageURL}} alt=""></div>
+    <div class="mockImages"><img class ="game-card-img" src={{simpleGame?.originalImageURL}} alt=""></div>
   </div>
   <div class="gameImage">
     <p>Image modifiée:</p>
-    <div class="mockImages">Image modifiée ici</div>
+    <div class="mockImages"><img class ="game-card-img" src={{simpleGame?.modifiedImageURL}} alt=""></div>
   </div>
 </div>
 <div class="messages">Les messages vont ici</div>
