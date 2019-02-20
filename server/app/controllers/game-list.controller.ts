@@ -77,16 +77,6 @@ export class GameListController {
                 });
         });
 
-        router.get("/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.getSimpleGame(req.query.id).then(
-                (response: IGame) => {
-                    res.json(response);
-                },
-                (error: Error) => {
-                    res.json(error);
-                });
-        });
-
         router.get("/free", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.getFreeGames().then(
                 (freeGames: IGame[]) => {

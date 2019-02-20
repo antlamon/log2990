@@ -17,8 +17,7 @@ export class ListViewComponent implements OnInit {
   public freeGames: IGame[];
   @Input() public isAdminMode: Boolean;
 
-  public constructor(private gameService: GameService, private socket: SocketService,
-    private router: Router) {
+  public constructor(private gameService: GameService, private socket: SocketService, private router: Router) {
     this.isAdminMode = false;
     this.socket.addEvent(SocketsEvents.UPDATE_SIMPLES_GAMES, this.getSimpleGames.bind(this));
   }
@@ -47,7 +46,7 @@ export class ListViewComponent implements OnInit {
 
   public playSelectedSimpleGame(game: IGame): void {
     this.router.navigate(["simple-game/" + game.id]);
-    // this.gameService.getSimpleGame(game).subscribe
+
   }
 
 }
