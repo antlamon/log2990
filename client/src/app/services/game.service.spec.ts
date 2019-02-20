@@ -7,7 +7,8 @@ import { Message, BASE_ID } from "../../../../common/communication/message";
 import { TestHelper } from "src/test.helper";
 
 describe("GameService", () => {
-    const mockedGame: IGame = { name: "testGame" } as IGame;
+    const mockedID: number = 40593;
+    const mockedGame: IGame = { name: "testGame", id: mockedID} as IGame;
 
     // tslint:disable-next-line:no-any Used to mock the http call
     let httpSpy: any;
@@ -39,6 +40,16 @@ describe("GameService", () => {
         );
     });
 
+    it("Getting a simple game should return a simple game", () => {
+        const expectedGame: IGame = { name: "test1", id: mockedID} as IGame;
+        httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
+        gameService.getSimpleGame(mockedID).then(
+            (response: IGame) => {
+                expect(response).toEqual(expectedGame);
+            }
+        );
+    });
+
     it("Getting free games should return free games", () => {
         const expectedGames: IGame[] = [
             { name: "test1" } as IGame,
@@ -54,6 +65,7 @@ describe("GameService", () => {
 
     it("Creating simple games should send a post", () => {
         const game: ISimpleForm = {
+            id: 39820,
             name: "testGame",
             originalImage: {name: "original"} as File,
             modifiedImage: {name: "modified"} as File,
