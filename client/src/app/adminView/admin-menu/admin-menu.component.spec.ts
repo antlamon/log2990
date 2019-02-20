@@ -10,6 +10,7 @@ import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "../../services/modal.service";
+import { GameViewComponent } from "src/app/gameView/game-view/game-view.component";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
@@ -23,7 +24,8 @@ describe("AdminMenuComponent", () => {
         FreeGeneratorComponent,
         SimpleGeneratorComponent,
         InitialComponent,
-        ListViewComponent
+        ListViewComponent,
+        GameViewComponent
       ],
       imports: [
         AppRoutingModule,

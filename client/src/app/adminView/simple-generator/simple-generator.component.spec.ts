@@ -11,6 +11,7 @@ import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "src/app/services/file-validator.service";
 import { GameService } from "src/app/services/game.service";
 import { By } from "@angular/platform-browser";
+import { GameViewComponent } from "src/app/gameView/game-view/game-view.component";
 
 describe("SimpleGeneratorComponent", () => {
   const LOADING_FILE_DELAY: number = 50;
@@ -24,7 +25,8 @@ describe("SimpleGeneratorComponent", () => {
         AdminMenuComponent,
         FreeGeneratorComponent,
         InitialComponent,
-        ListViewComponent
+        ListViewComponent,
+        GameViewComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService, FileValidatorService, GameService]
