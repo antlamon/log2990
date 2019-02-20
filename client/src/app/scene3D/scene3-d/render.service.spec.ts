@@ -63,7 +63,7 @@ describe("renderService", () => {
     });
     it("should give the background color given in parameters at creation", () => {
       component.initialize(container, mockOkScene);
-      expect(component["scene.background"]).toEqual(new THREE.Color(mockOkScene.backColor));
+      expect(component["scene"].background).toEqual(new THREE.Color(mockOkScene.backColor));
     });
     it("should call createShape the right amount of times", () => {
       spyOn(component["shapeService"], "createShape");

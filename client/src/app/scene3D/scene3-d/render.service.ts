@@ -91,9 +91,7 @@ export class RenderService {
 
   private render(): void {
     requestAnimationFrame(() => this.render());
-
     this.renderer.render(this.scene, this.camera);
-    // this.stats.update();
   }
 
   public onResize(): void {
