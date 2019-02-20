@@ -12,6 +12,7 @@ import { FreeGeneratorComponent } from "./adminView/free-generator/free-generato
 import { SimpleGeneratorComponent } from "./adminView/simple-generator/simple-generator.component";
 import { ListViewComponent } from "./list-view/list-view.component";
 import { GameViewComponent } from "./gameView/game-view/game-view.component";
+import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 
 describe("AppComponent", () => {
   beforeEach(async(() => {
@@ -23,7 +24,8 @@ describe("AppComponent", () => {
         FreeGeneratorComponent,
         SimpleGeneratorComponent,
         ListViewComponent,
-        GameViewComponent
+        GameViewComponent,
+        Scene3DComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule],
       providers: [IndexService]

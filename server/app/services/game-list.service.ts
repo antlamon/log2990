@@ -4,11 +4,13 @@ import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
-import { IGame, ISimpleForm } from "../../../common/models/game";
+import { IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { ITop3 } from "../../../common/models/top3";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
+import { Game3DGeneratorService } from "./game3Dgenerator.service";
 import { ImageService } from "./image.service";
 
 @injectable()
@@ -17,15 +19,12 @@ export class GameListService {
     public static readonly MAX_TIME_TOP_3: number = 1000;
 
     public constructor( @inject(TYPES.ImageService) private imageService: ImageService,
-                        @inject(TYPES.SocketServerManager) private socketController: SocketServerManager) {
-
+                        @inject(TYPES.SocketServerManager) private socketController: SocketServerManager,
+                        @inject(TYPES.Game3DGeneratorService) private game3DGenerator: Game3DGeneratorService) {
         // for sprint1, load the image as string64. Will be changed later for a database
         for (const simpleGame of SIMPLEGAMES) {
             simpleGame.originalImageURL = this.imageService.imageToString64(simpleGame.originalImageURL);
             simpleGame.modifiedImageURL = this.imageService.imageToString64(simpleGame.modifiedImageURL);
-        }
-        for (const freeGame of FREEGAMES) {
-            freeGame.originalImageURL = this.imageService.imageToString64(freeGame.originalImageURL);
         }
     }
 
@@ -33,37 +32,8 @@ export class GameListService {
         return SIMPLEGAMES;
     }
 
-    public async getFreeGames(): Promise<IGame[]> {
+    public async getFreeGames(): Promise<Game3D[]> {
         return FREEGAMES;
-    }
-
-    public async addFreeGame(newGame: IGame): Promise<IGame> {
-        // Not implemented for sprint1
-        FREEGAMES.push(newGame); // mock-data for sprint1
-
-        return (newGame);
-    }
-
-    public async deleteSimpleGame(gameName: string): Promise<Message> {
-        const index: number = SIMPLEGAMES.findIndex((x: IGame) => x.name === gameName);
-        if (index === -1) {
-            return { title: ERROR_ID, body: `Le jeu ${gameName} n'existe pas!` };
-        }
-        SIMPLEGAMES.splice(index, 1);
-        this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
-
-        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
-    }
-
-    public async deleteFreeGame(gameName: string): Promise<Message> {
-        const index: number = FREEGAMES.findIndex((x: IGame) => x.name === gameName);
-        if (index === -1) {
-            return { title: ERROR_ID, body: `Le jeu ${gameName} n'existe pas!` };
-        }
-        FREEGAMES.splice(index, 1);
-        this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
-
-        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
 
     public async addSimpleGame(newGame: ISimpleForm, originalImage: MulterFile, modifiedImage: MulterFile): Promise<Message> {
@@ -95,6 +65,42 @@ export class GameListService {
         }
 
         return (message);
+    }
+
+    public async addFreeGame(newGame: IGame3DForm): Promise<Message> {
+        // validate the form
+        // if not valid... to be completed.. function implemented for testing
+
+        try {
+            this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
+            FREEGAMES.push(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database
+
+            return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};
+        } catch (error) {
+                return {title: ERROR_ID, body: error.message};
+        }
+    }
+
+    public async deleteSimpleGame(gameName: string): Promise<Message> {
+        const index: number = SIMPLEGAMES.findIndex((x: IGame) => x.name === gameName);
+        if (index === -1) {
+            return { title: ERROR_ID, body: `Le jeu ${gameName} n'existe pas!` };
+        }
+        SIMPLEGAMES.splice(index, 1);
+        this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
+
+        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
+    }
+
+    public async deleteFreeGame(gameName: string): Promise<Message> {
+        const index: number = FREEGAMES.findIndex((x: Game3D) => x.name === gameName);
+        if (index === -1) {
+            return { title: ERROR_ID, body: `Le jeu ${gameName} n'existe pas!` };
+        }
+        FREEGAMES.splice(index, 1);
+        this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
+
+        return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé` };
     }
 
     public top3RandomOrder(): ITop3 {

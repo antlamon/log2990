@@ -4,6 +4,7 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IGame, ISimpleForm } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { container } from "../inversify.config";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
@@ -19,15 +20,6 @@ const mockedNewImageMessage: Message = {
 const mockedErrorMessage: Message = {
     title: ERROR_ID,
     body: "error",
-};
-
-const mockedGame: IGame = {
-    id: 34208,
-    name: "testGame",
-    originalImageURL: "",
-    modifiedImageURL: "",
-    solo: { first: 1, second: 2, third: 3 },
-    multi: { first: 1, second: 2, third: 3 },
 };
 
 const mockedSimpleGame: ISimpleForm = {
@@ -84,7 +76,7 @@ describe("GameList service", () => {
 
         it("Getting free games should return FREEGAMES", async () => {
             service.getFreeGames().then(
-                (games: IGame[]) => {
+                (games: Game3D[]) => {
                     expect(games).to.eql(FREEGAMES);
                 },
                 () => fail(),
@@ -93,14 +85,6 @@ describe("GameList service", () => {
     });
 
     describe("Adding games", () => {
-        it("Adding a free game should return the game", async () => {
-            service.addFreeGame(mockedGame).then(
-                (message: IGame) => {
-                    expect(message).to.eql(mockedGame);
-                },
-                () => fail(),
-            );
-        });
 
         describe("Adding simple games", () => {
 
@@ -169,23 +153,6 @@ describe("GameList service", () => {
         });
 
         describe("Deleting free games", () => {
-            it("Deleting a free game should return a relevant message", async () => {
-                const freeGame: IGame = {
-                    id: 8239,
-                    name: "freeGame",
-                    originalImageURL: "",
-                    modifiedImageURL: "",
-                    solo: { first: 1, second: 2, third: 3 },
-                    multi: { first: 1, second: 2, third: 3 },
-                };
-                FREEGAMES.push(freeGame);
-                service.deleteFreeGame("freeGame").then(
-                    (message: Message) => {
-                        expect(message.body).to.equal("Le jeu freeGame a été supprimé");
-                    },
-                    () => fail(),
-                );
-            });
 
             it("Deleting a free game that doesnt exist should return a relevant message", async () => {
                 service.deleteFreeGame("freeGame").then(

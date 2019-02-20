@@ -8,6 +8,7 @@ import { GameViewComponent } from "../gameView/game-view/game-view.component";
 import { SimpleGeneratorComponent } from "../adminView/simple-generator/simple-generator.component";
 import { FreeGeneratorComponent } from "../adminView/free-generator/free-generator.component";
 import { FormsModule } from "@angular/forms";
+import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 
 describe("ListViewComponent", () => {
   let component: ListViewComponent;
@@ -26,12 +27,11 @@ describe("ListViewComponent", () => {
         InitialComponent,
         GameViewComponent,
         SimpleGeneratorComponent,
-        FreeGeneratorComponent
+        FreeGeneratorComponent,
+        Scene3DComponent
       ]
     })
-    .compileComponents().then(() => {}, (error: Error) => {
-      console.error(error);
-    });
+    .compileComponents().then(() => {}, (error: Error) => {});
   }));
 
   beforeEach(() => {

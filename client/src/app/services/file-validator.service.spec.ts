@@ -10,6 +10,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "./file-validator.service";
 import { GameViewComponent } from "../gameView/game-view/game-view.component";
+import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 
 describe("FileValidatorService", () => {
 
@@ -31,7 +32,8 @@ describe("FileValidatorService", () => {
         FreeGeneratorComponent,
         InitialComponent,
         ListViewComponent,
-        GameViewComponent
+        GameViewComponent,
+        Scene3DComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService, FileValidatorService]

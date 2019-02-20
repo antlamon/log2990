@@ -11,6 +11,7 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "../../services/modal.service";
 import { GameViewComponent } from "src/app/gameView/game-view/game-view.component";
+import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
@@ -25,7 +26,8 @@ describe("AdminMenuComponent", () => {
         SimpleGeneratorComponent,
         InitialComponent,
         ListViewComponent,
-        GameViewComponent
+        GameViewComponent,
+        Scene3DComponent
       ],
       imports: [
         AppRoutingModule,
@@ -34,9 +36,7 @@ describe("AdminMenuComponent", () => {
       ],
       providers: [ModalService, FreeGeneratorComponent]
     })
-    .compileComponents().then(() => {}, (error: Error) => {
-      console.error(error);
-    });
+    .compileComponents();
   }));
 
   beforeEach(() => {

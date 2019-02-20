@@ -15,3 +15,9 @@ export interface ISimpleForm {
     originalImage: File;
     modifiedImage: File;
 }
+export interface IGame3DForm {
+    name: string;
+    objectType: string;
+    objectQty: number;
+    modifications: {add: boolean, delete: boolean, color: boolean}; 
+}
