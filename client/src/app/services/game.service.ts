@@ -54,6 +54,7 @@ export class GameService {
         "Content-Type": "application/json"
       })
     };
+
     return this.http.post<Message>(this.FREE_URL, game, httpOptions).pipe(
       catchError(this.handleError<Message>("createFreeGame"))
     );

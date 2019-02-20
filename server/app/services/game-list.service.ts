@@ -67,6 +67,7 @@ export class GameListService {
     public async addFreeGame(newGame: IGame3DForm): Promise<Message> {
         // validate the form
         // if not valid... to be completed.. function implemented for testing
+
         try {
             this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
             FREEGAMES.push(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database

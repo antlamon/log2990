@@ -84,8 +84,15 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       });
     } else {
       this.validity(this.fileValidator.isValidGameName(this.gameName), "gameName", "Nom de jeu invalide.");
-      this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 10 et 200");
-      this.validity(this.hasModifications(), "typeModif", "Il faut choisir au moins un type de modifications");
+      this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 10 et 200.");
+      this.validity(this.hasModifications(), "typeModif", "Il faut choisir au moins un type de modifications.");
+    }
+  }
+
+  private resetErrors(ids: string[]): void {
+
+    for (const id of ids) {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
     }
   }
   public hasModifications(): boolean {
@@ -109,8 +116,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   public close(): void {
-    this.element.style.display = "none";
     this.resetForm();
+    this.element.style.display = "none";
     document.body.classList.remove("modal-open");
   }
 
@@ -139,5 +146,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   private resetForm(): void {
     this.noObj = "";
     this.gameName = "";
+    this.clearErrorMessages();
+    this.resetErrors(["gameName", "noObj", "typeModif"]);
   }
 }
