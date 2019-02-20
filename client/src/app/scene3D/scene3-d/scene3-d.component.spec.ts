@@ -2,10 +2,26 @@ import { async, TestBed, ComponentFixture } from "@angular/core/testing";
 import { Scene3DComponent } from "./scene3-d.component";
 import { RenderService } from "./render.service";
 import { ShapeCreatorService } from "./shape-creator.service";
+import { Scene3D } from "../../../../../common/models/game3D";
+import { Objet3D } from "../../../../../common/models/objet3D";
 
 describe("Scene3DComponent", () => {
   let component: Scene3DComponent;
   let fixture: ComponentFixture<Scene3DComponent>;
+  const obj3D: Objet3D = {
+    type: "cube",
+    color: 0,
+    position: { x: 0, y: 0, z: 0},
+    size: 0.7,
+    rotation: {x: 0, y: 0, z: 0},
+};
+
+const mockScene: Scene3D = {
+    modified: false,
+    backColor: 0x00000,
+    objects: [obj3D],
+    numObj: 1
+};
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,9 +47,18 @@ describe("Scene3DComponent", () => {
 
   describe("Test for display mode : card or no card. ", () => {
     it("should not call the scene renderer if no game is given", () => {
+      component["game"] = undefined;
+      const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize");
       component.ngAfterViewInit();
-      const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize").and.callFake(component.ngAfterViewInit);
       expect(spyInitialize).toHaveBeenCalledTimes(0);
+    });
+    it("should call the scene renderer if valid game is given", () => {
+      component["game"] = mockScene;
+      var dummyCanva= document.createElement('canvas');
+      component["container"].appendChild(dummyCanva);
+      const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize");
+      component.ngAfterViewInit();
+      expect(spyInitialize).toHaveBeenCalled();
     });
     it("should not display the 3DScene if in cardMode", () => {
       component["isCardMode"] = true;
