@@ -1,12 +1,14 @@
-import { TestBed } from "@angular/core/testing";
+import { TestBed, async } from "@angular/core/testing";
 
 import { ShapeCreatorService } from "./shape-creator.service";
 
 describe("ShapeCreatorService", () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ ShapeCreatorService ],
+      providers: [ ShapeCreatorService ]
+    })
+    .compileComponents();
+  }));
 
-  it("should be created", () => {
-    const service: ShapeCreatorService = TestBed.get(ShapeCreatorService);
-    expect(service).toBeTruthy();
-  });
 });
