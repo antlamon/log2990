@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { inject, injectable } from "inversify";
-import { Point } from "../../../common/communication/message";
+import { BASE_ID, ERROR_ID, Message, Point } from "../../../common/communication/message";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP } from "./convertImage.service";
 import { IdentificationService } from "./identification.service";
@@ -23,21 +23,33 @@ export class IdentificationServiceManager {
         this.identificationServices = {} as IDictionary;
     }
 
-    public getDifference(gameId: string, point: Point): string {
+    public getDifference(gameId: string, point: Point): Message {
         if (this.identificationServices[gameId] === undefined) {
-            return `${IdentificationServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, GameId: ${gameId}`;
+            return {
+                title: ERROR_ID,
+                body: `${IdentificationServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, GameId: ${gameId}`,
+            };
         }
         const image: ImageBMP | null = this.identificationServices[gameId].getDifference(point);
         if (image === null) {
-            return IdentificationServiceManager.NO_DIFFERENCE_FOUND;
+            return {
+                title: ERROR_ID,
+                body: IdentificationServiceManager.NO_DIFFERENCE_FOUND,
+            };
         }
 
-        return this.imageToString64(this.convertImage.imageBMPtoBuffer(image, this.bmpBufferFormat));
+        return {
+            title: BASE_ID,
+            body: this.imageToString64(this.convertImage.imageBMPtoBuffer(image, this.bmpBufferFormat)),
+        };
     }
 
-    public startNewService(gameId: string, originalImagePath: string, modifiedImagePath: string, differenceImagePath: string): string {
+    public startNewService(gameId: string, originalImagePath: string, modifiedImagePath: string, differenceImagePath: string): Message {
         if (this.identificationServices[gameId] !== undefined) {
-            return `${IdentificationServiceManager.GAMEID_ALREADY_EXISTS}, gameId:${gameId}`;
+            return {
+                title: ERROR_ID,
+                body: `${IdentificationServiceManager.GAMEID_ALREADY_EXISTS}, gameId:${gameId}`,
+            };
         }
 
         const originalBuffer: Buffer = readFileSync(originalImagePath);
@@ -49,7 +61,10 @@ export class IdentificationServiceManager {
         const differenceImage: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(differenceImagePath));
         this.identificationServices[gameId] = new IdentificationService(originalImage, modifiedImage, differenceImage);
 
-        return "";
+        return {
+            title: BASE_ID,
+            body: "",
+        };
     }
 
     private imageToString64(buffer: Buffer): string {

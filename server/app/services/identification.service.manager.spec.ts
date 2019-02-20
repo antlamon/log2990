@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { Message } from "../../../common/communication/message";
 import { PATHS } from "../path";
 import { ConvertImage } from "./convertImage.service";
 import { IdentificationService } from "./identification.service";
@@ -17,19 +18,19 @@ describe("Identification service tests", () => {
 
     it("Trying to get a difference on a non instanciated service return a message", () => {
         const gameId: string = "blabalbal";
-        const message: string = serviceManager.getDifference(gameId, { x: 215, y: 0 });
-        expect(message).to.contain(IdentificationServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND);
+        const message: Message = serviceManager.getDifference(gameId, { x: 215, y: 0 });
+        expect(message.body).to.contain(IdentificationServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND);
     });
 
     describe("Adding a new identification service", () => {
         const gameId: string = "a123";
         it("Creating a new identification service", () => {
-            expect(serviceManager.startNewService(gameId, path1, path2, path3)).to.equal("");
+            expect(serviceManager.startNewService(gameId, path1, path2, path3).body).to.equal("");
             expect(Object.keys(serviceManager["identificationServices"]).length).to.be.greaterThan(0);
         });
 
         it("Trying to add the same gameId should not work", () => {
-            expect(serviceManager.startNewService(gameId, path1, path2, path3))
+            expect(serviceManager.startNewService(gameId, path1, path2, path3).body)
                 .to.contain(IdentificationServiceManager.GAMEID_ALREADY_EXISTS);
         });
 
@@ -39,14 +40,14 @@ describe("Identification service tests", () => {
             expect(buffer).to.eql(serviceManager["bmpBufferFormat"]);
         });
 
-        it("Finding an difference in the image should return a new image in string", () => {
-            const newImage: string = serviceManager.getDifference(gameId, { x: 215, y: 0 });
-            expect(newImage.length).to.be.greaterThan(0);
+        it("Finding a difference in the image should return a new image in string", () => {
+            const newImage: Message = serviceManager.getDifference(gameId, { x: 215, y: 0 });
+            expect(newImage.body.length).to.be.greaterThan(0);
         });
 
         it("Finding no difference in the image should return no difference string", () => {
-            const newImage: string = serviceManager.getDifference(gameId, { x: 0, y: 0 });
-            expect(newImage).to.equal(IdentificationServiceManager.NO_DIFFERENCE_FOUND);
+            const newImage: Message = serviceManager.getDifference(gameId, { x: 0, y: 0 });
+            expect(newImage.body).to.equal(IdentificationServiceManager.NO_DIFFERENCE_FOUND);
         });
 
         it("Finding all differences should return the original image", () => {
