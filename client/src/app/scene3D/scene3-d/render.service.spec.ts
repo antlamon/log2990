@@ -1,4 +1,4 @@
-import { TestBed, async, ComponentFixture } from "@angular/core/testing";
+import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
 import { Scene3D } from "../../../../../common/models/game3D";
@@ -6,8 +6,6 @@ import { Objet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 
 describe("renderService", () => {
-  let component: RenderService;
-  let fixture: ComponentFixture<RenderService>;
   const cone: Objet3D = {
     type: "cone",
     color: 0,
@@ -32,29 +30,27 @@ describe("renderService", () => {
   const mockObjects: Objet3D[] = [cone, cube, cylinder];
   const mockOkScene: Scene3D = {
     modified: false,
-    numObj: 20,
+    numObj: mockObjects.length,
     objects: mockObjects,
     backColor: 0xFF0F0F,
   };
-  const container: HTMLDivElement = new HTMLDivElement();
+  const container: HTMLDivElement = document.createElement("div");
+  const component: RenderService = new RenderService(new ShapeCreatorService());
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RenderService ],
-      providers: [RenderService, ShapeCreatorService ]
+      providers: [ RenderService, ShapeCreatorService ]
     })
     .compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(RenderService);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  it("should be created", inject([RenderService], (service: RenderService) => {
+    expect(service).toBeTruthy();
+  }));
 
   describe("Test for the function random", () => {
     it("should return a number between the max / min paremeters (included)", () => {
-      const max: number = 1, min: number = 0;
+      const max: number = 200, min: number = 10;
       const nb: number = component.random(min, max);
       expect(nb).toBeGreaterThanOrEqual(min);
       expect(nb).toBeLessThanOrEqual(max);
@@ -67,7 +63,7 @@ describe("renderService", () => {
     });
     it("should give the background color given in parameters at creation", () => {
       component.initialize(container, mockOkScene);
-      expect(component["scene.background"]).toEqual(new THREE.Color(mockOkScene.backColor));
+      expect(component["scene"].background).toEqual(new THREE.Color(mockOkScene.backColor));
     });
     it("should call createShape the right amount of times", () => {
       spyOn(component["shapeService"], "createShape");
