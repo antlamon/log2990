@@ -9,12 +9,10 @@ describe("Scene3DComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ Scene3DComponent ],
-      providers: [ RenderService, ShapeCreatorService ],
+      declarations: [Scene3DComponent],
+      providers: [RenderService, ShapeCreatorService],
     })
-      .compileComponents().then(() => { }, (error: Error) => {
-        console.error(error);
-      });
+      .compileComponents().then(() => { }, (error: Error) => {});
   }));
 
   beforeEach(() => {
@@ -23,7 +21,30 @@ describe("Scene3DComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it("should be created", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should be created with cardMode false", () => {
+    expect(component["isCardMode"]).toEqual(false);
+  });
+
+  describe("Test for display mode : card or no card. ", () => {
+    it("should not call the scene renderer if no game is given", () => {
+      component.ngAfterViewInit();
+      const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize").and.callFake(component.ngAfterViewInit);
+      expect(spyInitialize).toHaveBeenCalledTimes(0);
+    });
+    it("should not display the 3DScene if in cardMode", () => {
+      component["isCardMode"] = true;
+      component.ngAfterViewInit();
+      expect(component["container"].style.display).toEqual("none");
+    });
+    it("should display the 3DScene if not in cardMode", () => {
+      component["isCardMode"] = false;
+      component.ngAfterViewInit();
+      expect(component["container"].style.display).toEqual("block");
+    });
+  });
+
 });
