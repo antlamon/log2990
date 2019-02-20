@@ -19,6 +19,7 @@ import { FileValidatorService } from "./services/file-validator.service";
 import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 import { RenderService } from "./scene3D/scene3-d/render.service";
 import { Game3DComponent } from "./scene3D/game3-d/game3-d.component";
+import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator-service.service";
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { Game3DComponent } from "./scene3D/game3-d/game3-d.component";
     ModalService,
     FileValidatorService,
     RenderService,
+    ShapeCreatorService
   ],
   bootstrap: [AppComponent]
 })
