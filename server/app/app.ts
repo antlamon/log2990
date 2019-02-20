@@ -6,6 +6,7 @@ import { inject, injectable } from "inversify";
 import * as logger from "morgan";
 import { ConnexionController } from "./controllers/connexion.controller";
 import { GameListController } from "./controllers/game-list.controller";
+import { IdentificationController } from "./controllers/identification.controller";
 import { ImageController } from "./controllers/image.controller";
 import { TYPES } from "./types";
 
@@ -18,7 +19,8 @@ export class Application {
     public constructor(
             @inject(TYPES.ConnexionController) private connexionController: ConnexionController,
             @inject(TYPES.ImageController) private imageController: ImageController,
-            @inject(TYPES.GameListController) private gameListController: GameListController) {
+            @inject(TYPES.GameListController) private gameListController: GameListController,
+            @inject(TYPES.IdentificationController) private identificationController: IdentificationController) {
         this.app = express();
         this.config();
         this.bindRoutes();
@@ -38,6 +40,7 @@ export class Application {
         this.app.use(this.connexionController.URL, this.connexionController.router);
         this.app.use(ImageController.URL, this.imageController.router);
         this.app.use(this.gameListController.URL, this.gameListController.router);
+        this.app.use(IdentificationController.URL, this.identificationController.router);
         this.errorHandeling();
     }
 

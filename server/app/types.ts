@@ -14,6 +14,8 @@ const TYPES =  {
         Game3DGeneratorService: Symbol("Game3DGeneratorService"),
         Game3DModificatorService: Symbol("Game3DModificatorService"),
         ObjectGeneratorService: Symbol("ObjectGeneratorService"),
+        IdentificationController: Symbol("IdentificationController"),
+        IdentificationServiceManager: Symbol("IdentificationServiceManager"),
 };
 
 export  { TYPES };
