@@ -116,6 +116,15 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.gameName = "";
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
+    this.resetErrors(["gameNameLabel", this.ID_MODIFIED_FILENAME, this.ID_ORIGINAL_FILENAME]);
+    this.clearErrorMessages();
+  }
+
+  private resetErrors(ids: string[]): void {
+
+    for (const id of ids) {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
+    }
   }
 
   private validity(condition: boolean, id: string, errorMessage: string): void {
@@ -135,8 +144,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   public close(): void {
-    this.element.style.display = "none";
     this.resetForm();
+    this.element.style.display = "none";
     document.body.classList.remove("modal-open");
   }
 
