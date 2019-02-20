@@ -49,7 +49,9 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     // submit form ...sprint 2
     const newGame: IGame  = {
       id: 999,
-      name: "NouveauJeu", imageURL: "nouveauTest.bmp",
+      name: "NouveauJeu", 
+      originalImageURL: "nouveauTest.bmp",
+      modifiedImageURL: "nouveauTestModified.bmp",
       solo: { first: 9999, second: 9999, third: 9999 },
       multi: { first: 9999, second: 9999, third: 9999 }
     }; // for tests
