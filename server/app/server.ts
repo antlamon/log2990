@@ -3,7 +3,6 @@ import { inject, injectable } from "inversify";
 import { AddressInfo } from "net";
 import { Application } from "./app";
 import { container } from "./inversify.config";
-import { SocketIdentificationManager } from "./socket/socketIdentificationManager";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
 
@@ -14,7 +13,6 @@ export class Server {
     private readonly baseDix: number = 10;
     private server: http.Server;
     private socketServerManager: SocketServerManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
-    private socketIdentificationManager: SocketIdentificationManager = container.get(TYPES.SocketIdentificationManager);
 
     public constructor(@inject(TYPES.Application) private application: Application) { }
 
@@ -23,7 +21,6 @@ export class Server {
 
         this.server = http.createServer(this.application.app);
         this.socketServerManager.startServer(this.server);
-        this.socketIdentificationManager.initIdentificationSocket(this.server);
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());
