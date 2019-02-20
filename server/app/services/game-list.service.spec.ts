@@ -149,21 +149,6 @@ describe("GameList service", () => {
         });
 
         describe("Deleting free games", () => {
-            /*it("Deleting a free game should return a relevant message", async () => {
-                const freeGame: IGame = {
-                    name: "freeGame",
-                    imageURL: "",
-                    solo: { first: 1, second: 2, third: 3 },
-                    multi: { first: 1, second: 2, third: 3 },
-                };
-                FREEGAMES.push(simpl);
-                service.deleteFreeGame("freeGame").then(
-                    (message: Message) => {
-                        expect(message.body).to.equal("Le jeu freeGame a été supprimé");
-                    },
-                    () => fail(),
-                );
-            });*/
 
             it("Deleting a free game that doesnt exist should return a relevant message", async () => {
                 service.deleteFreeGame("freeGame").then(

@@ -17,9 +17,7 @@ describe("ListViewComponent", () => {
         Scene3DComponent
        ]
     })
-    .compileComponents().then(() => {}, (error: Error) => {
-      console.error(error);
-    });
+    .compileComponents().then(() => {}, (error: Error) => {});
   }));
 
   beforeEach(() => {
