@@ -72,9 +72,9 @@ export class GameListService {
             FREEGAMES.push(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database
 
             return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};
-            } catch (error) {
-                return {title: "Erreur", body: error.message};
-            }
+        } catch (error) {
+                return {title: ERROR_ID, body: error.message};
+        }
     }
 
     public async deleteSimpleGame(gameName: string): Promise<Message> {
