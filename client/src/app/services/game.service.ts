@@ -47,14 +47,17 @@ export class GameService {
 
   }
 
-  public createFreeGame(game: IGame3DForm): void {
+  public createFreeGame(game: IGame3DForm): Observable<Message> {
     // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
     };
-    this.http.post<Message>(this.FREE_URL, game, httpOptions).subscribe();
+    return this.http.post<Message>(this.FREE_URL, game, httpOptions).pipe(
+      catchError(this.handleError<Message>("createFreeGame"))
+    );
+
   }
 
   public deleteSimpleGame(game: IGame): Observable<{}> {

@@ -5,6 +5,7 @@ import { IModal } from "src/app/models/modal";
 import { IGame3DForm } from "../../../../../common/models/game";
 import { GEOMETRIC_TYPE_NAME, THEMATIC_TYPE_NAME } from "../../../../../common/models/game3D";
 import { FileValidatorService } from "src/app/services/file-validator.service";
+import { Message, ERROR_ID } from "../../../../../common/communication/message";
 
 @Component({
   selector: "app-free-generator",
@@ -71,8 +72,16 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
         objectQty: +this.noObj,
         modifications: {add: this.modification[0], delete: this.modification[1], color: this.modification[this.nbModification - 1]}
       };
-      this.gameService.createFreeGame(newGame);
-      this.close();
+      this.gameService.createFreeGame(newGame).subscribe((message: Message) => {
+        if (message.title === ERROR_ID) {
+          this.showErrorMessage("L'opération a été annulée: ");
+          this.showErrorMessage(message.body);
+        } else {
+          this.close();
+
+          return true;
+        }
+      });
     } else {
       this.validity(this.fileValidator.isValidGameName(this.gameName), "gameName", "Nom de jeu invalide.");
       this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 10 et 200");
