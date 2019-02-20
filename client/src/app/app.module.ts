@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ModalService } from "./services/modal.service";
 import { FileValidatorService } from "./services/file-validator.service";
 import { GameViewComponent } from "./gameView/game-view/game-view.component";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { GameViewComponent } from "./gameView/game-view/game-view.component";
     MatCardModule,
     MatDialogModule,
     BrowserAnimationsModule,
+    RouterModule.forRoot([]),
   ],
   entryComponents: [
     SimpleGeneratorComponent,
