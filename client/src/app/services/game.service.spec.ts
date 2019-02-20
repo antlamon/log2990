@@ -8,6 +8,7 @@ import { TestHelper } from "src/test.helper";
 import { Game3D } from "../../../../common/models/game3D";
 
 describe("GameService", () => {
+    const mockedID: number = 40593;
     const mocked3DGame: Game3D = { name: "testGame" } as Game3D;
     const mocked2DGame: IGame = { name: "testGame" } as IGame;
 
@@ -41,6 +42,16 @@ describe("GameService", () => {
         );
     });
 
+    it("Getting a simple game should return a simple game", () => {
+        const expectedGame: IGame = { name: "test1", id: mockedID} as IGame;
+        httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
+        gameService.getSimpleGame(mockedID).then(
+            (response: IGame) => {
+                expect(response).toEqual(expectedGame);
+            }
+        );
+    });
+
     it("Getting free games should return free games", () => {
         const expectedGames: Game3D[] = [
             { name: "test1" } as Game3D,
@@ -56,6 +67,7 @@ describe("GameService", () => {
 
     it("Creating simple games should send a post", () => {
         const game: ISimpleForm = {
+            id: 39820,
             name: "testGame",
             originalImage: {name: "original"} as File,
             modifiedImage: {name: "modified"} as File,

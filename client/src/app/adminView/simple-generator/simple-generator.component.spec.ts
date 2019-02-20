@@ -11,6 +11,7 @@ import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "src/app/services/file-validator.service";
 import { GameService } from "src/app/services/game.service";
 import { By } from "@angular/platform-browser";
+import { GameViewComponent } from "src/app/gameView/game-view/game-view.component";
 import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 
 describe("SimpleGeneratorComponent", () => {
@@ -26,6 +27,7 @@ describe("SimpleGeneratorComponent", () => {
         FreeGeneratorComponent,
         InitialComponent,
         ListViewComponent,
+        GameViewComponent,
         Scene3DComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],

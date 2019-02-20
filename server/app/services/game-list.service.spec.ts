@@ -23,12 +23,14 @@ const mockedErrorMessage: Message = {
 };
 
 const mockedSimpleGame: ISimpleForm = {
+    id: 3948,
     name: "testSimpleGame",
     originalImage: {} as File,
     modifiedImage: {} as File,
 };
 
 const mockedErrorGame: ISimpleForm = {
+    id: 0,
     name: "error",
     originalImage: {} as File,
     modifiedImage: {} as File,
@@ -124,8 +126,10 @@ describe("GameList service", () => {
         describe("Deleting simple games", () => {
             it("Deleting a simple game should return a relevant message", async () => {
                 const simpleGame: IGame = {
+                    id: 3482,
                     name: "simpleGame",
-                    imageURL: "",
+                    originalImageURL: "",
+                    modifiedImageURL: "",
                     solo: { first: 1, second: 2, third: 3 },
                     multi: { first: 1, second: 2, third: 3 },
                 };

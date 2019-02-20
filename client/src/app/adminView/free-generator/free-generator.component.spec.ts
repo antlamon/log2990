@@ -8,6 +8,7 @@ import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "src/app/services/modal.service";
+import { GameViewComponent } from "src/app/gameView/game-view/game-view.component";
 import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 
 describe("FreeGeneratorComponent", () => {
@@ -22,6 +23,7 @@ describe("FreeGeneratorComponent", () => {
         SimpleGeneratorComponent,
         InitialComponent,
         ListViewComponent,
+        GameViewComponent,
         Scene3DComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],

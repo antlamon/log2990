@@ -23,7 +23,8 @@ export class GameListService {
                         @inject(TYPES.Game3DGeneratorService) private game3DGenerator: Game3DGeneratorService) {
         // for sprint1, load the image as string64. Will be changed later for a database
         for (const simpleGame of SIMPLEGAMES) {
-            simpleGame.imageURL = this.imageService.imageToString64(simpleGame.imageURL);
+            simpleGame.originalImageURL = this.imageService.imageToString64(simpleGame.originalImageURL);
+            simpleGame.modifiedImageURL = this.imageService.imageToString64(simpleGame.modifiedImageURL);
         }
     }
 
@@ -50,8 +51,10 @@ export class GameListService {
         if (message.title !== ERROR_ID) {
             // for mock-data, will be changed when database is implemented
             const game: IGame = {
+                id: 7754,
                 name: message.body,
-                imageURL: "data:image/bmp;base64," + originalImage.buffer.toString("base64"),
+                originalImageURL: "data:image/bmp;base64," + originalImage.buffer.toString("base64"),
+                modifiedImageURL: "data:image/bmp;base64," + modifiedImage.buffer.toString("base64"),
                 solo: this.top3RandomOrder(),
                 multi: this.top3RandomOrder(),
             };

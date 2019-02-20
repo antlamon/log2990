@@ -21,8 +21,10 @@ const mockedMessage: Message = {
 };
 
 const mockedGame: IGame = {
+    id: 34093,
     name: "testGame",
-    imageURL: "",
+    originalImageURL: "",
+    modifiedImageURL: "",
     solo: {first: 1, second: 2, third: 3},
     multi: {first: 1, second: 2, third: 3},
 };
