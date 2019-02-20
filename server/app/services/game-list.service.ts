@@ -17,8 +17,9 @@ export class GameListService {
     public static readonly MIN_TIME_TOP_3: number = 500;
     public static readonly MAX_TIME_TOP_3: number = 1000;
     public static readonly SIMPLE_COLLECTION: string =  "simple-games";
+    public static readonly IMAGES_COLLECTION: string =  "images";
     public static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
-    private simpleCollection: Collection;
+    private _simpleCollection: Collection;
 
     public constructor( @inject(TYPES.SocketServerManager) private socketController: SocketServerManager,
                         @inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
@@ -27,7 +28,7 @@ export class GameListService {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
-        return this.collection.find({}).map((x: IFullGame) => x.card).toArray();
+         return this.simpleCollection.find({}).map((x: IFullGame) => x.card).toArray();
     }
 
     public async getFreeGames(): Promise<IGame[]> {
@@ -42,8 +43,7 @@ export class GameListService {
     }
 
     public async deleteSimpleGame(gameName: string): Promise<Message> {
-
-       return this.collection.deleteOne({"card.name": gameName}).then( (res: DeleteWriteOpResultObject) => {
+       return this.simpleCollection.deleteOne({"card.name": gameName}).then( (res: DeleteWriteOpResultObject) => {
             if ( res.deletedCount === 1 ) {
                this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
 
@@ -81,7 +81,7 @@ export class GameListService {
         if (message.title !== ERROR_ID) {
             // for mock-data, will be changed when database is implemented
             const imagesArray: string[] = message.body.split(GameListService.BMP_S64_HEADER);
-            this.collection.insert(
+            this.simpleCollection.insertOne(
                 {card: {
                     name: newGame.name,
                     imageURL: GameListService.BMP_S64_HEADER + imagesArray[1],
@@ -90,8 +90,8 @@ export class GameListService {
             },
                  modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[2] ,
                  differenceImage: GameListService.BMP_S64_HEADER + imagesArray[3] }).then(
-                                        () => { this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);}
-                                    );
+                                        () => { this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES); },
+                                    ).catch();
         }
 
         return (message);
@@ -110,12 +110,12 @@ export class GameListService {
     public randomNumberGenerator(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
-    private get collection(): Collection {
-        if ( this.simpleCollection == null ) {
-            this.simpleCollection = this.databaseService.db.collection(GameListService.SIMPLE_COLLECTION);
+    private get simpleCollection(): Collection {
+        if ( this._simpleCollection == null ) {
+            this._simpleCollection = this.databaseService.db.collection(GameListService.SIMPLE_COLLECTION);
         }
 
-        return this.simpleCollection;
+        return this._simpleCollection;
     }
 }
 

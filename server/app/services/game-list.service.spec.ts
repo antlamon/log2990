@@ -2,7 +2,7 @@ import { fail } from "assert";
 import Axios, { AxiosResponse } from "axios";
 import chai = require("chai");
 import spies = require("chai-spies");
-import { Collection, Db, WriteOpResult } from "mongodb";
+import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongodb";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IFullGame, IGame, ISimpleForm } from "../../../common/models/game";
 import { container } from "../inversify.config";
@@ -57,6 +57,14 @@ const mockedMulterFile: MulterFile = {
     buffer: Buffer.alloc(0),
     fileName: "test",
 };
+const deleteWriteOPMock: DeleteWriteOpResultObject = {
+    result: {
+        ok: 1,
+        n: 1,
+    },
+    // The number of documents deleted.
+    deletedCount: 1,
+};
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 describe("GameList service", () => {
@@ -76,10 +84,10 @@ describe("GameList service", () => {
         // tslint:disable-next-line:typedef
         mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db ) => {
             mockCollection = db.collection(GameListService.SIMPLE_COLLECTION);
-            service["simpleCollection"] = mockCollection;
-            service["simpleCollection"].insert(mockedFullGame).then( (res: WriteOpResult) => {
+            service["_simpleCollection"] = mockCollection;
+            service["_simpleCollection"].insertOne(mockedFullGame).then( (res: WriteOpResult) => {
                 done();
-            });
+            }).catch();
         });
     });
     after(() => {
@@ -155,20 +163,24 @@ describe("GameList service", () => {
 
     describe("Deleting games", () => {
         describe("Deleting simple games", () => {
-            it("Deleting a simple game should return a relevant message",  async () => {
-                service.deleteSimpleGame("testSimpleGame").then(
-                    (message: Message) => {
-                        expect(message.body).to.equal("Le jeu testSimpleGame a été supprimé!");
-                    });
-            });
-
-            it("Deleting a simple game that doesnt exist should return a relevant message",  (done: Mocha.Done) => {
+            it("Deleting a simple game that doesnt exist should return a relevant message", (done: Mocha.Done) => {
                 service.deleteSimpleGame("simpleGame3").then(
                     (message: Message) => {
                         expect(message.body).to.equal("Le jeu simpleGame3 n'existe pas!");
                         done();
-                    });
+                    }).catch();
             });
+
+            it("Deleting a simple game should return a relevant message", async () => {
+                sandbox.on(service["_simpleCollection"], "deleteOne", async () => {
+                    return Promise.resolve(deleteWriteOPMock);
+                });
+                await service.deleteSimpleGame("testSimpleGame").then(
+                    (message: Message) => {
+                        expect(message.body).to.equal("Le jeu testSimpleGame a été supprimé!");
+                    }).catch();
+            });
+
         });
 
         describe("Deleting free games", () => {
@@ -193,7 +205,7 @@ describe("GameList service", () => {
                     (message: Message) => {
                         expect(message.body).to.equal("Le jeu freeGame n'existe pas!");
                         done();
-                    });
+                    }).catch();
             });
         });
     });

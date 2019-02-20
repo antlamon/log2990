@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
@@ -164,9 +164,5 @@ export class ImageService {
 
     public isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
-    }
-
-    public imageToString64(path: string): string {
-        return "data:image/bmp;base64," + readFileSync(path).toString("base64");
     }
 }
