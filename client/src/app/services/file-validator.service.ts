@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { NO_MAX_OBJECTS } from "../../../../common/models/game3D";
+import { NO_MAX_OBJECTS, NO_MIN_OBJECTS } from "../../../../common/models/game3D";
 
 @Injectable({
   providedIn: "root"
@@ -34,6 +34,6 @@ export class FileValidatorService {
   public isValidObjNb(nbObj: string): boolean {
     const nb: number = +nbObj;
 
-    return this.containOnlyNumeric(nbObj) && nb <= NO_MAX_OBJECTS && nb >= NO_MAX_OBJECTS;
+    return this.containOnlyNumeric(nbObj) && nb <= NO_MAX_OBJECTS && nb >= NO_MIN_OBJECTS;
   }
 }
