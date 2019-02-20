@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import * as THREE from 'three';
-import { Scene3D } from "../../../../../common/models/game3D"
-import { Objet3D, INITIAL_OBJECT_SIZE } from "../../../../../common/models/objet3D"
+import { Injectable } from "@angular/core";
+import * as THREE from "three";
+import { Scene3D } from "../../../../../common/models/game3D";
+import { Objet3D, INITIAL_OBJECT_SIZE, MAX_COLOR } from "../../../../../common/models/objet3D";
 
 // import Stats = require('stats.js');
 
@@ -61,7 +61,7 @@ export class RenderService {
     const geometry: THREE.Geometry = new THREE.BoxGeometry(INITIAL_OBJECT_SIZE, INITIAL_OBJECT_SIZE, INITIAL_OBJECT_SIZE);
 
     const cube: THREE.Mesh = new THREE.Mesh(geometry);
- 
+
     this.map.set("cube", cube);
   }
 
@@ -104,8 +104,10 @@ export class RenderService {
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(scene.backColor);
     this.createCamera();
-    this.scene.add( new THREE.HemisphereLight( 0x606060, 0x404040 ) );
-    this.light = new THREE.DirectionalLight( 0xffffff );
+    const skyLight: number = 0x606060;
+    const groundLight: number = 0x404040;
+    this.scene.add( new THREE.HemisphereLight( skyLight, groundLight ) );
+    this.light = new THREE.DirectionalLight( MAX_COLOR );
     this.light.position.set( 0, 0, 1 );
     this.scene.add(this.light);
 

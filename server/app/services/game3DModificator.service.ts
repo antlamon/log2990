@@ -1,13 +1,13 @@
 import { inject, injectable } from "inversify";
 import { Scene3D } from "../../../common/models/game3D";
-import { Objet3D } from "../../../common/models/objet3D";
+import { MAX_COLOR, Objet3D  } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
 @injectable()
 export class Game3DModificatorService {
 
-    private static readonly NB_DIFF: number = 7;
+    public static readonly NB_DIFF: number = 7;
     private static readonly ADD: number = 1;
     private static readonly DELETE: number = 2;
     private static readonly COLOR: number = 3;
@@ -41,7 +41,7 @@ export class Game3DModificatorService {
 
     }
 
-    private createDifference(obj: Objet3D, objects: Objet3D[], typeObj: string, 
+    private createDifference(obj: Objet3D, objects: Objet3D[], typeObj: string,
                              typeModif:  {add: boolean, delete: boolean, color: boolean}): Objet3D | null {
 
         switch (this.chooseModif(typeModif)) {
@@ -75,7 +75,7 @@ export class Game3DModificatorService {
     private changeColor(obj: Objet3D): Objet3D {
         return {
             type: obj.type,
-            color: this.objectGenerator.randomInt(0x000000, 0xFFFFFF),
+            color: this.objectGenerator.randomInt(0x000000, MAX_COLOR),
             position: obj.position,
             size: obj.size,
             rotation: obj.rotation,

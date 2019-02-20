@@ -26,18 +26,14 @@ export class Scene3DComponent implements AfterViewInit {
   private containerRef: ElementRef;
 
   @HostListener("window:resize", ["$event"])
-  public onResize() {
+  public onResize(): void {
     this.renderService.onResize();
   }
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     this.renderService.initialize(this.container, this.game);
-    this.imageBase64 = ((this.container as any).children[0] as HTMLCanvasElement).toDataURL();
-    if (this.isCardMode) {
-      this.container.style.display = "none";
-    } else {
-      this.container.style.display = "block";
-    }
+    this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
+    this.container.style.display =  this.isCardMode ? "none" : "block";
   }
 
 }

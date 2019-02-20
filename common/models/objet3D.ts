@@ -7,3 +7,4 @@ export interface Objet3D {
 }
 
 export const INITIAL_OBJECT_SIZE: number = 20;
+export const MAX_COLOR: number = 0xFFFFFF;

@@ -98,12 +98,14 @@ describe("Game3D Modificator service", () => {
 
     describe("Modifying the objects should work, whatever the type", () => {
         it("Should return an array with 7 added objects", async () => {
-            expect(service.createModifScene(mockScene, typeGeometric, mockTypeModifAdd).objects.length).to.eql(mockObjects.length + 7);
+            expect(service.createModifScene(mockScene, typeGeometric, mockTypeModifAdd).objects.length).
+                to.eql(mockObjects.length + Game3DModificatorService.NB_DIFF);
         });
 
         it("Should return an array with only 1 object", async () => {
 
-            expect(service.createModifScene(mockScene, typeGeometric, mockTypeModifDelete).objects.length).to.eql(mockObjects.length - 7);
+            expect(service.createModifScene(mockScene, typeGeometric, mockTypeModifDelete).objects.length).
+                to.eql(mockObjects.length - Game3DModificatorService.NB_DIFF);
         });
 
         it("Should return an array with 7 modified objects", async () => {
@@ -115,7 +117,7 @@ describe("Game3D Modificator service", () => {
                     count++;
                 }
             }
-            expect(count).to.eql(7);
+            expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
         it("Should return an array with 7 modified objects", async () => {
             // A modifier avec les textures
@@ -126,7 +128,7 @@ describe("Game3D Modificator service", () => {
                     count++;
                 }
             }
-            expect(count).to.eql(7);
+            expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
 
     });

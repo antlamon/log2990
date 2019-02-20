@@ -9,7 +9,7 @@ export class Game3DComponent implements OnInit {
 
   public constructor() { }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
   }
 
 }
