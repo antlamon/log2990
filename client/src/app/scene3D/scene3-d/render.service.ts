@@ -49,6 +49,12 @@ export class RenderService {
 
   }
 
+  public onResize(): void {
+    this.camera.aspect = this.getAspectRatio();
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+  }
+
   private createScene(scene: Scene3D): void {
     /* Scene */
     this.scene = new THREE.Scene();
@@ -91,15 +97,6 @@ export class RenderService {
 
   private render(): void {
     requestAnimationFrame(() => this.render());
-
     this.renderer.render(this.scene, this.camera);
-    // this.stats.update();
-  }
-
-  public onResize(): void {
-    this.camera.aspect = this.getAspectRatio();
-    this.camera.updateProjectionMatrix();
-
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
   }
 }
