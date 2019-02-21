@@ -10,13 +10,18 @@ export class FileValidatorService {
   private readonly IMAGE_HEIGHT: number = 480;
   private readonly MIN_LENGTH: number = 3;
   private readonly MAX_LENGTH: number = 15;
+  private readonly MAX_NAME: number = 10;
 
   public dimensionsAreValid(bmpWidth: number, bmpHeight: number): boolean {
     return (bmpWidth === this.IMAGE_WIDTH && bmpHeight === this.IMAGE_HEIGHT);
   }
 
   public isValidGameName(name: string): boolean {
-    return name.length < this.MAX_LENGTH && name.length > this.MIN_LENGTH && this.containOnlyAlphaNumeric(name);
+    return name.length <= this.MAX_LENGTH && name.length >= this.MIN_LENGTH && this.containOnlyAlphaNumeric(name);
+  }
+
+  public isValidName(name: string): boolean {
+    return name.length <= this.MAX_NAME && name.length >= this.MIN_LENGTH && this.containOnlyAlphaNumeric(name);
   }
 
   public containOnlyAlphaNumeric(name: string): boolean {

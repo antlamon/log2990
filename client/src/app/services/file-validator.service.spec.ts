@@ -126,11 +126,24 @@ describe("FileValidatorService", () => {
       expect(component.containOnlyAlphaNumeric("@#$ans")).toEqual(false);
     });
     it("A name that only contains alphanumeric characters should return true", () => {
-      expect(component.containOnlyAlphaNumeric("dksjhfalkdsjfhaskd24324")).toEqual(true);
+      expect(component.containOnlyAlphaNumeric("dksjhfad24324")).toEqual(true);
     });
     it("A NULL name should return false", () => {
       expect(component.isValidGameName("")).toEqual(false);
     });
   });
-
+  describe("Test for the name of the username", () => {
+    it("A name longer than 10 characters should return false", () => {
+      expect(component.isValidName("abcdefghijklmnopqrstuvwxyz")).toEqual(false);
+    });
+    it("A name shorter than 3 characters should return false", () => {
+      expect(component.isValidName("az")).toEqual(false);
+    });
+    it("A name that contains between 3 and 15 characters should return true", () => {
+      expect(component.isValidName("nomdujeu")).toEqual(true);
+    });
+    it("A NULL name should return false", () => {
+      expect(component.isValidName("")).toEqual(false);
+    });
+  });
 });
