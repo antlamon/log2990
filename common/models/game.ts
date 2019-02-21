@@ -1,7 +1,7 @@
 import { ITop3 } from "./top3";
 
 export interface IGame {
-    id: number;
+    id: string,
     name: string;
     originalImageURL: string;
     solo: ITop3;
