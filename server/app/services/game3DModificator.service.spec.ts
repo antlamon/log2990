@@ -96,7 +96,7 @@ describe("Game3D Modificator service", () => {
         sandbox.restore();
     });
 
-    describe("Modifying the objects should work, whatever the type", () => {
+    describe("Modifying the objects should work, whatever the type, if there is modifications", () => {
         it("Should return an array with 7 added objects", async () => {
             expect(service.createModifScene(mockScene, typeGeometric, mockTypeModifAdd).objects.length).
                 to.eql(mockObjects.length + Game3DModificatorService.NB_DIFF);

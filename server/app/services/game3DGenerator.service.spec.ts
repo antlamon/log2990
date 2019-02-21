@@ -7,11 +7,6 @@ import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3Dgenerator.service";
 
-const TYPE_ERROR: Error = {
-    name: "Invalid game3D type: ",
-    message: "The type chosen for the new 3D game is not valid.",
-};
-
 const mockBadGameType: IGame3DForm = {
     name: "heres my new game",
     objectType: "fake bad type",
@@ -34,14 +29,14 @@ const mockThematic: IGame3DForm = {
 const mockBadNb: IGame3DForm = {
     name: "heres my new game",
     objectType: THEMATIC_TYPE_NAME,
-    objectQty: 13,
+    objectQty: 3,
     modifications: {add: true, delete: true, color: true},
 };
 const mockBadModifs: IGame3DForm = {
     name: "heres my new game",
     objectType: THEMATIC_TYPE_NAME,
     objectQty: 13,
-    modifications: {add: true, delete: true, color: true},
+    modifications: {add: false, delete: false, color: false},
 };
 
 const obj3D: Objet3D = {
@@ -87,11 +82,8 @@ describe("Game3D generator service", () => {
 
     describe(" Creating a random 3D game should accept only geometric or themed game type", () => {
         it("Should throw a type error when random type is sent", async () => {
-            try {
-                service.createRandom3DGame(mockBadGameType);
-            } catch (error) {
-                expect(error.message).to.eql(TYPE_ERROR.message);
-            }
+
+            expect(() => service.createRandom3DGame(mockBadGameType)).to.throw(Error);
         });
         it("Should return random 3D geometric game", async () => {
             expect(typeof(service.createRandom3DGame(mockGeometric))).to.eql(typeof(mock3DGame));
@@ -102,18 +94,12 @@ describe("Game3D generator service", () => {
     });
     describe("Should validate the number of objects and the modifications", () => {
         it("Should throw an error for missing modifications  ", async () => {
-            try {
-                service.createRandom3DGame(mockBadModifs);
-            }   catch (error) {
-                expect(error.message).to.eql("Il faut choisir au moins une modification");
-            }
+
+            expect(() => service.createRandom3DGame(mockBadModifs)).to.throw(Error);
         });
         it("Should throw an error for the wrong number of objects", async () => {
-            try {
-                service.createRandom3DGame(mockBadNb);
-            } catch (error) {
-                expect(error.message).to.eql("Le nombre d'objets doit être entre 10 et 200");
-            }
+
+            expect(() => service.createRandom3DGame(mockBadNb)).to.throw(Error);
         });
     });
 });
