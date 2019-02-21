@@ -21,9 +21,9 @@ export class GameViewComponent implements OnInit {
     this.getSimpleGame();
   }
 
-  private getId(): number {
+  private getId(): string {
 
-    return Number(this.route.snapshot.paramMap.get("id"));
+    return String(this.route.snapshot.paramMap.get("id"));
   }
 
   public getSimpleGame(): void {

@@ -49,10 +49,9 @@ describe("ListViewComponent", () => {
   it("should route to game Play with the proper iD", () => {
     const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate");
     const game: IGame = {
-      id: 1,
+      id: "",
       name: "string",
       originalImageURL: "string",
-      modifiedImageURL: "string",
       solo: {} as ITop3,
       multi:  {} as ITop3
     };
