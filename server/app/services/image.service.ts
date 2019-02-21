@@ -47,34 +47,37 @@ export class ImageService {
     public getNbDifferences(image: ImageBMP): number {
         const pixels: Pixel[][] = image.pixels;
         const visited: boolean[][] = this.createVisitedArray(pixels);
-        const callBackPixels: [number, number][] = [];
         let diffCount: number = 0;
         for (let x: number = 0; x < image.height; x++) {
             for (let y: number = 0; y < image.width; y++) {
                 if (!visited[x][y]) {
                     diffCount++;
-                    callBackPixels.push([x, y]);
-                    while (callBackPixels.length > 0) {
-                        let hasNext: boolean = false;
-                        const current: [number, number] = callBackPixels[callBackPixels.length - 1];
-                        for (let i: number = current[0] - 1; i <= current[0] + 1; i++) {
-                            for (let j: number = current[1] - 1; j <= current[1] + 1; j++) {
-                                if (i >= 0 && i < image.height && j >= 0 && j < image.width && !visited[i][j]) {
-                                    callBackPixels.push([i, j]);
-                                    hasNext = true;
-                                    visited[i][j] = true;
-                                }
-                            }
-                        }
-                        if (!hasNext) {
-                            callBackPixels.pop();
-                        }
-                    }
+                    this.visitNeighboors([x, y], visited, image.height, image.width);
                 }
             }
         }
 
         return diffCount;
+    }
+
+    private visitNeighboors(pixel: [number, number], visited: boolean[][], height: number, width: number): void {
+        const callBackPixels: [number, number][] = [pixel];
+        while (callBackPixels.length > 0) {
+            let hasNext: boolean = false;
+            const current: [number, number] = callBackPixels[callBackPixels.length - 1];
+            for (let i: number = current[0] - 1; i <= current[0] + 1; i++) {
+                for (let j: number = current[1] - 1; j <= current[1] + 1; j++) {
+                    if (i >= 0 && i < height && j >= 0 && j < width && !visited[i][j]) {
+                        callBackPixels.push([i, j]);
+                        hasNext = true;
+                        visited[i][j] = true;
+                    }
+                }
+            }
+            if (!hasNext) {
+                callBackPixels.pop();
+            }
+        }
     }
 
     public createVisitedArray(pixels: Pixel[][]): boolean[][] {

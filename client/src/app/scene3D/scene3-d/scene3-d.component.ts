@@ -31,7 +31,7 @@ export class Scene3DComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    if ( this.game != undefined) {
+    if ( this.game !== undefined) {
       this.renderService.initialize(this.container, this.game);
       this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
     }
