@@ -10,7 +10,7 @@ import { ITop3 } from "../../../common/models/top3";
 import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
-import { Game3DGeneratorService } from "./game3Dgenerator.service";
+import { Game3DGeneratorService } from "./game3DGenerator.service";
 import { ImageService } from "./image.service";
 
 @injectable()

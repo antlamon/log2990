@@ -5,7 +5,7 @@ import { Game3D, GEOMETRIC_TYPE_NAME, Scene3D, THEMATIC_TYPE_NAME } from "../../
 import { Objet3D } from "../../../common/models/objet3D";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
-import { Game3DGeneratorService } from "./game3Dgenerator.service";
+import { Game3DGeneratorService } from "./game3DGenerator.service";
 
 const mockBadGameType: IGame3DForm = {
     name: "heres my new game",
