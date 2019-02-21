@@ -1,5 +1,6 @@
 import chai = require("chai");
 import spies = require("chai-spies");
+import { NO_MAX_OBJECTS } from "../../../common/models/game3D";
 import { Objet3D } from "../../../common/models/objet3D";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
@@ -41,7 +42,14 @@ describe("object generator service", () => {
     });
     describe("Generating an object should be randomized", () => {
         it("Should return a valid object", async () => {
-            expect(typeof(service.generateRandom3Dobject(mockObjects))).to.eql(typeof(obj3D));
+            let goodtype: boolean = true;
+            for (let i: number = 0; i < NO_MAX_OBJECTS; i++) {
+                mockObjects.push(service.generateRandom3Dobject(mockObjects));
+                if (typeof(mockObjects[i]) !== typeof(obj3D)) {
+                    goodtype = false;
+                }
+            }
+            expect(goodtype).to.eql(true);
         });
     });
 });
