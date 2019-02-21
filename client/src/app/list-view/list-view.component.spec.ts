@@ -9,6 +9,8 @@ import { SimpleGeneratorComponent } from "../adminView/simple-generator/simple-g
 import { FreeGeneratorComponent } from "../adminView/free-generator/free-generator.component";
 import { FormsModule } from "@angular/forms";
 import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
+import { IGame } from "../../../../common/models/game";
+import { ITop3 } from "../../../../common/models/top3";
 
 describe("ListViewComponent", () => {
   let component: ListViewComponent;
@@ -31,7 +33,7 @@ describe("ListViewComponent", () => {
         Scene3DComponent
       ]
     })
-    .compileComponents().then(() => {}, (error: Error) => {});
+      .compileComponents().then(() => { }, (error: Error) => { });
   }));
 
   beforeEach(() => {
@@ -43,4 +45,19 @@ describe("ListViewComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("should route to game Play with the proper iD", () => {
+    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate");
+    const game: IGame = {
+      id: 1,
+      name: "string",
+      originalImageURL: "string",
+      modifiedImageURL: "string",
+      solo: {} as ITop3,
+      multi:  {} as ITop3
+    };
+    component.playSelectedSimpleGame(game);
+    expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + game.id]);
+  });
+
 });
