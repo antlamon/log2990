@@ -11,8 +11,6 @@ export class FileValidatorService {
   private readonly MIN_LENGTH: number = 3;
   private readonly MAX_LENGTH: number = 15;
 
-  public constructor() { }
-
   public dimensionsAreValid(bmpWidth: number, bmpHeight: number): boolean {
     return (bmpWidth === this.IMAGE_WIDTH && bmpHeight === this.IMAGE_HEIGHT);
   }
