@@ -16,22 +16,18 @@ export class Game3DGeneratorService {
     private readonly MINIMUM_CONTRAST: number = 0x00000F;
     private readonly PALE_COLOR: number = 0x0F0F0F;
 
-    private readonly TYPE_ERROR: Error = {
-        name: "Invalid game3D type: ",
-        message: "The type chosen for the new 3D game is not valid.",
-    };
-
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
     public createRandom3DGame(form: IGame3DForm): Game3D {
+
         this.formValidator(form);
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             return this.generateGeometryGame(form);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
             return this.generateThemeGame(form);
         } else {
-            throw this.TYPE_ERROR;
+            throw Error("The type chosen for the new 3D game is not valid.");
         }
     }
 
@@ -95,8 +91,6 @@ export class Game3DGeneratorService {
             throw Error("Le nombre d'objets doit être entre 10 et 200");
         } else if (!form.modifications.add && !form.modifications.delete && !form.modifications.color) {
             throw Error("Il faut choisir au moins une modification");
-        } else {
-            return;
         }
     }
 

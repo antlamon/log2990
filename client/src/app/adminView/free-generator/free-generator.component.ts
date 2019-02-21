@@ -13,7 +13,7 @@ import { Message, ERROR_ID } from "../../../../../common/communication/message";
   styleUrls: ["./free-generator.component.css"]
 })
 export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
-  
+
   public GAME_ID: number = 1;
   public gameName: string;
   public noObj: string;
