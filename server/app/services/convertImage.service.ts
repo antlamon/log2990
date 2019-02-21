@@ -5,6 +5,8 @@ import "reflect-metadata";
 export class ConvertImage {
   public static readonly ERROR_MESSAGE_WRONG_FORMAT: string = "Les images ne sont pas dans le bon format";
   public readonly VALID_BIT_COUNT: number = 24;
+  private readonly HEADER_BITS: number = 32;
+  private readonly BIT_SIZE: number = 4;
 
   public bufferToImageBMP(buffer: Buffer): ImageBMP {
 
@@ -35,8 +37,8 @@ export class ConvertImage {
   private getPixels(header: BMPHeader, buffer: Buffer): ImageBMP {
     const imageBMP: ImageBMP = {
       header: header,
-      // tslint:disable-next-line:no-magic-numbers
-      stride: Math.floor((header.infoHeader.biBitCount * header.infoHeader.biWidth + 31) / 32) * 4,
+      stride: Math.floor((header.infoHeader.biBitCount * header.infoHeader.biWidth + this.HEADER_BITS - 1)
+        / this.HEADER_BITS) * this.BIT_SIZE,
       width: header.infoHeader.biWidth,
       height: header.infoHeader.biHeight,
       pixels: [],
@@ -59,32 +61,34 @@ export class ConvertImage {
     return imageBMP;
   }
 
-  // tslint:disable:no-magic-numbers
   private getHeader(buffer: Buffer): BMPHeader {
+    let index: number = 0;
+    const int16Size: number = 2;
+    const int32Size: number = 4;
+
     return {
       fileHeader: {
-        bfType: buffer.readInt16LE(0, true),
-        bfSize: buffer.readInt32LE(2, true),
-        bfReserved1: buffer.readInt16LE(6, true),
-        bfReserved2: buffer.readInt16LE(8, true),
-        bfOffBits: buffer.readInt32LE(10, true),
+        bfType: buffer.readInt16LE(index, true),
+        bfSize: buffer.readInt32LE(index += int16Size, true),
+        bfReserved1: buffer.readInt16LE(index += int32Size, true),
+        bfReserved2: buffer.readInt16LE(index += int16Size, true),
+        bfOffBits: buffer.readInt32LE(index += int16Size, true),
       },
       infoHeader: {
-        biSize: buffer.readInt32LE(14, true),
-        biWidth: buffer.readInt32LE(18, true),
-        biHeight: buffer.readInt32LE(22, true),
-        biPlanes: buffer.readInt16LE(26, true),
-        biBitCount: buffer.readInt16LE(28, true),
-        biCompression: buffer.readInt32LE(30, true),
-        biSizeImage: buffer.readInt32LE(34, true),
-        biXPelsPerMeter: buffer.readInt32LE(38, true),
-        biYPelsPerMeter: buffer.readInt32LE(42, true),
-        biClrUsed: buffer.readInt32LE(46, true),
-        biClrImportant: buffer.readInt32LE(50, true),
+        biSize: buffer.readInt32LE(index += int32Size, true),
+        biWidth: buffer.readInt32LE(index += int32Size, true),
+        biHeight: buffer.readInt32LE(index += int32Size, true),
+        biPlanes: buffer.readInt16LE(index += int32Size, true),
+        biBitCount: buffer.readInt16LE(index += int16Size, true),
+        biCompression: buffer.readInt32LE(index += int16Size, true),
+        biSizeImage: buffer.readInt32LE(index += int32Size, true),
+        biXPelsPerMeter: buffer.readInt32LE(index += int32Size, true),
+        biYPelsPerMeter: buffer.readInt32LE(index += int32Size, true),
+        biClrUsed: buffer.readInt32LE(index += int32Size, true),
+        biClrImportant: buffer.readInt32LE(index += int32Size, true),
       },
     };
   }
-  // tslint:enable
 }
 
 export interface BMPHeader {
