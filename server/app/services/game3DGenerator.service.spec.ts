@@ -56,7 +56,7 @@ const mockScene: Scene3D = {
 
 const mock3DGame: Game3D = {
     name: "string",
-    id: 0,
+    id: "",
     originalScene: mockScene,
     modifiedScene: mockScene,
     solo: {first: 222, second: 223, third: 21312},

@@ -44,6 +44,7 @@ export class Game3DModificatorService {
     private createDifference(obj: Objet3D, objects: Objet3D[], typeObj: string,
                              typeModif:  {add: boolean, delete: boolean, color: boolean}): Objet3D | null {
 
+        // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
                 this.addObject(objects);
@@ -59,7 +60,6 @@ export class Game3DModificatorService {
                     return this.changeTexture(obj);
                 }
             }
-            default:
 
         }
 
@@ -106,6 +106,7 @@ export class Game3DModificatorService {
         let randModif: number = 0;
         while (!valid) {
             randModif = this.objectGenerator.randomInt(Game3DModificatorService.ADD, Game3DModificatorService.COLOR);
+            // tslint:disable-next-line:switch-default
             switch (randModif) {
                 case Game3DModificatorService.ADD: {
                     if (typeModif.add) {
@@ -125,7 +126,6 @@ export class Game3DModificatorService {
                     }
                     break;
                 }
-                default:
             }
         }
 

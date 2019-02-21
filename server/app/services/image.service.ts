@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
@@ -17,11 +17,15 @@ export class ImageService {
 
     public static readonly ERROR_MESSAGE_NOT_7_ERRORS: string = "Les images n'ont pas 7 différences";
     public static readonly ERROR_MESSAGE_SIZE_NOT_COMPATIBLE: string = "La taille des deux images n'est pas compatible";
+    public static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
 
     public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
     public getDifferencesImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
         try {
+
+            const originalImage: string = ImageService.BMP_S64_HEADER + originalBuffer.toString("base64");
+            const modifiedImage: string = ImageService.BMP_S64_HEADER + modifiedBuffer.toString("base64");
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
@@ -30,10 +34,11 @@ export class ImageService {
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
             writeFileSync(PATHS.DIFFERENCES_IMAGES_PATH + `${newImageName}.bmp`, modifiedBuffer);
+            const compareImage: string = ImageService.BMP_S64_HEADER + modifiedBuffer.toString("base64");
 
             return {
                 title: BASE_ID,
-                body: newImageName,
+                body: originalImage + modifiedImage + compareImage,
             };
 
         } catch (error) {
@@ -164,9 +169,5 @@ export class ImageService {
 
     public isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
-    }
-
-    public imageToString64(path: string): string {
-        return "data:image/bmp;base64," + readFileSync(path).toString("base64");
     }
 }

@@ -59,7 +59,7 @@ export class GameListController {
         });
 
         router.delete("/simple", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteSimpleGame(req.query.name).then(
+            this.gameListService.deleteSimpleGame(req.query.id).then(
                 (response: Message) => {
                     res.json(response);
                 },
@@ -69,7 +69,7 @@ export class GameListController {
         });
 
         router.delete("/free", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.deleteFreeGame(req.query.name).then(
+            this.gameListService.deleteFreeGame(req.query.id).then(
                 (response: Message) => {
                     res.json(response);
                 },

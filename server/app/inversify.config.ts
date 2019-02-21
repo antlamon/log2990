@@ -7,6 +7,7 @@ import { ImageController } from "./controllers/image.controller";
 import { Server } from "./server";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
+import { DatabaseService } from "./services/database.service";
 import { GameListService } from "./services/game-list.service";
 import { Game3DModificatorService } from "./services/game3DModificator.service";
 import { Game3DGeneratorService } from "./services/game3Dgenerator.service";
@@ -38,6 +39,7 @@ container.bind(TYPES.ObjectGeneratorService).to(ObjectGeneratorService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();
+container.bind(TYPES.DatabaseService).to(DatabaseService).inSingletonScope();
 
 container.bind(TYPES.IdentificationController).to(IdentificationController);
 container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManager);
