@@ -46,6 +46,25 @@ const mockScene: Scene3D = {
   });
 
   describe("Test for display mode : card or no card. ", () => {
+    it("should not display the 3DScene if in cardMode", () => {
+      component["isCardMode"] = true;
+      component.ngAfterViewInit();
+      expect(component["container"].style.display).toEqual("none");
+    });
+    it("should display the 3DScene if not in cardMode", () => {
+      component["isCardMode"] = false;
+      component.ngAfterViewInit();
+      expect(component["container"].style.display).toEqual("block");
+    });
+  });
+  describe("Test for the resize event.", () => {
+    it("should call render function Onresize when window is resized", () => {
+      const spyResize: jasmine.Spy =spyOn(component["renderService"], "onResize");
+      component.onResize();
+      expect(spyResize).toHaveBeenCalled();
+    });
+  });
+  describe("Test for the controlled calls to the renderer. ", () => {
     it("should not call the scene renderer if no game is given", () => {
       component["game"] = undefined;
       const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize");
@@ -59,16 +78,6 @@ const mockScene: Scene3D = {
       const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize");
       component.ngAfterViewInit();
       expect(spyInitialize).toHaveBeenCalled();
-    });
-    it("should not display the 3DScene if in cardMode", () => {
-      component["isCardMode"] = true;
-      component.ngAfterViewInit();
-      expect(component["container"].style.display).toEqual("none");
-    });
-    it("should display the 3DScene if not in cardMode", () => {
-      component["isCardMode"] = false;
-      component.ngAfterViewInit();
-      expect(component["container"].style.display).toEqual("block");
     });
   });
 
