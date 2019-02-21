@@ -4,7 +4,7 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongodb";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { IFullGame, IGame, ISimpleForm, IGame3DForm } from "../../../common/models/game";
+import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { Game3D } from "../../../common/models/game3D";
 import { container } from "../inversify.config";
 import { FREEGAMES } from "../mock-games";
@@ -75,6 +75,14 @@ const deleteWriteOPMock: DeleteWriteOpResultObject = {
     // The number of documents deleted.
     deletedCount: 1,
 };
+const mockGame3D: Game3D = {
+    name: "mock3DName",
+    id: "",
+    originalScene: { modified: false, numObj: -1, objects: [], backColor: -1,},
+    modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1,},
+    solo: { first: 1, second: 2, third: 3 },
+    multi: { first: 1, second: 2, third: 3 },
+}
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 describe("GameList service", () => {
@@ -199,6 +207,14 @@ describe("GameList service", () => {
                 service.deleteFreeGame("freeGame").then(
                     (message: Message) => {
                         expect(message.body).to.equal("Le jeu freeGame n'existe pas!");
+                        done();
+                    }).catch();
+            });
+            it("Deleting a free game that exist should return a relevant message", (done: Mocha.Done) => {
+                FREEGAMES.push(mockGame3D);
+                service.deleteFreeGame(mockGame3D.name).then(
+                    (message: Message) => {
+                        expect(message.body).to.equal(`Le jeu ${mockGame3D.name} a été supprimé`);
                         done();
                     }).catch();
             });

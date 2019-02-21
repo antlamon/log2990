@@ -4,7 +4,7 @@ import { ITop3 } from "./top3";
 export interface Game3D{
 
     name: string,
-    id: number,
+    id: string,
     originalScene: Scene3D,
     modifiedScene: Scene3D,
     solo: ITop3,

@@ -12,7 +12,7 @@ import { FREEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { DatabaseService } from "./database.service";
-import { Game3DGeneratorService } from "./game3Dgenerator.service";
+import { Game3DGeneratorService } from "./game3DGenerator.service";
 
 @injectable()
 export class GameListService {
