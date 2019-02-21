@@ -34,13 +34,11 @@ const mock3DGame: IGame3DForm = {
     objectType: "geometric",
     objectQty: 11,
     modifications: {add: true, delete: false, color: false},
-
-
-}
+};
 
 const mockedGame: IGame = {
+    id: "mockedID",
     name: "testGame",
-    id: 0,
     originalImageURL: "",
     solo: { first: 1, second: 2, third: 3 },
     multi: { first: 1, second: 2, third: 3 },

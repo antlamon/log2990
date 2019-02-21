@@ -1,7 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import FormData = require("form-data");
 import { inject, injectable } from "inversify";
-import { Collection, DeleteWriteOpResultObject } from "mongodb";
+import { Collection, DeleteWriteOpResultObject, ObjectID } from "mongodb";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
@@ -36,15 +36,15 @@ export class GameListService {
         return FREEGAMES;
     }
 
-    public async deleteSimpleGame(gameName: string): Promise<Message> {
-       return this.simpleCollection.deleteOne({"card.name": gameName}).then( (res: DeleteWriteOpResultObject) => {
+    public async deleteSimpleGame(id: string): Promise<Message> {
+       return this.simpleCollection.deleteOne({"card.id": id}).then( (res: DeleteWriteOpResultObject) => {
             if ( res.deletedCount === 1 ) {
                this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
 
-               return { title: BASE_ID, body: `Le jeu ${gameName} a été supprimé!` };
+               return { title: BASE_ID, body: `Le jeu ${id} a été supprimé!` };
            } else {
 
-               return { title: BASE_ID, body: `Le jeu ${gameName} n'existe pas!` };
+               return { title: BASE_ID, body: `Le jeu ${id} n'existe pas!` };
            }
         }).catch();
     }
@@ -77,8 +77,9 @@ export class GameListService {
             const imagesArray: string[] = message.body.split(GameListService.BMP_S64_HEADER);
             this.simpleCollection.insertOne(
                 {card: {
+                    id: (new ObjectID()).toHexString(),
                     name: newGame.name,
-                    imageURL: GameListService.BMP_S64_HEADER + imagesArray[1],
+                    originalImageURL: GameListService.BMP_S64_HEADER + imagesArray[1],
                     solo: this.top3RandomOrder(),
                     multi: this.top3RandomOrder(),
             },
