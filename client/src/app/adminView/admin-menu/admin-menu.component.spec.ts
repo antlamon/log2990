@@ -48,4 +48,18 @@ describe("AdminMenuComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  describe("Test for the modal ", () => {
+    it("should call the simpleModal from the modalService", () => {
+      const spySimple: jasmine.Spy = spyOn(component["modalService"], "open");
+      component.openSimpleDialog("simpleModal");
+      expect(spySimple).toHaveBeenCalledWith("simpleModal");
+    });
+    it("should call the freeeModal from the modalService", () => {
+      const spyFree: jasmine.Spy = spyOn(component["modalService"], "open");
+      component.openFreeDialog("freeeModal");
+      expect(spyFree).toHaveBeenCalledWith("freeeModal");
+    });
+  });
+
 });
