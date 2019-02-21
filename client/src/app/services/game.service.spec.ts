@@ -8,7 +8,7 @@ import { TestHelper } from "src/test.helper";
 import { Game3D } from "../../../../common/models/game3D";
 
 describe("GameService", () => {
-    const mockedID: number = 40593;
+    const mockedID: string = "mockedId";
     const mocked3DGame: Game3D = { name: "testGame" } as Game3D;
     const mocked2DGame: IGame = { name: "testGame" } as IGame;
 

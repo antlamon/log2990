@@ -114,8 +114,7 @@ export class ImageService {
         const imageCompared: ImageBMP = image1;
         const pixels: Pixel[][] = [];
         const differentPixels: [number, number][] = [];
-        if (image1.height !== image2.height || image1.width !== image2.width
-            || image1.height !== ImageService.IMAGE_HEIGHT || image1.width !== ImageService.IMAGE_WIDTH) {
+        if (!this.validSize(image1, image2)) {
             throw Error(ImageService.ERROR_MESSAGE_SIZE_NOT_COMPATIBLE);
         }
         for (let i: number = 0; i < image1.height; i++) {
@@ -136,7 +135,10 @@ export class ImageService {
 
         return imageCompared;
     }
-
+    private validSize(image1: ImageBMP, image2: ImageBMP): boolean {
+        return !(image1.height !== image2.height || image1.width !== image2.width
+            || image1.height !== ImageService.IMAGE_HEIGHT || image1.width !== ImageService.IMAGE_WIDTH);
+    }
     public enlargeBlackPixels(image: ImageBMP, pixelsToEnlarge: [number, number][]): void {
         pixelsToEnlarge.forEach((element: [number, number]) => {
             const i: number = element[0];

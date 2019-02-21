@@ -25,7 +25,7 @@ export class GameService {
     );
   }
 
-  public async getSimpleGame(id: number): Promise<IGame> {
+  public async getSimpleGame(id: string): Promise<IGame> {
     const url: string = this.SIMPLE_URL + "?id=" + id;
     (console as Console).log(url);
 

@@ -1,3 +1,4 @@
+import { ObjectID } from "bson";
 import { inject, injectable } from "inversify";
 import { IGame3DForm } from "../../../common/models/game";
 import { Game3D, GEOMETRIC_TYPE_NAME, NO_MAX_OBJECTS, NO_MIN_OBJECTS, Scene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
@@ -11,7 +12,6 @@ import { ObjectGeneratorService } from "./objectGenerator.service";
 @injectable()
 export class Game3DGeneratorService {
 
-    private static id: number = 1;
 
     private readonly MINIMUM_CONTRAST: number = 0x00000F;
     private readonly PALE_COLOR: number = 0x0F0F0F;
@@ -50,7 +50,7 @@ export class Game3DGeneratorService {
 
         return {
             name: form.name,
-            id: Game3DGeneratorService.id++,
+            id: (new ObjectID()).toHexString(),
             originalScene: scene,
             modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications),
             solo: this.top3RandomOrder(),

@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component} from "@angular/core";
 import {IndexService} from "../services/index.service";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
 import { Router} from "@angular/router";
@@ -8,15 +8,12 @@ import { Router} from "@angular/router";
   templateUrl: "./initial.component.html",
   styleUrls: ["./initial.component.css"]
 })
-export class InitialComponent implements OnInit {
+export class InitialComponent {
   public username: string;
   public readonly MESSAGE_BOX_ID: string = "message_box";
 
   public constructor(private indexService: IndexService, private router: Router) {
     this.username = ""; // invalid name
-  }
-
-  public ngOnInit(): void {
   }
 
   public connect(username: string): void {
