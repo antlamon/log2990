@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, HostListener, Input } from "@angular/core";
-import {RenderService} from "./render.service";
+import { RenderService } from "./render.service";
 import { Scene3D } from "../../../../../common/models/game3D";
 
 @Component({
@@ -19,7 +19,7 @@ export class Scene3DComponent implements AfterViewInit {
   }
 
   private get container(): HTMLDivElement {
-      return this.containerRef.nativeElement;
+    return this.containerRef.nativeElement;
   }
 
   @ViewChild("container")
@@ -33,9 +33,11 @@ export class Scene3DComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     if ( this.game !== undefined) {
       this.renderService.initialize(this.container, this.game);
-      this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
+      setTimeout(() => {
+        this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
+      },         1); // make sure scene is rendered before
     }
-    this.container.style.display =  this.isCardMode ? "none" : "block";
+    this.container.style.display = this.isCardMode ? "none" : "block";
   }
 
 }
