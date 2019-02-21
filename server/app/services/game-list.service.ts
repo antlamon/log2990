@@ -5,12 +5,14 @@ import { Collection, DeleteWriteOpResultObject } from "mongodb";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
-import { IFullGame, IGame, ISimpleForm } from "../../../common/models/game";
+import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { ITop3 } from "../../../common/models/top3";
 import { FREEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { DatabaseService } from "./database.service";
+import { Game3DGeneratorService } from "./game3Dgenerator.service";
 
 @injectable()
 export class GameListService {
@@ -22,24 +24,16 @@ export class GameListService {
     private _simpleCollection: Collection;
 
     public constructor( @inject(TYPES.SocketServerManager) private socketController: SocketServerManager,
+                        @inject(TYPES.Game3DGeneratorService) private game3DGenerator: Game3DGeneratorService,
                         @inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
-
-        // for sprint1, load the image as string64. Will be changed later for a database
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
          return this.simpleCollection.find({}).map((x: IFullGame) => x.card).toArray();
     }
 
-    public async getFreeGames(): Promise<IGame[]> {
-        return [];
-    }
-
-    public async addFreeGame(newGame: IGame): Promise<IGame> {
-        // Not implemented for sprint1
-        FREEGAMES.push(newGame); // mock-data for sprint1
-
-        return (newGame);
+    public async getFreeGames(): Promise<Game3D[]> {
+        return FREEGAMES;
     }
 
     public async deleteSimpleGame(gameName: string): Promise<Message> {
@@ -56,7 +50,7 @@ export class GameListService {
     }
 
     public async deleteFreeGame(gameName: string): Promise<Message> {
-        const index: number = FREEGAMES.findIndex((x: IGame) => x.name === gameName);
+        const index: number = FREEGAMES.findIndex((x: Game3D) => x.name === gameName);
         if (index === -1) {
             return { title: ERROR_ID, body: `Le jeu ${gameName} n'existe pas!` };
         }
@@ -95,6 +89,20 @@ export class GameListService {
         }
 
         return (message);
+    }
+
+    public async addFreeGame(newGame: IGame3DForm): Promise<Message> {
+        // validate the form
+        // if not valid... to be completed.. function implemented for testing
+
+        try {
+            this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
+            FREEGAMES.push(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database
+
+            return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};
+        } catch (error) {
+                return {title: ERROR_ID, body: error.message};
+        }
     }
 
     public top3RandomOrder(): ITop3 {

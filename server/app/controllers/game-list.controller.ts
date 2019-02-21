@@ -3,6 +3,7 @@ import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { GameListService, MulterFile } from "../services/game-list.service";
 import { TYPES } from "../types";
 
@@ -47,6 +48,16 @@ export class GameListController {
                 });
         });
 
+        router.post("/free", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.addFreeGame(req.body).then(
+                (response: Message) => {
+                    res.json(response);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
+        });
+
         router.delete("/simple", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.deleteSimpleGame(req.query.name).then(
                 (response: Message) => {
@@ -79,18 +90,8 @@ export class GameListController {
 
         router.get("/free", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.getFreeGames().then(
-                (freeGames: IGame[]) => {
+                (freeGames: Game3D[]) => {
                     res.json(freeGames);
-                },
-                (error: Error) => {
-                    res.json(error);
-                });
-        });
-
-        router.post("/free", (req: Request, res: Response, next: NextFunction) => {
-            this.gameListService.addFreeGame(req.body).then(
-                (game: IGame) => {
-                    res.json(game);
                 },
                 (error: Error) => {
                     res.json(error);

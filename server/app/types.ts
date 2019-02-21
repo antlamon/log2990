@@ -12,6 +12,9 @@ const TYPES =  {
         UserManager: Symbol("UserManager"),
         SocketServerManager: Symbol("SocketServerManager"),
         DatabaseService: Symbol("DatabaseService"),
+        Game3DGeneratorService: Symbol("Game3DGeneratorService"),
+        Game3DModificatorService: Symbol("Game3DModificatorService"),
+        ObjectGeneratorService: Symbol("ObjectGeneratorService"),
 };
 
 export  { TYPES };

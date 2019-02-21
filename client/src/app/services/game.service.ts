@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
-import { IGame, ISimpleForm } from "../../../../common/models/game";
+import { IGame, ISimpleForm, IGame3DForm } from "../../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Message } from "../../../../common/communication/message";
 import { BASE_SERVER_PATH } from "../global/constants";
+import { Game3D } from "../../../../common/models/game3D";
 
 @Injectable({
   providedIn: "root"
@@ -24,18 +25,29 @@ export class GameService {
     );
   }
 
+  public async getSimpleGame(id: number): Promise<IGame> {
+    const url: string = this.SIMPLE_URL + "?id=" + id;
+    (console as Console).log(url);
+
+    return this.http.get<IGame>(url).pipe(
+      catchError(this.handleError<IGame>("getSimpleGame"))
+    ).toPromise();
+  }
+
   private handleError<T>(request: string, result?: T): (error: Error) => Observable<T> {
     return (error: Error): Observable<T> => {
       return of(result as T);
     };
   }
 
-  public getFreeGames(): Observable<IGame[]> {
-    return this.http.get<IGame[]>(this.FREE_URL);
+  public getFreeGames(): Observable<Game3D[]> {
+    return this.http.get<Game3D[]>(this.FREE_URL);
   }
+
   public createSimpleGame(game: ISimpleForm): Observable<Message> {
 
     const form: FormData = new FormData();
+    form.append("id", String(game.id));
     form.append("name", game.name);
     form.append("originalImage", game.originalImage, game.originalImage.name);
     form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);
@@ -46,7 +58,7 @@ export class GameService {
 
   }
 
-  public createFreeGame(game: IGame): void {
+  public createFreeGame(game: IGame3DForm): Observable<Message> {
     // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
@@ -54,7 +66,10 @@ export class GameService {
       })
     };
 
-    this.http.post<Message>(this.FREE_URL, game, httpOptions).subscribe();
+    return this.http.post<Message>(this.FREE_URL, game, httpOptions).pipe(
+      catchError(this.handleError<Message>("createFreeGame"))
+    );
+
   }
 
   public deleteSimpleGame(game: IGame): Observable<{}> {
@@ -64,19 +79,19 @@ export class GameService {
         "Content-Type": "application/json"
       })
     };
-    const url: string = this.SIMPLE_URL + "?name=" + game.name;
+    const url: string = this.SIMPLE_URL + "?id=" + game.id;
 
     return this.http.delete(url, httpOptions);
   }
 
-  public deleteFreeGame(game: IGame): Observable<{}> {
+  public deleteFreeGame(game: Game3D): Observable<{}> {
     // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
     };
-    const url: string = this.SIMPLE_URL + "?name=" + game.name;
+    const url: string = this.FREE_URL + "?id=" + game.id;
 
     return this.http.delete(url, httpOptions);
   }

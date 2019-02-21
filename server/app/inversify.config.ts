@@ -8,7 +8,10 @@ import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
 import { DatabaseService } from "./services/database.service";
 import { GameListService } from "./services/game-list.service";
+import { Game3DModificatorService } from "./services/game3DModificator.service";
+import { Game3DGeneratorService } from "./services/game3Dgenerator.service";
 import { ImageService } from "./services/image.service";
+import { ObjectGeneratorService } from "./services/objectGenerator.service";
 import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
@@ -27,6 +30,10 @@ container.bind(TYPES.ConnexionController).to(ConnexionController);
 
 container.bind(TYPES.GameListController).to(GameListController);
 container.bind(TYPES.GameListService).to(GameListService);
+
+container.bind(TYPES.Game3DGeneratorService).to(Game3DGeneratorService);
+container.bind(TYPES.Game3DModificatorService).to(Game3DModificatorService);
+container.bind(TYPES.ObjectGeneratorService).to(ObjectGeneratorService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();

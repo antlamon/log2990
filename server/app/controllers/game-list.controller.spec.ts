@@ -5,7 +5,7 @@ import { BASE_ID, Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
 import { Application } from "../app";
 import { container } from "../inversify.config";
-import { FREEGAMES, SIMPLEGAMES } from "../mock-games";
+import { FREEGAMES } from "../mock-games";
 import { PATHS } from "../path";
 import { GameListService } from "../services/game-list.service";
 import { ImageService } from "../services/image.service";
@@ -21,8 +21,9 @@ const mockedMessage: Message = {
 };
 
 const mockedGame: IGame = {
+    id: 34093,
     name: "testGame",
-    imageURL: "",
+    originalImageURL: "",
     solo: {first: 1, second: 2, third: 3},
     multi: {first: 1, second: 2, third: 3},
 };
@@ -131,23 +132,23 @@ describe("Game list controller", () => {
     });
 
     it("Get to simple should get SIMPLEGAMES", (done: Mocha.Done) => {
-        sandbox.on(gameListService, "getSimpleGames", async() => Promise.resolve(SIMPLEGAMES));
+        sandbox.on(gameListService, "getSimpleGames", async() => Promise.resolve([]));
         supertest(app)
         .get(baseURL + "simple")
         .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
-            expect(response.body).to.eql(SIMPLEGAMES);
+            expect(response.body).to.eql([]);
             done(error);
         });
     });
 
     it("Get to simple should get SIMPLEGAMES from promise rejection", (done: Mocha.Done) => {
-        sandbox.on(gameListService, "getSimpleGames", async() => Promise.reject(SIMPLEGAMES));
+        sandbox.on(gameListService, "getSimpleGames", async() => Promise.reject([]));
         supertest(app)
         .get(baseURL + "simple")
         .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
-            expect(response.body).to.eql(SIMPLEGAMES);
+            expect(response.body).to.eql([]);
             done(error);
         });
     });

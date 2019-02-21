@@ -1,43 +1,45 @@
 <div class="freeViewForm">
-  <div>
-    <h1>Créer un jeu point de vue libre</h1>
+  <h1>Créer un jeu point de vue libre</h1>
+  <div>  
     <p>Format d'image: bitmap 24-bit (640x480)</p>
+    <form id="formSV">
+      <div class="form-grid">
+        <div>
+          <p id="gameName">Nom du jeu</p>
+        </div>
+        <div class="rightColumn">
+          <input [(ngModel)]="gameName" placeholder="Nom du jeu" name="gameNAM"/>
+        </div>
+        <div>
+          <p id="typeObj">Type d'objets</p>
+        </div>
+        <select class="rightColumn" (change)="changeType($event.target.value)">
+          <option value={{type1}}> formes géométriques</option>
+          <option value={{type2}}>thématique </option>
+        </select>
+        <div>
+          <p id="noObj">Quantité d'objets</p>
+        </div>
+        <div class="rightColumn">
+          <input [(ngModel)]="noObj" placeholder="Nombre d'objets" name="noOBJ"/>
+        </div>
+        <div>
+          <p id="typeModif">Type de modifications</p>
+        </div>
+        <div class="rightColumn">
+          <input type="checkbox" id="add" value="add" (click)="changeModif(0)"> Ajout<br>
+          <input type="checkbox" id="delete" value="delete" (click)="changeModif(1)"> Supression <br>
+          <input type="checkbox" id="colorChange" value="colorChange" (click)="changeModif(2)"> Changement de couleur <br>
+        </div>
+      </div>
+    </form>
   </div>
-
-  <div class="form-grid">
-    <div>
-      <p>Nom du jeu</p>
-    </div>
-    <div class="rightColumn">
-      <input type="text">
-    </div>
-    <div>
-      <p>Type d'objets</p>
-    </div>
-    <select class="rightColumn">
-      <option value="none"></option>
-      <option value="formesGeo"> formes géométriques</option>
-      <option value="thematique">thématique </option>
-    </select>
-    <div>
-      <p>Quantité d'objets</p>
-    </div>
-    <div class="rightColumn">
-      <input type="text">
-    </div>
-    <div>
-      <p>Type de modifications</p>
-    </div>
-    <div class="rightColumn">
-      <input type="checkbox" value="add"> Ajout<br>
-      <input type="checkbox" value="delete"> Supression <br>
-      <input type="checkbox" value="colorChange"> Changement de couleur <br>
-    </div>
-    <div>
-      <button (click)="submit()">Soumettre </button>
+  <div >
+    <div class="buttons">
+      <button type="submit" id="submitButton" (click)="submit()">Soumettre </button>
       <button (click)="close()"> Annuler </button>
     </div>
+    <div id="errorMessages" class="errorsDiv"></div>
   </div>
 </div>
-
-  <div class="form-background"></div>
+<div class="form-background"></div>

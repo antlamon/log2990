@@ -4,7 +4,8 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongodb";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { IFullGame, IGame, ISimpleForm } from "../../../common/models/game";
+import { IFullGame, IGame, ISimpleForm, IGame3DForm } from "../../../common/models/game";
+import { Game3D } from "../../../common/models/game3D";
 import { container } from "../inversify.config";
 import { FREEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
@@ -28,10 +29,19 @@ const mockedErrorMessage: Message = {
     title: ERROR_ID,
     body: "error",
 };
+const mock3DGame: IGame3DForm = {
+    name: "3dgame",
+    objectType: "geometric",
+    objectQty: 11,
+    modifications: {add: true, delete: false, color: false},
+
+
+}
 
 const mockedGame: IGame = {
     name: "testGame",
-    imageURL: "",
+    id: 0,
+    originalImageURL: "",
     solo: { first: 1, second: 2, third: 3 },
     multi: { first: 1, second: 2, third: 3 },
 };
@@ -42,12 +52,14 @@ const mockedFullGame: IFullGame = {
 };
 
 const mockedSimpleGame: ISimpleForm = {
+    id: 3948,
     name: "testSimpleGame",
     originalImage: {} as File,
     modifiedImage: {} as File,
 };
 
 const mockedErrorGame: ISimpleForm = {
+    id: 0,
     name: "error",
     originalImage: {} as File,
     modifiedImage: {} as File,
@@ -107,8 +119,8 @@ describe("GameList service", () => {
 
         it("Getting free games should return FREEGAMES", async () => {
             service.getFreeGames().then(
-                (games: IGame[]) => {
-                    expect(games).to.eql([]);
+                (games: Game3D[]) => {
+                    expect(games).to.eql(FREEGAMES);
                 },
                 () => fail(),
             );
@@ -117,9 +129,9 @@ describe("GameList service", () => {
 
     describe("Adding games", () => {
         it("Adding a free game should return the game", async () => {
-            service.addFreeGame(mockedGame).then(
-                (message: IGame) => {
-                    expect(message.name).to.eql(mockedGame.name);
+            service.addFreeGame(mock3DGame).then(
+                (message: Message) => {
+                    expect(message.title).to.eql(" The 3D form sent was correct. ");
                 },
                 () => fail(),
             );
@@ -184,21 +196,6 @@ describe("GameList service", () => {
         });
 
         describe("Deleting free games", () => {
-            it("Deleting a free game should return a relevant message", async () => {
-                const freeGame: IGame = {
-                    name: "freeGame",
-                    imageURL: "",
-                    solo: { first: 1, second: 2, third: 3 },
-                    multi: { first: 1, second: 2, third: 3 },
-                };
-                FREEGAMES.push(freeGame);
-                service.deleteFreeGame("freeGame").then(
-                    (message: Message) => {
-                        expect(message.body).to.equal("Le jeu freeGame a été supprimé");
-                    },
-                    () => fail(),
-                );
-            });
 
             it("Deleting a free game that doesnt exist should return a relevant message", (done: Mocha.Done) => {
                 service.deleteFreeGame("freeGame").then(

@@ -19,6 +19,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   public readonly ID_ORIGINAL_FILE: string = "originalFile";
   public readonly ID_ORIGINAL_FILENAME: string = "originalFileName";
   public readonly VALID_FILE_EXTENSION: string = "image/bmp";
+  public GAME_ID: number = 1;
 
   private readonly WIDTH_OFFSET: number = 18;
   private readonly HEIGHT_OFFSET: number = 22;
@@ -90,7 +91,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     if (this.modifiedFileIsOK && this.originalFileIsOK && this.fileValidator.isValidGameName(this.gameName)) {
       const file1: File = (document.getElementById(this.ID_ORIGINAL_FILE) as HTMLInputElement).files[0];
       const file2: File = (document.getElementById(this.ID_MODIFIED_FILE) as HTMLInputElement).files[0];
-      const newGame: ISimpleForm = { name: this.gameName, originalImage: file1, modifiedImage: file2 };
+      const newGame: ISimpleForm = { id: this.GAME_ID, name: this.gameName, originalImage: file1, modifiedImage: file2 };
+      this.GAME_ID ++;
       this.gameService.createSimpleGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
           this.showErrorMessage("L'opération a été annulée: ");
@@ -116,6 +118,15 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.gameName = "";
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
+    this.resetErrors(["gameNameLabel", this.ID_MODIFIED_FILENAME, this.ID_ORIGINAL_FILENAME]);
+    this.clearErrorMessages();
+  }
+
+  private resetErrors(ids: string[]): void {
+
+    for (const id of ids) {
+      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
+    }
   }
 
   private validity(condition: boolean, id: string, errorMessage: string): void {
@@ -135,8 +146,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   public close(): void {
-    this.element.style.display = "none";
     this.resetForm();
+    this.element.style.display = "none";
     document.body.classList.remove("modal-open");
   }
 
