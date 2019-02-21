@@ -14,7 +14,7 @@ const HTTP_BADREQUEST: number = 400;
 const path1: string = "./app/documents/test-images/image_test_1.bmp";
 const path2: string = "./app/documents/test-images/image_test_2.bmp";
 
-const mockedGetDiffenrenceData: Message = {
+const mockedGetDifferenceData: Message = {
     title: "Image created",
     body: "Image with difference created",
 };
@@ -39,7 +39,7 @@ describe("Image Controller", () => {
     before(() => {
         container.snapshot();
         const service: ImageService = container.get<ImageService>(TYPES.ImageService);
-        sandbox.on(service, "getDifferencesImage", () => mockedGetDiffenrenceData);
+        sandbox.on(service, "getDifferencesImage", () => mockedGetDifferenceData);
         sandbox.on(service, "imageToString64", () => "");
         container.rebind(TYPES.ImageService).toConstantValue(service);
         app = container.get<Application>(TYPES.Application).app;
@@ -58,7 +58,7 @@ describe("Image Controller", () => {
         .attach("modifiedImage", path2)
         .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
-            expect(response.body).to.eql(mockedGetDiffenrenceData, "Image differences not created");
+            expect(response.body).to.eql(mockedGetDifferenceData, "Image differences not created");
             done(error);
         });
     });

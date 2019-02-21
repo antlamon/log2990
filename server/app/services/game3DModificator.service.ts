@@ -59,7 +59,7 @@ export class Game3DModificatorService {
                     return this.changeTexture(obj);
                 }
             }
-            default: throw Error("No modifications chosen");
+            default:
 
         }
 
@@ -105,7 +105,7 @@ export class Game3DModificatorService {
         let valid: boolean = false;
         let randModif: number = 0;
         while (!valid) {
-            randModif = this.objectGenerator.randomInt(1, 3);
+            randModif = this.objectGenerator.randomInt(Game3DModificatorService.ADD, Game3DModificatorService.COLOR);
             switch (randModif) {
                 case Game3DModificatorService.ADD: {
                     if (typeModif.add) {
@@ -125,7 +125,7 @@ export class Game3DModificatorService {
                     }
                     break;
                 }
-                default: break;
+                default:
             }
         }
 

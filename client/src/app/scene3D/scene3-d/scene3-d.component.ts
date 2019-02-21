@@ -31,8 +31,10 @@ export class Scene3DComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    this.renderService.initialize(this.container, this.game);
-    this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
+    if ( this.game != undefined) {
+      this.renderService.initialize(this.container, this.game);
+      this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
+    }
     this.container.style.display =  this.isCardMode ? "none" : "block";
   }
 
