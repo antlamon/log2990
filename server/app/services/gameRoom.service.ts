@@ -29,9 +29,13 @@ export class GameRoomService {
 
     public async checkDifference(gameRoomId: string, username: string, point: Point): Promise<GameRoomUpdate> {
         const response: AxiosResponse = await Axios.get(this.IDENTIFICATION_URL,
-                                                        { params: { gameRoomId: gameRoomId, point: point }});
+                                                        { params: { gameRoomId: gameRoomId, point: point } });
         if (response.data.title !== BASE_ID) {
-            return Promise.reject(response.data.body);
+            return {
+                username: username,
+                newImage: response.data.body,
+                differencesFound: -1,
+            };
         }
         let gamer: Gamer | undefined = this.gameRooms[gameRoomId].find((user: Gamer) => user.username === username);
         if (gamer === undefined) {

@@ -1,7 +1,7 @@
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
-import { GameRoomUpdate, NewGameMessage, Point } from "../../../common/communication/message";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/gameRoom.service";
 import { UsersManager } from "../services/users.service";
@@ -23,8 +23,8 @@ export class SocketServerManager {
             socket.on(SocketsEvents.CREATE_GAME_ROOM, (newGameMessage: NewGameMessage) => {
                 this.handleNewGameRoom(socket, newGameMessage);
             });
-            socket.on(SocketsEvents.CHECK_DIFFERENCE, (gameRoomId: string, username: string, point: Point) => {
-                this.handleCheckDifference(gameRoomId, username, point);
+            socket.on(SocketsEvents.CHECK_DIFFERENCE, (event: ImageClickMessage) => {
+                this.handleCheckDifference(event);
             });
             socket.on("disconnect", () => {
                 this.userManager.removeUser(socket.client.id);
@@ -37,13 +37,7 @@ export class SocketServerManager {
     }
 
     private handleNewGameRoom(socket: Socket, newGameMessage: NewGameMessage): void {
-        this.gameRoomService.createNewGameRoom({
-            originalImagePath: "./app/documents/test-images/image_test_1.bmp",
-            modifiedImagePath: "./app/documents/test-images/image_test_2.bmp",
-            differenceImagePath: "./app/documents/test-images/image_result.bmp",
-            username: "alloa",
-            gameRoomId: "alloa",
-        }).then(
+        this.gameRoomService.createNewGameRoom(newGameMessage).then(
             (roomId: string) => {
                 socket.join(roomId);
                 this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId);
@@ -53,13 +47,10 @@ export class SocketServerManager {
             });
     }
 
-    private handleCheckDifference(gameRoomId: string, username: string, point: Point): void {
-        this.gameRoomService.checkDifference(gameRoomId, username, point).then(
+    private handleCheckDifference(event: ImageClickMessage): void {
+        this.gameRoomService.checkDifference(event.gameRoomId, event.username, event.point).then(
             (gameRoomUpdate: GameRoomUpdate) => {
-                this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, gameRoomId, gameRoomUpdate);
-            },
-            (rejection: string) => {
-                this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, gameRoomId, rejection);
+                this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, event.gameRoomId, gameRoomUpdate);
             });
     }
 

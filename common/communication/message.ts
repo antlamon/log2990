@@ -23,3 +23,9 @@ export interface GameRoomUpdate {
     differencesFound: number;
     newImage: string;
 }
+
+export interface ImageClickMessage {
+    username: string;
+    gameRoomId: string;
+    point: Point;
+}

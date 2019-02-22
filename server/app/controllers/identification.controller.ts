@@ -16,7 +16,7 @@ export class IdentificationController {
 
         router.get("/", (req: Request, res: Response, next: NextFunction) => {
             const gameRoomId: string = req.query.gameRoomId;
-            const point: Point = req.query.point;
+            const point: Point = JSON.parse(req.query.point);
             res.json(this.identificationServiceManager.getDifference(gameRoomId, point));
         });
 

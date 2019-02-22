@@ -88,12 +88,12 @@ describe("GameRoomService", () => {
             sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
             service.checkDifference("test", "user", { x: 0, y: 0 })
                 .then(
-                    (error: GameRoomUpdate) => {
-                        done(error);
-                    },
-                    (rejection: string) => {
-                        expect(rejection).to.equal("error");
+                    (update: GameRoomUpdate) => {
+                        expect(update.differencesFound).to.equal(-1);
                         done();
+                    },
+                    (error: string) => {
+                        done(error);
                     });
         });
     });
