@@ -43,7 +43,7 @@ export class ListViewComponent implements OnInit {
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe((response: Game3D[]) => {this.freeGames = response;console.log(response);});
+        .subscribe((response: Game3D[]) => {this.freeGames = response; });
   }
 
   public deleteFreeGames(game: Game3D): void {

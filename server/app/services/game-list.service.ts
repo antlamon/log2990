@@ -34,9 +34,8 @@ export class GameListService {
     }
 
     public async getFreeGames(): Promise<Game3D[]> {
-        let a = this.freeCollection.find({}).toArray();
-        console.log(a);
-        return a;
+
+        return this.freeCollection.find({}).toArray();
     }
 
     public async deleteSimpleGame(id: string): Promise<Message> {
@@ -56,6 +55,7 @@ export class GameListService {
         return this.freeCollection.deleteOne({"id": id}).then( (res: DeleteWriteOpResultObject) => {
             if ( res.deletedCount === 1 ) {
                this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
+
                return { title: BASE_ID, body: `Le jeu ${id} a été supprimé!` };
            } else {
 
@@ -115,9 +115,9 @@ export class GameListService {
         }
         scores.sort();
 
-        return { first: {name: "GoodComputer", score: (scores[0].toString() + ":00")}, 
-                 second: {name: "MediumComputer", score: (scores[1].toString() + ":00")}, 
-                 third: {name: "BadComputer", score: (scores[2].toString() + ":00")}
+        return { first: {name: "GoodComputer", score: (scores[0].toString() + ":00")},
+                 second: {name: "MediumComputer", score: (scores[1].toString() + ":00")},
+                 third: {name: "BadComputer", score: (scores[2].toString() + ":00")},
                 };
     }
 

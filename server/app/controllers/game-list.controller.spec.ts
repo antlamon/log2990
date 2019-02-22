@@ -3,6 +3,7 @@ import spies = require("chai-spies");
 import supertest = require("supertest");
 import { BASE_ID, Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
+import { ITop3 } from "../../../common/models/top3";
 import { Application } from "../app";
 import { container } from "../inversify.config";
 import { FREEGAMES } from "../mock-games";
@@ -10,7 +11,6 @@ import { PATHS } from "../path";
 import { GameListService } from "../services/game-list.service";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
-import { ITop3 } from "../../../common/models/top3";
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);

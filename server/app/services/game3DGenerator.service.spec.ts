@@ -4,10 +4,10 @@ import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { Game3D, GEOMETRIC_TYPE_NAME, Scene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { Objet3D } from "../../../common/models/objet3D";
+import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
-import { ITop3 } from "../../../common/models/top3";
 
 const mockBadGameType: IGame3DForm = {
     name: "heres my new game",

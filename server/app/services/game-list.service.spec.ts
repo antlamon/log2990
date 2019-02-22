@@ -6,13 +6,13 @@ import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongod
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { Game3D } from "../../../common/models/game3D";
+import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { FREEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { GameListService, MulterFile } from "./game-list.service";
 import { ImageService } from "./image.service";
-import { ITop3 } from "../../../common/models/top3";
 
 // tslint:disable-next-line:typedef
 const mongoMock = require("mongo-mock");

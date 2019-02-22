@@ -80,9 +80,9 @@ export class Game3DGeneratorService {
         }
         scores.sort();
 
-        return { first: {name: "GoodComputer", score:scores[0].toString() + ":00"}, 
-                 second: {name: "MediumComputer", score:scores[1].toString() + ":00"}, 
-                 third: {name: "BadComputer", score:scores[2].toString() + ":00"}
+        return { first: {name: "GoodComputer", score: scores[0].toString() + ":00"},
+                 second: {name: "MediumComputer", score: scores[1].toString() + ":00"},
+                 third: {name: "BadComputer", score: scores[2].toString() + ":00"},
                 };
     }
 
