@@ -87,8 +87,8 @@ export class GameListService {
                     solo: this.top3RandomOrder(),
                     multi: this.top3RandomOrder(),
             },
-                 modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[2] ,
-                 differenceImage: GameListService.BMP_S64_HEADER + imagesArray[3] }).then(
+                 modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[3] ,
+                 differenceImage: GameListService.BMP_S64_HEADER + imagesArray[2] }).then(
                                         () => { this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES); },
                                     ).catch();
         }
