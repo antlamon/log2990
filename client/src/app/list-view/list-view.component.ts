@@ -37,7 +37,7 @@ export class ListViewComponent implements OnInit {
   }
 
   public deleteSimpleGames(game: IGame): void {
-    // faudra afficher le message
+    // TODO: warning delete box "are you sure? yes/no"
     this.gameService.deleteSimpleGame(game).subscribe();
   }
 
@@ -47,7 +47,7 @@ export class ListViewComponent implements OnInit {
   }
 
   public deleteFreeGames(game: Game3D): void {
-    // faudra afficher le message
+    // TODO: warning delete box "are you sure? yes/no"
     this.gameService.deleteFreeGame(game).subscribe();
   }
 
