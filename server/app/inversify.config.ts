@@ -11,6 +11,7 @@ import { DatabaseService } from "./services/database.service";
 import { GameListService } from "./services/game-list.service";
 import { Game3DGeneratorService } from "./services/game3DGenerator.service";
 import { Game3DModificatorService } from "./services/game3DModificator.service";
+import { GameRoomService } from "./services/gameRoom.service";
 import { IdentificationServiceManager } from "./services/identification.service.manager";
 import { ImageService } from "./services/image.service";
 import { ObjectGeneratorService } from "./services/objectGenerator.service";
@@ -44,5 +45,6 @@ container.bind(TYPES.DatabaseService).to(DatabaseService).inSingletonScope();
 container.bind(TYPES.IdentificationController).to(IdentificationController);
 container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManager);
 
-export { container };
+container.bind(TYPES.GameRoomService).to(GameRoomService);
 
+export { container };

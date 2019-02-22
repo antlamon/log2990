@@ -14,7 +14,7 @@ export class IdentificationServiceManager {
 
     public static readonly IDENTIFICATION_SERVICE_NOT_FOUND: string = "Le service d'identification pour ce jeu n'est pas instancié";
     public static readonly NO_DIFFERENCE_FOUND: string = "Aucune différence trouvée";
-    public static readonly GAMEID_ALREADY_EXISTS: string = "Le service avec ce gameId existe deja";
+    public static readonly GAMEROOMID_ALREADY_EXISTS: string = "Le service pour ce game room existe deja";
 
     private identificationServices: IDictionary;
     private bmpBufferFormat: Buffer;
@@ -23,14 +23,14 @@ export class IdentificationServiceManager {
         this.identificationServices = {} as IDictionary;
     }
 
-    public getDifference(gameId: string, point: Point): Message {
-        if (this.identificationServices[gameId] === undefined) {
+    public getDifference(gameRoomId: string, point: Point): Message {
+        if (this.identificationServices[gameRoomId] === undefined) {
             return {
                 title: ERROR_ID,
-                body: `${IdentificationServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, GameId: ${gameId}`,
+                body: `${IdentificationServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, Game room: ${gameRoomId}`,
             };
         }
-        const image: ImageBMP | null = this.identificationServices[gameId].getDifference(point);
+        const image: ImageBMP | null = this.identificationServices[gameRoomId].getDifference(point);
         if (image === null) {
             return {
                 title: ERROR_ID,
@@ -44,11 +44,11 @@ export class IdentificationServiceManager {
         };
     }
 
-    public startNewService(gameId: string, originalImagePath: string, modifiedImagePath: string, differenceImagePath: string): Message {
-        if (this.identificationServices[gameId] !== undefined) {
+    public startNewService(gameRoomId: string, originalImagePath: string, modifiedImagePath: string, differenceImagePath: string): Message {
+        if (this.identificationServices[gameRoomId] !== undefined) {
             return {
                 title: ERROR_ID,
-                body: `${IdentificationServiceManager.GAMEID_ALREADY_EXISTS}, gameId:${gameId}`,
+                body: `${IdentificationServiceManager.GAMEROOMID_ALREADY_EXISTS}, Game room:${gameRoomId}`,
             };
         }
 
@@ -59,11 +59,26 @@ export class IdentificationServiceManager {
         const originalImage: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
         const modifiedImage: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(modifiedImagePath));
         const differenceImage: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(differenceImagePath));
-        this.identificationServices[gameId] = new IdentificationService(originalImage, modifiedImage, differenceImage);
+        this.identificationServices[gameRoomId] = new IdentificationService(originalImage, modifiedImage, differenceImage);
 
         return {
             title: BASE_ID,
-            body: "",
+            body: gameRoomId,
+        };
+    }
+
+    public deleteService(gameRoomId: string): Message {
+        if (this.identificationServices[gameRoomId] === undefined) {
+            return {
+                title: ERROR_ID,
+                body: `${IdentificationServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, Game room: ${gameRoomId}`,
+            };
+        }
+        delete this.identificationServices[gameRoomId];
+
+        return {
+            title: BASE_ID,
+            body: `Service for ${gameRoomId} deleted`,
         };
     }
 

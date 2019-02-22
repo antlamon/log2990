@@ -17,6 +17,7 @@ const TYPES =  {
         ObjectGeneratorService: Symbol("ObjectGeneratorService"),
         IdentificationController: Symbol("IdentificationController"),
         IdentificationServiceManager: Symbol("IdentificationServiceManager"),
+        GameRoomService: Symbol("GameRoomService"),
 };
 
 export  { TYPES };
