@@ -20,7 +20,7 @@ export class Server {
         this.application.app.set("port", this.appPort);
 
         this.server = http.createServer(this.application.app);
-        this.socketServerManager.startServer(this.server);
+        this.socketServerManager.initializeSocket(this.server);
         this.server.listen(this.appPort);
         this.server.on("error", (error: NodeJS.ErrnoException) => this.onError(error));
         this.server.on("listening", () => this.onListening());

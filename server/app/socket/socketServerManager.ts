@@ -16,7 +16,7 @@ export class SocketServerManager {
     public constructor( @inject(TYPES.UserManager) private userManager: UsersManager,
                         @inject(TYPES.GameRoomService) private gameRoomService: GameRoomService) { }
 
-    public startServer(server: Server): void {
+    public initializeSocket(server: Server): void {
         this.socketServer = SocketIO(server);
         this.socketServer.on("connect", (socket: Socket) => {
             this.userManager.addUser(socket.client.id);

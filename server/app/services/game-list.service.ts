@@ -7,7 +7,6 @@ import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/messag
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { Game3D } from "../../../common/models/game3D";
-import { ITop3 } from "../../../common/models/top3";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { DatabaseService } from "./database.service";
@@ -84,8 +83,8 @@ export class GameListService {
                     id: (new ObjectID()).toHexString(),
                     name: newGame.name,
                     originalImageURL: GameListService.BMP_S64_HEADER + imagesArray[1],
-                    solo: this.top3RandomOrder(),
-                    multi: this.top3RandomOrder(),
+                    solo: this.game3DGenerator.top3RandomOrder(),
+                    multi: this.game3DGenerator.top3RandomOrder(),
             },
                  modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[3] ,
                  differenceImage: GameListService.BMP_S64_HEADER + imagesArray[2] }).then(
@@ -106,19 +105,6 @@ export class GameListService {
         } catch (error) {
                 return {title: ERROR_ID, body: error.message};
         }
-    }
-
-    public top3RandomOrder(): ITop3 {
-        const scores: number[] = [];
-        for (let i: number = 0; i < 3; i++) {
-            scores.push(this.randomNumberGenerator(GameListService.MIN_TIME_TOP_3, GameListService.MAX_TIME_TOP_3));
-        }
-        scores.sort();
-
-        return { first: {name: "GoodComputer", score: (scores[0].toString() + ":00")},
-                 second: {name: "MediumComputer", score: (scores[1].toString() + ":00")},
-                 third: {name: "BadComputer", score: (scores[2].toString() + ":00")},
-                };
     }
 
     public randomNumberGenerator(min: number, max: number): number {
