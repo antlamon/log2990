@@ -8,6 +8,7 @@ import { Server } from "./server";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
 import { GameListService } from "./services/game-list.service";
+import { GameRoomService } from "./services/gameRoom.service";
 import { IdentificationServiceManager } from "./services/identification.service.manager";
 import { ImageService } from "./services/image.service";
 import { UsersManager } from "./services/users.service";
@@ -34,5 +35,7 @@ container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonSco
 
 container.bind(TYPES.IdentificationController).to(IdentificationController);
 container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManager);
+
+container.bind(TYPES.GameRoomService).to(GameRoomService);
 
 export { container };

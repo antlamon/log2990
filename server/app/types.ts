@@ -13,6 +13,7 @@ const TYPES =  {
         SocketServerManager: Symbol("SocketServerManager"),
         IdentificationController: Symbol("IdentificationController"),
         IdentificationServiceManager: Symbol("IdentificationServiceManager"),
+        GameRoomService: Symbol("GameRoomService"),
 };
 
 export  { TYPES };
