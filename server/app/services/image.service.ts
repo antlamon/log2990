@@ -2,6 +2,7 @@ import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
+import { DIFFERENCE_ERROR, SIZE_ERROR } from "../../../common/models/errors";
 import { PATHS } from "../path";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
@@ -30,7 +31,7 @@ export class ImageService {
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
             if (this.getNbDifferences(imagesCompared) !== ImageService.NUM_DIFF) {
-                throw Error(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
+                throw new DIFFERENCE_ERROR(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
             writeFileSync(PATHS.DIFFERENCES_IMAGES_PATH + `${newImageName}.bmp`, modifiedBuffer);
@@ -115,7 +116,7 @@ export class ImageService {
         const pixels: Pixel[][] = [];
         const differentPixels: [number, number][] = [];
         if (!this.validSize(image1, image2)) {
-            throw Error(ImageService.ERROR_MESSAGE_SIZE_NOT_COMPATIBLE);
+            throw new SIZE_ERROR(ImageService.ERROR_MESSAGE_SIZE_NOT_COMPATIBLE);
         }
         for (let i: number = 0; i < image1.height; i++) {
             pixels[i] = [];

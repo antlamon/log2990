@@ -1,5 +1,6 @@
 import { injectable } from "inversify";
 import "reflect-metadata";
+import { FORMAT_ERROR } from "../../../common/models/errors";
 
 @injectable()
 export class ConvertImage {
@@ -12,7 +13,7 @@ export class ConvertImage {
 
     const header: BMPHeader = this.getHeader(buffer);
     if (header.infoHeader.biBitCount !== this.VALID_BIT_COUNT) {
-      throw Error(ConvertImage.ERROR_MESSAGE_WRONG_FORMAT);
+      throw new FORMAT_ERROR(ConvertImage.ERROR_MESSAGE_WRONG_FORMAT);
     }
 
     return this.getPixels(header, buffer);
