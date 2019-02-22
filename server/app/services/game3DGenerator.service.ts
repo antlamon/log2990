@@ -79,7 +79,10 @@ export class Game3DGeneratorService {
         }
         scores.sort();
 
-        return { first: scores[0], second: scores[1], third: scores[2] };
+        return { first: {name: "GoodComputer", score:scores[0].toString() + ":00"}, 
+                 second: {name: "MediumComputer", score:scores[1].toString() + ":00"}, 
+                 third: {name: "BadComputer", score:scores[2].toString() + ":00"}
+                };
     }
 
     private generateThemeGame(form: IGame3DForm): Game3D {

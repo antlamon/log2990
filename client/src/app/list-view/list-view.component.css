@@ -44,18 +44,15 @@ h1{
 }
 .game-card{
     display:flex;
-    width: 600px;
-    max-width: 600px;
+    width: 750px;
+    max-width: 750px;
     max-height: 600px;
     height: 600px;
     background-color: #919CD1;
     margin: 30px;
     transition: all .2s ease-in-out;
     font-weight: bold;
-    border-left: 5px solid rgba(81, 43, 216, 0.35);
-    border-right: 5px solid rgba(81, 43, 216, 0.35);
-    border-bottom: 10px solid rgba(81, 43, 216, 0.35);
-    border-top: 10px solid rgba(81, 43, 216, 0.35);
+    border: 5px solid black;
 }
 .game-card-left-content{
     display: flex;
@@ -111,11 +108,12 @@ h1{
 .game-card-right-content{
     display: flex;
     flex-direction: column;
-    justify-items: flex-start;
+    justify-content: space-evenly;
     width: 40%;
     background-color: #B1B7D4;
 }
 .top-container{
+    margin: 0px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly; 
@@ -126,13 +124,12 @@ h1{
 .top-title{
     font-size: 30px;
     margin-bottom: 10px;
-    color: #e0dce7;
+    color: #1b1b1d;
     text-shadow: -1px -1px 1px #000, 1px 1px 1px #ccc;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-bottom: 10px solid rgba(81, 43, 216, 0.35);
-    border-top: 10px solid rgba(81, 43, 216, 0.35);
-    background:  rgba(81, 43, 216, 0.35);
+    border-bottom: 10px solid rgb(65, 105, 179);
+    border-top: 10px solid rgb(65, 105, 179);
 }
 .top-score{
     margin-top: 10px;
@@ -165,7 +162,7 @@ h1{
     margin-right: 10px;
 }
 .score-position {
-  background: rgba(81, 43, 216, 0.35);
+  background: rgb(65, 105, 179);
   width: 1.2em;
   color: #fff;
   font-style: italic;

@@ -1,6 +1,6 @@
 
 export interface ITop3 {
-    first: {name: string, score: number};
-    second: {name: string, score: number};
-    third: {name: string, score: number};
+    first: {name: string, score: string};
+    second: {name: string, score: string};
+    third: {name: string, score: string};
 }

@@ -16,8 +16,8 @@ import { Game3DGeneratorService } from "./game3DGenerator.service";
 
 @injectable()
 export class GameListService {
-    public static readonly MIN_TIME_TOP_3: number = 500;
-    public static readonly MAX_TIME_TOP_3: number = 1000;
+    public static readonly MIN_TIME_TOP_3: number = 15;
+    public static readonly MAX_TIME_TOP_3: number = 30;
     public static readonly SIMPLE_COLLECTION: string =  "simple-games";
     public static readonly IMAGES_COLLECTION: string =  "images";
     public static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
@@ -111,9 +111,9 @@ export class GameListService {
         }
         scores.sort();
 
-        return { first: {name: "GoodComputer", score:scores[0]}, 
-                 second: {name: "MediumComputer", score:scores[1]}, 
-                 third: {name: "BadComputer", score:scores[2]}
+        return { first: {name: "GoodComputer", score: (scores[0].toString() + ":00")}, 
+                 second: {name: "MediumComputer", score: (scores[1].toString() + ":00")}, 
+                 third: {name: "BadComputer", score: (scores[2].toString() + ":00")}
                 };
     }
 
