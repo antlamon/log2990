@@ -20,7 +20,8 @@ mongoMock.max_delay = 0;
 // tslint:disable-next-line:typedef
 const mongoClient = mongoMock.MongoClient;
 
-let mockCollection: Collection;
+let mockSimpleCollection: Collection;
+let mockFreeCollection: Collection;
 const mockedNewImageMessage: Message = {
     title: BASE_ID, // Title is error_id to not add the game to the databse
     body: "newImageName",
@@ -102,8 +103,11 @@ describe("GameList service", () => {
         service = container.get<GameListService>(TYPES.GameListService);
         // tslint:disable-next-line:typedef
         mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db ) => {
-            mockCollection = db.collection(GameListService.SIMPLE_COLLECTION);
-            service["_simpleCollection"] = mockCollection;
+            mockSimpleCollection = db.collection(GameListService.SIMPLE_COLLECTION);
+            mockFreeCollection = db.collection(GameListService.FREE_COLLECTION);
+            service["_freeCollection"] = mockFreeCollection;
+            service["_freeCollection"].insertOne(mockGame3D);
+            service["_simpleCollection"] = mockSimpleCollection;
             service["_simpleCollection"].insertOne(mockedFullGame).then( (res: WriteOpResult) => {
                 done();
             }).catch();
@@ -212,10 +216,12 @@ describe("GameList service", () => {
                     }).catch();
             });
             it("Deleting a free game that exist should return a relevant message", (done: Mocha.Done) => {
-                FREEGAMES.push(mockGame3D);
-                service.deleteFreeGame(mockGame3D.name).then(
+                sandbox.on(service["freeCollection"], "deleteOne", async () => {
+                    return Promise.resolve(deleteWriteOPMock);
+                });
+                service.deleteFreeGame("testID").then(
                     (message: Message) => {
-                        expect(message.body).to.equal(`Le jeu ${mockGame3D.name} a été supprimé`);
+                        expect(message.body).to.equal(`Le jeu testID a été supprimé!`);
                         done();
                     }).catch();
             });
