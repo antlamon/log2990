@@ -85,7 +85,8 @@ describe("FileValidatorService", () => {
 
   describe("Test for the function validating object Qty", () => {
     it("No number below the constant NO_OBJ_MIN", () => {
-      const veryBelowMin: number = NO_MIN_OBJECTS - 10;
+      const delta: number = 10;
+      const veryBelowMin: number = NO_MIN_OBJECTS - delta;
 
       expect(component.isValidObjNb(veryBelowMin.toString())).toEqual(false);
     });
@@ -98,7 +99,8 @@ describe("FileValidatorService", () => {
       expect(component.isValidObjNb(min.toString())).toEqual(true);
     });
     it("No number bigger than the constant NO_OBJ_MAX", () => {
-      const veryMAX: number = NO_MAX_OBJECTS + 10;
+      const delta: number = 10;
+      const veryMAX: number = NO_MAX_OBJECTS + delta;
 
       expect(component.isValidObjNb(veryMAX.toString())).toEqual(false);
     });
