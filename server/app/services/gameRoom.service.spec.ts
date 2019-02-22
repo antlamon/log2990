@@ -32,14 +32,14 @@ describe("GameRoomService", () => {
         });
 
         it("Should return the rejection on reject", (done: Mocha.Done) => {
-            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID }}));
+            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
             service.createNewGameRoom({ gameRoomId: "test", username: "user" } as NewGameMessage)
                 .then(
                     (error: string) => {
                         done(error);
                     },
-                    (rejection: string) => {
-                        expect(rejection).to.equal("Couldn't create a new identification service");
+                    (rejection: Error) => {
+                        expect(rejection.message).to.equal("error");
                         done();
                     });
         });

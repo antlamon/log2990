@@ -15,7 +15,7 @@ export class GameRoomService {
     public async createNewGameRoom(newGameMessage: NewGameMessage): Promise<string> {
         const response: AxiosResponse = await Axios.post(this.IDENTIFICATION_URL, newGameMessage);
         if (response.data.title !== BASE_ID) {
-            return Promise.reject("Couldn't create a new identification service");
+            return Promise.reject(Error(response.data.body));
         }
         const newGamer: Gamer = {
             username: newGameMessage.username,

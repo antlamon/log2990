@@ -77,7 +77,6 @@ describe("Test for the socketServerManager", () => {
 
     it("Should handle check difference event with resolved promise", (done: Mocha.Done) => {
         mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE, (gameRoom: string) => {
-            mockClientSocket.off(SocketsEvents.CHECK_DIFFERENCE);
             expect(gameRoom).to.equal("123");
             done();
         });

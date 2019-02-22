@@ -44,7 +44,7 @@ describe("Identification Controller", () => {
         .get("/api/identification")
         .query({
             gameRoomId: "test",
-            point: {"x": 0, "y": 0},
+            point: JSON.stringify({"x": 0, "y": 0}),
         })
         .expect(200)
         .end((error: Error, response: supertest.Response) => {

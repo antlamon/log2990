@@ -20,12 +20,10 @@ export class SocketServerManager {
         this.socketServer = SocketIO(server);
         this.socketServer.on("connect", (socket: Socket) => {
             this.userManager.addUser(socket.client.id);
-            socket.on(SocketsEvents.CREATE_GAME_ROOM, (newGameMessage: NewGameMessage) => {
-                this.handleNewGameRoom(socket, newGameMessage);
+            socket.on(SocketsEvents.CREATE_GAME_ROOM, async (newGameMessage: NewGameMessage) => {
+                await this.handleNewGameRoom(socket, newGameMessage);
             });
-            socket.on(SocketsEvents.CHECK_DIFFERENCE, (event: ImageClickMessage) => {
-                this.handleCheckDifference(event);
-            });
+            socket.on(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
             socket.on("disconnect", () => {
                 this.userManager.removeUser(socket.client.id);
             });
@@ -36,22 +34,19 @@ export class SocketServerManager {
         this.socketServer.emit(event);
     }
 
-    private handleNewGameRoom(socket: Socket, newGameMessage: NewGameMessage): void {
-        this.gameRoomService.createNewGameRoom(newGameMessage).then(
-            (roomId: string) => {
-                socket.join(roomId);
-                this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId);
-            },
-            (rejection: string) => {
-                this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection);
-            });
+    private async handleNewGameRoom(socket: Socket, newGameMessage: NewGameMessage): Promise<void> {
+        try {
+            const roomId: string = await this.gameRoomService.createNewGameRoom(newGameMessage);
+            socket.join(roomId);
+            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId);
+        } catch (rejection) {
+            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection);
+        }
     }
 
-    private handleCheckDifference(event: ImageClickMessage): void {
-        this.gameRoomService.checkDifference(event.gameRoomId, event.username, event.point).then(
-            (gameRoomUpdate: GameRoomUpdate) => {
-                this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, event.gameRoomId, gameRoomUpdate);
-            });
+    private async handleCheckDifference(event: ImageClickMessage): Promise<void> {
+        const update: GameRoomUpdate = await this.gameRoomService.checkDifference(event.gameRoomId, event.username, event.point);
+        this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, event.gameRoomId, update);
     }
 
     private emitRoomEvent<T>(event: string, room: string, data?: T): void {
