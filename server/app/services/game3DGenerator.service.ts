@@ -12,7 +12,6 @@ import { ObjectGeneratorService } from "./objectGenerator.service";
 @injectable()
 export class Game3DGeneratorService {
 
-
     private readonly MINIMUM_CONTRAST: number = 0x00000F;
     private readonly PALE_COLOR: number = 0x0F0F0F;
 

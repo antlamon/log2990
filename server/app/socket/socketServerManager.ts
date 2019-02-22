@@ -23,7 +23,9 @@ export class SocketServerManager {
             socket.on(SocketsEvents.CREATE_GAME_ROOM, (newGameMessage: NewGameMessage) => {
                 this.handleNewGameRoom(socket, newGameMessage);
             });
-            socket.on(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference);
+            socket.on(SocketsEvents.CHECK_DIFFERENCE, (gameRoomId: string, username: string, point: Point) => {
+                this.handleCheckDifference(gameRoomId, username, point);
+            });
             socket.on("disconnect", () => {
                 this.userManager.removeUser(socket.client.id);
             });

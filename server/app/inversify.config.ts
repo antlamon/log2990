@@ -48,4 +48,3 @@ container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManag
 container.bind(TYPES.GameRoomService).to(GameRoomService);
 
 export { container };
-
