@@ -1,5 +1,6 @@
 import { ObjectID } from "bson";
 import { inject, injectable } from "inversify";
+import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { Game3D, GEOMETRIC_TYPE_NAME, NO_MAX_OBJECTS, NO_MIN_OBJECTS, Scene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
 import { MAX_COLOR, Objet3D } from "../../../common/models/objet3D";
@@ -26,7 +27,7 @@ export class Game3DGeneratorService {
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
             return this.generateThemeGame(form);
         } else {
-            throw Error("The type chosen for the new 3D game is not valid.");
+            throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
         }
     }
 
@@ -79,7 +80,10 @@ export class Game3DGeneratorService {
         }
         scores.sort();
 
-        return { first: scores[0], second: scores[1], third: scores[2] };
+        return { first: {name: "GoodComputer", score: scores[0].toString() + ":00"},
+                 second: {name: "MediumComputer", score: scores[1].toString() + ":00"},
+                 third: {name: "BadComputer", score: scores[2].toString() + ":00"},
+                };
     }
 
     private generateThemeGame(form: IGame3DForm): Game3D {
@@ -87,9 +91,9 @@ export class Game3DGeneratorService {
     }
     private formValidator(form: IGame3DForm): void {
         if (form.objectQty < NO_MIN_OBJECTS || form.objectQty > NO_MAX_OBJECTS) {
-            throw Error("Le nombre d'objets doit être entre 10 et 200");
+            throw new FORM_ERROR("Le nombre d'objets doit être entre 10 et 200");
         } else if (!form.modifications.add && !form.modifications.delete && !form.modifications.color) {
-            throw Error("Il faut choisir au moins une modification");
+            throw new FORM_ERROR("Il faut choisir au moins une modification");
         }
     }
 

@@ -1,8 +1,10 @@
 import chai = require("chai");
 import spies = require("chai-spies");
+import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { Game3D, GEOMETRIC_TYPE_NAME, Scene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { Objet3D } from "../../../common/models/objet3D";
+import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
@@ -59,8 +61,8 @@ const mock3DGame: Game3D = {
     id: "",
     originalScene: mockScene,
     modifiedScene: mockScene,
-    solo: {first: 222, second: 223, third: 21312},
-    multi: {first: 222, second: 223, third: 21312},
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 
 const expect: Chai.ExpectStatic = chai.expect;
@@ -83,7 +85,7 @@ describe("Game3D generator service", () => {
     describe(" Creating a random 3D game should accept only geometric or themed game type", () => {
         it("Should throw a type error when random type is sent", async () => {
 
-            expect(() => service.createRandom3DGame(mockBadGameType)).to.throw(Error);
+            expect(() => service.createRandom3DGame(mockBadGameType)).to.throw(TYPE_ERROR);
         });
         it("Should return random 3D geometric game", async () => {
             expect(typeof(service.createRandom3DGame(mockGeometric))).to.eql(typeof(mock3DGame));
@@ -95,11 +97,11 @@ describe("Game3D generator service", () => {
     describe("Should validate the number of objects and the modifications", () => {
         it("Should throw an error for missing modifications  ", async () => {
 
-            expect(() => service.createRandom3DGame(mockBadModifs)).to.throw(Error);
+            expect(() => service.createRandom3DGame(mockBadModifs)).to.throw(FORM_ERROR);
         });
         it("Should throw an error for the wrong number of objects", async () => {
 
-            expect(() => service.createRandom3DGame(mockBadNb)).to.throw(Error);
+            expect(() => service.createRandom3DGame(mockBadNb)).to.throw(FORM_ERROR);
         });
     });
 });

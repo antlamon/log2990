@@ -33,21 +33,21 @@ export class ListViewComponent implements OnInit {
 
   public getSimpleGames(): void {
     this.gameService.getSimpleGames()
-        .subscribe((response: IGame[]) => {this.simpleGames = response;});
+        .subscribe((response: IGame[]) => {this.simpleGames = response; });
   }
 
   public deleteSimpleGames(game: IGame): void {
-    // faudra afficher le message
+    // TODO: warning delete box "are you sure? yes/no"
     this.gameService.deleteSimpleGame(game).subscribe();
   }
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe((response: Game3D[]) => this.freeGames = response);
+        .subscribe((response: Game3D[]) => {this.freeGames = response; });
   }
 
   public deleteFreeGames(game: Game3D): void {
-    // faudra afficher le message
+    // TODO: warning delete box "are you sure? yes/no"
     this.gameService.deleteFreeGame(game).subscribe();
   }
 

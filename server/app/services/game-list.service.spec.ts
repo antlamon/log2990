@@ -6,6 +6,7 @@ import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongod
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { Game3D } from "../../../common/models/game3D";
+import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { FREEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
@@ -19,7 +20,8 @@ mongoMock.max_delay = 0;
 // tslint:disable-next-line:typedef
 const mongoClient = mongoMock.MongoClient;
 
-let mockCollection: Collection;
+let mockSimpleCollection: Collection;
+let mockFreeCollection: Collection;
 const mockedNewImageMessage: Message = {
     title: BASE_ID, // Title is error_id to not add the game to the databse
     body: "newImageName",
@@ -40,8 +42,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImageURL: "",
-    solo: { first: 1, second: 2, third: 3 },
-    multi: { first: 1, second: 2, third: 3 },
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -80,8 +82,8 @@ const mockGame3D: Game3D = {
     id: "",
     originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
     modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-    solo: { first: 1, second: 2, third: 3 },
-    multi: { first: 1, second: 2, third: 3 },
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -101,8 +103,11 @@ describe("GameList service", () => {
         service = container.get<GameListService>(TYPES.GameListService);
         // tslint:disable-next-line:typedef
         mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db ) => {
-            mockCollection = db.collection(GameListService.SIMPLE_COLLECTION);
-            service["_simpleCollection"] = mockCollection;
+            mockSimpleCollection = db.collection(GameListService.SIMPLE_COLLECTION);
+            mockFreeCollection = db.collection(GameListService.FREE_COLLECTION);
+            service["_freeCollection"] = mockFreeCollection;
+            service["_freeCollection"].insertOne(mockGame3D);
+            service["_simpleCollection"] = mockSimpleCollection;
             service["_simpleCollection"].insertOne(mockedFullGame).then( (res: WriteOpResult) => {
                 done();
             }).catch();
@@ -211,10 +216,12 @@ describe("GameList service", () => {
                     }).catch();
             });
             it("Deleting a free game that exist should return a relevant message", (done: Mocha.Done) => {
-                FREEGAMES.push(mockGame3D);
-                service.deleteFreeGame(mockGame3D.name).then(
+                sandbox.on(service["freeCollection"], "deleteOne", async () => {
+                    return Promise.resolve(deleteWriteOPMock);
+                });
+                service.deleteFreeGame("testID").then(
                     (message: Message) => {
-                        expect(message.body).to.equal(`Le jeu ${mockGame3D.name} a été supprimé`);
+                        expect(message.body).to.equal(`Le jeu testID a été supprimé!`);
                         done();
                     }).catch();
             });

@@ -3,6 +3,7 @@ import spies = require("chai-spies");
 import supertest = require("supertest");
 import { BASE_ID, Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
+import { ITop3 } from "../../../common/models/top3";
 import { Application } from "../app";
 import { container } from "../inversify.config";
 import { FREEGAMES } from "../mock-games";
@@ -24,8 +25,8 @@ const mockedGame: IGame = {
     id: "idmockgenerate",
     name: "testGame",
     originalImageURL: "",
-    solo: {first: 1, second: 2, third: 3},
-    multi: {first: 1, second: 2, third: 3},
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 
 describe("Game list controller", () => {
