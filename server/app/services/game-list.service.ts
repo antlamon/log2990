@@ -112,8 +112,8 @@ export class GameListService {
         scores.sort();
 
         return { first: {name: "GoodComputer", score:scores[0]}, 
-                 second: {name: "MediumComputer", score:scores[0]}, 
-                 third: {name: "BadComputer", score:scores[0]}
+                 second: {name: "MediumComputer", score:scores[1]}, 
+                 third: {name: "BadComputer", score:scores[2]}
                 };
     }
 
