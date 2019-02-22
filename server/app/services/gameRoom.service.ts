@@ -21,6 +21,7 @@ export class GameRoomService {
             username: newGameMessage.username,
             differencesFound: 0,
         };
+        this.gameRooms[newGameMessage.gameRoomId] = [];
         this.gameRooms[newGameMessage.gameRoomId].push(newGamer);
 
         return response.data.body;
@@ -32,11 +33,19 @@ export class GameRoomService {
         if (response.data.title !== BASE_ID) {
             return Promise.reject(response.data.body);
         }
+        let gamer: Gamer | undefined = this.gameRooms[gameRoomId].find((user: Gamer) => user.username === username);
+        if (gamer === undefined) {
+            gamer = {
+                username: username,
+                differencesFound: 0,
+            };
+            this.gameRooms[gameRoomId].push(gamer);
+        }
 
         return {
             username: username,
             newImage: response.data.body,
-            differenceCount: ++this.gameRooms[gameRoomId][username],
+            differencesFound: ++gamer.differencesFound,
         };
     }
 }

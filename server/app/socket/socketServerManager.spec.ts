@@ -5,7 +5,6 @@ import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { container } from "../inversify.config";
 import { Server } from "../server";
 import { GameRoomService } from "../services/gameRoom.service";
-// import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 import { SocketServerManager } from "./socketServerManager";
 const expect: Chai.ExpectStatic = chai.expect;

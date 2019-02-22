@@ -20,6 +20,6 @@ export interface Point {
 
 export interface GameRoomUpdate {
     username: string;
-    differenceCount: number;
+    differencesFound: number;
     newImage: string;
 }
