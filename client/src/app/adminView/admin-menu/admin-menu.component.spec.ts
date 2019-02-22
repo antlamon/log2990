@@ -10,6 +10,8 @@ import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "../../services/modal.service";
+import { GameViewComponent } from "src/app/gameView/game-view/game-view.component";
+import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
@@ -23,7 +25,9 @@ describe("AdminMenuComponent", () => {
         FreeGeneratorComponent,
         SimpleGeneratorComponent,
         InitialComponent,
-        ListViewComponent
+        ListViewComponent,
+        GameViewComponent,
+        Scene3DComponent
       ],
       imports: [
         AppRoutingModule,
@@ -32,9 +36,7 @@ describe("AdminMenuComponent", () => {
       ],
       providers: [ModalService, FreeGeneratorComponent]
     })
-    .compileComponents().then(() => {}, (error: Error) => {
-      console.error(error);
-    });
+    .compileComponents();
   }));
 
   beforeEach(() => {
@@ -46,4 +48,18 @@ describe("AdminMenuComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  describe("Test for the modal ", () => {
+    it("should call the simpleModal from the modalService", () => {
+      const spySimple: jasmine.Spy = spyOn(component["modalService"], "open");
+      component.openSimpleDialog("simpleModal");
+      expect(spySimple).toHaveBeenCalledWith("simpleModal");
+    });
+    it("should call the freeeModal from the modalService", () => {
+      const spyFree: jasmine.Spy = spyOn(component["modalService"], "open");
+      component.openFreeDialog("freeeModal");
+      expect(spyFree).toHaveBeenCalledWith("freeeModal");
+    });
+  });
+
 });

@@ -2,12 +2,15 @@ import { TestBed, inject } from "@angular/core/testing";
 
 import { GameService } from "./game.service";
 import { HttpClientModule } from "@angular/common/http";
-import { IGame, ISimpleForm } from "../../../../common/models/game";
+import { IGame, ISimpleForm, IGame3DForm } from "../../../../common/models/game";
 import { Message, BASE_ID } from "../../../../common/communication/message";
 import { TestHelper } from "src/test.helper";
+import { Game3D } from "../../../../common/models/game3D";
 
 describe("GameService", () => {
-    const mockedGame: IGame = { name: "testGame" } as IGame;
+    const mockedID: string = "mockedId";
+    const mocked3DGame: Game3D = { name: "testGame" } as Game3D;
+    const mocked2DGame: IGame = { name: "testGame" } as IGame;
 
     // tslint:disable-next-line:no-any Used to mock the http call
     let httpSpy: any;
@@ -39,14 +42,24 @@ describe("GameService", () => {
         );
     });
 
+    it("Getting a simple game should return a simple game", () => {
+        const expectedGame: IGame = { name: "test1", id: mockedID} as IGame;
+        httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
+        gameService.getSimpleGame(mockedID).then(
+            (response: IGame) => {
+                expect(response).toEqual(expectedGame);
+            }
+        );
+    });
+
     it("Getting free games should return free games", () => {
-        const expectedGames: IGame[] = [
-            { name: "test1" } as IGame,
-            { name: "test2" } as IGame,
+        const expectedGames: Game3D[] = [
+            { name: "test1" } as Game3D,
+            { name: "test2" } as Game3D,
         ];
         httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGames));
         gameService.getFreeGames().subscribe(
-            (response: IGame[]) => {
+            (response: Game3D[]) => {
                 expect(response).toEqual(expectedGames);
             }
         );
@@ -54,6 +67,7 @@ describe("GameService", () => {
 
     it("Creating simple games should send a post", () => {
         const game: ISimpleForm = {
+            id: 39820,
             name: "testGame",
             originalImage: {name: "original"} as File,
             modifiedImage: {name: "modified"} as File,
@@ -65,7 +79,10 @@ describe("GameService", () => {
 
     it("Creating free games should send a post", () => {
         httpSpy.post.and.returnValue(TestHelper.asyncData(0));
-        gameService.createFreeGame(mockedGame);
+        const game: IGame3DForm = {
+            name: "testGame"
+        } as IGame3DForm;
+        gameService.createFreeGame(game);
         expect(httpSpy.post.calls.count()).toBe(1);
     });
 
@@ -75,7 +92,7 @@ describe("GameService", () => {
             body: "Deleted Test"
         };
         httpSpy.delete.and.returnValue(TestHelper.asyncData(expectedMessage));
-        gameService.deleteSimpleGame(mockedGame).subscribe(
+        gameService.deleteSimpleGame(mocked2DGame).subscribe(
             (response: Message) => {
                 expect(response).toEqual(expectedMessage);
             }
@@ -88,7 +105,7 @@ describe("GameService", () => {
             body: "Deleted Test"
         };
         httpSpy.delete.and.returnValue(TestHelper.asyncData(expectedMessage));
-        gameService.deleteFreeGame(mockedGame).subscribe(
+        gameService.deleteFreeGame(mocked3DGame).subscribe(
             (response: Message) => {
                 expect(response).toEqual(expectedMessage);
             }

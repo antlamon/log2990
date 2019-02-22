@@ -16,6 +16,12 @@ import { MatDialogModule } from "@angular/material";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ModalService } from "./services/modal.service";
 import { FileValidatorService } from "./services/file-validator.service";
+import { GameViewComponent } from "./gameView/game-view/game-view.component";
+import { RouterModule } from "@angular/router";
+import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
+import { RenderService } from "./scene3D/scene3-d/render.service";
+import { Game3DComponent } from "./scene3D/game3-d/game3-d.component";
+import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
 
 @NgModule({
   declarations: [
@@ -25,6 +31,9 @@ import { FileValidatorService } from "./services/file-validator.service";
     FreeGeneratorComponent,
     ListViewComponent,
     SimpleGeneratorComponent,
+    GameViewComponent,
+    Scene3DComponent,
+    Game3DComponent,
   ],
   imports: [
     FormsModule,
@@ -34,6 +43,7 @@ import { FileValidatorService } from "./services/file-validator.service";
     MatCardModule,
     MatDialogModule,
     BrowserAnimationsModule,
+    RouterModule.forRoot([]),
   ],
   entryComponents: [
     SimpleGeneratorComponent,
@@ -44,6 +54,8 @@ import { FileValidatorService } from "./services/file-validator.service";
     SocketService,
     ModalService,
     FileValidatorService,
+    RenderService,
+    ShapeCreatorService
   ],
   bootstrap: [AppComponent]
 })

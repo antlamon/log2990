@@ -6,7 +6,7 @@
     margin-top: -275px; /* Negative half of height. */
     margin-left: -250px; /* Negative half of width. */
     width: 500px;
-    height: 550px;
+    height: 575px;
     display: flex;
     flex-direction: column;
     background: #f4f7f8;
@@ -69,6 +69,7 @@ input:focus{
 
 .rightColumn{
     align-self: center;
+    width: 130%;
 }
 
 .form-background {
@@ -85,4 +86,10 @@ input:focus{
         
     /* z-index must be below .modal and above everything else  */
      z-index: 700;
-  }
+}
+
+.errorsDiv {
+    display: flex;
+    flex-direction: column;
+    color: red;
+}

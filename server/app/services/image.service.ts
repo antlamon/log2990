@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
@@ -17,11 +17,15 @@ export class ImageService {
 
     public static readonly ERROR_MESSAGE_NOT_7_ERRORS: string = "Les images n'ont pas 7 différences";
     public static readonly ERROR_MESSAGE_SIZE_NOT_COMPATIBLE: string = "La taille des deux images n'est pas compatible";
+    public static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
 
     public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
     public getDifferencesImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
         try {
+
+            const originalImage: string = ImageService.BMP_S64_HEADER + originalBuffer.toString("base64");
+            const modifiedImage: string = ImageService.BMP_S64_HEADER + modifiedBuffer.toString("base64");
             const image1: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
             const image2: ImageBMP = this.convertImage.bufferToImageBMP(modifiedBuffer);
             const imagesCompared: ImageBMP = this.compareData(image1, image2);
@@ -30,10 +34,11 @@ export class ImageService {
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
             writeFileSync(PATHS.DIFFERENCES_IMAGES_PATH + `${newImageName}.bmp`, modifiedBuffer);
+            const compareImage: string = ImageService.BMP_S64_HEADER + modifiedBuffer.toString("base64");
 
             return {
                 title: BASE_ID,
-                body: newImageName,
+                body: originalImage + modifiedImage + compareImage,
             };
 
         } catch (error) {
@@ -47,34 +52,37 @@ export class ImageService {
     public getNbDifferences(image: ImageBMP): number {
         const pixels: Pixel[][] = image.pixels;
         const visited: boolean[][] = this.createVisitedArray(pixels);
-        const callBackPixels: [number, number][] = [];
         let diffCount: number = 0;
         for (let x: number = 0; x < image.height; x++) {
             for (let y: number = 0; y < image.width; y++) {
                 if (!visited[x][y]) {
                     diffCount++;
-                    callBackPixels.push([x, y]);
-                    while (callBackPixels.length > 0) {
-                        let hasNext: boolean = false;
-                        const current: [number, number] = callBackPixels[callBackPixels.length - 1];
-                        for (let i: number = current[0] - 1; i <= current[0] + 1; i++) {
-                            for (let j: number = current[1] - 1; j <= current[1] + 1; j++) {
-                                if (i >= 0 && i < image.height && j >= 0 && j < image.width && !visited[i][j]) {
-                                    callBackPixels.push([i, j]);
-                                    hasNext = true;
-                                    visited[i][j] = true;
-                                }
-                            }
-                        }
-                        if (!hasNext) {
-                            callBackPixels.pop();
-                        }
-                    }
+                    this.visitNeighboors([x, y], visited, image.height, image.width);
                 }
             }
         }
 
         return diffCount;
+    }
+
+    private visitNeighboors(pixel: [number, number], visited: boolean[][], height: number, width: number): void {
+        const callBackPixels: [number, number][] = [pixel];
+        while (callBackPixels.length > 0) {
+            let hasNext: boolean = false;
+            const current: [number, number] = callBackPixels[callBackPixels.length - 1];
+            for (let i: number = current[0] - 1; i <= current[0] + 1; i++) {
+                for (let j: number = current[1] - 1; j <= current[1] + 1; j++) {
+                    if (i >= 0 && i < height && j >= 0 && j < width && !visited[i][j]) {
+                        callBackPixels.push([i, j]);
+                        hasNext = true;
+                        visited[i][j] = true;
+                    }
+                }
+            }
+            if (!hasNext) {
+                callBackPixels.pop();
+            }
+        }
     }
 
     public createVisitedArray(pixels: Pixel[][]): boolean[][] {
@@ -106,8 +114,7 @@ export class ImageService {
         const imageCompared: ImageBMP = image1;
         const pixels: Pixel[][] = [];
         const differentPixels: [number, number][] = [];
-        if (image1.height !== image2.height || image1.width !== image2.width
-            || image1.height !== ImageService.IMAGE_HEIGHT || image1.width !== ImageService.IMAGE_WIDTH) {
+        if (!this.validSize(image1, image2)) {
             throw Error(ImageService.ERROR_MESSAGE_SIZE_NOT_COMPATIBLE);
         }
         for (let i: number = 0; i < image1.height; i++) {
@@ -128,7 +135,10 @@ export class ImageService {
 
         return imageCompared;
     }
-
+    private validSize(image1: ImageBMP, image2: ImageBMP): boolean {
+        return !(image1.height !== image2.height || image1.width !== image2.width
+            || image1.height !== ImageService.IMAGE_HEIGHT || image1.width !== ImageService.IMAGE_WIDTH);
+    }
     public enlargeBlackPixels(image: ImageBMP, pixelsToEnlarge: [number, number][]): void {
         pixelsToEnlarge.forEach((element: [number, number]) => {
             const i: number = element[0];
@@ -159,9 +169,5 @@ export class ImageService {
 
     public isBlackPixel(pixel: Pixel): boolean {
         return (pixel.blue === 0 && pixel.green === 0 && pixel.red === 0);
-    }
-
-    public imageToString64(path: string): string {
-        return "data:image/bmp;base64," + readFileSync(path).toString("base64");
     }
 }

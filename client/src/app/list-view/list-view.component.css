@@ -57,7 +57,7 @@ h1{
 .game-card-left-content{
     display: flex;
     flex-direction: column;
-    width: 70%;
+    width: 60%;
 }
 .game-card-title{
     text-align :center; 
@@ -108,7 +108,7 @@ h1{
 .game-card-right-content{
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 40%;
     background-color: #B1B7D4;
 }
 .top-container{
@@ -116,18 +116,55 @@ h1{
     display: flex;
     flex-direction: column;
     text-align: center;
+    justify-content: space-evenly;
     height: 50%;
+    width: 100%;
 }
 .top-title{
     font-size: 30px;
     margin-bottom: 20px;
-    height:20%;
+    color: #1e1331;
+    text-shadow: -1px -1px 1px #000, 1px 1px 1px #ccc;
+    
 }
 .top-score{
     margin-top: 10px;
     font-size: 20px;
     margin-bottom: 10px;
     height:10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.number-column, .score-column, .name-column  {
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    justify-content: space-around; 
+}
+.score-position, .scores, .name {
+  font-size: 1.5em;
+  text-align: center;
+  font-weight: 700;
+  padding-top: 0;
+  top: -0.65em;
+  height: 1.35em;
+  margin: 3px;
+}
+.name, .scores {
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.score-position {
+  background: rgba(81, 43, 216, 0.35);
+  width: 1.2em;
+  color: #fff;
+  font-style: italic;
+  text-shadow: 1px 1px rgba(21, 5, 59, 0.5);
+  border-radius: 0.675em 0.675em 0.675em 0.675em;
+
 }
 h2{
     font-size: 70px;

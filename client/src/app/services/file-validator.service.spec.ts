@@ -9,6 +9,9 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "./file-validator.service";
+import { GameViewComponent } from "../gameView/game-view/game-view.component";
+import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
+import { NO_MIN_OBJECTS, NO_MAX_OBJECTS } from "../../../../common/models/game3D";
 
 describe("FileValidatorService", () => {
 
@@ -30,6 +33,8 @@ describe("FileValidatorService", () => {
         FreeGeneratorComponent,
         InitialComponent,
         ListViewComponent,
+        GameViewComponent,
+        Scene3DComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService, FileValidatorService]
@@ -60,6 +65,53 @@ describe("FileValidatorService", () => {
     });
   });
 
+  describe("Test for the function onlyNumeric", () => {
+    it("No letters should pass", () => {
+      expect(component.containOnlyNumeric("ALLO")).toEqual(false);
+    });
+    it("no special caracter should pass", () => {
+      expect(component.containOnlyNumeric("!1243")).toEqual(false);
+    });
+    it("no special caracter should pass", () => {
+      expect(component.containOnlyNumeric("!12%?")).toEqual(false);
+    });
+    it("only numbers should pass", () => {
+      expect(component.containOnlyNumeric("123")).toEqual(true);
+    });
+    it("@#$!@ should not pass", () => {
+      expect(component.containOnlyNumeric("@#$!@ ")).toEqual(false);
+    });
+  });
+
+  describe("Test for the function validating object Qty", () => {
+    it("No number below the constant NO_OBJ_MIN", () => {
+      const veryBelowMin: number = NO_MIN_OBJECTS - 10;
+
+      expect(component.isValidObjNb(veryBelowMin.toString())).toEqual(false);
+    });
+    it("No number below the constant NO_OBJ_MIN", () => {
+      const belowMin: number = NO_MIN_OBJECTS - 1;
+      expect(component.isValidObjNb(belowMin.toString())).toEqual(false);
+    });
+    it("should accept number equal to the constant NO_OBJ_MIN", () => {
+      const min: number = NO_MIN_OBJECTS;
+      expect(component.isValidObjNb(min.toString())).toEqual(true);
+    });
+    it("No number bigger than the constant NO_OBJ_MAX", () => {
+      const veryMAX: number = NO_MAX_OBJECTS + 10;
+
+      expect(component.isValidObjNb(veryMAX.toString())).toEqual(false);
+    });
+    it("No number below the constant NO_OBJ_MIN", () => {
+      const tooMuch: number = NO_MAX_OBJECTS + 1;
+      expect(component.isValidObjNb(tooMuch.toString())).toEqual(false);
+    });
+    it("should accept number equal to the constant NO_OBJ_MIN", () => {
+      const max: number = NO_MAX_OBJECTS;
+      expect(component.isValidObjNb(max.toString())).toEqual(true);
+    });
+  });
+
   describe("Test for the name of the game", () => {
     it("A name longer than 15 characters should return false", () => {
       expect(component.isValidGameName("abcdefghijklmnopqrstuvwxyz")).toEqual(false);
@@ -74,11 +126,24 @@ describe("FileValidatorService", () => {
       expect(component.containOnlyAlphaNumeric("@#$ans")).toEqual(false);
     });
     it("A name that only contains alphanumeric characters should return true", () => {
-      expect(component.containOnlyAlphaNumeric("dksjhfalkdsjfhaskd24324")).toEqual(true);
+      expect(component.containOnlyAlphaNumeric("dksjhfad24324")).toEqual(true);
     });
     it("A NULL name should return false", () => {
       expect(component.isValidGameName("")).toEqual(false);
     });
   });
-
+  describe("Test for the name of the username", () => {
+    it("A name longer than 10 characters should return false", () => {
+      expect(component.isValidName("abcdefghijklmnopqrstuvwxyz")).toEqual(false);
+    });
+    it("A name shorter than 3 characters should return false", () => {
+      expect(component.isValidName("az")).toEqual(false);
+    });
+    it("A name that contains between 3 and 15 characters should return true", () => {
+      expect(component.isValidName("nomdujeu")).toEqual(true);
+    });
+    it("A NULL name should return false", () => {
+      expect(component.isValidName("")).toEqual(false);
+    });
+  });
 });
