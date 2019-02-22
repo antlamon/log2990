@@ -46,7 +46,7 @@ export class SocketServerManager {
         }).then(
             (roomId: string) => {
                 socket.join(roomId);
-                this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId, null);
+                this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId);
             },
             (rejection: string) => {
                 this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection);
@@ -63,8 +63,7 @@ export class SocketServerManager {
             });
     }
 
-    // tslint:disable-next-line:no-any
-    private emitRoomEvent(event: string, room: string, data: any): void {
+    private emitRoomEvent<T>(event: string, room: string, data?: T): void {
         this.socketServer.in(room).emit(event, data);
     }
 }
