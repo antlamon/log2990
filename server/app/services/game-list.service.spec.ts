@@ -12,6 +12,7 @@ import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { GameListService, MulterFile } from "./game-list.service";
 import { ImageService } from "./image.service";
+import { ITop3 } from "../../../common/models/top3";
 
 // tslint:disable-next-line:typedef
 const mongoMock = require("mongo-mock");
@@ -40,8 +41,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImageURL: "",
-    solo: { first: 1, second: 2, third: 3 },
-    multi: { first: 1, second: 2, third: 3 },
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -80,8 +81,8 @@ const mockGame3D: Game3D = {
     id: "",
     originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
     modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-    solo: { first: 1, second: 2, third: 3 },
-    multi: { first: 1, second: 2, third: 3 },
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
