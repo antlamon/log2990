@@ -4,11 +4,11 @@ import { IFullGame } from "../../../../../common/models/game";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: "app-game-view",
-  templateUrl: "./game-view.component.html",
-  styleUrls: ["./game-view.component.css"]
+  selector: "app-game2D-view",
+  templateUrl: "./game2D-view.component.html",
+  styleUrls: ["./game2D-view.component.css"]
 })
-export class GameViewComponent implements OnInit {
+export class Game2DViewComponent implements OnInit {
 
   public simpleGame: IFullGame;
 
@@ -28,7 +28,7 @@ export class GameViewComponent implements OnInit {
 
   public getSimpleGame(): void {
     this.gameService.getSimpleGame(this.getId())
-        .then((response: IFullGame) => this.simpleGame = response[0] )
+        .then((response: IFullGame) => this.simpleGame = response)
         .catch(() => "getSimpleGame");
   }
 
