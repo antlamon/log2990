@@ -29,34 +29,34 @@
                                 <div class="score-position">3</div>
                             </div>
                             <div class="name-column">
-                                    <div class="name">Sample1</div>
-                                    <div class="name">Sample2</div>
-                                    <div class="name">Sample3</div>
+                                <div class="name">{{game.solo.first.name}}</div>
+                                <div class="name">{{game.solo.second.name}}</div>
+                                <div class="name">{{game.solo.third.name}}</div>
                             </div>
                             <div class="score-column">
-                                <div class="scores">{{game.solo.first}}</div>
-                                <div class="scores">{{game.solo.second}}</div>
-                                <div class="scores">{{game.solo.third}}</div>
+                                <div class="scores">{{game.solo.first.score}}</div>
+                                <div class="scores">{{game.solo.second.score}}</div>
+                                <div class="scores">{{game.solo.third.score}}</div>
                             </div>
                         </div>
                     </div>
                     <div class="top-container">
                         <div class="top-title">TOP 1V1</div>
                         <div class="top-score">
-                        <div class="number-column">
+                            <div class="number-column">
                                 <div class="score-position">1</div>
                                 <div class="score-position">2</div>
                                 <div class="score-position">3</div>
                             </div>
                             <div class="name-column">
-                                    <div class="name">Sample1</div>
-                                    <div class="name">Sample2</div>
-                                    <div class="name">Sample3</div>
+                                <div class="scores">{{game.multi.first.score}}</div>
+                                <div class="scores">{{game.multi.second.score}}</div>
+                                <div class="scores">{{game.multi.third.score}}</div>
                             </div>
                             <div class="score-column">
-                                    <div class="scores">{{game.multi.first}}</div>
-                                    <div class="scores">{{game.multi.second}}</div>
-                                    <div class="scores">{{game.multi.third}}</div>
+                                <div class="scores">{{game.multi.first.score}}</div>
+                                <div class="scores">{{game.multi.second.score}}</div>
+                                <div class="scores">{{game.multi.third.score}}</div>
                             </div>
                         </div>
                     </div>
@@ -86,21 +86,49 @@
                 <div class="game-card-right-content">
                     <div class="top-container">
                         <div class="top-title">TOP SOLO</div>
-                        <div>
-                            <div class="top-score">1:{{game.solo.first}}</div>
-                            <div class="top-score">2:{{game.solo.second}}</div>
-                            <div class="top-score">3:{{game.solo.third}}</div>
+                        <div class="top-score">
+                            <div class="number-column">
+                                <div class="score-position">1</div>
+                                <div class="score-position">2</div>
+                                <div class="score-position">3</div>
+                            </div>
+                            <div class="name-column">
+                                <div class="scores">{{game.solo.first.name}}</div>
+                                <div class="scores">{{game.solo.second.name}}</div>
+                                <div class="scores">{{game.solo.third.name}}</div>
+                            </div>
+                            <div class="score-column">
+                                <div class="scores">{{game.solo.first.score}}</div>
+                                <div class="scores">{{game.solo.second.score}}</div>
+                                <div class="scores">{{game.solo.third.score}}</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="top-container">
-                        <div class="top-title">TOP 1V1</div>
-                        <div class="top-score">1:{{game.multi.first}}</div>
-                        <div class="top-score">2:{{game.multi.second}}</div>
-                        <div class="top-score">3:{{game.multi.third}}</div>
+                </div>
+                <div class="top-container">
+                    <div class="top-title">TOP 1V1</div>
+                    <div class="top-score">
+                        <div class="number-column">
+                            <div class="score-position">1</div>
+                            <div class="score-position">2</div>
+                            <div class="score-position">3</div>
+                        </div>
+                        <div class="name-column">
+                            <div class="scores">{{game.multi.first.name}}</div>
+                            <div class="scores">{{game.multi.second.name}}</div>
+                            <div class="scores">{{game.multi.third.name}}</div>
+                        </div>
+                        <div class="score-column">
+                            <div class="scores">{{game.multi.first.score}}</div>
+                            <div class="scores">{{game.multi.second.score}}</div>
+                            <div class="scores">{{game.multi.third.score}}</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
 
 </div>

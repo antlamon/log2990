@@ -111,7 +111,10 @@ export class GameListService {
         }
         scores.sort();
 
-        return { first: scores[0], second: scores[1], third: scores[2] };
+        return { first: {name: "GoodComputer", score:scores[0]}, 
+                 second: {name: "MediumComputer", score:scores[0]}, 
+                 third: {name: "BadComputer", score:scores[0]}
+                };
     }
 
     public randomNumberGenerator(min: number, max: number): number {
