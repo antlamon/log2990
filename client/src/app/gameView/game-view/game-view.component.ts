@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { GameService } from "../../services/game.service";
-import { IGame } from "../../../../../common/models/game";
+import { IFullGame } from "../../../../../common/models/game";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -10,7 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class GameViewComponent implements OnInit {
 
-  public simpleGame: IGame;
+  public simpleGame: IFullGame;
 
   public constructor(
     private gameService: GameService,
@@ -28,7 +28,7 @@ export class GameViewComponent implements OnInit {
 
   public getSimpleGame(): void {
     this.gameService.getSimpleGame(this.getId())
-        .then((response: IGame) => this.simpleGame = response[0] )
+        .then((response: IFullGame) => this.simpleGame = response[0] )
         .catch(() => "getSimpleGame");
   }
 

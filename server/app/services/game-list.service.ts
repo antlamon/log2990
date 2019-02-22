@@ -32,6 +32,10 @@ export class GameListService {
          return this.simpleCollection.find({}).map((x: IFullGame) => x.card).toArray();
     }
 
+    public async getSimpleGame(id: string): Promise<IFullGame> {
+        return this.simpleCollection.find({"card.id": id}).toArray()[0];
+   }
+
     public async getFreeGames(): Promise<Game3D[]> {
         return FREEGAMES;
     }
@@ -83,8 +87,8 @@ export class GameListService {
                     solo: this.top3RandomOrder(),
                     multi: this.top3RandomOrder(),
             },
-                 modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[2] ,
-                 differenceImage: GameListService.BMP_S64_HEADER + imagesArray[3] }).then(
+                 imgCmpUrl: GameListService.BMP_S64_HEADER + imagesArray[2] ,
+                 imgDiffUrl: GameListService.BMP_S64_HEADER + imagesArray[3] }).then(
                                         () => { this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES); },
                                     ).catch();
         }
