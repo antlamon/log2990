@@ -10,6 +10,7 @@ import { PATHS } from "../path";
 import { GameListService } from "../services/game-list.service";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
+import { ITop3 } from "../../../common/models/top3";
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -24,8 +25,8 @@ const mockedGame: IGame = {
     id: "idmockgenerate",
     name: "testGame",
     originalImageURL: "",
-    solo: {first: 1, second: 2, third: 3},
-    multi: {first: 1, second: 2, third: 3},
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 
 describe("Game list controller", () => {

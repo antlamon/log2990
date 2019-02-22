@@ -6,6 +6,7 @@ import { Objet3D } from "../../../common/models/objet3D";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
+import { ITop3 } from "../../../common/models/top3";
 
 const mockBadGameType: IGame3DForm = {
     name: "heres my new game",
@@ -59,8 +60,8 @@ const mock3DGame: Game3D = {
     id: "",
     originalScene: mockScene,
     modifiedScene: mockScene,
-    solo: {first: 222, second: 223, third: 21312},
-    multi: {first: 222, second: 223, third: 21312},
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 
 const expect: Chai.ExpectStatic = chai.expect;
