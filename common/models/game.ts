@@ -9,7 +9,6 @@ export interface IGame {
 }
 
 export interface ISimpleForm {
-    id: number;
     name: string;
     originalImage: File;
     modifiedImage: File;

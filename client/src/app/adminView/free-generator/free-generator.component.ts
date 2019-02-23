@@ -85,18 +85,21 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
         }
       });
     } else {
-      this.validity(this.fileValidator.isValidGameName(this.gameName), "gameName", "Nom de jeu invalide.");
-      this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 10 et 200.");
-      this.validity(this.hasModifications(), "typeModif", "Il faut choisir au moins un type de modifications.");
+      this.showErrors();
+    }
+  }
+  private showErrors(): void {
+    if (!this.hasModifications()) {
+      this.showErrorMessage(`Il faut choisir au moins un type de modifications.`);
+    }
+    if (!this.fileValidator.isValidObjNb(this.noObj)) {
+      this.showErrorMessage(`Le nombre d'objet doit être entre 10 et 200`);
+    }
+    if (!this.fileValidator.isValidGameName(this.gameName)) {
+      this.showErrorMessage(`Le nom ${this.gameName} est invalide`);
     }
   }
 
-  private resetErrors(ids: string[]): void {
-
-    for (const id of ids) {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
-    }
-  }
   public hasModifications(): boolean {
     return this.modification.includes(true);
 
@@ -123,15 +126,6 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     document.body.classList.remove("modal-open");
   }
 
-  private validity(condition: boolean, id: string, errorMessage: string): void {
-
-    if (condition) {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
-    } else {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "red";
-      this.showErrorMessage(errorMessage);
-    }
-  }
   private showErrorMessage(error: string): void {
     const errorBox: HTMLElement = document.createElement("span");
     const errorMessage: Text = document.createTextNode(error);
@@ -149,6 +143,5 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.noObj = "";
     this.gameName = "";
     this.clearErrorMessages();
-    this.resetErrors(["gameName", "noObj", "typeModif"]);
   }
 }

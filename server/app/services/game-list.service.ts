@@ -74,9 +74,7 @@ export class GameListService {
 
         const message: Message = response.data;
 
-        // for mock-data, will be changed when database is implemented
         if (message.title !== ERROR_ID) {
-            // for mock-data, will be changed when database is implemented
             const imagesArray: string[] = message.body.split(GameListService.BMP_S64_HEADER);
             this.simpleCollection.insertOne(
                 {card: {
@@ -98,7 +96,7 @@ export class GameListService {
     public async addFreeGame(newGame: IGame3DForm): Promise<Message> {
 
         try {
-            this.freeCollection.insertOne(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database
+            this.freeCollection.insertOne(this.game3DGenerator.createRandom3DGame(newGame));
             this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
 
             return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};

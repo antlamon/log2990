@@ -19,7 +19,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   public readonly ID_ORIGINAL_FILE: string = "originalFile";
   public readonly ID_ORIGINAL_FILENAME: string = "originalFileName";
   public readonly VALID_FILE_EXTENSION: string = "image/bmp";
-  public GAME_ID: number = 1;
+  public gameName: string;
 
   private readonly WIDTH_OFFSET: number = 18;
   private readonly HEIGHT_OFFSET: number = 22;
@@ -29,8 +29,10 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   private element: HTMLElement;
   @Input() public id: string;
   private modalRef: SimpleGeneratorComponent;
-  public gameName: string;
-
+  private originalFileName: string;
+  private modifiedFileName: string;
+  private originalFile: File;
+  private modifiedFile: File;
   public constructor(private gameService: GameService, private fileValidator: FileValidatorService,
                      private modalService: ModalService, public el: ElementRef) {
     this.element = el.nativeElement;
@@ -40,6 +42,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   public ngOnInit(): void {
+    this.originalFileName = "Choisir un fichier";
+    this.modifiedFileName = "Choisir un fichier";
     this.initModal();
   }
 
@@ -59,10 +63,15 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     return this.fileValidator.dimensionsAreValid(width, height);
   }
 
-  public onFileChange(file: File, fileId: string, labelId: string): void {
+  public onFileChange(file: File, fileId: string): void {
 
-    const fileName: string = file.name;
-    (document.getElementById(labelId) as HTMLParagraphElement).textContent = fileName;
+    if (fileId === this.ID_ORIGINAL_FILE) {
+      this.originalFileName = file.name;
+      this.originalFile = file;
+    } else {
+      this.modifiedFileName = file.name;
+      this.modifiedFile = file;
+    }
     const reader: FileReader = new FileReader();
     if (file && file.type === this.VALID_FILE_EXTENSION) {
       let validFile: boolean = false;
@@ -89,10 +98,8 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   public submit(): boolean {
     this.clearErrorMessages();
     if (this.modifiedFileIsOK && this.originalFileIsOK && this.fileValidator.isValidGameName(this.gameName)) {
-      const file1: File = (document.getElementById(this.ID_ORIGINAL_FILE) as HTMLInputElement).files[0];
-      const file2: File = (document.getElementById(this.ID_MODIFIED_FILE) as HTMLInputElement).files[0];
-      const newGame: ISimpleForm = { id: this.GAME_ID, name: this.gameName, originalImage: file1, modifiedImage: file2 };
-      this.GAME_ID ++;
+      const newGame: ISimpleForm = { name: this.gameName,
+                                     originalImage: this.originalFile, modifiedImage: this.modifiedFile };
       this.gameService.createSimpleGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
           this.showErrorMessage("L'opération a été annulée: ");
@@ -104,39 +111,30 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
         }
       });
     } else {
-      this.validity(this.fileValidator.isValidGameName(this.gameName), "gameNameLabel", "Nom de jeu invalide.");
-      this.validity(this.modifiedFileIsOK, this.ID_MODIFIED_FILE, "Fichier de jeu modifié invalide.");
-      this.validity(this.originalFileIsOK, this.ID_ORIGINAL_FILE, "Fichier de jeu original invalide.");
+      this.showErrors();
     }
 
     return false;
   }
+  private showErrors(): void {
+    if (!this.originalFileIsOK) {
+      this.showErrorMessage(`Le fichier ${this.originalFileName} est invalide`);
+    }
+    if (!this.modifiedFileIsOK) {
+      this.showErrorMessage(`Le fichier ${this.modifiedFileName} est invalide`);
+    }
+    if (!this.fileValidator.isValidGameName(this.gameName)) {
+      this.showErrorMessage(`Le nom ${this.gameName} est invalide`);
+    }
+  }
 
   private resetForm(): void {
-    document.getElementById(this.ID_ORIGINAL_FILENAME).textContent = "Aucun fichier choisi.";
-    document.getElementById(this.ID_MODIFIED_FILENAME).textContent = "Aucun fichier choisi.";
+    this.originalFileName = "Aucun fichier choisi.";
+    this.modifiedFileName = "Aucun fichier choisi.";
     this.gameName = "";
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
-    this.resetErrors(["gameNameLabel", this.ID_MODIFIED_FILENAME, this.ID_ORIGINAL_FILENAME]);
     this.clearErrorMessages();
-  }
-
-  private resetErrors(ids: string[]): void {
-
-    for (const id of ids) {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
-    }
-  }
-
-  private validity(condition: boolean, id: string, errorMessage: string): void {
-
-    if (condition) {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
-    } else {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "red";
-      this.showErrorMessage(errorMessage);
-    }
   }
 
   public open(): void {
