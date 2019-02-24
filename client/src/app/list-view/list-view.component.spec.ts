@@ -11,7 +11,7 @@ import { FormsModule } from "@angular/forms";
 import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { IGame } from "../../../../common/models/game";
 import { ITop3 } from "../../../../common/models/top3";
-import { Game3D } from "../../../../common/models/game3D";
+import { IGame3D } from "../../../../common/models/game3D";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -20,7 +20,7 @@ const mockSimple: IGame = {
   solo: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
   multi: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
 };
-const mockGame3D: Game3D = {
+const mockGame3D: IGame3D = {
   name: "mock3DName",
   id: "",
   originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },

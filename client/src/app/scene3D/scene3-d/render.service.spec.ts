@@ -1,34 +1,34 @@
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
-import { Scene3D } from "../../../../../common/models/game3D";
-import { Objet3D } from "../../../../../common/models/objet3D";
+import { IScene3D } from "../../../../../common/models/game3D";
+import { IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 
 describe("renderService", () => {
-  const cone: Objet3D = {
+  const cone: IObjet3D = {
     type: "cone",
     color: 0,
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const cube: Objet3D = {
+  const cube: IObjet3D = {
     type: "cube",
     color: 0,
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const cylinder: Objet3D = {
+  const cylinder: IObjet3D = {
     type: "cylinder",
     color: 0,
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const mockObjects: Objet3D[] = [cone, cube, cylinder];
-  const mockOkScene: Scene3D = {
+  const mockObjects: IObjet3D[] = [cone, cube, cylinder];
+  const mockOkScene: IScene3D = {
     modified: false,
     numObj: mockObjects.length,
     objects: mockObjects,
@@ -41,7 +41,7 @@ describe("renderService", () => {
     TestBed.configureTestingModule({
       providers: [ RenderService, ShapeCreatorService ]
     })
-    .compileComponents();
+    .compileComponents().catch();
   }));
 
   it("should be created", inject([RenderService], (service: RenderService) => {
@@ -76,7 +76,7 @@ describe("renderService", () => {
       component.onResize();
       const width: number = component["container"].clientWidth;
       const height: number = component["container"].clientHeight;
-      expect(component["camera"].aspect).toEqual(width/height);
+      expect(component["camera"].aspect).toEqual(width / height);
     });
     it("should update the projection matrix", () => {
       const spyProjectionMatrix: jasmine.Spy = spyOn(component["camera"], "updateProjectionMatrix");

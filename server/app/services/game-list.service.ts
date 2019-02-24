@@ -6,7 +6,7 @@ import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
-import { Game3D } from "../../../common/models/game3D";
+import { IGame3D } from "../../../common/models/game3D";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { DatabaseService } from "./database.service";
@@ -36,7 +36,7 @@ export class GameListService {
         return await this.simpleCollection.findOne({ "card.id": id }) as IFullGame;
     }
 
-    public async getFreeGames(): Promise<Game3D[]> {
+    public async getFreeGames(): Promise<IGame3D[]> {
 
         return this.freeCollection.find({}).toArray();
     }

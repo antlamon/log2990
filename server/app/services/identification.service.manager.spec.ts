@@ -1,18 +1,18 @@
 import { expect } from "chai";
 import { readFileSync } from "fs";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { PATHS } from "../path";
 import { ConvertImage } from "./convertImage.service";
 import { IdentificationService } from "./identification.service";
 import { IdentificationServiceManager } from "./identification.service.manager";
 
 describe("Identification service tests", () => {
+    const TEST_IMAGES_PATH: string = "./app/documents/test-images/";
     const BMP_S64_HEADER: string = "data:image/bmp;base64,";
     const convertService: ConvertImage = new ConvertImage();
 
-    const image: string = BMP_S64_HEADER + readFileSync(PATHS.TEST_IMAGES_PATH + "image_test_1.bmp").toString("base64");
-    const modifiedImage: string = BMP_S64_HEADER + readFileSync(PATHS.TEST_IMAGES_PATH + "image_test_2.bmp").toString("base64");
-    const differenceImage: string = BMP_S64_HEADER + readFileSync(PATHS.TEST_IMAGES_PATH + "image_result.bmp").toString("base64");
+    const image: string = BMP_S64_HEADER + readFileSync(TEST_IMAGES_PATH + "image_test_1.bmp").toString("base64");
+    const modifiedImage: string = BMP_S64_HEADER + readFileSync(TEST_IMAGES_PATH + "image_test_2.bmp").toString("base64");
+    const differenceImage: string = BMP_S64_HEADER + readFileSync(TEST_IMAGES_PATH + "image_result.bmp").toString("base64");
     let serviceManager: IdentificationServiceManager;
 
     before(() => {

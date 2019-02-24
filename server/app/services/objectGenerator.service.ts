@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { INITIAL_OBJECT_SIZE, Objet3D } from "../../../common/models/objet3D";
+import { INITIAL_OBJECT_SIZE, IObjet3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
 
 @injectable()
@@ -13,7 +13,7 @@ export class ObjectGeneratorService {
     private readonly B0X_LENGHT: number = 300;
     private readonly MAX_ROTATION: number = 360;
 
-    public generateRandom3Dobject(objects: Objet3D[]): Objet3D {
+    public generateRandom3Dobject(objects: IObjet3D[]): IObjet3D {
         return {
             type: this.randomShape(),
             color: this.randomInt(this.WHITE, this.BLACK),
@@ -26,7 +26,7 @@ export class ObjectGeneratorService {
             },
         };
     }
-    private generatePosition(objects: Objet3D[]): {x: number, y: number, z: number} {
+    private generatePosition(objects: IObjet3D[]): {x: number, y: number, z: number} {
         let position: {x: number, y: number, z: number};
         let valid: boolean;
         do {

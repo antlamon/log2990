@@ -6,7 +6,7 @@ describe("ShapeCreatorService", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ShapeCreatorService ],
-      providers: [ ShapeCreatorService ]
+      providers: [ ShapeCreatorService ],
     })
     .compileComponents();
   }));
