@@ -16,7 +16,7 @@ import { Game3D } from "../../../../common/models/game3D";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
-  originalImageURL: "",
+  originalImage: "",
   solo: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
   multi: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
 };
@@ -68,7 +68,7 @@ describe("ListViewComponent", () => {
     const game: IGame = {
       id: "",
       name: "string",
-      originalImageURL: "string",
+      originalImage: "string",
       solo: {} as ITop3,
       multi:  {} as ITop3
     };

@@ -41,14 +41,14 @@ const mock3DGame: IGame3DForm = {
 const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
-    originalImageURL: "",
+    originalImage: "",
     solo: { } as ITop3,
     multi: { } as ITop3,
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
-    imgDiffURL: " ",
-    imgCmpURL: " ",
+    modifiedImage: " ",
+    differenceImage: " ",
 };
 
 const mockedSimpleGame: ISimpleForm = {

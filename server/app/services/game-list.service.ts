@@ -80,7 +80,7 @@ export class GameListService {
                 {card: {
                     id: (new ObjectID()).toHexString(),
                     name: newGame.name,
-                    originalImageURL: GameListService.BMP_S64_HEADER + imagesArray[1],
+                    originalImage: GameListService.BMP_S64_HEADER + imagesArray[1],
                     solo: this.game3DGenerator.top3RandomOrder(),
                     multi: this.game3DGenerator.top3RandomOrder(),
             },

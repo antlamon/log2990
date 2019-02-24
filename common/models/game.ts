@@ -3,7 +3,7 @@ import { ITop3 } from "./top3";
 export interface IGame {
     id: string,
     name: string;
-    originalImageURL: string;
+    originalImage: string;
     solo: ITop3;
     multi: ITop3;
 }
@@ -15,8 +15,8 @@ export interface ISimpleForm {
 }
 export interface IFullGame {
     card: IGame;
-    imgDiffURL: string;
-    imgCmpURL: string;
+    modifiedImage: string;
+    differenceImage: string;
 }
 export interface IGame3DForm {
     name: string;
