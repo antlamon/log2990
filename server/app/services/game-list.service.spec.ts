@@ -107,7 +107,7 @@ describe("GameList service", () => {
             mockSimpleCollection = db.collection(GameListService.SIMPLE_COLLECTION);
             mockFreeCollection = db.collection(GameListService.FREE_COLLECTION);
             service["_freeCollection"] = mockFreeCollection;
-            service["_freeCollection"].insertOne(mockGame3D);
+            service["_freeCollection"].insertOne(mockGame3D).catch();
             service["_simpleCollection"] = mockSimpleCollection;
             service["_simpleCollection"].insertOne(mockedFullGame).then( (res: WriteOpResult) => {
                 done();
