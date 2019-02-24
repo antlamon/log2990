@@ -36,7 +36,7 @@ describe("AdminMenuComponent", () => {
       ],
       providers: [ModalService, FreeGeneratorComponent]
     })
-    .compileComponents();
+    .compileComponents().catch();
   }));
 
   beforeEach(() => {

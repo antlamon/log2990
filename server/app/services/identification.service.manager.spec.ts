@@ -1,15 +1,16 @@
 import { expect } from "chai";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
-import { PATHS } from "../path";
 import { ConvertImage } from "./convertImage.service";
 import { IdentificationService } from "./identification.service";
 import { IdentificationServiceManager } from "./identification.service.manager";
 
 describe("Identification service tests", () => {
+    const TEST_IMAGES_PATH: string = "./app/documents/test-images/";
     const convertService: ConvertImage = new ConvertImage();
-    const path1: string = PATHS.TEST_IMAGES_PATH + "image_test_1.bmp";
-    const path2: string = PATHS.TEST_IMAGES_PATH + "image_test_2.bmp";
-    const path3: string = PATHS.TEST_IMAGES_PATH + "image_result.bmp";
+    const path1: string = 
+    TEST_IMAGES_PATH + "image_test_1.bmp";
+    const path2: string = TEST_IMAGES_PATH + "image_test_2.bmp";
+    const path3: string = TEST_IMAGES_PATH + "image_result.bmp";
     let serviceManager: IdentificationServiceManager;
 
     before(() => {

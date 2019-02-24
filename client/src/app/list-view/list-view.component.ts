@@ -4,7 +4,7 @@ import { IGame } from "../../../../common/models/game";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { Router} from "@angular/router";
-import { Game3D } from "../../../../common/models/game3D";
+import { IGame3D } from "../../../../common/models/game3D";
 
 @Component({
   selector: "app-list-view",
@@ -15,7 +15,7 @@ import { Game3D } from "../../../../common/models/game3D";
 export class ListViewComponent implements OnInit {
 
   public simpleGames: IGame[];
-  public freeGames: Game3D[];
+  public freeGames: IGame3D[];
   @Input() public isAdminMode: Boolean;
 
   public constructor(private gameService: GameService, private socket: SocketService, private router: Router) {
@@ -38,7 +38,7 @@ export class ListViewComponent implements OnInit {
 
   public deleteSimpleGames(game: IGame): void {
     // TODO: warning delete box "are you sure? yes/no"
-    const index: number = this.simpleGames.findIndex((x:IGame) => x === game);
+    const index: number = this.simpleGames.findIndex((x: IGame) => x === game);
     if (index !== -1) {
       this.simpleGames.splice(index, 1);
       this.gameService.deleteSimpleGame(game).subscribe();
@@ -47,12 +47,12 @@ export class ListViewComponent implements OnInit {
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe((response: Game3D[]) => {this.freeGames = response; });
+        .subscribe((response: IGame3D[]) => {this.freeGames = response; });
   }
 
-  public deleteFreeGames(game: Game3D): void {
+  public deleteFreeGames(game: IGame3D): void {
     // TODO: warning delete box "are you sure? yes/no"
-    const index: number = this.freeGames.findIndex((x: Game3D) => x === game);
+    const index: number = this.freeGames.findIndex((x: IGame3D) => x === game);
     if (index !== -1) {
       this.freeGames.splice(index, 1);
       this.gameService.deleteFreeGame(game).subscribe();

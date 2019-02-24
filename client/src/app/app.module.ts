@@ -34,6 +34,7 @@ import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
     GameViewComponent,
     Scene3DComponent,
     Game3DComponent,
+    ShapeCreatorService
   ],
   imports: [
     FormsModule,

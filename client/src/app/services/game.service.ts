@@ -5,7 +5,7 @@ import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Message } from "../../../../common/communication/message";
 import { BASE_SERVER_PATH } from "../global/constants";
-import { Game3D } from "../../../../common/models/game3D";
+import { IGame3D } from "../../../../common/models/game3D";
 
 @Injectable({
   providedIn: "root"
@@ -40,8 +40,8 @@ export class GameService {
     };
   }
 
-  public getFreeGames(): Observable<Game3D[]> {
-    return this.http.get<Game3D[]>(this.FREE_URL);
+  public getFreeGames(): Observable<IGame3D[]> {
+    return this.http.get<IGame3D[]>(this.FREE_URL);
   }
 
   public createSimpleGame(game: ISimpleForm): Observable<Message> {
@@ -83,7 +83,7 @@ export class GameService {
     return this.http.delete(url, httpOptions);
   }
 
-  public deleteFreeGame(game: Game3D): Observable<{}> {
+  public deleteFreeGame(game: IGame3D): Observable<{}> {
     // tslint:disable-next-line:typedef
     const httpOptions = {
       headers: new HttpHeaders({

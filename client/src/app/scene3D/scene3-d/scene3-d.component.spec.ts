@@ -2,13 +2,13 @@ import { async, TestBed, ComponentFixture } from "@angular/core/testing";
 import { Scene3DComponent } from "./scene3-d.component";
 import { RenderService } from "./render.service";
 import { ShapeCreatorService } from "./shape-creator.service";
-import { Scene3D } from "../../../../../common/models/game3D";
-import { Objet3D } from "../../../../../common/models/objet3D";
+import { IScene3D } from "../../../../../common/models/game3D";
+import { IObjet3D } from "../../../../../common/models/objet3D";
 
 describe("Scene3DComponent", () => {
   let component: Scene3DComponent;
   let fixture: ComponentFixture<Scene3DComponent>;
-  const obj3D: Objet3D = {
+  const obj3D: IObjet3D = {
     type: "cube",
     color: 0,
     position: { x: 0, y: 0, z: 0},
@@ -16,7 +16,7 @@ describe("Scene3DComponent", () => {
     rotation: {x: 0, y: 0, z: 0},
 };
 
-const mockScene: Scene3D = {
+  const mockScene: IScene3D = {
     modified: false,
     backColor: 0x00000,
     objects: [obj3D],
@@ -59,7 +59,7 @@ const mockScene: Scene3D = {
   });
   describe("Test for the resize event.", () => {
     it("should call render function Onresize when window is resized", () => {
-      const spyResize: jasmine.Spy =spyOn(component["renderService"], "onResize");
+      const spyResize: jasmine.Spy = spyOn(component["renderService"], "onResize");
       component.onResize();
       expect(spyResize).toHaveBeenCalled();
     });
@@ -73,7 +73,7 @@ const mockScene: Scene3D = {
     });
     it("should call the scene renderer if valid game is given", () => {
       component["game"] = mockScene;
-      var dummyCanva= document.createElement('canvas');
+      const dummyCanva: HTMLCanvasElement = document.createElement("canvas");
       component["container"].appendChild(dummyCanva);
       const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize");
       component.ngAfterViewInit();

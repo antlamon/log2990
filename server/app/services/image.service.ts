@@ -1,9 +1,7 @@
-import { writeFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { DIFFERENCE_ERROR, SIZE_ERROR } from "../../../common/models/errors";
-import { PATHS } from "../path";
 import { TYPES } from "../types";
 import { ConvertImage, ImageBMP, Pixel } from "./convertImage.service";
 
@@ -34,7 +32,6 @@ export class ImageService {
                 throw new DIFFERENCE_ERROR(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
             }
             this.convertImage.imageBMPtoBuffer(imagesCompared, modifiedBuffer);
-            writeFileSync(PATHS.DIFFERENCES_IMAGES_PATH + `${newImageName}.bmp`, modifiedBuffer);
             const compareImage: string = ImageService.BMP_S64_HEADER + modifiedBuffer.toString("base64");
 
             return {
