@@ -2,7 +2,9 @@ import { Injectable } from "@angular/core";
 import { IObjet3D, INITIAL_OBJECT_SIZE } from "../../../../../common/models/objet3D";
 import * as THREE from "three";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class ShapeCreatorService {
 
   private map: Map<string, THREE.Mesh>;
