@@ -53,16 +53,16 @@ export class IdentificationServiceManager {
             };
         }
 
-        const originalBuffer: Buffer = new Buffer(  originalImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length),
+        const originalBuffer: Buffer = Buffer.from( originalImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length),
                                                     "base64");
         if (this.bmpBufferFormat === undefined) {
             this.bmpBufferFormat = originalBuffer;
         }
         const originalImage: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
         const modifiedImage: ImageBMP = this.convertImage.bufferToImageBMP(
-            new Buffer(modifiedImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
+            Buffer.from(modifiedImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
         const differenceImage: ImageBMP = this.convertImage.bufferToImageBMP(
-            new Buffer(differenceImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
+            Buffer.from(differenceImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
         this.identificationServices[gameRoomId] = new IdentificationService(originalImage, modifiedImage, differenceImage);
 
         return {
