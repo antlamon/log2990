@@ -1,10 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { GameService } from "../../services/game.service";
-import { SocketService } from "../../services/socket.service";
+import { ActivatedRoute } from "@angular/router";
+import { IndexService } from "src/app/services/index.service";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IFullGame } from "../../../../../common/models/game";
-import { ActivatedRoute } from "@angular/router";
-import { GameRoomUpdate, Point, ImageClickMessage, NewGameMessage } from "../../../../../common/communication/message";
+import { GameService } from "../../services/game.service";
+import { SocketService } from "../../services/socket.service";
 
 @Component({
   selector: "app-game2d-view",
@@ -22,7 +23,8 @@ export class Game2DViewComponent implements OnInit {
     public constructor(
         private gameService: GameService,
         private socket: SocketService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private index: IndexService
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -36,7 +38,6 @@ export class Game2DViewComponent implements OnInit {
     }
 
     private getId(): string {
-
         return String(this.route.snapshot.paramMap.get("id"));
     }
 
@@ -45,7 +46,7 @@ export class Game2DViewComponent implements OnInit {
             .then((response: IFullGame) => {
                 this.simpleGame = response;
                 const newGameMessage: NewGameMessage =  {
-                    username: "alloa",
+                    username: this.index.username,
                     gameRoomId: this.simpleGame.card.id,
                     originalImage: this.simpleGame.card.originalImage,
                     modifiedImage: this.simpleGame.modifiedImage,
@@ -82,7 +83,7 @@ export class Game2DViewComponent implements OnInit {
         const imageClickMessage: ImageClickMessage = {
             point: point,
             gameRoomId: this.simpleGame.card.id,
-            username: "alloa",
+            username: this.index.username,
         };
 
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE, imageClickMessage);
