@@ -1,7 +1,7 @@
-import {IObjet3D} from "./objet3D";
+import { IObjet3D } from "./objet3D";
 import { ITop3 } from "./top3";
 
-export interface IGame3D{
+export interface IGame3D {
 
     name: string;
     id: string;
@@ -12,7 +12,7 @@ export interface IGame3D{
 
 }
 
-export interface IScene3D{
+export interface IScene3D {
     modified: boolean;
     numObj: number;
     objects: IObjet3D[];

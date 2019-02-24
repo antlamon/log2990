@@ -16,9 +16,9 @@ import { Game3DGeneratorService } from "./game3DGenerator.service";
 export class GameListService {
     public static readonly MIN_TIME_TOP_3: number = 15;
     public static readonly MAX_TIME_TOP_3: number = 30;
-    public static readonly SIMPLE_COLLECTION: string =  "simple-games";
-    public static readonly FREE_COLLECTION: string =  "free-games";
-    public static readonly IMAGES_COLLECTION: string =  "images";
+    public static readonly SIMPLE_COLLECTION: string = "simple-games";
+    public static readonly FREE_COLLECTION: string = "free-games";
+    public static readonly IMAGES_COLLECTION: string = "images";
     public static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
     private _simpleCollection: Collection;
     private _freeCollection: Collection;
@@ -29,7 +29,11 @@ export class GameListService {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
-         return this.simpleCollection.find({}).map((x: IFullGame) => x.card).toArray();
+        return this.simpleCollection.find({}).map((x: IFullGame) => x.card).toArray();
+    }
+
+    public async getSimpleGame(id: string): Promise<IFullGame> {
+        return await this.simpleCollection.findOne({ "card.id": id }) as IFullGame;
     }
 
     public async getFreeGames(): Promise<IGame3D[]> {
@@ -38,28 +42,28 @@ export class GameListService {
     }
 
     public async deleteSimpleGame(id: string): Promise<Message> {
-       return this.simpleCollection.deleteOne({"card.id": id}).then( (res: DeleteWriteOpResultObject) => {
-            if ( res.deletedCount === 1 ) {
-               this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
+        return this.simpleCollection.deleteOne({ "card.id": id }).then((res: DeleteWriteOpResultObject) => {
+            if (res.deletedCount === 1) {
+                this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES);
 
-               return { title: BASE_ID, body: `Le jeu ${id} a été supprimé!` };
-           } else {
+                return { title: BASE_ID, body: `Le jeu ${id} a été supprimé!` };
+            } else {
 
-               return { title: BASE_ID, body: `Le jeu ${id} n'existe pas!` };
-           }
+                return { title: BASE_ID, body: `Le jeu ${id} n'existe pas!` };
+            }
         }).catch();
     }
 
     public async deleteFreeGame(id: string): Promise<Message> {
-        return this.freeCollection.deleteOne({"id": id}).then( (res: DeleteWriteOpResultObject) => {
-            if ( res.deletedCount === 1 ) {
-               this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
+        return this.freeCollection.deleteOne({ "id": id }).then((res: DeleteWriteOpResultObject) => {
+            if (res.deletedCount === 1) {
+                this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
 
-               return { title: BASE_ID, body: `Le jeu ${id} a été supprimé!` };
-           } else {
+                return { title: BASE_ID, body: `Le jeu ${id} a été supprimé!` };
+            } else {
 
-               return { title: BASE_ID, body: `Le jeu ${id} n'existe pas!` };
-           }
+                return { title: BASE_ID, body: `Le jeu ${id} n'existe pas!` };
+            }
         }).catch();
     }
 
@@ -110,14 +114,14 @@ export class GameListService {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
     private get simpleCollection(): Collection {
-        if ( this._simpleCollection == null ) {
+        if (this._simpleCollection == null) {
             this._simpleCollection = this.databaseService.db.collection(GameListService.SIMPLE_COLLECTION);
         }
 
         return this._simpleCollection;
     }
     private get freeCollection(): Collection {
-        if ( this._freeCollection == null ) {
+        if (this._freeCollection == null) {
             this._freeCollection = this.databaseService.db.collection(GameListService.FREE_COLLECTION);
         }
 

@@ -4,7 +4,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { AppRoutingModule } from "../app-routing.module";
 import { AdminMenuComponent } from "../adminView/admin-menu/admin-menu.component";
 import { InitialComponent } from "../initial/initial.component";
-import { GameViewComponent } from "../gameView/game-view/game-view.component";
+import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
 import { SimpleGeneratorComponent } from "../adminView/simple-generator/simple-generator.component";
 import { FreeGeneratorComponent } from "../adminView/free-generator/free-generator.component";
 import { FormsModule } from "@angular/forms";
@@ -44,7 +44,7 @@ describe("ListViewComponent", () => {
         ListViewComponent,
         AdminMenuComponent,
         InitialComponent,
-        GameViewComponent,
+        Game2DViewComponent,
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
         Scene3DComponent

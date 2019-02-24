@@ -2,7 +2,7 @@ import { NextFunction, Request, RequestHandler, Response, Router } from "express
 import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { Message } from "../../../common/communication/message";
-import { IGame } from "../../../common/models/game";
+import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { GameListService, MulterFile } from "../services/game-list.service";
 import { TYPES } from "../types";
@@ -82,6 +82,16 @@ export class GameListController {
             this.gameListService.getSimpleGames().then(
                 (simpleGames: IGame[]) => {
                     res.json(simpleGames);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
+        });
+
+        router.get("/onesimple", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.getSimpleGame(req.query.id).then(
+                (simpleGame: IFullGame) => {
+                    res.json(simpleGame);
                 },
                 (error: Error) => {
                     res.json(error);

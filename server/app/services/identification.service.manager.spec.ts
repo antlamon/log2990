@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { readFileSync } from "fs";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { ConvertImage } from "./convertImage.service";
 import { IdentificationService } from "./identification.service";
@@ -6,11 +7,12 @@ import { IdentificationServiceManager } from "./identification.service.manager";
 
 describe("Identification service tests", () => {
     const TEST_IMAGES_PATH: string = "./app/documents/test-images/";
+    const BMP_S64_HEADER: string = "data:image/bmp;base64,";
     const convertService: ConvertImage = new ConvertImage();
-    const path1: string = 
-    TEST_IMAGES_PATH + "image_test_1.bmp";
-    const path2: string = TEST_IMAGES_PATH + "image_test_2.bmp";
-    const path3: string = TEST_IMAGES_PATH + "image_result.bmp";
+
+    const image: string = BMP_S64_HEADER + readFileSync(TEST_IMAGES_PATH + "image_test_1.bmp").toString("base64");
+    const modifiedImage: string = BMP_S64_HEADER + readFileSync(TEST_IMAGES_PATH + "image_test_2.bmp").toString("base64");
+    const differenceImage: string = BMP_S64_HEADER + readFileSync(TEST_IMAGES_PATH + "image_result.bmp").toString("base64");
     let serviceManager: IdentificationServiceManager;
 
     before(() => {
@@ -31,18 +33,18 @@ describe("Identification service tests", () => {
     describe("Adding a new identification service", () => {
         const gameRoomId: string = "a123";
         it("Creating a new identification service", () => {
-            expect(serviceManager.startNewService(gameRoomId, path1, path2, path3).body).to.equal(gameRoomId);
+            expect(serviceManager.startNewService(gameRoomId, image, modifiedImage, differenceImage).body).to.equal(gameRoomId);
             expect(Object.keys(serviceManager["identificationServices"]).length).to.be.greaterThan(0);
         });
 
         it("Trying to add the same gameId should not work", () => {
-            expect(serviceManager.startNewService(gameRoomId, path1, path2, path3).body)
+            expect(serviceManager.startNewService(gameRoomId, image, modifiedImage, differenceImage).body)
                 .to.contain(IdentificationServiceManager.GAMEROOMID_ALREADY_EXISTS);
         });
 
         it("Adding another identification service shouldnt reset the bmp buffer", () => {
             const buffer: Buffer = serviceManager["bmpBufferFormat"];
-            serviceManager.startNewService("newID", path1, path2, path3);
+            serviceManager.startNewService("newID", image, modifiedImage, differenceImage);
             expect(buffer).to.eql(serviceManager["bmpBufferFormat"]);
         });
 

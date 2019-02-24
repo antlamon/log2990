@@ -2,7 +2,7 @@ import { TestBed, inject } from "@angular/core/testing";
 
 import { GameService } from "./game.service";
 import { HttpClientModule } from "@angular/common/http";
-import { IGame, ISimpleForm, IGame3DForm } from "../../../../common/models/game";
+import { IGame, ISimpleForm, IGame3DForm, IFullGame } from "../../../../common/models/game";
 import { Message, BASE_ID } from "../../../../common/communication/message";
 import { TestHelper } from "src/test.helper";
 import { IGame3D } from "../../../../common/models/game3D";
@@ -43,10 +43,14 @@ describe("GameService", () => {
     });
 
     it("Getting a simple game should return a simple game", () => {
-        const expectedGame: IGame = { name: "test1", id: mockedID} as IGame;
+        const expectedGame: IFullGame = {
+            card: { name: "test1", id: mockedID} as IGame,
+            modifiedImage: "modif",
+            differenceImage: "diff"
+        };
         httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
         gameService.getSimpleGame(mockedID).then(
-            (response: IGame) => {
+            (response: IFullGame) => {
                 expect(response).toEqual(expectedGame);
             }
         );
