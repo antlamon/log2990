@@ -5,7 +5,8 @@
     <form id="formSV">
       <div class="form-grid">
         <div>
-          <p id="gameName">Nom du jeu</p>
+          <div *ngIf = "this.fileValidator.isValidGameName(this.gameName)"><p id="gameName">Nom du jeu</p></div>
+          <div *ngIf = "!(this.fileValidator.isValidGameName(this.gameName))" style="color:red"><p id="gameName">Nom du jeu</p></div>
         </div>
         <div class="rightColumn">
           <input [(ngModel)]="gameName" placeholder="Nom du jeu" name="gameNAM"/>
@@ -18,13 +19,15 @@
           <option value={{type2}}>thématique </option>
         </select>
         <div>
-          <p id="noObj">Quantité d'objets</p>
+          <div *ngIf = "this.fileValidator.isValidObjNb(this.noObj)"><p id="noObj">Quantité d'objets</p></div>
+          <div *ngIf = "!(this.fileValidator.isValidObjNb(this.noObj))" style="color:red"><p id="noObj">Quantité d'objets</p></div>
         </div>
         <div class="rightColumn">
           <input [(ngModel)]="noObj" placeholder="Nombre d'objets" name="noOBJ"/>
         </div>
         <div>
-          <p id="typeModif">Type de modifications</p>
+          <div *ngIf = "this.hasModifications()"><p id="typeModif">Type de modifications</p></div>
+          <div *ngIf = "!(this.hasModifications())" style="color:red"><p id="typeModif">Type de modifications</p></div>
         </div>
         <div class="rightColumn">
           <input type="checkbox" id="add" value="add" (click)="changeModif(0)"> Ajout<br>
@@ -39,7 +42,9 @@
       <button type="submit" id="submitButton" (click)="submit()">Soumettre </button>
       <button (click)="close()"> Annuler </button>
     </div>
-    <div id="errorMessages" class="errorsDiv"></div>
+    <div *ngFor ="let error of errorsMessages ">
+        <p style="color:red">{{error}}</p>
+    </div>
   </div>
 </div>
 <div class="form-background"></div>

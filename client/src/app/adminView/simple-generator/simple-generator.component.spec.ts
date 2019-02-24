@@ -66,7 +66,7 @@ describe("SimpleGeneratorComponent", () => {
     });
 
     spyOn(component["fileValidator"], "dimensionsAreValid").and.returnValue(true);
-    component.onFileChange(mockedFile, "originalFile", "originalFileName");
+    component.onFileChange(mockedFile, "originalFile");
     setTimeout(
       () => {
         expect(component["originalFileIsOK"]).toEqual(true);
@@ -81,7 +81,7 @@ describe("SimpleGeneratorComponent", () => {
     });
 
     spyOn(component["fileValidator"], "dimensionsAreValid").and.returnValue(true);
-    component.onFileChange(mockedFile, "modifiedFile", "modifiedFileName");
+    component.onFileChange(mockedFile, "modifiedFile");
     setTimeout(
       () => {
         expect(component["modifiedFileIsOK"]).toEqual(true);
@@ -92,13 +92,13 @@ describe("SimpleGeneratorComponent", () => {
 
   it("On file change with not bmp file should return false", () => {
     const mockedFile: File = new File(["data:image/bmp;base64,somedata"], "originalImage");
-    component.onFileChange(mockedFile, "originalFile", "originalFileName");
+    component.onFileChange(mockedFile, "originalFile");
     expect(component["originalFileIsOK"]).toEqual(false);
   });
 
   it("On file change with not bmp file should return false", () => {
     const mockedFile: File = new File(["data:image/bmp;base64,somedata"], "modifiedImage");
-    component.onFileChange(mockedFile, "modifiedFile", "modifiedFileName");
+    component.onFileChange(mockedFile, "modifiedFile");
     expect(component["modifiedFileIsOK"]).toEqual(false);
   });
 });

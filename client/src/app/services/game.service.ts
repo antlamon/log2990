@@ -47,7 +47,6 @@ export class GameService {
   public createSimpleGame(game: ISimpleForm): Observable<Message> {
 
     const form: FormData = new FormData();
-    form.append("id", String(game.id));
     form.append("name", game.name);
     form.append("originalImage", game.originalImage, game.originalImage.name);
     form.append("modifiedImage", game.modifiedImage, game.modifiedImage.name);

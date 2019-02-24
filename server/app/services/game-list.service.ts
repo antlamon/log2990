@@ -74,20 +74,18 @@ export class GameListService {
 
         const message: Message = response.data;
 
-        // for mock-data, will be changed when database is implemented
         if (message.title !== ERROR_ID) {
-            // for mock-data, will be changed when database is implemented
             const imagesArray: string[] = message.body.split(GameListService.BMP_S64_HEADER);
             this.simpleCollection.insertOne(
                 {card: {
                     id: (new ObjectID()).toHexString(),
                     name: newGame.name,
-                    originalImageURL: GameListService.BMP_S64_HEADER + imagesArray[1],
+                    originalImage: GameListService.BMP_S64_HEADER + imagesArray[1],
                     solo: this.game3DGenerator.top3RandomOrder(),
                     multi: this.game3DGenerator.top3RandomOrder(),
             },
-                 modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[3] ,
-                 differenceImage: GameListService.BMP_S64_HEADER + imagesArray[2] }).then(
+                 modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[2] ,
+                 differenceImage: GameListService.BMP_S64_HEADER + imagesArray[3] }).then(
                                         () => { this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES); },
                                     ).catch();
         }
@@ -97,14 +95,15 @@ export class GameListService {
 
     public async addFreeGame(newGame: IGame3DForm): Promise<Message> {
 
-        try {
-            this.freeCollection.insertOne(this.game3DGenerator.createRandom3DGame(newGame)); // for now. to be added to database
+        return this.freeCollection.insertOne(this.game3DGenerator.createRandom3DGame(newGame)).then(() => {
             this.socketController.emitEvent(SocketsEvents.UPDATE_FREE_GAMES);
 
             return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};
-        } catch (error) {
-                return {title: ERROR_ID, body: error.message};
-        }
+
+        }).catch((error: Error) => {
+            return {title: ERROR_ID, body: error.message};
+        });
+
     }
 
     public randomNumberGenerator(min: number, max: number): number {
