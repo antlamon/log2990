@@ -76,7 +76,8 @@ const deleteWriteOPMock: DeleteWriteOpResultObject = {
     deletedCount: 1,
 };
 const upperBound: number = 10;
-const lowerBound:number =5;
+const lowerBound: number = 5;
+
 const mockGame3D: Game3D = {
     name: "mock3DName",
     id: "",

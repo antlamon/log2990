@@ -33,12 +33,14 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   private modifiedFileName: string;
   private originalFile: File;
   private modifiedFile: File;
+  private errorsMessages: string[];
   public constructor(private gameService: GameService, private fileValidator: FileValidatorService,
                      private modalService: ModalService, public el: ElementRef) {
     this.element = el.nativeElement;
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
     this.gameName = "";
+    this.errorsMessages = [];
   }
 
   public ngOnInit(): void {
@@ -96,14 +98,14 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   public submit(): boolean {
-    this.clearErrorMessages();
+    this.errorsMessages = [];
     if (this.modifiedFileIsOK && this.originalFileIsOK && this.fileValidator.isValidGameName(this.gameName)) {
       const newGame: ISimpleForm = { name: this.gameName,
                                      originalImage: this.originalFile, modifiedImage: this.modifiedFile };
       this.gameService.createSimpleGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
-          this.showErrorMessage("L'opération a été annulée: ");
-          this.showErrorMessage(message.body);
+          this.errorsMessages.push("L'opération a été annulée: ");
+          this.errorsMessages.push(message.body);
         } else {
           this.close();
 
@@ -117,14 +119,14 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     return false;
   }
   private showErrors(): void {
+    if (!this.fileValidator.isValidGameName(this.gameName)) {
+      this.errorsMessages.push(`Le nom ${this.gameName} est invalide`);
+    }
     if (!this.originalFileIsOK) {
-      this.showErrorMessage(`Le fichier ${this.originalFileName} est invalide`);
+      this.errorsMessages.push(`Le fichier: [${this.originalFileName}] choisi pour l'image original est invalide`);
     }
     if (!this.modifiedFileIsOK) {
-      this.showErrorMessage(`Le fichier ${this.modifiedFileName} est invalide`);
-    }
-    if (!this.fileValidator.isValidGameName(this.gameName)) {
-      this.showErrorMessage(`Le nom ${this.gameName} est invalide`);
+      this.errorsMessages.push(`Le fichier: [${this.modifiedFileName}] choisi pour l'image modifié est invalide`);
     }
   }
 
@@ -134,25 +136,21 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.gameName = "";
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
-    this.clearErrorMessages();
+    this.errorsMessages = [];
   }
 
   public open(): void {
     this.element.style.display = "block";
-    document.body.classList.add("modal-open");
 
   }
 
   public close(): void {
     this.resetForm();
     this.element.style.display = "none";
-    document.body.classList.remove("modal-open");
   }
 
   private initModal(): void {
     this.modalRef = this;
-
-    document.body.appendChild(this.element);
 
     this.element.addEventListener("click", (event: Event) => {
       if (event.constructor.name === "modal") {
@@ -161,20 +159,5 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     });
 
     this.modalService.add(this);
-
-  }
-
-  private showErrorMessage(error: string): void {
-    const errorBox: HTMLElement = document.createElement("span");
-    const errorMessage: Text = document.createTextNode(error);
-    errorBox.appendChild(errorMessage);
-    document.getElementById("errorsMessages").appendChild(errorBox);
-  }
-
-  private clearErrorMessages(): void {
-    const errors: HTMLElement = document.getElementById("errorsMessages");
-    while (errors.hasChildNodes()) {
-      errors.removeChild(errors.firstChild);
-    }
   }
 }

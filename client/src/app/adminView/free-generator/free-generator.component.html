@@ -42,7 +42,9 @@
       <button type="submit" id="submitButton" (click)="submit()">Soumettre </button>
       <button (click)="close()"> Annuler </button>
     </div>
-    <div id="errorMessages" class="errorsDiv"></div>
+    <div *ngFor ="let error of errorsMessages ">
+        <p style="color:red">{{error}}</p>
+    </div>
   </div>
 </div>
 <div class="form-background"></div>

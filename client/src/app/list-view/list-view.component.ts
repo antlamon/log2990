@@ -38,7 +38,11 @@ export class ListViewComponent implements OnInit {
 
   public deleteSimpleGames(game: IGame): void {
     // TODO: warning delete box "are you sure? yes/no"
-    this.gameService.deleteSimpleGame(game).subscribe();
+    const index: number = this.simpleGames.findIndex((x:IGame) => x === game);
+    if (index !== -1) {
+      this.simpleGames.splice(index, 1);
+      this.gameService.deleteSimpleGame(game).subscribe();
+    }
   }
 
   public getFreeGames(): void {
@@ -48,7 +52,11 @@ export class ListViewComponent implements OnInit {
 
   public deleteFreeGames(game: Game3D): void {
     // TODO: warning delete box "are you sure? yes/no"
-    this.gameService.deleteFreeGame(game).subscribe();
+    const index: number = this.freeGames.findIndex((x: Game3D) => x === game);
+    if (index !== -1) {
+      this.freeGames.splice(index, 1);
+      this.gameService.deleteFreeGame(game).subscribe();
+    }
   }
 
   public playSelectedSimpleGame(game: IGame): void {
