@@ -2,18 +2,18 @@ import { Component, OnInit } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { IGame } from "../../../../../common/models/game";
+import { IFullGame } from "../../../../../common/models/game";
 import { ActivatedRoute } from "@angular/router";
-import { GameRoomUpdate, Point, ImageClickMessage } from "../../../../../common/communication/message";
+import { GameRoomUpdate, Point, ImageClickMessage, NewGameMessage } from "../../../../../common/communication/message";
 
 @Component({
-    selector: "app-game-view",
-    templateUrl: "./game-view.component.html",
-    styleUrls: ["./game-view.component.css"]
+  selector: "app-game2d-view",
+  templateUrl: "./game2D-view.component.html",
+  styleUrls: ["./game2D-view.component.css"]
 })
-export class GameViewComponent implements OnInit {
+export class Game2DViewComponent implements OnInit {
 
-    public simpleGame: IGame;
+    public simpleGame: IFullGame;
     public differencesFound: number;
 
     private correctSound: HTMLAudioElement;
@@ -27,10 +27,8 @@ export class GameViewComponent implements OnInit {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
         this.differencesFound = 0;
-        this.correctSound = new Audio();
-        this.correctSound.src = "assets/correct.wav";
-        this.errorSound = new Audio();
-        this.errorSound.src = "assets/error.wav";
+        this.correctSound = new Audio("assets/correct.wav");
+        this.errorSound = new Audio("assets/error.wav");
     }
 
     public ngOnInit(): void {
@@ -44,15 +42,18 @@ export class GameViewComponent implements OnInit {
 
     public getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
-            .then((response: IGame) => {
-                this.simpleGame = response[0];
-                this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, {
-                    originalImagePath: "./app/documents/test-images/image_test_1.bmp",
-                    modifiedImagePath: "./app/documents/test-images/image_test_2.bmp",
-                    differenceImagePath: "./app/documents/test-images/image_result.bmp",
+            .then((response: IFullGame) => {
+                this.simpleGame = response;
+                console.log(this.simpleGame);
+                const newGameMessage: NewGameMessage =  {
                     username: "alloa",
-                    gameRoomId: this.simpleGame.id,
-                });
+                    gameRoomId: this.simpleGame.card.id,
+                    originalImageURL: this.simpleGame.card.originalImageURL,
+                    modifiedImageURL: this.simpleGame.imgDiffURL,
+                    differenceImageURL: this.simpleGame.imgCmpURL
+                };
+                console.log(newGameMessage);
+                this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
             })
             .catch (() => "getSimpleGame");
     }
@@ -66,18 +67,15 @@ export class GameViewComponent implements OnInit {
     public handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
             // not a difference
-            console.log("noDif");
             this.errorSound.play();
         } else {
-            console.log("what");
-            this.simpleGame["modifiedImageURL"] = update.newImage;
+            this.simpleGame.imgCmpURL = update.newImage;
             this.differencesFound = update.differencesFound;
             this.correctSound.play();
         }
     }
 
     public sendClick(event: MouseEvent): void {
-        console.log(event);
         const IMAGE_HEIGHT: number = 480;
         const point: Point = {
             x: event.offsetX,
@@ -85,11 +83,10 @@ export class GameViewComponent implements OnInit {
         };
         const imageClickMessage: ImageClickMessage = {
             point: point,
-            gameRoomId: this.simpleGame.id,
+            gameRoomId: this.simpleGame.card.id,
             username: "alloa",
         };
 
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE, imageClickMessage);
     }
-
 }

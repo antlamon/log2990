@@ -71,9 +71,9 @@ describe("Identification Controller", () => {
         .post("/api/identification")
         .send({
             "gameRoomId": "test",
-            "originalImagePath": "path1",
-            "modifiedImagePath": "path2",
-            "differenceImagePath": "path3",
+            "originalImageURL": "url1",
+            "modifiedImageURL": "url2",
+            "differenceImageURL": "url3",
         })
         .expect("Content-Type", /json/)
         .expect(200)

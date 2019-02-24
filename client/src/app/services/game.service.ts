@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { IGame, ISimpleForm, IGame3DForm } from "../../../../common/models/game";
+import { IGame, ISimpleForm, IGame3DForm, IFullGame } from "../../../../common/models/game";
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -14,7 +14,9 @@ export class GameService {
 
   private readonly GAMES_URL: string = BASE_SERVER_PATH + "api/gameList";
   private readonly SIMPLE_URL: string = this.GAMES_URL + "/simple";
+  private readonly SIMPLEONE_URL: string = this.GAMES_URL + "/onesimple";
   private readonly FREE_URL: string = this.GAMES_URL + "/free";
+  private readonly FREEONE_URL: string = this.GAMES_URL + "/onefree";
 
   public constructor(private http: HttpClient) {
   }
@@ -25,12 +27,12 @@ export class GameService {
     );
   }
 
-  public async getSimpleGame(id: string): Promise<IGame> {
-    const url: string = this.SIMPLE_URL + "?id=" + id;
+  public async getSimpleGame(id: string): Promise<IFullGame> {
+    const url: string = this.SIMPLEONE_URL + "?id=" + id;
     (console as Console).log(url);
 
-    return this.http.get<IGame>(url).pipe(
-      catchError(this.handleError<IGame>("getSimpleGame"))
+    return this.http.get<IFullGame>(url).pipe(
+      catchError(this.handleError<IFullGame>("getSimpleGame"))
     ).toPromise();
   }
 
@@ -42,6 +44,15 @@ export class GameService {
 
   public getFreeGames(): Observable<Game3D[]> {
     return this.http.get<Game3D[]>(this.FREE_URL);
+  }
+
+  public get3DGame(id: string): Promise<Game3D> {
+    const url: string = this.FREEONE_URL + "?id=" + id;
+    (console as Console).log(url);
+
+    return this.http.get<Game3D>(url).pipe(
+      catchError(this.handleError<Game3D>("get3DGame"))
+    ).toPromise();
   }
 
   public createSimpleGame(game: ISimpleForm): Observable<Message> {

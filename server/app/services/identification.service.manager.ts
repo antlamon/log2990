@@ -1,4 +1,3 @@
-import { readFileSync } from "fs";
 import { inject, injectable } from "inversify";
 import { BASE_ID, ERROR_ID, Message, Point } from "../../../common/communication/message";
 import { TYPES } from "../types";
@@ -15,6 +14,7 @@ export class IdentificationServiceManager {
     public static readonly IDENTIFICATION_SERVICE_NOT_FOUND: string = "Le service d'identification pour ce jeu n'est pas instancié";
     public static readonly NO_DIFFERENCE_FOUND: string = "Aucune différence trouvée";
     public static readonly GAMEROOMID_ALREADY_EXISTS: string = "Le service pour ce game room existe deja";
+    public static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
 
     private identificationServices: IDictionary;
     private bmpBufferFormat: Buffer;
@@ -44,7 +44,7 @@ export class IdentificationServiceManager {
         };
     }
 
-    public startNewService(gameRoomId: string, originalImagePath: string, modifiedImagePath: string, differenceImagePath: string): Message {
+    public startNewService(gameRoomId: string, originalImageURL: string, modifiedImageURL: string, differenceImageURL: string): Message {
         if (this.identificationServices[gameRoomId] !== undefined) {
             return {
                 title: ERROR_ID,
@@ -52,13 +52,15 @@ export class IdentificationServiceManager {
             };
         }
 
-        const originalBuffer: Buffer = readFileSync(originalImagePath);
+        const originalBuffer: Buffer = new Buffer(originalImageURL.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64");
         if (this.bmpBufferFormat === undefined) {
             this.bmpBufferFormat = originalBuffer;
         }
         const originalImage: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
-        const modifiedImage: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(modifiedImagePath));
-        const differenceImage: ImageBMP = this.convertImage.bufferToImageBMP(readFileSync(differenceImagePath));
+        const modifiedImage: ImageBMP = this.convertImage.bufferToImageBMP(
+            new Buffer(modifiedImageURL.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
+        const differenceImage: ImageBMP = this.convertImage.bufferToImageBMP(
+            new Buffer(differenceImageURL.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
         this.identificationServices[gameRoomId] = new IdentificationService(originalImage, modifiedImage, differenceImage);
 
         return {
@@ -83,6 +85,6 @@ export class IdentificationServiceManager {
     }
 
     private imageToString64(buffer: Buffer): string {
-        return "data:image/bmp;base64," + buffer.toString("base64");
+        return IdentificationServiceManager.BMP_S64_HEADER + buffer.toString("base64");
     }
 }

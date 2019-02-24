@@ -6,11 +6,11 @@ export const ERROR_ID: string = "error";
 export const BASE_ID:string = "base";
 
 export interface NewGameMessage {
-    originalImagePath: string;
-    modifiedImagePath: string;
-    differenceImagePath: string;
     gameRoomId: string;
     username: string;
+    originalImageURL: string;
+    modifiedImageURL: string;
+    differenceImageURL: string;
 }
 
 export interface Point {

@@ -11,7 +11,7 @@ import { AdminMenuComponent } from "./adminView/admin-menu/admin-menu.component"
 import { FreeGeneratorComponent } from "./adminView/free-generator/free-generator.component";
 import { SimpleGeneratorComponent } from "./adminView/simple-generator/simple-generator.component";
 import { ListViewComponent } from "./list-view/list-view.component";
-import { GameViewComponent } from "./gameView/game-view/game-view.component";
+import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.component";
 import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 
 describe("AppComponent", () => {
@@ -24,7 +24,7 @@ describe("AppComponent", () => {
         FreeGeneratorComponent,
         SimpleGeneratorComponent,
         ListViewComponent,
-        GameViewComponent,
+        Game2DViewComponent,
         Scene3DComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule],

@@ -1,15 +1,15 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { GameViewComponent } from "./game-view.component";
+import { Game2DViewComponent } from "./game2D-view.component";
 import { HttpClientModule } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 
-describe("GameViewComponent", () => {
-  let component: GameViewComponent;
-  let fixture: ComponentFixture<GameViewComponent>;
+describe("Game2DViewComponent", () => {
+  let component: Game2DViewComponent;
+  let fixture: ComponentFixture<Game2DViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GameViewComponent ],
+      declarations: [ Game2DViewComponent ],
       imports: [ HttpClientModule, RouterModule.forRoot([]) ]
     })
     .compileComponents().then(() => {}, (error: Error) => {
@@ -18,7 +18,7 @@ describe("GameViewComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GameViewComponent);
+    fixture = TestBed.createComponent(Game2DViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
