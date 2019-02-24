@@ -24,7 +24,7 @@ const mockedMessage: Message = {
 const mockedGame: IGame = {
     id: "idmockgenerate",
     name: "testGame",
-    originalImageURL: "",
+    originalImage: "",
     solo: { } as ITop3,
     multi: { } as ITop3,
 };

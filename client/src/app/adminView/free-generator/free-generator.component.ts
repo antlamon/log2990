@@ -26,7 +26,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   private element: HTMLElement;
   private modification: boolean[];
   private selectedType: string;
-
+  private errorsMessages: string[];
   public constructor(
     private gameService: GameService,
     private fileValidator: FileValidatorService,
@@ -38,6 +38,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       this.type1 = GEOMETRIC_TYPE_NAME;
       this.type2 = THEMATIC_TYPE_NAME;
       this.selectedType = this.type1;
+      this.errorsMessages = [];
   }
 
   public ngOnInit(): void {
@@ -63,7 +64,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   }
   public submit(): void {
-    this.clearErrorMessages();
+    this.errorsMessages = [];
 
     if (this.fileValidator.isValidGameName(this.gameName) &&
         this.fileValidator.isValidObjNb(this.noObj) &&
@@ -76,8 +77,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       };
       this.gameService.createFreeGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
-          this.showErrorMessage("L'opération a été annulée: ");
-          this.showErrorMessage(message.body);
+          this.errorsMessages.push("L'opération a été annulée: ");
+          this.errorsMessages.push(message.body);
         } else {
           this.close();
 
@@ -85,18 +86,21 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
         }
       });
     } else {
-      this.validity(this.fileValidator.isValidGameName(this.gameName), "gameName", "Nom de jeu invalide.");
-      this.validity(this.fileValidator.isValidObjNb(this.noObj), "noObj", "Le nombre d'objet doit être entre 10 et 200.");
-      this.validity(this.hasModifications(), "typeModif", "Il faut choisir au moins un type de modifications.");
+      this.showErrors();
+    }
+  }
+  private showErrors(): void {
+    if (!this.hasModifications()) {
+      this.errorsMessages.push(`Il faut choisir au moins un type de modifications.`);
+    }
+    if (!this.fileValidator.isValidObjNb(this.noObj)) {
+      this.errorsMessages.push(`Le nombre d'objet doit être entre 10 et 200`);
+    }
+    if (!this.fileValidator.isValidGameName(this.gameName)) {
+      this.errorsMessages.push(`Le nom ${this.gameName} est invalide`);
     }
   }
 
-  private resetErrors(ids: string[]): void {
-
-    for (const id of ids) {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
-    }
-  }
   public hasModifications(): boolean {
     return this.modification.includes(true);
 
@@ -113,42 +117,17 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   public open(): void {
     this.element.style.display = "block";
-    document.body.classList.add("modal-open");
 
   }
 
   public close(): void {
     this.resetForm();
     this.element.style.display = "none";
-    document.body.classList.remove("modal-open");
   }
 
-  private validity(condition: boolean, id: string, errorMessage: string): void {
-
-    if (condition) {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "black";
-    } else {
-      (document.getElementById(id) as HTMLParagraphElement).style.color = "red";
-      this.showErrorMessage(errorMessage);
-    }
-  }
-  private showErrorMessage(error: string): void {
-    const errorBox: HTMLElement = document.createElement("span");
-    const errorMessage: Text = document.createTextNode(error);
-    errorBox.appendChild(errorMessage);
-    document.getElementById("errorMessages").appendChild(errorBox);
-  }
-
-  private clearErrorMessages(): void {
-    const errors: HTMLElement = document.getElementById("errorMessages");
-    while (errors.hasChildNodes()) {
-      errors.removeChild(errors.firstChild);
-    }
-  }
   private resetForm(): void {
     this.noObj = "";
     this.gameName = "";
-    this.clearErrorMessages();
-    this.resetErrors(["gameName", "noObj", "typeModif"]);
+    this.errorsMessages = [];
   }
 }

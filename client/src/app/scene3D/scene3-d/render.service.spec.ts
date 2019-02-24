@@ -74,10 +74,10 @@ describe("renderService", () => {
   describe("Test for the resize function", () => {
     it("should change the camera aspect ratio for the new one", () => {
       component.onResize();
-      let width: number = component["container"].clientWidth;
-      let height: number = component["container"].clientHeight;
+      const width: number = component["container"].clientWidth;
+      const height: number = component["container"].clientHeight;
       expect(component["camera"].aspect).toEqual(width/height);
-    }); 
+    });
     it("should update the projection matrix", () => {
       const spyProjectionMatrix: jasmine.Spy = spyOn(component["camera"], "updateProjectionMatrix");
       component.onResize();
@@ -86,8 +86,8 @@ describe("renderService", () => {
     it("should set the new size when resized", () => {
       const spyRenderer: jasmine.Spy = spyOn(component["renderer"], "setSize");
       component.onResize();
-      let width: number = component["container"].clientWidth;
-      let height: number = component["container"].clientHeight;
+      const width: number = component["container"].clientWidth;
+      const height: number = component["container"].clientHeight;
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
     });
   });

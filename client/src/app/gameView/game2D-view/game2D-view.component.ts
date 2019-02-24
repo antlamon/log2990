@@ -44,15 +44,13 @@ export class Game2DViewComponent implements OnInit {
         this.gameService.getSimpleGame(this.getId())
             .then((response: IFullGame) => {
                 this.simpleGame = response;
-                console.log(this.simpleGame);
                 const newGameMessage: NewGameMessage =  {
                     username: "alloa",
                     gameRoomId: this.simpleGame.card.id,
-                    originalImageURL: this.simpleGame.card.originalImageURL,
-                    modifiedImageURL: this.simpleGame.imgDiffURL,
-                    differenceImageURL: this.simpleGame.imgCmpURL
+                    originalImage: this.simpleGame.card.originalImage,
+                    modifiedImage: this.simpleGame.modifiedImage,
+                    differenceImage: this.simpleGame.differenceImage
                 };
-                console.log(newGameMessage);
                 this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
             })
             .catch (() => "getSimpleGame");
@@ -69,7 +67,7 @@ export class Game2DViewComponent implements OnInit {
             // not a difference
             this.errorSound.play();
         } else {
-            this.simpleGame.imgCmpURL = update.newImage;
+            this.simpleGame.modifiedImage = update.newImage;
             this.differencesFound = update.differencesFound;
             this.correctSound.play();
         }

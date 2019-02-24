@@ -21,12 +21,12 @@ export class IdentificationController {
         });
 
         router.post("/", (req: Request, res: Response, next: NextFunction) => {
-            const originalImageURL: string = req.body.originalImageURL;
-            const modifiedImageURL: string = req.body.modifiedImageURL;
-            const differenceImageURL: string = req.body.differenceImageURL;
+            const originalImageString: string = req.body.originalImage;
+            const modifiedImageString: string = req.body.modifiedImage;
+            const differenceImageString: string = req.body.differenceImage;
             const gameRoomId: string = req.body.gameRoomId;
             res.json(this.identificationServiceManager
-                .startNewService(gameRoomId, originalImageURL, modifiedImageURL, differenceImageURL));
+                .startNewService(gameRoomId, originalImageString, modifiedImageString, differenceImageString));
         });
 
         router.delete("/", (req: Request, res: Response, next: NextFunction) => {

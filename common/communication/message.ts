@@ -8,9 +8,9 @@ export const BASE_ID:string = "base";
 export interface NewGameMessage {
     gameRoomId: string;
     username: string;
-    originalImageURL: string;
-    modifiedImageURL: string;
-    differenceImageURL: string;
+    originalImage: string;
+    modifiedImage: string;
+    differenceImage: string;
 }
 
 export interface Point {

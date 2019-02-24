@@ -67,7 +67,6 @@ describe("GameService", () => {
 
     it("Creating simple games should send a post", () => {
         const game: ISimpleForm = {
-            id: 39820,
             name: "testGame",
             originalImage: {name: "original"} as File,
             modifiedImage: {name: "modified"} as File,

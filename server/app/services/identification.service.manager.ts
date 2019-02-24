@@ -44,7 +44,8 @@ export class IdentificationServiceManager {
         };
     }
 
-    public startNewService(gameRoomId: string, originalImageURL: string, modifiedImageURL: string, differenceImageURL: string): Message {
+    public startNewService(gameRoomId: string, originalImageString: string, modifiedImageString: string, differenceImageString: string)
+        : Message {
         if (this.identificationServices[gameRoomId] !== undefined) {
             return {
                 title: ERROR_ID,
@@ -52,15 +53,16 @@ export class IdentificationServiceManager {
             };
         }
 
-        const originalBuffer: Buffer = new Buffer(originalImageURL.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64");
+        const originalBuffer: Buffer = new Buffer(  originalImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length),
+                                                    "base64");
         if (this.bmpBufferFormat === undefined) {
             this.bmpBufferFormat = originalBuffer;
         }
         const originalImage: ImageBMP = this.convertImage.bufferToImageBMP(originalBuffer);
         const modifiedImage: ImageBMP = this.convertImage.bufferToImageBMP(
-            new Buffer(modifiedImageURL.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
+            new Buffer(modifiedImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
         const differenceImage: ImageBMP = this.convertImage.bufferToImageBMP(
-            new Buffer(differenceImageURL.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
+            new Buffer(differenceImageString.substring(IdentificationServiceManager.BMP_S64_HEADER.length), "base64"));
         this.identificationServices[gameRoomId] = new IdentificationService(originalImage, modifiedImage, differenceImage);
 
         return {

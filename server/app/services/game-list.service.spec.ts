@@ -41,25 +41,23 @@ const mock3DGame: IGame3DForm = {
 const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
-    originalImageURL: "",
+    originalImage: "",
     solo: { } as ITop3,
     multi: { } as ITop3,
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
-    imgDiffURL: " ",
-    imgCmpURL: " ",
+    modifiedImage: " ",
+    differenceImage: " ",
 };
 
 const mockedSimpleGame: ISimpleForm = {
-    id: 3948,
     name: "testSimpleGame",
     originalImage: {} as File,
     modifiedImage: {} as File,
 };
 
 const mockedErrorGame: ISimpleForm = {
-    id: 0,
     name: "error",
     originalImage: {} as File,
     modifiedImage: {} as File,
@@ -77,6 +75,9 @@ const deleteWriteOPMock: DeleteWriteOpResultObject = {
     // The number of documents deleted.
     deletedCount: 1,
 };
+const upperBound: number = 10;
+const lowerBound: number = 5;
+
 const mockGame3D: Game3D = {
     name: "mock3DName",
     id: "",
@@ -143,6 +144,17 @@ describe("GameList service", () => {
             service.addFreeGame(mock3DGame).then(
                 (message: Message) => {
                     expect(message.title).to.eql(" The 3D form sent was correct. ");
+                },
+                () => fail(),
+            );
+        });
+        it("If an error should occur, addFreeGame should return the message error", async () => {
+            sandbox.on(service["_freeCollection"], "insertOne", () => {
+                throw new Error("ErrorMock");
+            });
+            service.addFreeGame(mock3DGame).then(
+                (message: Message) => {
+                    expect(message.body).to.eql("ErrorMock");
                 },
                 () => fail(),
             );
@@ -224,6 +236,14 @@ describe("GameList service", () => {
                         expect(message.body).to.equal(`Le jeu testID a été supprimé!`);
                         done();
                     }).catch();
+            });
+        });
+        describe("Random generator", () => {
+            it("The returned number should be below the upper bound", () => {
+                expect(service.randomNumberGenerator(0, upperBound)).to.be.below(upperBound);
+            });
+            it("The returned number should be above the lower bound", () => {
+                expect(service.randomNumberGenerator(lowerBound, lowerBound * 2)).to.be.above(lowerBound);
             });
         });
     });
