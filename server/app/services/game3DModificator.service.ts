@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import { GEOMETRIC_TYPE_NAME, Scene3D } from "../../../common/models/game3D";
-import { MAX_COLOR, Objet3D  } from "../../../common/models/objet3D";
+import { GEOMETRIC_TYPE_NAME, IScene3D } from "../../../common/models/game3D";
+import { MAX_COLOR, IObjet3D  } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -14,19 +14,19 @@ export class Game3DModificatorService {
 
     public constructor(@inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
-    public createModifScene(originalScene: Scene3D, typeObj: string,
-                            typeModif:  {add: boolean, delete: boolean, color: boolean}): Scene3D {
+    public createModifScene(originalScene: IScene3D, typeObj: string,
+                            typeModif:  {add: boolean, delete: boolean, color: boolean}): IScene3D {
 
-        const modifiedObjects: Objet3D[] = [];
+        const modifiedObjects: IObjet3D[] = [];
         const indexModif: number[] = this.randomIndex(originalScene.objects.length);
 
         for (let i: number = 0; i < originalScene.objects.length; i++) {
 
-            let newObj: Objet3D | null = originalScene.objects[i];
+            let newObj: IObjet3D | null = originalScene.objects[i];
 
             for (const no of indexModif) {
                 if (no === i) {
-                    newObj = this.createDifference((newObj) as Objet3D, modifiedObjects, typeObj, typeModif);
+                    newObj = this.createDifference((newObj) as IObjet3D, modifiedObjects, typeObj, typeModif);
                 }
             }
             if (newObj !== null) {
@@ -41,8 +41,8 @@ export class Game3DModificatorService {
 
     }
 
-    private createDifference(obj: Objet3D, objects: Objet3D[], typeObj: string,
-                             typeModif:  {add: boolean, delete: boolean, color: boolean}): Objet3D | null {
+    private createDifference(obj: IObjet3D, objects: IObjet3D[], typeObj: string,
+                             typeModif:  {add: boolean, delete: boolean, color: boolean}): IObjet3D | null {
 
         // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
@@ -67,7 +67,7 @@ export class Game3DModificatorService {
 
     }
 
-    private addObject(objects: Objet3D[], typeObj: string): void {
+    private addObject(objects: IObjet3D[], typeObj: string): void {
         if (typeObj === GEOMETRIC_TYPE_NAME) {
             objects.push(this.objectGenerator.generateRandomGeometricObject(objects));
         } else {
@@ -75,7 +75,7 @@ export class Game3DModificatorService {
         }
     }
 
-    private changeColor(obj: Objet3D): Objet3D {
+    private changeColor(obj: IObjet3D): IObjet3D {
         return {
             type: obj.type,
             color: this.objectGenerator.randomInt(0x000000, MAX_COLOR),
@@ -86,7 +86,7 @@ export class Game3DModificatorService {
         };
     }
 
-    private changeTexture(obj: Objet3D): Objet3D {
+    private changeTexture(obj: IObjet3D): IObjet3D {
 
         const previousText: string = obj.texture;
         let newText: string;

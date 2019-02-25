@@ -16,17 +16,17 @@ export class IdentificationController {
 
         router.get("/", (req: Request, res: Response, next: NextFunction) => {
             const gameRoomId: string = req.query.gameRoomId;
-            const point: Point = req.query.point;
+            const point: Point = JSON.parse(req.query.point);
             res.json(this.identificationServiceManager.getDifference(gameRoomId, point));
         });
 
         router.post("/", (req: Request, res: Response, next: NextFunction) => {
-            const originalImagePath: string = req.body.originalImagePath;
-            const modifiedImagePath: string = req.body.modifiedImagePath;
-            const differenceImagePath: string = req.body.differenceImagePath;
+            const originalImageString: string = req.body.originalImage;
+            const modifiedImageString: string = req.body.modifiedImage;
+            const differenceImageString: string = req.body.differenceImage;
             const gameRoomId: string = req.body.gameRoomId;
             res.json(this.identificationServiceManager
-                .startNewService(gameRoomId, originalImagePath, modifiedImagePath, differenceImagePath));
+                .startNewService(gameRoomId, originalImageString, modifiedImageString, differenceImageString));
         });
 
         router.delete("/", (req: Request, res: Response, next: NextFunction) => {

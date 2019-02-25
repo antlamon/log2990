@@ -7,7 +7,6 @@ import { ITop3 } from "../../../common/models/top3";
 import { Application } from "../app";
 import { container } from "../inversify.config";
 import { FREEGAMES } from "../mock-games";
-import { PATHS } from "../path";
 import { GameListService } from "../services/game-list.service";
 import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
@@ -15,7 +14,7 @@ import { TYPES } from "../types";
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 const HTTP_OK: number = 200;
-
+const TEST_IMAGES_PATH: string = "./app/documents/test-images/";
 const mockedMessage: Message = {
     title: BASE_ID,
     body: "good job",
@@ -61,8 +60,8 @@ describe("Game list controller", () => {
         supertest(app)
         .post(baseURL + "simple")
         .field("name", "testGame")
-        .attach("originalImage", PATHS.TEST_IMAGES_PATH + "image_test_1.bmp")
-        .attach("modifiedImage", PATHS.TEST_IMAGES_PATH + "image_test_2.bmp")
+        .attach("originalImage", TEST_IMAGES_PATH + "image_test_1.bmp")
+        .attach("modifiedImage", TEST_IMAGES_PATH + "image_test_2.bmp")
         .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedMessage);
@@ -75,8 +74,8 @@ describe("Game list controller", () => {
         supertest(app)
         .post(baseURL + "simple")
         .field("name", "testGame")
-        .attach("originalImage", PATHS.TEST_IMAGES_PATH + "image_test_1.bmp")
-        .attach("modifiedImage", PATHS.TEST_IMAGES_PATH + "image_test_2.bmp")
+        .attach("originalImage", TEST_IMAGES_PATH + "image_test_1.bmp")
+        .attach("modifiedImage", TEST_IMAGES_PATH + "image_test_2.bmp")
         .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql(mockedMessage);

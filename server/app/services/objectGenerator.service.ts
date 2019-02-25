@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { INITIAL_OBJECT_SIZE, Objet3D } from "../../../common/models/objet3D";
+import { INITIAL_OBJECT_SIZE, IObjet3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
 import { TEXTURES } from "../../../common/models/textures";
 
@@ -13,7 +13,7 @@ export class ObjectGeneratorService {
     private readonly B0X_LENGHT: number = 300;
     private readonly MAX_ROTATION: number = 360;
 
-    private generateRandom3Dobject(objects: Objet3D[]): Objet3D {
+    private generateRandom3Dobject(objects: IObjet3D[]): IObjet3D {
         return {
             type: this.randomShape(),
             color: 0,
@@ -27,14 +27,14 @@ export class ObjectGeneratorService {
             },
         };
     }
-    public generateRandomGeometricObject(objects: Objet3D[]): Objet3D {
-        const genericObject: Objet3D = this.generateRandom3Dobject(objects);
+    public generateRandomGeometricObject(objects: IObjet3D[]): IObjet3D {
+        const genericObject: IObjet3D = this.generateRandom3Dobject(objects);
         genericObject.color = this.randomInt(this.WHITE, this.BLACK);
 
         return genericObject;
     }
-    public generateRandomThematicObject(objects: Objet3D[]): Objet3D {
-        const genericObject: Objet3D = this.generateRandom3Dobject(objects);
+    public generateRandomThematicObject(objects: IObjet3D[]): IObjet3D {
+        const genericObject: IObjet3D = this.generateRandom3Dobject(objects);
         genericObject.texture = this.randomTexture();
 
         return genericObject;
@@ -43,7 +43,7 @@ export class ObjectGeneratorService {
     public randomTexture(): string {
         return TEXTURES[this.randomInt(0, TEXTURES.length - 1)];
     }
-    private generatePosition(objects: Objet3D[]): {x: number, y: number, z: number} {
+    private generatePosition(objects: IObjet3D[]): {x: number, y: number, z: number} {
         let position: {x: number, y: number, z: number};
         let valid: boolean;
         do {

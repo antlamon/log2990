@@ -77,25 +77,14 @@ describe("Test for the socketServerManager", () => {
 
     it("Should handle check difference event with resolved promise", (done: Mocha.Done) => {
         mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE, (gameRoom: string) => {
-            mockClientSocket.off(SocketsEvents.CHECK_DIFFERENCE);
             expect(gameRoom).to.equal("123");
             done();
         });
         sandbox.on(gameRoomService, "checkDifference", async () => Promise.resolve("123"));
-        mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE, "123");
+        mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE, {gameRoomId : "123"});
     });
 
-    it("Should handle check difference event with rejected promise", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE, (rejection: string) => {
-            mockClientSocket.off(SocketsEvents.CHECK_DIFFERENCE);
-            expect(rejection).to.equal("123");
-            done();
-        });
-        sandbox.on(gameRoomService, "checkDifference", async () => Promise.reject("123"));
-        mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE, "123");
-    });
-
-    it("Should the socket disconnect, the user must be removed from userManger", (done: Mocha.Done) => {
+    it("Should the socket disconnect, the user must be removed from userManager", (done: Mocha.Done) => {
         nbUser = testManager["userManager"].users.length;
         mockClientSocket.disconnect();
         setTimeout(() => {

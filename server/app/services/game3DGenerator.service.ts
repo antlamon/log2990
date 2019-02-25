@@ -2,8 +2,8 @@ import { ObjectID } from "bson";
 import { inject, injectable } from "inversify";
 import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { Game3D, GEOMETRIC_TYPE_NAME, NO_MAX_OBJECTS, NO_MIN_OBJECTS, Scene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
-import { MAX_COLOR, Objet3D } from "../../../common/models/objet3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, NO_MAX_OBJECTS, NO_MIN_OBJECTS, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
+import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { GameListService } from "./game-list.service";
@@ -19,17 +19,17 @@ export class Game3DGeneratorService {
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
-    public createRandom3DGame(form: IGame3DForm): Game3D {
+    public createRandom3DGame(form: IGame3DForm): IGame3D {
 
         this.formValidator(form);
 
         return this.generateGame(form);
 
     }
-    private generateObjGeometricBackground(objects: Objet3D[], quantity: number): number {
+    private generateObjGeometricBackground(objects: IObjet3D[], quantity: number): number {
         let backGroundColor: number = 0;
         for (let i: number = 0; i < quantity; i++) {
-            const obj: Objet3D = this.objectGenerator.generateRandomGeometricObject(objects);
+            const obj: IObjet3D = this.objectGenerator.generateRandomGeometricObject(objects);
             objects.push(obj);
             do  {
                 backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
@@ -38,19 +38,19 @@ export class Game3DGeneratorService {
 
         return backGroundColor;
     }
-    private generateObjThematicBackground(objects: Objet3D[], quantity: number): number {
+    private generateObjThematicBackground(objects: IObjet3D[], quantity: number): number {
 
         for (let i: number = 0; i < quantity; i++) {
-            const obj: Objet3D = this.objectGenerator.generateRandomThematicObject(objects);
+            const obj: IObjet3D = this.objectGenerator.generateRandomThematicObject(objects);
             objects.push(obj);
         }
 
         return this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR);
     }
 
-    private generateGame(form: IGame3DForm): Game3D {
+    private generateGame(form: IGame3DForm): IGame3D {
 
-        const randomObjects: Objet3D[] = [];
+        const randomObjects: IObjet3D[] = [];
 
         let backGroundColor: number = 0;
 
@@ -62,7 +62,7 @@ export class Game3DGeneratorService {
             throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
         }
 
-        const scene: Scene3D = { modified: false,
+        const scene: IScene3D = { modified: false,
                                  objects: randomObjects,
                                  numObj: form.objectQty,
                                  backColor: backGroundColor,

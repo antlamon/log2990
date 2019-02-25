@@ -1,13 +1,13 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import { NO_MAX_OBJECTS } from "../../../common/models/game3D";
-import { Objet3D } from "../../../common/models/objet3D";
+import { IObjet3D } from "../../../common/models/objet3D";
 import { TEXTURES } from "../../../common/models/textures";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
-const mockObjects: Objet3D[] = [];
+const mockObjects: IObjet3D[] = [];
 const MIN: number = 12;
 const MAX: number = 20;
 

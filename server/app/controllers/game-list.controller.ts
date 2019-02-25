@@ -2,8 +2,8 @@ import { NextFunction, Request, RequestHandler, Response, Router } from "express
 import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { Message } from "../../../common/communication/message";
-import { IGame } from "../../../common/models/game";
-import { Game3D } from "../../../common/models/game3D";
+import { IFullGame, IGame } from "../../../common/models/game";
+import { IGame3D } from "../../../common/models/game3D";
 import { GameListService, MulterFile } from "../services/game-list.service";
 import { TYPES } from "../types";
 
@@ -88,10 +88,30 @@ export class GameListController {
                 });
         });
 
+        router.get("/onesimple", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.getSimpleGame(req.query.id).then(
+                (simpleGame: IFullGame) => {
+                    res.json(simpleGame);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
+        });
+
         router.get("/free", (req: Request, res: Response, next: NextFunction) => {
             this.gameListService.getFreeGames().then(
-                (freeGames: Game3D[]) => {
+                (freeGames: IGame3D[]) => {
                     res.json(freeGames);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
+        });
+
+        router.get("/onefree", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.getFreeGame(req.query.id).then(
+                (freeGame: IGame3D) => {
+                    res.json(freeGame);
                 },
                 (error: Error) => {
                     res.json(error);

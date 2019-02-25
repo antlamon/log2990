@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
-import { Objet3D, INITIAL_OBJECT_SIZE } from "../../../../../common/models/objet3D";
+import { IObjet3D, INITIAL_OBJECT_SIZE } from "../../../../../common/models/objet3D";
 import * as THREE from "three";
 // import { GEOMETRIC_TYPE_NAME } from "../../../../../common/models/game3D";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class ShapeCreatorService {
 
   private map: Map<string, THREE.Mesh>;
@@ -23,7 +25,7 @@ export class ShapeCreatorService {
     this.createTetrahedron();
   }
 
-  public createShape(obj: Objet3D): THREE.Mesh {
+  public createShape(obj: IObjet3D): THREE.Mesh {
 
     const shape: THREE.Mesh = this.map.get(obj.type).clone();
 
@@ -41,7 +43,7 @@ export class ShapeCreatorService {
     return shape;
   }
 
-  public createCube(): void {
+  private createCube(): void {
 
     const geometry: THREE.Geometry = new THREE.BoxGeometry(INITIAL_OBJECT_SIZE, INITIAL_OBJECT_SIZE, INITIAL_OBJECT_SIZE);
 
@@ -50,7 +52,7 @@ export class ShapeCreatorService {
     this.map.set("cube", cube);
   }
 
-  public createCylindre(): void {
+  private createCylindre(): void {
 
     const geometry: THREE.Geometry = new THREE.CylinderGeometry(INITIAL_OBJECT_SIZE, INITIAL_OBJECT_SIZE, INITIAL_OBJECT_SIZE
                                                               , this.NB_SEGMENTS);
@@ -59,7 +61,7 @@ export class ShapeCreatorService {
 
     this.map.set("cylinder", cylindre);
   }
-  public createTetrahedron(): void {
+  private createTetrahedron(): void {
 
     const geometry: THREE.Geometry = new THREE.TetrahedronGeometry(INITIAL_OBJECT_SIZE);
 
@@ -67,7 +69,7 @@ export class ShapeCreatorService {
 
     this.map.set("tetrahedron", tetrahedron);
   }
-  public createSphere(): void {
+  private createSphere(): void {
 
     const geometry: THREE.Geometry = new THREE.SphereGeometry(INITIAL_OBJECT_SIZE, this.NB_SEGMENTS, this.NB_SEGMENTS);
 
@@ -75,7 +77,7 @@ export class ShapeCreatorService {
 
     this.map.set("sphere", sphere);
   }
-  public createCone(): void {
+  private createCone(): void {
 
     const geometry: THREE.Geometry = new THREE.ConeGeometry(INITIAL_OBJECT_SIZE, INITIAL_OBJECT_SIZE, this.NB_SEGMENTS);
 

@@ -1,4 +1,4 @@
-export interface Objet3D {
+export interface IObjet3D {
     type: string,
     color: number,
     texture: string,
