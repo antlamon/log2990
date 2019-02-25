@@ -108,6 +108,16 @@ export class GameListController {
                 });
         });
 
+        router.get("/onefree", (req: Request, res: Response, next: NextFunction) => {
+            this.gameListService.getFreeGame(req.query.id).then(
+                (freeGame: Game3D) => {
+                    res.json(freeGame);
+                },
+                (error: Error) => {
+                    res.json(error);
+                });
+        });
+
         return router;
     }
 }
