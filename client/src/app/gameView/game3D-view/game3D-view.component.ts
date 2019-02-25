@@ -1,7 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute } from "@angular/router";
 import { Game3D } from "../../../../../common/models/game3D";
+import { RenderService } from "src/app/scene3D/scene3-d/render.service";
+
 
 @Component({
   selector: 'app-game3D-view',
@@ -10,11 +12,18 @@ import { Game3D } from "../../../../../common/models/game3D";
 })
 export class Game3DViewComponent implements OnInit {
 
+  @ViewChild("originalContainer")
+  private originalContainerRef: ElementRef;
+
+  @ViewChild("modifiedContainer")
+  private modifiedContainerRef: ElementRef;
+
   public game3D: Game3D;
 
   public constructor(
     private gameService: GameService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private render: RenderService,
   ) {}
 
   public ngOnInit(): void {
@@ -26,9 +35,21 @@ export class Game3DViewComponent implements OnInit {
     return String(this.route.snapshot.paramMap.get("id"));
   }
 
+  private get originalContainer(): HTMLDivElement {
+    return this.originalContainerRef.nativeElement;
+  }
+
+  private get modifiedContainer(): HTMLDivElement {
+    return this.modifiedContainerRef.nativeElement;
+  }
+
   public get3DGame(): void {
     this.gameService.get3DGame(this.getId())
-        .then((response: Game3D) => this.game3D = response)
+        .then((response: Game3D) => {
+          this.game3D = response;
+          this.render.initialize(this.originalContainer, this.game3D.originalScene);
+          this.render.initialize(this.modifiedContainer, this.game3D.modifiedScene);
+        })
         .catch(() => "get3DGame");
   }
 

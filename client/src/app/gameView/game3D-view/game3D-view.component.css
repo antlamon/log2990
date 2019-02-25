@@ -2,7 +2,7 @@
 
 .chrono {
     position: absolute;
-    top: 170px;
+    top: 210px;
     right: 185px;
     font-size: 25px;
     font-weight: bold;
@@ -10,18 +10,18 @@
 
 .compteur {
     position: absolute;
-    top: 143px;
+    top: 183px;
     right: 165px;
     font-size: 25px;
     font-weight: bold;
 }
 
-.messagesBox{
+.messagesBox {
     display: grid;
     position: absolute;
     width: 395px;
     height: 540px;
-    top: 210px;
+    top: 250px;
     right: 20px;
     background-color: white;
     outline: 5px solid black;
@@ -34,16 +34,17 @@
     font-size: 25px;
     font-weight: bold;
 }
-/* 
-.messagesBoxTitle > p {
-    padding-left: 5px;
-} */
 
-.gameTitle{
+.game-card-img {
+    width: auto;
+    height: 640px;
+} 
+
+.gameTitle {
     background-color: white;
     outline: 5px solid black;
     height: 70px;
-    top: 50px;
+    top: 90px;
     left: 20px;
     position: absolute;
     display: inline-block;
@@ -56,7 +57,7 @@
 
 .divGames {
     position: absolute;
-    top: 150px;
+    top: 190px;
     left: 20px;
     width: 1480px;
     height: 600px;
