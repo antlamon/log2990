@@ -2,8 +2,8 @@ import { ObjectID } from "bson";
 import { inject, injectable } from "inversify";
 import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { Game3D, GEOMETRIC_TYPE_NAME, NO_MAX_OBJECTS, NO_MIN_OBJECTS, Scene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
-import { MAX_COLOR, Objet3D } from "../../../common/models/objet3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, NO_MAX_OBJECTS, NO_MIN_OBJECTS, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
+import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { GameListService } from "./game-list.service";
@@ -19,7 +19,7 @@ export class Game3DGeneratorService {
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
-    public createRandom3DGame(form: IGame3DForm): Game3D {
+    public createRandom3DGame(form: IGame3DForm): IGame3D {
 
         this.formValidator(form);
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
@@ -31,21 +31,21 @@ export class Game3DGeneratorService {
         }
     }
 
-    private generateGeometryGame(form: IGame3DForm): Game3D {
+    private generateGeometryGame(form: IGame3DForm): IGame3D {
 
-        const randomObjects: Objet3D[] = [];
+        const randomObjects: IObjet3D[] = [];
         let backGroundColor: number = 0; // we go for pale colors
         for (let i: number = 0; i < form.objectQty; i++) {
-            const obj: Objet3D = this.objectGenerator.generateRandom3Dobject(randomObjects);
+            const obj: IObjet3D = this.objectGenerator.generateRandom3Dobject(randomObjects);
             randomObjects.push(obj);
             do  {
                 backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR);
             } while (!this.isEnoughContrast(backGroundColor, randomObjects[i].color));
         }
-        const scene: Scene3D = { modified: false,
-                                 objects: randomObjects,
-                                 numObj: form.objectQty,
-                                 backColor: backGroundColor,
+        const scene: IScene3D = { modified: false,
+                                  objects: randomObjects,
+                                  numObj: form.objectQty,
+                                  backColor: backGroundColor,
                                 };
 
         return {
@@ -80,10 +80,13 @@ export class Game3DGeneratorService {
         }
         scores.sort();
 
-        return { first: scores[0], second: scores[1], third: scores[2] };
+        return { first: {name: "GoodComputer", score: scores[0].toString() + ":00"},
+                 second: {name: "MediumComputer", score: scores[1].toString() + ":00"},
+                 third: {name: "BadComputer", score: scores[2].toString() + ":00"},
+                };
     }
 
-    private generateThemeGame(form: IGame3DForm): Game3D {
+    private generateThemeGame(form: IGame3DForm): IGame3D {
         return this.generateGeometryGame(form); // for now... themed 3Dgame not implemented yet
     }
     private formValidator(form: IGame3DForm): void {

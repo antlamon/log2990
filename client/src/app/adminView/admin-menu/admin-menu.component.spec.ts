@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { AdminMenuComponent } from "./admin-menu.component";
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { AppComponent } from "src/app/app.component";
@@ -28,8 +27,8 @@ describe("AdminMenuComponent", () => {
         InitialComponent,
         ListViewComponent,
         Game2DViewComponent,
-        Scene3DComponent,
-        Game3DViewComponent
+        Game3DViewComponent,
+        Scene3DComponent
       ],
       imports: [
         AppRoutingModule,
@@ -38,7 +37,7 @@ describe("AdminMenuComponent", () => {
       ],
       providers: [ModalService, FreeGeneratorComponent]
     })
-    .compileComponents();
+    .compileComponents().catch();
   }));
 
   beforeEach(() => {

@@ -32,14 +32,14 @@ describe("GameRoomService", () => {
         });
 
         it("Should return the rejection on reject", (done: Mocha.Done) => {
-            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID }}));
+            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
             service.createNewGameRoom({ gameRoomId: "test", username: "user" } as NewGameMessage)
                 .then(
                     (error: string) => {
                         done(error);
                     },
-                    (rejection: string) => {
-                        expect(rejection).to.equal("Couldn't create a new identification service");
+                    (rejection: Error) => {
+                        expect(rejection.message).to.equal("error");
                         done();
                     });
         });
@@ -88,12 +88,12 @@ describe("GameRoomService", () => {
             sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
             service.checkDifference("test", "user", { x: 0, y: 0 })
                 .then(
-                    (error: GameRoomUpdate) => {
-                        done(error);
-                    },
-                    (rejection: string) => {
-                        expect(rejection).to.equal("error");
+                    (update: GameRoomUpdate) => {
+                        expect(update.differencesFound).to.equal(-1);
                         done();
+                    },
+                    (error: string) => {
+                        done(error);
                     });
         });
     });

@@ -15,7 +15,7 @@ export class GameRoomService {
     public async createNewGameRoom(newGameMessage: NewGameMessage): Promise<string> {
         const response: AxiosResponse = await Axios.post(this.IDENTIFICATION_URL, newGameMessage);
         if (response.data.title !== BASE_ID) {
-            return Promise.reject("Couldn't create a new identification service");
+            return Promise.reject(Error(response.data.body));
         }
         const newGamer: Gamer = {
             username: newGameMessage.username,
@@ -29,9 +29,13 @@ export class GameRoomService {
 
     public async checkDifference(gameRoomId: string, username: string, point: Point): Promise<GameRoomUpdate> {
         const response: AxiosResponse = await Axios.get(this.IDENTIFICATION_URL,
-                                                        { params: { gameRoomId: gameRoomId, point: point }});
+                                                        { params: { gameRoomId: gameRoomId, point: point } });
         if (response.data.title !== BASE_ID) {
-            return Promise.reject(response.data.body);
+            return {
+                username: username,
+                newImage: response.data.body,
+                differencesFound: -1,
+            };
         }
         let gamer: Gamer | undefined = this.gameRooms[gameRoomId].find((user: Gamer) => user.username === username);
         if (gamer === undefined) {

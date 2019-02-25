@@ -26,8 +26,8 @@ describe("AppComponent", () => {
         SimpleGeneratorComponent,
         ListViewComponent,
         Game2DViewComponent,
-        Scene3DComponent,
-        Game3DViewComponent
+        Game3DViewComponent,
+        Scene3DComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule],
       providers: [IndexService]

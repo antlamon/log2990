@@ -1,34 +1,34 @@
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
-import { Scene3D } from "../../../../../common/models/game3D";
-import { Objet3D } from "../../../../../common/models/objet3D";
+import { IScene3D } from "../../../../../common/models/game3D";
+import { IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 
 describe("renderService", () => {
-  const cone: Objet3D = {
+  const cone: IObjet3D = {
     type: "cone",
     color: 0,
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const cube: Objet3D = {
+  const cube: IObjet3D = {
     type: "cube",
     color: 0,
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const cylinder: Objet3D = {
+  const cylinder: IObjet3D = {
     type: "cylinder",
     color: 0,
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const mockObjects: Objet3D[] = [cone, cube, cylinder];
-  const mockOkScene: Scene3D = {
+  const mockObjects: IObjet3D[] = [cone, cube, cylinder];
+  const mockOkScene: IScene3D = {
     modified: false,
     numObj: mockObjects.length,
     objects: mockObjects,
@@ -41,7 +41,7 @@ describe("renderService", () => {
     TestBed.configureTestingModule({
       providers: [ RenderService, ShapeCreatorService ]
     })
-    .compileComponents();
+    .compileComponents().catch();
   }));
 
   it("should be created", inject([RenderService], (service: RenderService) => {
@@ -74,10 +74,10 @@ describe("renderService", () => {
   describe("Test for the resize function", () => {
     it("should change the camera aspect ratio for the new one", () => {
       component.onResize();
-      let width: number = component["container"].clientWidth;
-      let height: number = component["container"].clientHeight;
-      expect(component["camera"].aspect).toEqual(width/height);
-    }); 
+      const width: number = component["container"].clientWidth;
+      const height: number = component["container"].clientHeight;
+      expect(component["camera"].aspect).toEqual(width / height);
+    });
     it("should update the projection matrix", () => {
       const spyProjectionMatrix: jasmine.Spy = spyOn(component["camera"], "updateProjectionMatrix");
       component.onResize();
@@ -86,8 +86,8 @@ describe("renderService", () => {
     it("should set the new size when resized", () => {
       const spyRenderer: jasmine.Spy = spyOn(component["renderer"], "setSize");
       component.onResize();
-      let width: number = component["container"].clientWidth;
-      let height: number = component["container"].clientHeight;
+      const width: number = component["container"].clientWidth;
+      const height: number = component["container"].clientHeight;
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
     });
   });

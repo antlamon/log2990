@@ -14,10 +14,16 @@ export class SocketService {
       alert("Server is not available at the moment.");
     }
   }
+
   public getSocketId(): string {
     return this.socket.id;
   }
+
   public addEvent( eventName: string, eventFunction: () => void): void {
     this.socket.on(eventName, eventFunction);
+  }
+
+  public emitEvent<T>(eventName: string, data?: T): void {
+    this.socket.emit(eventName, data);
   }
 }

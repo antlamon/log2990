@@ -39,7 +39,7 @@ describe("FileValidatorService", () => {
         Game3DViewComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],
-      providers: [ModalService, FileValidatorService]
+      providers: [ModalService, FileValidatorService, Game2DViewComponent]
     })
       .compileComponents().then(() => { }, (error: Error) => {
         console.error(error);

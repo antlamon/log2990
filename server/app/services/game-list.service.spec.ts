@@ -5,9 +5,9 @@ import spies = require("chai-spies");
 import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongodb";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
-import { Game3D } from "../../../common/models/game3D";
+import { IGame3D } from "../../../common/models/game3D";
+import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
-import { FREEGAMES } from "../mock-games";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { GameListService, MulterFile } from "./game-list.service";
@@ -30,7 +30,7 @@ const mockedErrorMessage: Message = {
     title: ERROR_ID,
     body: "error",
 };
-const mock3DGame: IGame3DForm = {
+const mock3DGameForm: IGame3DForm = {
     name: "3dgame",
     objectType: "geometric",
     objectQty: 11,
@@ -40,25 +40,23 @@ const mock3DGame: IGame3DForm = {
 const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
-    originalImageURL: "",
-    solo: { first: 1, second: 2, third: 3 },
-    multi: { first: 1, second: 2, third: 3 },
+    originalImage: "",
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
-    imgDiffURL: " ",
-    imgCmpURL: " ",
+    modifiedImage: " ",
+    differenceImage: " ",
 };
 
 const mockedSimpleGame: ISimpleForm = {
-    id: 3948,
     name: "testSimpleGame",
     originalImage: {} as File,
     modifiedImage: {} as File,
 };
 
 const mockedErrorGame: ISimpleForm = {
-    id: 0,
     name: "error",
     originalImage: {} as File,
     modifiedImage: {} as File,
@@ -76,13 +74,16 @@ const deleteWriteOPMock: DeleteWriteOpResultObject = {
     // The number of documents deleted.
     deletedCount: 1,
 };
-const mockGame3D: Game3D = {
+const upperBound: number = 10;
+const lowerBound: number = 5;
+
+const mockGame3D: IGame3D = {
     name: "mock3DName",
     id: "",
     originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
     modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-    solo: { first: 1, second: 2, third: 3 },
-    multi: { first: 1, second: 2, third: 3 },
+    solo: { } as ITop3,
+    multi: { } as ITop3,
 };
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -94,18 +95,17 @@ describe("GameList service", () => {
         container.snapshot();
         const imageService: ImageService = container.get<ImageService>(TYPES.ImageService);
         const sockerController: SocketServerManager = container.get<SocketServerManager>(TYPES.SocketServerManager);
-        sandbox.on(imageService, "imageToString64", () => "");
-        sandbox.on(sockerController, "emitEvent", () => null);
         container.rebind(TYPES.ImageService).toConstantValue(imageService);
         container.rebind(TYPES.SocketServerManager).toConstantValue(sockerController);
         container.rebind(TYPES.GameListService).to(GameListService);
         service = container.get<GameListService>(TYPES.GameListService);
         // tslint:disable-next-line:typedef
+        sandbox.on(service["socketController"], "emitEvent", () => null);
         mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db ) => {
             mockSimpleCollection = db.collection(GameListService.SIMPLE_COLLECTION);
             mockFreeCollection = db.collection(GameListService.FREE_COLLECTION);
             service["_freeCollection"] = mockFreeCollection;
-            service["_freeCollection"].insertOne(mockGame3D);
+            service["_freeCollection"].insertOne(mockGame3D).catch();
             service["_simpleCollection"] = mockSimpleCollection;
             service["_simpleCollection"].insertOne(mockedFullGame).then( (res: WriteOpResult) => {
                 done();
@@ -129,8 +129,8 @@ describe("GameList service", () => {
 
         it("Getting free games should return FREEGAMES", async () => {
             service.getFreeGames().then(
-                (games: Game3D[]) => {
-                    expect(games).to.eql(FREEGAMES);
+                (games: IGame3D[]) => {
+                    expect(games[0].id).to.eql(mockGame3D.id);
                 },
                 () => fail(),
             );
@@ -139,7 +139,7 @@ describe("GameList service", () => {
 
     describe("Adding games", () => {
         it("Adding a free game should return the game", async () => {
-            service.addFreeGame(mock3DGame).then(
+            service.addFreeGame(mock3DGameForm).then(
                 (message: Message) => {
                     expect(message.title).to.eql(" The 3D form sent was correct. ");
                 },
@@ -223,6 +223,15 @@ describe("GameList service", () => {
                         expect(message.body).to.equal(`Le jeu testID a été supprimé!`);
                         done();
                     }).catch();
+            });
+
+        });
+        describe("Random generator", () => {
+            it("The returned number should be below or equal the upper bound", () => {
+                expect(service.randomNumberGenerator(0, upperBound) <= upperBound).to.be.equal(true);
+            });
+            it("The returned number should be above or euqalthe lower bound", () => {
+                expect(service.randomNumberGenerator(lowerBound, lowerBound * 2) >= lowerBound).to.be.equal(true);
             });
         });
     });

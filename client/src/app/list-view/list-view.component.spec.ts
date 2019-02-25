@@ -11,7 +11,24 @@ import { FormsModule } from "@angular/forms";
 import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { IGame } from "../../../../common/models/game";
 import { ITop3 } from "../../../../common/models/top3";
+import { IGame3D } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
+
+const mockSimple: IGame = {
+  id: "idSimple",
+  name: "nameSimple",
+  originalImage: "",
+  solo: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
+  multi: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
+};
+const mockGame3D: IGame3D = {
+  name: "mock3DName",
+  id: "",
+  originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
+  modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
+  solo: { } as ITop3,
+  multi: { } as ITop3,
+};
 
 describe("ListViewComponent", () => {
   let component: ListViewComponent;
@@ -29,6 +46,7 @@ describe("ListViewComponent", () => {
         AdminMenuComponent,
         InitialComponent,
         Game2DViewComponent,
+        Game3DViewComponent,
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
         Scene3DComponent,
@@ -53,12 +71,43 @@ describe("ListViewComponent", () => {
     const game: IGame = {
       id: "",
       name: "string",
-      originalImageURL: "string",
+      originalImage: "string",
       solo: {} as ITop3,
       multi:  {} as ITop3
     };
     component.playSelectedSimpleGame(game);
     expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + game.id]);
+  });
+
+  describe("Delete functions", () => {
+    it("Deleting an existing simple games should call the game service", () => {
+      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
+      component.simpleGames = [];
+      component.simpleGames.push(mockSimple);
+      component.deleteSimpleGames(mockSimple);
+      expect(gameServiceSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("Deleting a non existing simple games should not call the game service", () => {
+      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
+      component.simpleGames = [];
+      component.deleteSimpleGames(mockSimple);
+      expect(gameServiceSpy).toHaveBeenCalledTimes(0);
+    });
+    it("Deleting an existing free games should call the game service", () => {
+      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
+      component.freeGames = [];
+      component.freeGames.push(mockGame3D);
+      component.deleteFreeGames(mockGame3D);
+      expect(gameServiceSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("Deleting a non existing free games should not call the game service", () => {
+      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
+      component.freeGames = [];
+      component.deleteFreeGames(mockGame3D);
+      expect(gameServiceSpy).toHaveBeenCalledTimes(0);
+    });
   });
 
 });

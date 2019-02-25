@@ -25,8 +25,8 @@ describe("FreeGeneratorComponent", () => {
         InitialComponent,
         ListViewComponent,
         Game2DViewComponent,
-        Scene3DComponent,
-        Game3DViewComponent
+        Game3DViewComponent,
+        Scene3DComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService]
