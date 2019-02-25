@@ -69,6 +69,16 @@ describe("GameService", () => {
         );
     });
 
+    it("Getting a 3D game should return a 3D game", () => {
+        const expectedGame: IGame3D = mocked3DGame;
+        httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
+        gameService.get3DGame(mockedID).then(
+            (response: IGame3D) => {
+                expect(response).toEqual(expectedGame);
+            }
+        );
+    });
+
     it("Creating simple games should send a post", () => {
         const game: ISimpleForm = {
             name: "testGame",

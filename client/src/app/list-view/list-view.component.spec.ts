@@ -49,7 +49,8 @@ describe("ListViewComponent", () => {
         Game3DViewComponent,
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
-        Scene3DComponent
+        Scene3DComponent,
+        Game3DViewComponent
       ]
     })
       .compileComponents().then(() => { }, (error: Error) => { });

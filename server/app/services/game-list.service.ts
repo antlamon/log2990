@@ -41,6 +41,10 @@ export class GameListService {
         return this.freeCollection.find({}).toArray();
     }
 
+    public async getFreeGame(id: string): Promise<IGame3D> {
+        return await this.freeCollection.findOne({id}) as IGame3D;
+    }
+
     public async deleteSimpleGame(id: string): Promise<Message> {
         return this.simpleCollection.deleteOne({ "card.id": id }).then((res: DeleteWriteOpResultObject) => {
             if (res.deletedCount === 1) {
