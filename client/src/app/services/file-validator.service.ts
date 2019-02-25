@@ -11,6 +11,8 @@ export class FileValidatorService {
   private readonly MIN_LENGTH: number = 3;
   private readonly MAX_LENGTH: number = 15;
   private readonly MAX_NAME: number = 10;
+  private readonly ALPHA_NUMERICS_REGEX: RegExp = /^[a-zA-Z0-9]+$/i;
+  private readonly NUMERICS_REGEX: RegExp = /^[0-9]+$/i;
 
   public dimensionsAreValid(bmpWidth: number, bmpHeight: number): boolean {
     return (bmpWidth === this.IMAGE_WIDTH && bmpHeight === this.IMAGE_HEIGHT);
@@ -25,12 +27,12 @@ export class FileValidatorService {
   }
 
   public containOnlyAlphaNumeric(name: string): boolean {
-    const check: RegExpMatchArray = name.match(/^[a-zA-Z0-9]+$/i);
+    const check: RegExpMatchArray = name.match(this.ALPHA_NUMERICS_REGEX);
 
     return check === null ? false : check[0].length === name.length;
   }
   public containOnlyNumeric(nbObj: string): boolean {
-    const check: RegExpMatchArray = nbObj.match(/^[0-9]+$/i);
+    const check: RegExpMatchArray = nbObj.match(this.NUMERICS_REGEX);
 
     return check === null ? false : check[0].length === nbObj.length;
   }

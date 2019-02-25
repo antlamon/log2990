@@ -2,8 +2,8 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { Game3D, GEOMETRIC_TYPE_NAME, Scene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
-import { Objet3D } from "../../../common/models/objet3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+import { IObjet3D } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
@@ -41,7 +41,7 @@ const mockBadModifs: IGame3DForm = {
     modifications: {add: false, delete: false, color: false},
 };
 
-const obj3D: Objet3D = {
+const obj3D: IObjet3D = {
     type: "string",
     color: 0,
     position: { x: 0, y: 0, z: 0},
@@ -49,14 +49,14 @@ const obj3D: Objet3D = {
     rotation: {x: 0, y: 0, z: 0},
 };
 
-const mockScene: Scene3D = {
+const mockScene: IScene3D = {
     modified: false,
     backColor: 0x00000,
     objects: [obj3D],
     numObj: 1,
 };
 
-const mock3DGame: Game3D = {
+const mock3DGame: IGame3D = {
     name: "string",
     id: "",
     originalScene: mockScene,
