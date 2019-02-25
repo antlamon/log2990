@@ -1,9 +1,10 @@
 export interface IObjet3D {
-    type: string;
-    color: number;
-    position: { x: number, y: number, z: number};
-    size: number;
-    rotation: {x: number, y: number, z: number};
+    type: string,
+    color: number,
+    texture: string,
+    position: { x: number, y: number, z: number},
+    size: number,
+    rotation: {x: number, y: number, z: number}
 }
 
 export const INITIAL_OBJECT_SIZE: number = 20;

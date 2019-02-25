@@ -35,7 +35,7 @@ export class Scene3DComponent implements AfterViewInit {
       this.renderService.initialize(this.container, this.game);
       setTimeout(() => {
         this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
-      },         1); // make sure scene is rendered before
+      },         5); // make sure scene is rendered before
     }
     this.container.style.display = this.isCardMode ? "none" : "block";
   }

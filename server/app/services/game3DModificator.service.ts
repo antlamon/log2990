@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { IScene3D } from "../../../common/models/game3D";
+import { GEOMETRIC_TYPE_NAME, IScene3D } from "../../../common/models/game3D";
 import { IObjet3D, MAX_COLOR  } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
@@ -47,14 +47,14 @@ export class Game3DModificatorService {
         // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
-                this.addObject(objects);
+                this.addObject(objects, typeObj);
                 break;
             }
             case(Game3DModificatorService.DELETE): {
                 return null;
             }
             case(Game3DModificatorService.COLOR): {
-                if (typeObj === "geometric") {
+                if (typeObj === GEOMETRIC_TYPE_NAME) {
                     return this.changeColor(obj);
                 } else {
                     return this.changeTexture(obj);
@@ -67,15 +67,19 @@ export class Game3DModificatorService {
 
     }
 
-    private addObject(objects: IObjet3D[]): void {
-
-        objects.push(this.objectGenerator.generateRandom3Dobject(objects));
+    private addObject(objects: IObjet3D[], typeObj: string): void {
+        if (typeObj === GEOMETRIC_TYPE_NAME) {
+            objects.push(this.objectGenerator.generateRandomGeometricObject(objects));
+        } else {
+            objects.push(this.objectGenerator.generateRandomThematicObject(objects));
+        }
     }
 
     private changeColor(obj: IObjet3D): IObjet3D {
         return {
             type: obj.type,
             color: this.objectGenerator.randomInt(0x000000, MAX_COLOR),
+            texture: "",
             position: obj.position,
             size: obj.size,
             rotation: obj.rotation,
@@ -84,7 +88,20 @@ export class Game3DModificatorService {
 
     private changeTexture(obj: IObjet3D): IObjet3D {
 
-        return this.changeColor(obj); // Pour le moment texture non implémenté
+        const previousText: string = obj.texture;
+        let newText: string;
+        do {
+            newText = this.objectGenerator.randomTexture();
+        }   while (newText === previousText);
+
+        return {
+            type: obj.type,
+            color: 0,
+            texture: newText,
+            position: obj.position,
+            size: obj.size,
+            rotation: obj.rotation,
+        };
     }
 
     private randomIndex(size: number): number[] {

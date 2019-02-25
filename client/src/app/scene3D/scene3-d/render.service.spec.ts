@@ -9,6 +9,7 @@ describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
     color: 0,
+    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
@@ -16,6 +17,7 @@ describe("renderService", () => {
   const cube: IObjet3D = {
     type: "cube",
     color: 0,
+    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
@@ -23,6 +25,7 @@ describe("renderService", () => {
   const cylinder: IObjet3D = {
     type: "cylinder",
     color: 0,
+    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},

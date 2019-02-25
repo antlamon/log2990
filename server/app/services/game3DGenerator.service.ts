@@ -22,26 +22,46 @@ export class Game3DGeneratorService {
     public createRandom3DGame(form: IGame3DForm): IGame3D {
 
         this.formValidator(form);
+
+        return this.generateGame(form);
+
+    }
+    private generateObjGeometricBackground(objects: IObjet3D[], quantity: number): number {
+        let backGroundColor: number = 0;
+        for (let i: number = 0; i < quantity; i++) {
+            const obj: IObjet3D = this.objectGenerator.generateRandomGeometricObject(objects);
+            objects.push(obj);
+            do  {
+                backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
+            } while (!this.isEnoughContrast(backGroundColor, objects[i].color));
+        }
+
+        return backGroundColor;
+    }
+    private generateObjThematicBackground(objects: IObjet3D[], quantity: number): number {
+
+        for (let i: number = 0; i < quantity; i++) {
+            const obj: IObjet3D = this.objectGenerator.generateRandomThematicObject(objects);
+            objects.push(obj);
+        }
+
+        return this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR);
+    }
+
+    private generateGame(form: IGame3DForm): IGame3D {
+
+        const randomObjects: IObjet3D[] = [];
+
+        let backGroundColor: number = 0;
+
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
-            return this.generateGeometryGame(form);
+            backGroundColor = this.generateObjGeometricBackground(randomObjects, form.objectQty);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
-            return this.generateThemeGame(form);
+            backGroundColor = this.generateObjThematicBackground(randomObjects, form.objectQty);
         } else {
             throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
         }
-    }
 
-    private generateGeometryGame(form: IGame3DForm): IGame3D {
-
-        const randomObjects: IObjet3D[] = [];
-        let backGroundColor: number = 0; // we go for pale colors
-        for (let i: number = 0; i < form.objectQty; i++) {
-            const obj: IObjet3D = this.objectGenerator.generateRandom3Dobject(randomObjects);
-            randomObjects.push(obj);
-            do  {
-                backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR);
-            } while (!this.isEnoughContrast(backGroundColor, randomObjects[i].color));
-        }
         const scene: IScene3D = { modified: false,
                                   objects: randomObjects,
                                   numObj: form.objectQty,
@@ -86,9 +106,6 @@ export class Game3DGeneratorService {
                 };
     }
 
-    private generateThemeGame(form: IGame3DForm): IGame3D {
-        return this.generateGeometryGame(form); // for now... themed 3Dgame not implemented yet
-    }
     private formValidator(form: IGame3DForm): void {
         if (form.objectQty < NO_MIN_OBJECTS || form.objectQty > NO_MAX_OBJECTS) {
             throw new FORM_ERROR("Le nombre d'objets doit être entre 10 et 200");
