@@ -63,7 +63,7 @@ export class ListViewComponent implements OnInit {
 
   }
 
-  public playSelectedFreeGame(game: Game3D): void {
+  public playSelectedFreeGame(game: IGame3D): void {
     this.router.navigate(["free-game/" + game.id]);
   }
 

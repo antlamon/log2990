@@ -41,8 +41,8 @@ export class GameListService {
         return this.freeCollection.find({}).toArray();
     }
 
-    public async getFreeGame(id: string): Promise<Game3D> {
-        return await this.freeCollection.findOne({id}) as Game3D;
+    public async getFreeGame(id: string): Promise<IGame3D> {
+        return await this.freeCollection.findOne({id}) as IGame3D;
     }
 
     public async deleteSimpleGame(id: string): Promise<Message> {

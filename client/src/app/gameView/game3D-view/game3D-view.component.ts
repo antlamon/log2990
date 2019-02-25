@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute } from "@angular/router";
-import { Game3D } from "../../../../../common/models/game3D";
+import { IGame3D } from "../../../../../common/models/game3D";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 
 
@@ -18,7 +18,7 @@ export class Game3DViewComponent implements OnInit {
   @ViewChild("modifiedContainer")
   private modifiedContainerRef: ElementRef;
 
-  public game3D: Game3D;
+  public game3D: IGame3D;
 
   public constructor(
     private gameService: GameService,
@@ -45,7 +45,7 @@ export class Game3DViewComponent implements OnInit {
 
   public get3DGame(): void {
     this.gameService.get3DGame(this.getId())
-        .then((response: Game3D) => {
+        .then((response: IGame3D) => {
           this.game3D = response;
           this.render.initialize(this.originalContainer, this.game3D.originalScene);
           this.render.initialize(this.modifiedContainer, this.game3D.modifiedScene);
