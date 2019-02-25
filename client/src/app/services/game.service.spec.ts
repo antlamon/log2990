@@ -2,15 +2,15 @@ import { TestBed, inject } from "@angular/core/testing";
 
 import { GameService } from "./game.service";
 import { HttpClientModule } from "@angular/common/http";
-import { IGame, ISimpleForm, IGame3DForm } from "../../../../common/models/game";
+import { IGame, ISimpleForm, IGame3DForm, IFullGame } from "../../../../common/models/game";
 import { Message, BASE_ID } from "../../../../common/communication/message";
 import { TestHelper } from "src/test.helper";
 import { Game3D } from "../../../../common/models/game3D";
 
 describe("GameService", () => {
-    const mockedID: string = "mockedId";
-    const mocked3DGame: Game3D = { name: "testGame" } as Game3D;
-    const mocked2DGame: IGame = { name: "testGame" } as IGame;
+    const mockedId: string = "ab83hs";
+    const mocked3DGame: Game3D = { name: "testGame", id: mockedId } as Game3D;
+    const mocked2DGame: IGame = { name: "testGame", id: mockedId } as IGame;
 
     // tslint:disable-next-line:no-any Used to mock the http call
     let httpSpy: any;
@@ -43,10 +43,10 @@ describe("GameService", () => {
     });
 
     it("Getting a simple game should return a simple game", () => {
-        const expectedGame: IGame = { name: "test1", id: mockedID} as IGame;
+        const expectedGame: IFullGame = { card: mocked2DGame } as IFullGame;
         httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
-        gameService.getSimpleGame(mockedID).then(
-            (response: IGame) => {
+        gameService.getSimpleGame(mockedId).then(
+            (response: IFullGame) => {
                 expect(response).toEqual(expectedGame);
             }
         );
@@ -61,6 +61,16 @@ describe("GameService", () => {
         gameService.getFreeGames().subscribe(
             (response: Game3D[]) => {
                 expect(response).toEqual(expectedGames);
+            }
+        );
+    });
+
+    it("Getting a 3D game should return a 3D game", () => {
+        const expectedGame: Game3D = mocked3DGame;
+        httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
+        gameService.get3DGame(mockedId).then(
+            (response: Game3D) => {
+                expect(response).toEqual(expectedGame);
             }
         );
     });
