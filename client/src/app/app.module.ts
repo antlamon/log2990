@@ -15,7 +15,6 @@ import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.componen
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
 import { InitialComponent } from "./initial/initial.component";
 import { ListViewComponent } from "./list-view/list-view.component";
-import { Game3DComponent } from "./scene3D/game3-d/game3-d.component";
 import { RenderService } from "./scene3D/scene3-d/render.service";
 import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
@@ -34,7 +33,6 @@ import { SocketService } from "./services/socket.service";
     SimpleGeneratorComponent,
     Game2DViewComponent,
     Scene3DComponent,
-    Game3DComponent,
     Game3DViewComponent
   ],
   imports: [
