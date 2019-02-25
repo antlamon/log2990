@@ -1,6 +1,7 @@
 import { injectable } from "inversify";
 import { INITIAL_OBJECT_SIZE, Objet3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
+import { TEXTURES } from "../../../common/models/textures";
 
 @injectable()
 export class ObjectGeneratorService {
@@ -12,10 +13,11 @@ export class ObjectGeneratorService {
     private readonly B0X_LENGHT: number = 300;
     private readonly MAX_ROTATION: number = 360;
 
-    public generateRandom3Dobject(objects: Objet3D[]): Objet3D {
+    private generateRandom3Dobject(objects: Objet3D[]): Objet3D {
         return {
             type: this.randomShape(),
-            color: this.randomInt(this.WHITE, this.BLACK),
+            color: 0,
+            texture: "",
             position: this.generatePosition(objects),
             size: this.random1Interval(this.MIN_SCALE, this.MAX_SCALE), // scale between 50% and 150% of a reference size
             rotation: {
@@ -24,6 +26,22 @@ export class ObjectGeneratorService {
                 z: this.randomInt(0, this.MAX_ROTATION),
             },
         };
+    }
+    public generateRandomGeometricObject(objects: Objet3D[]): Objet3D {
+        const genericObject: Objet3D = this.generateRandom3Dobject(objects);
+        genericObject.color = this.randomInt(this.WHITE, this.BLACK);
+
+        return genericObject;
+    }
+    public generateRandomThematicObject(objects: Objet3D[]): Objet3D {
+        const genericObject: Objet3D = this.generateRandom3Dobject(objects);
+        genericObject.texture = this.randomTexture();
+
+        return genericObject;
+    }
+
+    public randomTexture(): string {
+        return TEXTURES[this.randomInt(0, TEXTURES.length - 1)];
     }
     private generatePosition(objects: Objet3D[]): {x: number, y: number, z: number} {
         let position: {x: number, y: number, z: number};

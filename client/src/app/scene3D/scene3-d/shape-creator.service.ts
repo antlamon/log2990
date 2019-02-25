@@ -1,16 +1,18 @@
 import { Injectable } from "@angular/core";
 import { Objet3D, INITIAL_OBJECT_SIZE } from "../../../../../common/models/objet3D";
 import * as THREE from "three";
+// import { GEOMETRIC_TYPE_NAME } from "../../../../../common/models/game3D";
 
 @Injectable()
 export class ShapeCreatorService {
 
   private map: Map<string, THREE.Mesh>;
-
+  private texture: THREE.TextureLoader;
   public readonly NB_SEGMENTS: number = 50; // to have circular originalObjects
 
   public constructor() {
     this.generateMap();
+    this.texture = new THREE.TextureLoader();
   }
   private generateMap(): void {
     this.map = new Map();
@@ -32,7 +34,9 @@ export class ShapeCreatorService {
     shape.rotation.x = obj.rotation.x;
     shape.rotation.y = obj.rotation.y;
     shape.rotation.z = obj.rotation.z;
-    shape.material = new THREE.MeshPhongMaterial({color: obj.color });
+    shape.material = obj.color !== 0 ?
+      new THREE.MeshPhongMaterial({color: obj.color }) :
+      new THREE.MeshPhongMaterial({map: this.texture.load(("assets/" + obj.texture + ".jpg")) });
 
     return shape;
   }

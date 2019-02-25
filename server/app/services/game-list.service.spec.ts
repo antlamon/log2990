@@ -240,10 +240,10 @@ describe("GameList service", () => {
         });
         describe("Random generator", () => {
             it("The returned number should be below the upper bound", () => {
-                expect(service.randomNumberGenerator(0, upperBound)).to.be.below(upperBound);
+                expect(service.randomNumberGenerator(0, upperBound)).to.be.below(upperBound + 1);
             });
             it("The returned number should be above the lower bound", () => {
-                expect(service.randomNumberGenerator(lowerBound, lowerBound * 2)).to.be.above(lowerBound);
+                expect(service.randomNumberGenerator(lowerBound, lowerBound * 2)).to.be.above(lowerBound - 1);
             });
         });
     });

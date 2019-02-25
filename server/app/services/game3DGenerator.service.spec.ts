@@ -44,6 +44,7 @@ const mockBadModifs: IGame3DForm = {
 const obj3D: Objet3D = {
     type: "string",
     color: 0,
+    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
