@@ -7,12 +7,12 @@ import * as THREE from "three";
 export class ShapeCreatorService {
 
   private map: Map<string, THREE.Mesh>;
-  private texture: THREE.TextureLoader;
+  private textureLoader: THREE.TextureLoader;
   public readonly NB_SEGMENTS: number = 50; // to have circular originalObjects
 
   public constructor() {
     this.generateMap();
-    this.texture = new THREE.TextureLoader();
+    this.textureLoader = new THREE.TextureLoader();
   }
   private generateMap(): void {
     this.map = new Map();
@@ -36,7 +36,7 @@ export class ShapeCreatorService {
     shape.rotation.z = obj.rotation.z;
     shape.material = obj.color !== 0 ?
       new THREE.MeshPhongMaterial({color: obj.color }) :
-      new THREE.MeshPhongMaterial({map: this.texture.load(("assets/" + obj.texture + ".jpg")) });
+      new THREE.MeshPhongMaterial({map: this.textureLoader.load(("assets/" + obj.texture + ".jpg")) });
 
     return shape;
   }
