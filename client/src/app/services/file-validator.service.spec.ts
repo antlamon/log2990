@@ -12,6 +12,7 @@ import { FileValidatorService } from "./file-validator.service";
 import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
 import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { NO_MIN_OBJECTS, NO_MAX_OBJECTS } from "../../../../common/models/game3D";
+import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
 
 describe("FileValidatorService", () => {
 
@@ -34,7 +35,8 @@ describe("FileValidatorService", () => {
         InitialComponent,
         ListViewComponent,
         Game2DViewComponent,
-        Scene3DComponent
+        Scene3DComponent,
+        Game3DViewComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService, FileValidatorService]

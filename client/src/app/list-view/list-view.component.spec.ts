@@ -11,6 +11,7 @@ import { FormsModule } from "@angular/forms";
 import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { IGame } from "../../../../common/models/game";
 import { ITop3 } from "../../../../common/models/top3";
+import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
 
 describe("ListViewComponent", () => {
   let component: ListViewComponent;
@@ -30,7 +31,8 @@ describe("ListViewComponent", () => {
         Game2DViewComponent,
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
-        Scene3DComponent
+        Scene3DComponent,
+        Game3DViewComponent
       ]
     })
       .compileComponents().then(() => { }, (error: Error) => { });

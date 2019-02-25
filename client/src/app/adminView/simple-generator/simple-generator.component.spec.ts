@@ -13,6 +13,7 @@ import { GameService } from "src/app/services/game.service";
 import { By } from "@angular/platform-browser";
 import { Game2DViewComponent } from "src/app/gameView/game2D-view/game2D-view.component";
 import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
+import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 
 describe("SimpleGeneratorComponent", () => {
   const LOADING_FILE_DELAY: number = 50;
@@ -28,7 +29,8 @@ describe("SimpleGeneratorComponent", () => {
         InitialComponent,
         ListViewComponent,
         Game2DViewComponent,
-        Scene3DComponent
+        Scene3DComponent,
+        Game3DViewComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule],
       providers: [ModalService, FileValidatorService, GameService]
