@@ -1,12 +1,13 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import { Game2DViewComponent } from "./game2D-view.component";
 import { HttpClientModule } from "@angular/common/http";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+import { of } from "rxjs";
+import { AppRoutingModule } from "src/app/app-routing.module";
+import { IndexService } from "src/app/services/index.service";
 import { GameRoomUpdate } from "../../../../../common/communication/message";
 import { IFullGame, IGame } from "../../../../../common/models/game";
-import { IndexService } from "src/app/services/index.service";
-import { RouterTestingModule } from "@angular/router/testing";
-import { AppRoutingModule } from "src/app/app-routing.module";
 import { ITop3 } from "../../../../../common/models/top3";
+import { Game2DViewComponent } from "./game2D-view.component";
 
 const mockedGame: IGame = {
     id: "mockedID",
@@ -86,7 +87,7 @@ describe("Game2DViewComponent", () => {
             differenceImage: "diff"
         };
         const socketSpy: jasmine.Spy = spyOn(component["socket"], "emitEvent");
-        spyOn(component["gameService"], "getSimpleGame").and.returnValue({subscribe: () => fullGame});
+        spyOn(component["gameService"], "getSimpleGame").and.returnValue(of(fullGame));
         component.getSimpleGame();
         expect(component.simpleGame).toEqual(fullGame);
         expect(socketSpy).toHaveBeenCalled();
