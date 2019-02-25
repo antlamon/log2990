@@ -89,3 +89,11 @@
     font-weight: bold;
     font-size: 20px;
 }
+
+.disable-click {
+    pointer-events: none;
+}
+
+.cursor-not-allowed {
+    cursor: not-allowed;
+}

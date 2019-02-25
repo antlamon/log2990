@@ -8,15 +8,18 @@ import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
 
 @Component({
-  selector: "app-game2d-view",
-  templateUrl: "./game2D-view.component.html",
-  styleUrls: ["./game2D-view.component.css"]
+    selector: "app-game2d-view",
+    templateUrl: "./game2D-view.component.html",
+    styleUrls: ["./game2D-view.component.css"]
 })
 export class Game2DViewComponent implements OnInit {
 
     public simpleGame: IFullGame;
     public differencesFound: number;
+    public disableClick: string;
+    public blockedCursor: string;
 
+    private readonly ONE_SEC_IN_MS: number = 1000;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
 
@@ -29,6 +32,8 @@ export class Game2DViewComponent implements OnInit {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
         this.differencesFound = 0;
+        this.disableClick = "";
+        this.blockedCursor = "";
         this.correctSound = new Audio("assets/correct.wav");
         this.errorSound = new Audio("assets/error.wav");
     }
@@ -45,7 +50,7 @@ export class Game2DViewComponent implements OnInit {
         this.gameService.getSimpleGame(this.getId())
             .subscribe((response: IFullGame) => {
                 this.simpleGame = response;
-                const newGameMessage: NewGameMessage =  {
+                const newGameMessage: NewGameMessage = {
                     username: this.index.username,
                     gameRoomId: this.simpleGame.card.id,
                     originalImage: this.simpleGame.card.originalImage,
@@ -64,8 +69,16 @@ export class Game2DViewComponent implements OnInit {
 
     public handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
-            // not a difference
             this.errorSound.play();
+            this.disableClick = "disable-click";
+            this.blockedCursor = "cursor-not-allowed";
+            setTimeout(
+                () => {
+                    this.disableClick = "";
+                    this.blockedCursor = "";
+                },
+                this.ONE_SEC_IN_MS
+            );
         } else {
             this.simpleGame.modifiedImage = update.newImage;
             this.differencesFound = update.differencesFound;
