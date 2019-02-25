@@ -28,7 +28,6 @@ export class ListViewComponent implements OnInit {
     this.getSimpleGames();
     this.getFreeGames();
     this.isAdminMode = false;
-
   }
 
   public getSimpleGames(): void {
@@ -43,7 +42,7 @@ export class ListViewComponent implements OnInit {
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe((response: Game3D[]) => {this.freeGames = response;console.log(response);});
+        .subscribe((response: Game3D[]) => this.freeGames = response);
   }
 
   public deleteFreeGames(game: Game3D): void {
@@ -54,6 +53,10 @@ export class ListViewComponent implements OnInit {
   public playSelectedSimpleGame(game: IGame): void {
     this.router.navigate(["simple-game/" + game.id]);
 
+  }
+
+  public playSelectedFreeGame(game: Game3D): void {
+    this.router.navigate(["free-game/" + game.id]);
   }
 
 }

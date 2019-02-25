@@ -75,7 +75,7 @@
                         <app-scene3-d-component class="game-card-img" [game]="game.originalScene" #scene [isCardMode]="true"></app-scene3-d-component>
                     </div>
                     <div class="game-card-buttons" *ngIf="!isAdminMode">
-                        <div class="game-card-button-container"><button>JOUER</button></div>
+                        <div class="game-card-button-container"><button (click)="playSelectedFreeGame(game)">JOUER</button></div>
                         <div class="game-card-button-container"><button>CRÉER</button></div>
                     </div>
                     <div class="game-card-buttons" *ngIf="isAdminMode">
