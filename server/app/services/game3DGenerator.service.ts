@@ -63,9 +63,9 @@ export class Game3DGeneratorService {
         }
 
         const scene: IScene3D = { modified: false,
-                                 objects: randomObjects,
-                                 numObj: form.objectQty,
-                                 backColor: backGroundColor,
+                                  objects: randomObjects,
+                                  numObj: form.objectQty,
+                                  backColor: backGroundColor,
                                 };
 
         return {

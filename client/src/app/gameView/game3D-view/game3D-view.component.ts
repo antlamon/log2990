@@ -4,7 +4,6 @@ import { ActivatedRoute } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 
-
 @Component({
   selector: "app-game3d-view",
   templateUrl: "./game3D-view.component.html",

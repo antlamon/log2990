@@ -11,6 +11,7 @@ describe("Scene3DComponent", () => {
   const obj3D: IObjet3D = {
     type: "cube",
     color: 0,
+    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},

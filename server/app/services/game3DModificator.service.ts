@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { GEOMETRIC_TYPE_NAME, IScene3D } from "../../../common/models/game3D";
-import { MAX_COLOR, IObjet3D  } from "../../../common/models/objet3D";
+import { IObjet3D, MAX_COLOR  } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
