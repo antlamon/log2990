@@ -43,7 +43,7 @@ export class Game2DViewComponent implements OnInit {
 
     public getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
-            .then((response: IFullGame) => {
+            .subscribe((response: IFullGame) => {
                 this.simpleGame = response;
                 const newGameMessage: NewGameMessage =  {
                     username: this.index.username,
@@ -53,8 +53,7 @@ export class Game2DViewComponent implements OnInit {
                     differenceImage: this.simpleGame.differenceImage
                 };
                 this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
-            })
-            .catch (() => "getSimpleGame");
+            });
     }
 
     public handleCreateGameRoom(rejection?: string): void {

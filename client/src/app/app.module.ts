@@ -46,6 +46,7 @@ import { SocketService } from "./services/socket.service";
     MatDialogModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([]),
+    IndexService,
   ],
   entryComponents: [
     SimpleGeneratorComponent,

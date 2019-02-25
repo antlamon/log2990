@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-
 import { AdminMenuComponent } from "./admin-menu.component";
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { AppComponent } from "src/app/app.component";
@@ -12,6 +11,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "../../services/modal.service";
 import { Game2DViewComponent } from "src/app/gameView/game2D-view/game2D-view.component";
 import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
+import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
@@ -27,6 +27,7 @@ describe("AdminMenuComponent", () => {
         InitialComponent,
         ListViewComponent,
         Game2DViewComponent,
+        Game3DViewComponent,
         Scene3DComponent
       ],
       imports: [

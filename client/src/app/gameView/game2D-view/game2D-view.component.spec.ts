@@ -1,10 +1,25 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { Game2DViewComponent } from "./game2D-view.component";
 import { HttpClientModule } from "@angular/common/http";
-import { RouterModule } from "@angular/router";
 import { GameRoomUpdate } from "../../../../../common/communication/message";
 import { IFullGame, IGame } from "../../../../../common/models/game";
+import { IndexService } from "src/app/services/index.service";
+import { RouterTestingModule } from "@angular/router/testing";
+import { AppRoutingModule } from "src/app/app-routing.module";
+import { ITop3 } from "../../../../../common/models/top3";
 
+const mockedGame: IGame = {
+    id: "mockedID",
+    name: "testGame",
+    originalImage: "",
+    solo: { } as ITop3,
+    multi: { } as ITop3,
+};
+const mockedFullGame: IFullGame = {
+    card: mockedGame,
+    modifiedImage: " ",
+    differenceImage: " ",
+};
 describe("Game2DViewComponent", () => {
     let component: Game2DViewComponent;
     let fixture: ComponentFixture<Game2DViewComponent>;
@@ -12,7 +27,8 @@ describe("Game2DViewComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [Game2DViewComponent],
-            imports: [HttpClientModule, RouterModule.forRoot([])]
+            imports: [ RouterTestingModule, HttpClientModule ],
+            providers: [ IndexService, AppRoutingModule ],
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);
@@ -23,6 +39,7 @@ describe("Game2DViewComponent", () => {
         fixture = TestBed.createComponent(Game2DViewComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
+        component.simpleGame = mockedFullGame;
     });
 
     it("should create", () => {
@@ -59,7 +76,7 @@ describe("Game2DViewComponent", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it("get simple game should init the simple game", () => {
+    it("get simple game should init the simple game", async () => {
         const fullGame: IFullGame = {
             card: {
                 id: "test",
@@ -69,9 +86,7 @@ describe("Game2DViewComponent", () => {
             differenceImage: "diff"
         };
         const socketSpy: jasmine.Spy = spyOn(component["socket"], "emitEvent");
-        spyOn(component["gameService"], "getSimpleGame").and.returnValue(
-            Promise.resolve(fullGame)
-        );
+        spyOn(component["gameService"], "getSimpleGame").and.returnValue({subscribe: () => fullGame});
         component.getSimpleGame();
         expect(component.simpleGame).toEqual(fullGame);
         expect(socketSpy).toHaveBeenCalled();

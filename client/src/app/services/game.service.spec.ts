@@ -49,7 +49,7 @@ describe("GameService", () => {
             differenceImage: "diff"
         };
         httpSpy.get.and.returnValue(TestHelper.asyncData(expectedGame));
-        gameService.getSimpleGame(mockedID).then(
+        gameService.getSimpleGame(mockedID).subscribe(
             (response: IFullGame) => {
                 expect(response).toEqual(expectedGame);
             }

@@ -13,6 +13,7 @@ import { SimpleGeneratorComponent } from "./adminView/simple-generator/simple-ge
 import { ListViewComponent } from "./list-view/list-view.component";
 import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.component";
 import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
+import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
 
 describe("AppComponent", () => {
   beforeEach(async(() => {
@@ -25,6 +26,7 @@ describe("AppComponent", () => {
         SimpleGeneratorComponent,
         ListViewComponent,
         Game2DViewComponent,
+        Game3DViewComponent,
         Scene3DComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule],
