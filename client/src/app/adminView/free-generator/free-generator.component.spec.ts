@@ -50,8 +50,16 @@ describe("FreeGeneratorComponent", () => {
     it("hasModifications should return false if no modification selected", () => {
       expect(component.hasModifications()).toEqual(false);
     });
-    it("hasModifications should return true if a modification is selected", () => {
-      component["modification"][0] = true;
+    it("hasModifications should return true if deletecheckBox is checked", () => {
+      component.deleteCheckbox = true;
+      expect(component.hasModifications()).toEqual(true);
+    });
+    it("hasModifications should return true if addcheckBox is checked", () => {
+      component.addCheckbox = true;
+      expect(component.hasModifications()).toEqual(true);
+    });
+    it("hasModifications should return true if colorcheckBox is checked", () => {
+      component.colorCheckbox = true;
       expect(component.hasModifications()).toEqual(true);
     });
   });
