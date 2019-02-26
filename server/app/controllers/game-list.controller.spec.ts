@@ -198,4 +198,48 @@ describe("Game list controller", () => {
             done(error);
         });
     });
+
+    it("Get to onesimple should get a simple game", (done: Mocha.Done) => {
+        sandbox.on(gameListService, "getSimpleGame", async() => Promise.resolve(mockedGame));
+        supertest(app)
+        .get(baseURL + "onesimple")
+        .expect(HTTP_OK)
+        .end((error: Error, response: supertest.Response) => {
+            expect(response.body).to.eql(mockedGame);
+            done(error);
+        });
+    });
+
+    it("Get to onesimple should get an error from promise rejection", (done: Mocha.Done) => {
+        sandbox.on(gameListService, "getSimpleGame", async() => Promise.reject("error"));
+        supertest(app)
+        .get(baseURL + "onesimple")
+        .expect(HTTP_OK)
+        .end((error: Error, response: supertest.Response) => {
+            expect(response.body).to.eql("error");
+            done(error);
+        });
+    });
+
+    it("Get to onefree should get a free game", (done: Mocha.Done) => {
+        sandbox.on(gameListService, "getFreeGame", async() => Promise.resolve(mockedGame));
+        supertest(app)
+        .get(baseURL + "onefree")
+        .expect(HTTP_OK)
+        .end((error: Error, response: supertest.Response) => {
+            expect(response.body).to.eql(mockedGame);
+            done(error);
+        });
+    });
+
+    it("Get to onefree should get an error from promise rejection", (done: Mocha.Done) => {
+        sandbox.on(gameListService, "getFreeGame", async() => Promise.reject("error"));
+        supertest(app)
+        .get(baseURL + "onefree")
+        .expect(HTTP_OK)
+        .end((error: Error, response: supertest.Response) => {
+            expect(response.body).to.eql("error");
+            done(error);
+        });
+    });
 });
