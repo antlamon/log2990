@@ -34,15 +34,15 @@ const mock3DGameForm: IGame3DForm = {
     name: "3dgame",
     objectType: "geometric",
     objectQty: 11,
-    modifications: {add: true, delete: false, color: false},
+    modifications: { add: true, delete: false, color: false },
 };
 
 const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: { } as ITop3,
-    multi: { } as ITop3,
+    solo: {} as ITop3,
+    multi: {} as ITop3,
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -79,11 +79,11 @@ const lowerBound: number = 5;
 
 const mockGame3D: IGame3D = {
     name: "mock3DName",
-    id: "",
+    id: "123",
     originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
     modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-    solo: { } as ITop3,
-    multi: { } as ITop3,
+    solo: {} as ITop3,
+    multi: {} as ITop3,
 };
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -99,15 +99,14 @@ describe("GameList service", () => {
         container.rebind(TYPES.SocketServerManager).toConstantValue(sockerController);
         container.rebind(TYPES.GameListService).to(GameListService);
         service = container.get<GameListService>(TYPES.GameListService);
-        // tslint:disable-next-line:typedef
         sandbox.on(service["socketController"], "emitEvent", () => null);
-        mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db ) => {
+        mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db) => {
             mockSimpleCollection = db.collection(GameListService.SIMPLE_COLLECTION);
             mockFreeCollection = db.collection(GameListService.FREE_COLLECTION);
             service["_freeCollection"] = mockFreeCollection;
             service["_freeCollection"].insertOne(mockGame3D).catch();
             service["_simpleCollection"] = mockSimpleCollection;
-            service["_simpleCollection"].insertOne(mockedFullGame).then( (res: WriteOpResult) => {
+            service["_simpleCollection"].insertOne(mockedFullGame).then((res: WriteOpResult) => {
                 done();
             }).catch();
         });
@@ -134,6 +133,22 @@ describe("GameList service", () => {
                 },
                 () => fail(),
             );
+        });
+
+        it("Getting a simple game should return the game", async () => {
+            const game: IFullGame = await service.getSimpleGame(mockedGame.id);
+
+            // proprity added by the database
+            delete game["_id"];
+            expect(game).to.eql(mockedFullGame);
+        });
+
+        it("Getting a free game should return the game", async () => {
+            const game: IGame3D = await service.getFreeGame(mockGame3D.id);
+
+            // proprity added by the database
+            delete game["_id"];
+            expect(game).to.eql(mockGame3D);
         });
     });
 
