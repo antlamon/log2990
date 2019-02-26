@@ -13,7 +13,6 @@ import { ObjectGeneratorService } from "./objectGenerator.service";
 @injectable()
 export class Game3DGeneratorService {
 
-    private readonly MINIMUM_CONTRAST: number = 0x00000F;
     private readonly PALE_COLOR: number = 0x0F0F0F;
 
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
@@ -33,7 +32,7 @@ export class Game3DGeneratorService {
             objects.push(obj);
             do  {
                 backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
-            } while (!this.isEnoughContrast(backGroundColor, objects[i].color));
+            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color));
         }
 
         return backGroundColor;
@@ -76,21 +75,6 @@ export class Game3DGeneratorService {
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
         };
-    }
-
-    private isEnoughContrast(backGroundColor: number, objColor: number): boolean {
-        // we want positive values, check for min and max
-        let max: number;
-        let min: number;
-        if (backGroundColor > objColor) {
-            max = backGroundColor;
-            min = objColor;
-        } else {
-            max = objColor;
-            min = backGroundColor;
-        }
-
-        return (max - min) >= this.MINIMUM_CONTRAST;
     }
 
     public top3RandomOrder(): ITop3 {

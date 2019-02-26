@@ -11,6 +11,7 @@ export class Game3DModificatorService {
     private static readonly ADD: number = 1;
     private static readonly DELETE: number = 2;
     private static readonly COLOR: number = 3;
+    private readonly MINIMUM_CONTRAST: number = 0x00000F;
 
     public constructor(@inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
@@ -76,9 +77,14 @@ export class Game3DModificatorService {
     }
 
     private changeColor(obj: IObjet3D): IObjet3D {
+        let newColor: number;
+        do {
+            newColor = this.objectGenerator.randomInt(0x000000, MAX_COLOR);
+        } while (!this.isEnoughContrast(obj.color, newColor));
+
         return {
             type: obj.type,
-            color: this.objectGenerator.randomInt(0x000000, MAX_COLOR),
+            color: newColor,
             texture: "",
             position: obj.position,
             size: obj.size,
@@ -102,6 +108,20 @@ export class Game3DModificatorService {
             size: obj.size,
             rotation: obj.rotation,
         };
+    }
+    public isEnoughContrast(otherColor: number, objColor: number): boolean {
+        // we want positive values, check for min and max
+        let max: number;
+        let min: number;
+        if (otherColor > objColor) {
+            max = otherColor;
+            min = objColor;
+        } else {
+            max = objColor;
+            min = otherColor;
+        }
+
+        return (max - min) >= this.MINIMUM_CONTRAST;
     }
 
     private randomIndex(size: number): number[] {

@@ -10,7 +10,7 @@ export class ObjectGeneratorService {
     private readonly MAX_SCALE: number = 1.5;
     private readonly WHITE: number = 0x000000;
     private readonly BLACK: number = 0xFFFFFF;
-    private readonly B0X_LENGHT: number = 300;
+    private readonly B0X_LENGHT: number = 280;
     private readonly MAX_ROTATION: number = 360;
 
     private generateRandom3Dobject(objects: IObjet3D[]): IObjet3D {
