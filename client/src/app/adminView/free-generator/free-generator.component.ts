@@ -20,16 +20,15 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   public addCheckbox: boolean;
   public deleteCheckbox: boolean;
   public colorCheckbox: boolean;
-  @Input() public id: string;
-  public nbModification: number = 3;
   public type1: string;
   public type2: string;
+  @Input() public id: string;
 
   private modalRef: FreeGeneratorComponent;
   private element: HTMLElement;
-  private modification: boolean[];
   private selectedType: string;
   private errorsMessages: string[];
+
   public constructor(
     private gameService: GameService,
     private fileValidator: FileValidatorService,
@@ -40,7 +39,6 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
       this.colorCheckbox = false;
       this.gameName = "";
       this.noObj = "";
-      this.modification = new Array(this.nbModification).fill(false);
       this.type1 = GEOMETRIC_TYPE_NAME;
       this.type2 = THEMATIC_TYPE_NAME;
       this.selectedType = this.type1;
@@ -79,7 +77,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
         name: this.gameName,
         objectType: this.selectedType,
         objectQty: +this.noObj,
-        modifications: {add: this.modification[0], delete: this.modification[1], color: this.modification[this.nbModification - 1]}
+        modifications: {add: this.addCheckbox, delete: this.deleteCheckbox, color: this.colorCheckbox}
       };
       this.gameService.createFreeGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
@@ -108,13 +106,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   public hasModifications(): boolean {
-    return this.modification.includes(true);
+    return this.colorCheckbox || this.addCheckbox || this.deleteCheckbox;
 
-  }
-  public changeModif( nModif: number): void {
-    if (nModif >= 0 && nModif < this.nbModification) {
-      this.modification[nModif] = !this.modification[nModif];
-    }
   }
 
   public changeType(newType: string): void {

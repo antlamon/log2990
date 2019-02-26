@@ -30,9 +30,9 @@
           <div *ngIf = "!(this.hasModifications())" style="color:red"><p id="typeModif">Type de modifications</p></div>
         </div>
         <div class="rightColumn">
-          <input type="checkbox" [(ngModel)]="addCheckbox" [ngModelOptions]="{standalone: true}" id="add" (click)="changeModif(0)"> Ajout<br>
-          <input type="checkbox" [(ngModel)]="deleteCheckbox" [ngModelOptions]="{standalone: true}"  id="delete" (click)="changeModif(1)" > Supression <br>
-          <input type="checkbox" [(ngModel)]="colorCheckbox" [ngModelOptions]="{standalone: true}" id="colorChange" (click)="changeModif(2)"> Changement de couleur <br>
+          <input type="checkbox" [(ngModel)]="addCheckbox" [ngModelOptions]="{standalone: true}" id="add" > Ajout<br>
+          <input type="checkbox" [(ngModel)]="deleteCheckbox" [ngModelOptions]="{standalone: true}"  id="delete" > Supression <br>
+          <input type="checkbox" [(ngModel)]="colorCheckbox" [ngModelOptions]="{standalone: true}" id="colorChange"> Changement de couleur <br>
         </div>
       </div>
     </form>
