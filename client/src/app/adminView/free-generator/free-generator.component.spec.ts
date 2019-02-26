@@ -55,18 +55,6 @@ describe("FreeGeneratorComponent", () => {
       expect(component.hasModifications()).toEqual(true);
     });
   });
-  describe("Test for the function changeModif", () => {
-    it("changeModif should not modifiy an modification if index out of bounds", () => {
-      const oldModi: boolean[] = component["modification"];
-      component.changeModif(-1);
-      component.changeModif(component.nbModification);
-      expect(oldModi).toEqual(component["modification"]);
-    });
-    it("changeModif should modify the slectd modification if index is valid", () => {
-      component.changeModif(0);
-      expect(component["modification"][0]).toEqual(true);
-    });
-  });
   describe("Test for the function changetype", () => {
     it("changetype should modify the selectedtype", () => {
       component.changeType("newType");
