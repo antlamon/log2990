@@ -17,6 +17,9 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   public GAME_ID: number = 1;
   public gameName: string;
   public noObj: string;
+  public addCheckbox: boolean;
+  public deleteCheckbox: boolean;
+  public colorCheckbox: boolean;
   @Input() public id: string;
   public nbModification: number = 3;
   public type1: string;
@@ -32,6 +35,9 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     private fileValidator: FileValidatorService,
     public el: ElementRef, private modal: ModalService) {
       this.element = el.nativeElement;
+      this.addCheckbox = false;
+      this.deleteCheckbox = false;
+      this.colorCheckbox = false;
       this.gameName = "";
       this.noObj = "";
       this.modification = new Array(this.nbModification).fill(false);
@@ -129,5 +135,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.noObj = "";
     this.gameName = "";
     this.errorsMessages = [];
+    this.addCheckbox = false;
+    this.deleteCheckbox = false;
+    this.colorCheckbox = false;
   }
 }
