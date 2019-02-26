@@ -126,7 +126,7 @@ describe("Game3D Modificator service", () => {
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
         it("Should return an array with 7 thematic modified objects", async () => {
-            // A modifier avec les textures
+            // to modify with texture next sprint
 
             const newObj: IScene3D = service.createModifScene(mockScene, THEMATIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
