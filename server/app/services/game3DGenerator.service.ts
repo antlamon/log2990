@@ -1,11 +1,12 @@
 import { ObjectID } from "bson";
 import { inject, injectable } from "inversify";
-import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
+import { TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, NO_MAX_OBJECTS, NO_MIN_OBJECTS, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
 import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
+import { FormValidatorService } from "./formValidator.service";
 import { GameListService } from "./game-list.service";
 import { Game3DModificatorService } from "./game3DModificator.service";
 import { ObjectGeneratorService } from "./objectGenerator.service";
@@ -16,11 +17,12 @@ export class Game3DGeneratorService {
     private readonly PALE_COLOR: number = 0x0F0F0F;
 
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
-                       @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
+                       @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService,
+                       @inject(TYPES.FormValidatorService) private formValidator: FormValidatorService) {}
 
     public createRandom3DGame(form: IGame3DForm): IGame3D {
 
-        this.formValidator(form);
+        this.formValidator.validate3DForm(form);
 
         return this.generateGame(form);
 
@@ -88,14 +90,6 @@ export class Game3DGeneratorService {
                  second: {name: "MediumComputer", score: scores[1].toString() + ":00"},
                  third: {name: "BadComputer", score: scores[2].toString() + ":00"},
                 };
-    }
-
-    private formValidator(form: IGame3DForm): void {
-        if (form.objectQty < NO_MIN_OBJECTS || form.objectQty > NO_MAX_OBJECTS) {
-            throw new FORM_ERROR("Le nombre d'objets doit être entre 10 et 200");
-        } else if (!form.modifications.add && !form.modifications.delete && !form.modifications.color) {
-            throw new FORM_ERROR("Il faut choisir au moins une modification");
-        }
     }
 
 }

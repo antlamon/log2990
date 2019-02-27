@@ -5,19 +5,22 @@ import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/messag
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { ConnexionService } from "./connexion.service";
+import { FormValidatorService } from "./formValidator.service";
 import { UsersManager } from "./users.service";
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 
 describe("Connexion service", () => {
+
     describe("Test for the function addName", () => {
         let service: ConnexionService;
         let sandbox: ChaiSpies.Sandbox;
         const userManager: UsersManager = container.get(TYPES.UserManager);
+        const formValidator: FormValidatorService = container.get(TYPES.FormValidatorService);
 
         beforeEach(() => {
-            service = new ConnexionService(userManager);
+            service = new ConnexionService(userManager, formValidator);
             sandbox = chai.spy.sandbox();
         });
 
