@@ -70,7 +70,7 @@ export class ImageService {
             const current: [number, number] = callBackPixels[callBackPixels.length - 1];
             for (let i: number = current[0] - 1; i <= current[0] + 1; i++) {
                 for (let j: number = current[1] - 1; j <= current[1] + 1; j++) {
-                    if (i >= 0 && i < height && j >= 0 && j < width && !visited[i][j]) {
+                    if (this.isInBound(i, j, height, width) && !visited[i][j]) {
                         callBackPixels.push([i, j]);
                         hasNext = true;
                         visited[i][j] = true;
@@ -81,6 +81,9 @@ export class ImageService {
                 callBackPixels.pop();
             }
         }
+    }
+    private isInBound(x: number, y: number, height: number, width: number): boolean {
+        return x >= 0 && x < height && y >= 0 && y < width;
     }
 
     public createVisitedArray(pixels: Pixel[][]): boolean[][] {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
@@ -12,12 +12,13 @@ import { SocketService } from "../../services/socket.service";
     templateUrl: "./game2D-view.component.html",
     styleUrls: ["./game2D-view.component.css"]
 })
-export class Game2DViewComponent implements OnInit {
+export class Game2DViewComponent implements OnInit, OnDestroy {
 
     private simpleGame: IFullGame;
     private differencesFound: number;
     public disableClick: string;
     public blockedCursor: string;
+    private readonly NB_MAX_DIFF: number = 7;
 
     private readonly ONE_SEC_IN_MS: number = 1000;
     private correctSound: HTMLAudioElement;
@@ -44,11 +45,16 @@ export class Game2DViewComponent implements OnInit {
         this.getSimpleGame();
     }
 
+    @HostListener("window:beforeunload")
+    public ngOnDestroy(): void {
+        this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
+    }
+
     private getId(): string {
         return String(this.route.snapshot.paramMap.get("id"));
     }
 
-    public getSimpleGame(): void {
+    private getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
             .subscribe((response: IFullGame) => {
                 this.simpleGame = response;
@@ -63,13 +69,13 @@ export class Game2DViewComponent implements OnInit {
             });
     }
 
-    public handleCreateGameRoom(rejection?: string): void {
-        if (rejection !== undefined) {
-            // error modal
+    private handleCreateGameRoom(rejection?: string): void {
+        if (rejection !== null) {
+            alert(rejection);
         }
     }
 
-    public handleCheckDifference(update: GameRoomUpdate): void {
+    private handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.disableClick = "disable-click";
@@ -84,9 +90,10 @@ export class Game2DViewComponent implements OnInit {
         } else {
             this.simpleGame.modifiedImage = update.newImage;
             this.differencesFound = update.differencesFound;
-            this.correctSound.play().catch((error: Error) => console.error(error.message));
-            if (this.differencesFound === 0) {
-               this.victorySound.play().catch((error: Error) => console.error(error.message));
+            if (this.differencesFound === this.NB_MAX_DIFF) {
+                this.victorySound.play().catch((error: Error) => console.error(error.message));
+            } else {
+                this.correctSound.play().catch((error: Error) => console.error(error.message));
             }
         }
     }

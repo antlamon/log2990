@@ -1,8 +1,8 @@
-import {Component} from "@angular/core";
-import {IndexService} from "../services/index.service";
-import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
-import { Router} from "@angular/router";
+import { Component } from "@angular/core";
+import { Router } from "@angular/router";
+import { BASE_ID, ERROR_ID, Message } from "../../../../common/communication/message";
 import { FileValidatorService } from "../services/file-validator.service";
+import { IndexService } from "../services/index.service";
 
 @Component({
   selector: "app-initial",
