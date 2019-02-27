@@ -146,21 +146,15 @@ export class Game3DModificatorService {
             // tslint:disable-next-line:switch-default
             switch (randModif) {
                 case Game3DModificatorService.ADD: {
-                    if (typeModif.add) {
-                        valid = true;
-                    }
+                    valid = typeModif.add;
                     break;
                 }
                 case(Game3DModificatorService.DELETE): {
-                    if (typeModif.delete) {
-                        valid = true;
-                    }
+                    valid = typeModif.delete;
                     break;
                 }
                 case Game3DModificatorService.COLOR: {
-                    if (typeModif.color) {
-                        valid = true;
-                    }
+                    valid = typeModif.color;
                     break;
                 }
             }
