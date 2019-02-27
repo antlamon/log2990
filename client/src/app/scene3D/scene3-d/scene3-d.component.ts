@@ -13,6 +13,7 @@ export class Scene3DComponent implements AfterViewInit {
   @Input() public game: IScene3D;
   @Input() public isCardMode: boolean;
   public imageBase64: string;
+  private readonly RENDERERING_DELAY: number = 5;
 
   public constructor(private renderService: RenderService) {
     this.isCardMode = false;
@@ -35,7 +36,7 @@ export class Scene3DComponent implements AfterViewInit {
       this.renderService.initialize(this.container, this.game);
       setTimeout(() => {
         this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
-      },         5); // make sure scene is rendered before
+      },         this.RENDERERING_DELAY); // make sure scene is rendered before
     }
     this.container.style.display = this.isCardMode ? "none" : "block";
   }
