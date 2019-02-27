@@ -3,6 +3,7 @@ import {IndexService} from "../services/index.service";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
 import { Router} from "@angular/router";
 import { FileValidatorService } from "../services/file-validator.service";
+import { NAVIGATE_ERROR } from "../global/clientError";
 
 @Component({
   selector: "app-initial",

@@ -101,8 +101,8 @@ describe("GameList service", () => {
         service = container.get<GameListService>(TYPES.GameListService);
         sandbox.on(service["socketController"], "emitEvent", () => null);
         mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db) => {
-            mockSimpleCollection = db.collection(GameListService.SIMPLE_COLLECTION);
-            mockFreeCollection = db.collection(GameListService.FREE_COLLECTION);
+            mockSimpleCollection = db.collection(service["SIMPLE_COLLECTION"]);
+            mockFreeCollection = db.collection(GameListService["FREE_COLLECTION"]);
             service["_freeCollection"] = mockFreeCollection;
             service["_freeCollection"].insertOne(mockGame3D).catch();
             service["_simpleCollection"] = mockSimpleCollection;
