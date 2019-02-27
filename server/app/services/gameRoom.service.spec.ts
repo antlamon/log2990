@@ -97,9 +97,9 @@ describe("GameRoomService", () => {
                     });
         });
 
-        it("Deleting a game room should send a delete request", () => {
+        it("Deleting a game room should send a delete request", async () => {
             const spy: ChaiSpies.Spy = sandbox.on(Axios, "delete", async () => Promise.resolve());
-            service.deleteGameRoom("test");
+            await service.deleteGameRoom("test");
             expect(spy).to.have.been.called();
         });
     });
