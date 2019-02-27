@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { IScene3D } from "../../../../../common/models/game3D";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
+import { KEYS } from "src/app/global/constants";
 
 @Injectable()
 export class RenderService {
@@ -39,7 +40,6 @@ export class RenderService {
     for (const obj of scen.objects) {
       this.scene.add(this.shapeService.createShape(obj));
     }
-
     this.startRenderingLoop();
   }
 
@@ -77,7 +77,6 @@ export class RenderService {
     );
     this.camera.position.z = this.cameraZ;
     this.scene.add(this.camera);
-
   }
 
   private getAspectRatio(): number {
@@ -92,11 +91,30 @@ export class RenderService {
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
 
     this.container.appendChild(this.renderer.domElement);
+    document.body.addEventListener( "keydown", this.onKeyDown, false );
     this.render();
   }
 
   private render(): void {
     requestAnimationFrame(() => this.render());
+
     this.renderer.render(this.scene, this.camera);
+  }
+  private onKeyDown = (event: KeyboardEvent) => {
+    switch (event.keyCode ) {
+      case KEYS["S"]: // up
+      this.camera.translateZ(3);
+      break;
+      case KEYS["W"]: // down
+      this.camera.translateZ(-3);
+      break;
+      case KEYS["D"]: // up
+      this.camera.translateX(3);
+      break;
+      case KEYS["A"]: // down
+      this.camera.translateX(-3);
+      break;
+      default: break;
+    }
   }
 }
