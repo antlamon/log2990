@@ -8,6 +8,7 @@ import { Server } from "./server";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
 import { DatabaseService } from "./services/database.service";
+import { FormValidatorService } from "./services/formValidator.service";
 import { GameListService } from "./services/game-list.service";
 import { Game3DGeneratorService } from "./services/game3DGenerator.service";
 import { Game3DModificatorService } from "./services/game3DModificator.service";
@@ -46,5 +47,6 @@ container.bind(TYPES.IdentificationController).to(IdentificationController);
 container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManager);
 
 container.bind(TYPES.GameRoomService).to(GameRoomService);
+container.bind(TYPES.FormValidatorService).to(FormValidatorService);
 
 export { container };
