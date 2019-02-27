@@ -13,8 +13,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: { } as ITop3,
-    multi: { } as ITop3,
+    solo: {} as ITop3,
+    multi: {} as ITop3,
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -28,8 +28,8 @@ describe("Game2DViewComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [Game2DViewComponent],
-            imports: [ RouterTestingModule, HttpClientModule ],
-            providers: [ IndexService, AppRoutingModule ],
+            imports: [RouterTestingModule, HttpClientModule],
+            providers: [IndexService, AppRoutingModule],
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);
@@ -45,6 +45,14 @@ describe("Game2DViewComponent", () => {
 
     it("should create", () => {
         expect(component).toBeTruthy();
+    });
+
+    it("get simple game should init the simple game", async () => {
+        const socketSpy: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.returnValue(Promise.resolve());
+        spyOn(component["gameService"], "getSimpleGame").and.returnValue(of(mockedFullGame));
+        component["getSimpleGame"]();
+        expect(component["simpleGame"]).toEqual(mockedFullGame);
+        expect(socketSpy).toHaveBeenCalled();
     });
 
     it("should send click event", () => {
@@ -77,19 +85,4 @@ describe("Game2DViewComponent", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it("get simple game should init the simple game", async () => {
-        const fullGame: IFullGame = {
-            card: {
-                id: "test",
-                originalImage: "origin",
-            } as IGame,
-            modifiedImage: "modif",
-            differenceImage: "diff"
-        };
-        const socketSpy: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.returnValue(Promise.resolve());
-        spyOn(component["gameService"], "getSimpleGame").and.returnValue(of(fullGame));
-        component["getSimpleGame"]();
-        expect(component["simpleGame"]).toEqual(fullGame);
-        expect(socketSpy).toHaveBeenCalled();
-    });
 });
