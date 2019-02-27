@@ -47,7 +47,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
-        this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
+        if (this.simpleGame) {
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
+        }
     }
 
     private getId(): string {

@@ -40,7 +40,8 @@ describe("Game2DViewComponent", () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
         component.simpleGame = mockedFullGame;
-    });
+        spyOn(component["gameService"], "getSimpleGame").and.returnValue(of(mockedFullGame));
+         });
 
     it("should create", () => {
         expect(component).toBeTruthy();
@@ -48,7 +49,6 @@ describe("Game2DViewComponent", () => {
 
     it("get simple game should init the simple game", async () => {
         const socketSpy: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.returnValue(Promise.resolve());
-        spyOn(component["gameService"], "getSimpleGame").and.returnValue(of(mockedFullGame));
         component["getSimpleGame"]();
         expect(component["simpleGame"]).toEqual(mockedFullGame);
         expect(socketSpy).toHaveBeenCalled();
