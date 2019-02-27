@@ -46,7 +46,7 @@ export class GameService {
     return this.http.get<IGame3D[]>(this.FREE_URL);
   }
 
-  public get3DGame(id: string): Promise<IGame3D> {
+  public async get3DGame(id: string): Promise<IGame3D> {
     const url: string = this.FREEONE_URL + "?id=" + id;
     (console as Console).log(url);
 
@@ -69,40 +69,34 @@ export class GameService {
   }
 
   public createFreeGame(game: IGame3DForm): Observable<Message> {
-    // tslint:disable-next-line:typedef
-    const httpOptions = {
+
+    return this.http.post<Message>(this.FREE_URL, game, {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
-    };
-
-    return this.http.post<Message>(this.FREE_URL, game, httpOptions).pipe(
+    }).pipe(
       catchError(this.handleError<Message>("createFreeGame"))
     );
 
   }
 
   public deleteSimpleGame(game: IGame): Observable<{}> {
-    // tslint:disable-next-line:typedef
-    const httpOptions = {
+    const url: string = this.SIMPLE_URL + "?id=" + game.id;
+
+    return this.http.delete(url, {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
-    };
-    const url: string = this.SIMPLE_URL + "?id=" + game.id;
-
-    return this.http.delete(url, httpOptions);
+    });
   }
 
   public deleteFreeGame(game: IGame3D): Observable<{}> {
-    // tslint:disable-next-line:typedef
-    const httpOptions = {
+    const url: string = this.FREE_URL + "?id=" + game.id;
+
+    return this.http.delete(url, {
       headers: new HttpHeaders({
         "Content-Type": "application/json"
       })
-    };
-    const url: string = this.FREE_URL + "?id=" + game.id;
-
-    return this.http.delete(url, httpOptions);
+    });
   }
 }

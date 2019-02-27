@@ -67,7 +67,7 @@ describe("ListViewComponent", () => {
   });
 
   it("should route to game Play with the proper iD", () => {
-    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate");
+    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
     const game: IGame = {
       id: "",
       name: "string",

@@ -76,7 +76,7 @@ describe("GameService", () => {
             (response: IGame3D) => {
                 expect(response).toEqual(expectedGame);
             }
-        );
+        ).catch((error: Error) => fail(error));
     });
 
     it("Creating simple games should send a post", () => {

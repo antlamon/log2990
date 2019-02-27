@@ -15,12 +15,13 @@
           <p id="typeObj">Type d'objets</p>
         </div>
         <select class="rightColumn" (change)="changeType($event.target.value)">
-          <option value={{type1}}> formes géométriques</option>
-          <option value={{type2}}>thématique </option>
+          <option value={{types[0]}}> formes géométriques</option>
+          <option value={{types[1]}}>thématique </option>
         </select>
         <div>
           <div *ngIf = "this.fileValidator.isValidObjNb(this.noObj)"><p id="noObj">Quantité d'objets</p></div>
           <div *ngIf = "!(this.fileValidator.isValidObjNb(this.noObj))" style="color:red"><p id="noObj">Quantité d'objets</p></div>
+          <p class = "p2" >Entre {{this.minObj}} et {{this.maxObj}}</p>
         </div>
         <div class="rightColumn">
           <input [(ngModel)]="noObj" placeholder="Nombre d'objets" name="noOBJ"/>
@@ -30,9 +31,9 @@
           <div *ngIf = "!(this.hasModifications())" style="color:red"><p id="typeModif">Type de modifications</p></div>
         </div>
         <div class="rightColumn">
-          <input type="checkbox" id="add" value="add" (click)="changeModif(0)"> Ajout<br>
-          <input type="checkbox" id="delete" value="delete" (click)="changeModif(1)"> Supression <br>
-          <input type="checkbox" id="colorChange" value="colorChange" (click)="changeModif(2)"> Changement de couleur <br>
+          <input type="checkbox" [(ngModel)]="addCheckbox" [ngModelOptions]="{standalone: true}" id="add" > Ajout<br>
+          <input type="checkbox" [(ngModel)]="deleteCheckbox" [ngModelOptions]="{standalone: true}"  id="delete" > Supression <br>
+          <input type="checkbox" [(ngModel)]="colorCheckbox" [ngModelOptions]="{standalone: true}" id="colorChange"> Changement de couleur <br>
         </div>
       </div>
     </form>

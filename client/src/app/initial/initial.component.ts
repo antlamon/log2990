@@ -27,7 +27,7 @@ export class InitialComponent {
           this.errors.push(message.body);
         }
         if (message.title === BASE_ID) {
-          this.router.navigate(["games"]);
+          this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
         }
       });
     } else {

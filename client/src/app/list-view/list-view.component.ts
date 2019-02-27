@@ -36,6 +36,7 @@ export class ListViewComponent implements OnInit {
   }
 
   public deleteSimpleGames(game: IGame): void {
+    // tslint:disable-next-line:no-suspicious-comment
     // TODO: warning delete box "are you sure? yes/no"
     const index: number = this.simpleGames.findIndex((x: IGame) => x === game);
     if (index !== -1) {
@@ -50,6 +51,7 @@ export class ListViewComponent implements OnInit {
   }
 
   public deleteFreeGames(game: IGame3D): void {
+    // tslint:disable-next-line:no-suspicious-comment
     // TODO: warning delete box "are you sure? yes/no"
     const index: number = this.freeGames.findIndex((x: IGame3D) => x === game);
     if (index !== -1) {
@@ -59,12 +61,12 @@ export class ListViewComponent implements OnInit {
   }
 
   public playSelectedSimpleGame(game: IGame): void {
-    this.router.navigate(["simple-game/" + game.id]);
+    this.router.navigate(["simple-game/" + game.id]).catch((error: Error) => console.error(error.message));
 
   }
 
   public playSelectedFreeGame(game: IGame3D): void {
-    this.router.navigate(["free-game/" + game.id]);
+    this.router.navigate(["free-game/" + game.id]).catch((error: Error) => console.error(error.message));
   }
 
 }

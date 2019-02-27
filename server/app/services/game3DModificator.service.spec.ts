@@ -126,7 +126,7 @@ describe("Game3D Modificator service", () => {
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
         it("Should return an array with 7 thematic modified objects", async () => {
-            // A modifier avec les textures
+            // to modify with texture next sprint
 
             const newObj: IScene3D = service.createModifScene(mockScene, THEMATIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
@@ -143,9 +143,9 @@ describe("Game3D Modificator service", () => {
         it("Should return false, not enough constrast", async () => {
             expect(service.isEnoughContrast(0x000000, 0x000001)).to.eql(false);
         });
-        it("Should return false, not enough constrast", async () => {
+        it("Should return true, enough contrast", async () => {
             const color: number = 0x00FF00;
-            expect(service.isEnoughContrast(color, 0x000001)).to.eql(false);
+            expect(service.isEnoughContrast(color, 0x000001)).to.eql(true);
         });
     });
 });

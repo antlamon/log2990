@@ -93,3 +93,6 @@ input:focus{
     flex-direction: column;
     color: red;
 }
+.p2 {
+    font-size:10px;
+}

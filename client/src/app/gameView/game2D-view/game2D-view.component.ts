@@ -14,14 +14,15 @@ import { SocketService } from "../../services/socket.service";
 })
 export class Game2DViewComponent implements OnInit, OnDestroy {
 
-    public simpleGame: IFullGame;
-    public differencesFound: number;
+    private simpleGame: IFullGame;
+    private differencesFound: number;
     public disableClick: string;
     public blockedCursor: string;
 
     private readonly ONE_SEC_IN_MS: number = 1000;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
+    private victorySound: HTMLAudioElement;
 
     public constructor(
         private gameService: GameService,
@@ -36,6 +37,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.blockedCursor = "";
         this.correctSound = new Audio("assets/correct.wav");
         this.errorSound = new Audio("assets/error.wav");
+        this.victorySound = new Audio("assets/Ta-Da.wav");
     }
 
     public ngOnInit(): void {
@@ -74,7 +76,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     public handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
-            this.errorSound.play();
+            this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.disableClick = "disable-click";
             this.blockedCursor = "cursor-not-allowed";
             setTimeout(
@@ -87,7 +89,10 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         } else {
             this.simpleGame.modifiedImage = update.newImage;
             this.differencesFound = update.differencesFound;
-            this.correctSound.play();
+            this.correctSound.play().catch((error: Error) => console.error(error.message));
+            if (this.differencesFound === 0) {
+               this.victorySound.play().catch((error: Error) => console.error(error.message));
+            }
         }
     }
 

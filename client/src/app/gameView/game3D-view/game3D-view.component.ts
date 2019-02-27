@@ -17,7 +17,7 @@ export class Game3DViewComponent implements OnInit {
   @ViewChild("modifiedContainer")
   private modifiedContainerRef: ElementRef;
 
-  public game3D: IGame3D;
+  private game3D: IGame3D;
 
   public constructor(
     private gameService: GameService,

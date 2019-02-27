@@ -39,7 +39,7 @@ describe("InitialComponent", () => {
         return of({title: BASE_ID, body: "test-message"});
       });
       // tslint:disable-next-line:no-any
-      const navigateSpy: jasmine.Spy = spyOn((component as any).router, "navigate");
+      const navigateSpy: jasmine.Spy = spyOn((component as any).router, "navigate").and.returnValue(Promise.resolve());
       component.connect("test123");
       expect(navigateSpy).toHaveBeenCalledWith(["games"]);
     });
@@ -49,7 +49,7 @@ describe("InitialComponent", () => {
         return of({title: ERROR_ID, body: "test-message"});
       });
       // tslint:disable-next-line:no-any
-      const navigateSpy: jasmine.Spy = spyOn((component as any).router, "navigate");
+      const navigateSpy: jasmine.Spy = spyOn((component as any).router, "navigate").and.returnValue(Promise.resolve());
       component.connect("test123");
       expect(navigateSpy).toHaveBeenCalledTimes(0);
     });

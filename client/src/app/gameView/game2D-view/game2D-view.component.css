@@ -2,7 +2,7 @@
 
 .chrono {
     position: absolute;
-    top: 170px;
+    top: 10%;
     right: 185px;
     font-size: 25px;
     font-weight: bold;
@@ -10,7 +10,7 @@
 
 .compteur {
     position: absolute;
-    top: 143px;
+    top: 5%;
     right: 165px;
     font-size: 25px;
     font-weight: bold;
@@ -20,9 +20,9 @@
     display: grid;
     position: absolute;
     width: 395px;
-    height: 540px;
-    top: 210px;
-    right: 20px;
+    height: 100px;
+    top: 20px;
+    right: 40%;
     background-color: white;
     outline: 5px solid black;
 }
@@ -34,10 +34,6 @@
     font-size: 25px;
     font-weight: bold;
 }
-/* 
-.messagesBoxTitle > p {
-    padding-left: 5px;
-} */
 
 .gameTitle{
     background-color: white;
