@@ -18,6 +18,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private differencesFound: number;
     public disableClick: string;
     public blockedCursor: string;
+    private readonly NB_MAX_DIFF: number = 7;
 
     private readonly ONE_SEC_IN_MS: number = 1000;
     private correctSound: HTMLAudioElement;
@@ -89,9 +90,10 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         } else {
             this.simpleGame.modifiedImage = update.newImage;
             this.differencesFound = update.differencesFound;
-            this.correctSound.play().catch((error: Error) => console.error(error.message));
-            if (this.differencesFound === 0) {
-               this.victorySound.play().catch((error: Error) => console.error(error.message));
+            if (this.differencesFound === this.NB_MAX_DIFF) {
+                this.victorySound.play().catch((error: Error) => console.error(error.message));
+            } else {
+                this.correctSound.play().catch((error: Error) => console.error(error.message));
             }
         }
     }
