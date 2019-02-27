@@ -11,37 +11,6 @@ const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 
 describe("Connexion service", () => {
-    describe("Test for the function isCorrectLength", () => {
-        it("A empty string should return false", () => {
-            expect(ConnexionService.isCorrectLength("")).to.equal(false);
-        });
-        it("A string under " + ConnexionService.MIN_USERNAME_LENGTH + " char should return false", () => {
-            expect(ConnexionService.isCorrectLength("aa")).to.equal(false);
-        });
-        it("A string above " + ConnexionService.MAX_USERNAME_LENGTH + " char should return false", () => {
-            expect(ConnexionService.isCorrectLength("aaaaaaaaaaa")).to.equal(false);
-        });
-        it( `A string between ${ConnexionService.MIN_USERNAME_LENGTH} and ${ConnexionService.MAX_USERNAME_LENGTH} should return true`,
-            () => {
-                expect(ConnexionService.isCorrectLength("aaaaa")).to.equal(true);
-            });
-    });
-
-    describe("Test for the function containAlphaNumerics", () => {
-        it("A string containing only regular char should return true", () => {
-            expect(ConnexionService.containOnlyAlphaNumeric("abc123")).to.equal(true);
-        });
-        it("An empty string should return false", () => {
-            expect(ConnexionService.containOnlyAlphaNumeric("")).to.equal(false);
-        });
-        it("A string containing @ should return false", () => {
-            expect(ConnexionService.containOnlyAlphaNumeric("@")).to.equal(false);
-        });
-        it("A string containing both alpha numerics char and non alpha numerics char should return false", () => {
-            expect(ConnexionService.containOnlyAlphaNumeric("abc123@")).to.equal(false);
-        });
-    });
-
     describe("Test for the function addName", () => {
         let service: ConnexionService;
         let sandbox: ChaiSpies.Sandbox;

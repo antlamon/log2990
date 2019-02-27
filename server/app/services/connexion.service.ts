@@ -9,10 +9,10 @@ export class ConnexionService {
     public static readonly MIN_USERNAME_LENGTH: number = 3;
     public static readonly MAX_USERNAME_LENGTH: number = 10;
 
-    public static isCorrectLength(nom: string): boolean {
+    private static isCorrectLength(nom: string): boolean {
         return nom.length <= this.MAX_USERNAME_LENGTH && nom.length >= this.MIN_USERNAME_LENGTH;
     }
-    public static containOnlyAlphaNumeric(nom: string): boolean {
+    private static containOnlyAlphaNumeric(nom: string): boolean {
         const tryRegex: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
 
         return tryRegex.test(nom);
@@ -22,7 +22,7 @@ export class ConnexionService {
 
     public async addName(newName: string, id: string): Promise<Message> {
         if (!ConnexionService.isCorrectLength(newName)) {
-            return {title: ERROR_ID, body: `Le nom n'est pas de la bonne taile entre
+            return {title: ERROR_ID, body: `Le nom n'est pas de la bonne taille entre
             ${ConnexionService.MIN_USERNAME_LENGTH} et ${ConnexionService.MAX_USERNAME_LENGTH}`};
         }
         if (!ConnexionService.containOnlyAlphaNumeric(newName)) {

@@ -16,10 +16,9 @@ import { Game3DGeneratorService } from "./game3DGenerator.service";
 export class GameListService {
     public static readonly MIN_TIME_TOP_3: number = 15;
     public static readonly MAX_TIME_TOP_3: number = 30;
-    public static readonly SIMPLE_COLLECTION: string = "simple-games";
-    public static readonly FREE_COLLECTION: string = "free-games";
-    public static readonly IMAGES_COLLECTION: string = "images";
-    public static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
+    private static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
+    private readonly SIMPLE_COLLECTION: string = "simple-games";
+    private readonly FREE_COLLECTION: string = "free-games";
     private _simpleCollection: Collection;
     private _freeCollection: Collection;
 
@@ -119,14 +118,14 @@ export class GameListService {
     }
     private get simpleCollection(): Collection {
         if (this._simpleCollection == null) {
-            this._simpleCollection = this.databaseService.db.collection(GameListService.SIMPLE_COLLECTION);
+            this._simpleCollection = this.databaseService.db.collection(this.SIMPLE_COLLECTION);
         }
 
         return this._simpleCollection;
     }
     private get freeCollection(): Collection {
         if (this._freeCollection == null) {
-            this._freeCollection = this.databaseService.db.collection(GameListService.FREE_COLLECTION);
+            this._freeCollection = this.databaseService.db.collection(this.FREE_COLLECTION);
         }
 
         return this._freeCollection;

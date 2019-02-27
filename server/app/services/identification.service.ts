@@ -21,34 +21,28 @@ export class IdentificationService {
             const point: Point = neighbours.pop() as Point;
             visited[point.x + point.y * this.originalImage.width] = true;
             this.modifiedImage.pixels[point.y][point.x] = this.originalImage.pixels[point.y][point.x];
-            const left: Point = { x: point.x - 1, y: point.y };
-            const right: Point = { x: point.x + 1, y: point.y };
-            const up: Point = { x: point.x, y: point.y + 1 };
-            const down: Point = { x: point.x, y: point.y - 1 };
-            if (left.x >= 0 && this.isBlackPixel(left) && !this.isVisited(visited, left)) {
-                neighbours.push(left);
-            }
-            if (right.x < this.originalImage.width && this.isBlackPixel(right) && !this.isVisited(visited, right)) {
-                neighbours.push(right);
-            }
-            if (down.y >= 0 && this.isBlackPixel(down) && !this.isVisited(visited, down)) {
-                neighbours.push(down);
-            }
-            if (up.y < this.originalImage.height && this.isBlackPixel(up) && !this.isVisited(visited, up)) {
-                neighbours.push(up);
+            for (let i: number = point.x - 1; i <= point.x + 1; ++i ) {
+                for (let j: number = point.y - 1; j <= point.y + 1; ++j) {
+                        if (this.isInBounds(i, j) && this.isBlackPixel(i, j) && !this.isVisited(visited, i, j)) {
+                            neighbours.push({x: i, y: j});
+                        }
+                }
             }
         }
     }
-
-    private isVisited(visited: boolean[], point: Point): boolean {
-        return visited[point.x + point.y * this.originalImage.width];
+    private isInBounds(x: number, y: number): boolean {
+        return x >= 0 && y >= 0 && x < this.originalImage.width && y < this.originalImage.height;
+    }
+    private isVisited(visited: boolean[], x: number, y: number): boolean {
+        return visited[x + y * this.originalImage.width];
     }
 
     private validateDifference(point: Point): boolean {
-        return this.isBlackPixel(point) && this.originalImage.pixels[point.y][point.x] !== this.modifiedImage.pixels[point.y][point.x];
+        return this.isBlackPixel(point.x, point.y) &&
+                this.originalImage.pixels[point.y][point.x] !== this.modifiedImage.pixels[point.y][point.x];
     }
 
-    private isBlackPixel(point: Point): boolean {
-        return this.differencesImage.pixels[point.y][point.x].blue === 0;
+    private isBlackPixel(x: number, y: number): boolean {
+        return this.differencesImage.pixels[y][x].blue === 0;
     }
 }
