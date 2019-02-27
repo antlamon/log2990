@@ -13,27 +13,30 @@ import { Message, ERROR_ID } from "../../../../../common/communication/message";
 })
 export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
 
-  public readonly NB_MODIFICATION: number = 3;
   public gameName: string;
   private noObj: string;
   @Input() public id: string;
   private types: string[];
   private maxObj: number = NO_MAX_OBJECTS;
   private minObj: number = NO_MIN_OBJECTS;
-
+  private addCheckbox: boolean;
+  private deleteCheckbox: boolean;
+  private colorCheckbox: boolean;
   private modalRef: FreeGeneratorComponent;
   private element: HTMLElement;
-  private modification: boolean[];
   private selectedType: string;
   private errorsMessages: string[];
+
   public constructor(
     private gameService: GameService,
     private fileValidator: FileValidatorService,
     public el: ElementRef, private modal: ModalService) {
       this.element = el.nativeElement;
+      this.addCheckbox = false;
+      this.deleteCheckbox = false;
+      this.colorCheckbox = false;
       this.gameName = "";
       this.noObj = "";
-      this.modification = new Array(this.NB_MODIFICATION).fill(false);
       this.types = [GEOMETRIC_TYPE_NAME, THEMATIC_TYPE_NAME];
       this.selectedType = this.types[0];
       this.errorsMessages = [];
@@ -67,7 +70,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
         name: this.gameName,
         objectType: this.selectedType,
         objectQty: +this.noObj,
-        modifications: {add: this.modification[0], delete: this.modification[1], color: this.modification[this.NB_MODIFICATION - 1]}
+        modifications: {add: this.addCheckbox, delete: this.deleteCheckbox, color: this.colorCheckbox}
       };
       this.gameService.createFreeGame(newGame).subscribe((message: Message) => {
         if (message.title === ERROR_ID) {
@@ -96,13 +99,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   }
 
   public hasModifications(): boolean {
-    return this.modification.includes(true);
+    return this.colorCheckbox || this.addCheckbox || this.deleteCheckbox;
 
-  }
-  public changeModif( nModif: number): void {
-    if (nModif >= 0 && nModif < this.NB_MODIFICATION) {
-      this.modification[nModif] = !this.modification[nModif];
-    }
   }
 
   public changeType(newType: string): void {
@@ -122,5 +120,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.noObj = "";
     this.gameName = "";
     this.errorsMessages = [];
+    this.addCheckbox = false;
+    this.deleteCheckbox = false;
+    this.colorCheckbox = false;
   }
 }

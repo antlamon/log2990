@@ -50,21 +50,17 @@ describe("FreeGeneratorComponent", () => {
     it("hasModifications should return false if no modification selected", () => {
       expect(component.hasModifications()).toEqual(false);
     });
-    it("hasModifications should return true if a modification is selected", () => {
-      component["modification"][0] = true;
+    it("hasModifications should return true if deletecheckBox is checked", () => {
+      component["deleteCheckbox"] = true;
       expect(component.hasModifications()).toEqual(true);
     });
-  });
-  describe("Test for the function changeModif", () => {
-    it("changeModif should not modifiy an modification if index out of bounds", () => {
-      const oldModi: boolean[] = component["modification"];
-      component.changeModif(-1);
-      component.changeModif(component.NB_MODIFICATION);
-      expect(oldModi).toEqual(component["modification"]);
+    it("hasModifications should return true if addcheckBox is checked", () => {
+      component["addCheckbox"] = true;
+      expect(component.hasModifications()).toEqual(true);
     });
-    it("changeModif should modify the slectd modification if index is valid", () => {
-      component.changeModif(0);
-      expect(component["modification"][0]).toEqual(true);
+    it("hasModifications should return true if colorcheckBox is checked", () => {
+      component["colorCheckbox"] = true;
+      expect(component.hasModifications()).toEqual(true);
     });
   });
   describe("Test for the function changetype", () => {
