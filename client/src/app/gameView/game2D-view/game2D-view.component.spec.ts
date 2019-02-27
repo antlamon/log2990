@@ -40,7 +40,7 @@ describe("Game2DViewComponent", () => {
         fixture = TestBed.createComponent(Game2DViewComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        component["simpleGame"] = mockedFullGame;
+        component.simpleGame = mockedFullGame;
     });
 
     it("should create", () => {
@@ -70,7 +70,7 @@ describe("Game2DViewComponent", () => {
         };
         component["handleCheckDifference"](update);
         expect(component["simpleGame"].modifiedImage).toEqual(update.newImage);
-        expect(component["differencesFound"]).toEqual(update.differencesFound);
+        expect(component.differencesFound).toEqual(update.differencesFound);
         expect(spy).toHaveBeenCalled();
     });
 
