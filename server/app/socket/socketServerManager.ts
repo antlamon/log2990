@@ -33,8 +33,8 @@ export class SocketServerManager {
         });
     }
 
-    public emitEvent(event: string): void {
-        this.socketServer.emit(event);
+    public emitEvent<T>(event: string, data?: T): void {
+        this.socketServer.emit(event, data);
     }
 
     private async handleNewGameRoom(socket: Socket, newGameMessage: NewGameMessage): Promise<void> {

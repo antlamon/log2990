@@ -35,7 +35,7 @@ describe("AdminMenuComponent", () => {
         FormsModule,
         HttpClientModule
       ],
-      providers: [ModalService, FreeGeneratorComponent]
+      providers: [ModalService]
     })
     .compileComponents().then(() => { }, (error: Error) => {});
   }));
