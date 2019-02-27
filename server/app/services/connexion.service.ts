@@ -2,6 +2,7 @@ import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { TYPES } from "../types";
+import { FormValidatorService } from "./formValidator.service";
 import { UsersManager } from "./users.service";
 
 @injectable()
@@ -9,23 +10,15 @@ export class ConnexionService {
     public static readonly MIN_USERNAME_LENGTH: number = 3;
     public static readonly MAX_USERNAME_LENGTH: number = 10;
 
-    private static isCorrectLength(nom: string): boolean {
-        return nom.length <= this.MAX_USERNAME_LENGTH && nom.length >= this.MIN_USERNAME_LENGTH;
-    }
-    private static containOnlyAlphaNumeric(nom: string): boolean {
-        const tryRegex: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
-
-        return tryRegex.test(nom);
-    }
-
-    public constructor(@inject(TYPES.UserManager) private userManager: UsersManager) {}
+    public constructor(@inject(TYPES.UserManager) private userManager: UsersManager,
+                       @inject(TYPES.FormValidatorService) private formValidator: FormValidatorService) {}
 
     public async addName(newName: string, id: string): Promise<Message> {
-        if (!ConnexionService.isCorrectLength(newName)) {
-            return {title: ERROR_ID, body: `Le nom n'est pas de la bonne taille entre
+        if (!this.formValidator.isCorrectLength(newName, ConnexionService.MIN_USERNAME_LENGTH, ConnexionService.MAX_USERNAME_LENGTH )) {
+            return {title: ERROR_ID, body: `Le nom n'est pas de la bonne taile entre
             ${ConnexionService.MIN_USERNAME_LENGTH} et ${ConnexionService.MAX_USERNAME_LENGTH}`};
         }
-        if (!ConnexionService.containOnlyAlphaNumeric(newName)) {
+        if (!this.formValidator.containOnlyAlphaNumeric(newName)) {
             return {title: ERROR_ID, body: "Le nom doit contenir seulement des charactères alphanumériques"};
         }
 

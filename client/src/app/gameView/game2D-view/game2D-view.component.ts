@@ -14,8 +14,8 @@ import { SocketService } from "../../services/socket.service";
 })
 export class Game2DViewComponent implements OnInit, OnDestroy {
 
-    private simpleGame: IFullGame;
-    private differencesFound: number;
+    public simpleGame: IFullGame;
+    public differencesFound: number;
     public disableClick: string;
     public blockedCursor: string;
     private readonly NB_MAX_DIFF: number = 7;
@@ -47,7 +47,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
-        this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
+        if (this.simpleGame) {
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
+        }
     }
 
     private getId(): string {

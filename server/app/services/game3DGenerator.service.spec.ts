@@ -10,32 +10,32 @@ import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
 
 const mockBadGameType: IGame3DForm = {
-    name: "heres my new game",
+    name: "newGame",
     objectType: "fake bad type",
     objectQty: 13,
     modifications: {add: true, delete: true, color: true},
 };
 
 const mockGeometric: IGame3DForm = {
-    name: "heres my new game",
+    name: "newGame",
     objectType: GEOMETRIC_TYPE_NAME,
     objectQty: 13,
     modifications: {add: true, delete: true, color: true},
 };
 const mockThematic: IGame3DForm = {
-    name: "heres my new game",
+    name: "newGame",
     objectType: THEMATIC_TYPE_NAME,
     objectQty: 13,
     modifications: {add: true, delete: true, color: true},
 };
 const mockBadNb: IGame3DForm = {
-    name: "heres my new game",
+    name: "newGame",
     objectType: THEMATIC_TYPE_NAME,
     objectQty: 3,
     modifications: {add: true, delete: true, color: true},
 };
 const mockBadModifs: IGame3DForm = {
-    name: "heres my new game",
+    name: "newGame",
     objectType: THEMATIC_TYPE_NAME,
     objectQty: 13,
     modifications: {add: false, delete: false, color: false},
