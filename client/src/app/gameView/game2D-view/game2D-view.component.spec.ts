@@ -32,7 +32,6 @@ describe("Game2DViewComponent", () => {
             providers: [ IndexService, AppRoutingModule ],
         })
             .compileComponents().then(() => { }, (error: Error) => {
-                console.error(error);
             });
     }));
 

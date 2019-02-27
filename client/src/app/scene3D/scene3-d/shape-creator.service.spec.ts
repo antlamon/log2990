@@ -19,7 +19,7 @@ describe("ShapeCreatorService", () => {
       declarations: [ ],
       providers: [ ShapeCreatorService ],
     })
-    .compileComponents().catch();
+    .compileComponents().then(() => { }, (error: Error) => {});
   }));
   it("should be created", inject([ShapeCreatorService], (service: ShapeCreatorService) => {
     expect(service).toBeTruthy();

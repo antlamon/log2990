@@ -45,9 +45,11 @@ export class Game3DViewComponent implements OnInit {
     public get3DGame(): void {
         this.gameService.get3DGame(this.getId())
             .then((response: IGame3D) => {
+                console.log("allo");
                 this.game3D = response;
                 this.render.initialize(this.originalContainer, this.game3D.originalScene);
                 this.render.initialize(this.modifiedContainer, this.game3D.modifiedScene);
+                console.log("allo");
             })
             .catch(() => "get3DGame");
     }
