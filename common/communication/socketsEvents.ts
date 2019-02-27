@@ -3,4 +3,5 @@ export class SocketsEvents {
     public static readonly UPDATE_FREE_GAMES = "update-free-games";
     public static readonly CHECK_DIFFERENCE = "check-difference";
     public static readonly CREATE_GAME_ROOM = "create-game-room";
+    public static readonly DELETE_GAME_ROOM = "delete-game-room";
 }
