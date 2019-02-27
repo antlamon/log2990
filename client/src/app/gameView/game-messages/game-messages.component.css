@@ -1,0 +1,29 @@
+.messagesBox{
+    display: grid;
+    position: absolute;
+    width: 800px;
+    height: 200px;
+    top: 770px;
+    right: 560px;
+    background-color: white;
+    outline: 5px solid black;
+}
+
+.messagesBoxTitle {
+    background-color: #B1B7D4; 
+    height: 30px;
+    outline: 5px solid black;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.messages-container {
+    display: flex;
+    flex-direction: column-reverse;
+    
+}
+
+.mock-message {
+
+
+}
