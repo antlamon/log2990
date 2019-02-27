@@ -5,7 +5,8 @@ import { RouterModule } from "@angular/router";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 import { ShapeCreatorService } from "src/app/scene3D/scene3-d/shape-creator.service";
 import { IObjet3D } from "../../../../../common/models/objet3D";
-import { IScene3D } from "../../../../../common/models/game3D";
+import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
+import { ITop3 } from "../../../../../common/models/top3";
 const mockObjects: IObjet3D[] = [];
 const mockOkScene: IScene3D = {
   modified: false,
@@ -13,6 +14,16 @@ const mockOkScene: IScene3D = {
   objects: mockObjects,
   backColor: 0xFF0F0F,
 };
+
+const mockGame3D: IGame3D = {
+    name: "mock3DName",
+    id: "dskjahd",
+    originalScene: mockOkScene,
+    modifiedScene: mockOkScene,
+    solo: { } as ITop3,
+    multi: { } as ITop3,
+  };
+
 const nbRenderCall: number = 2;
 const delay: number = 10;
 describe("Game3DViewComponent", () => {
@@ -34,7 +45,7 @@ describe("Game3DViewComponent", () => {
         fixture = TestBed.createComponent(Game3DViewComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        spyOn(component["gameService"], "get3DGame").and.returnValue(Promise.resolve(mockOkScene));
+        spyOn(component["gameService"], "get3DGame").and.returnValue(Promise.resolve(mockGame3D));
     });
 
     it("should create", () => {
