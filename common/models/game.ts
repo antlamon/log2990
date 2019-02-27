@@ -1,7 +1,7 @@
 import { ITop3 } from "./top3";
 
 export interface IGame {
-    id: string,
+    id: string;
     name: string;
     originalImage: string;
     solo: ITop3;
@@ -22,5 +22,5 @@ export interface IGame3DForm {
     name: string;
     objectType: string;
     objectQty: number;
-    modifications: {add: boolean, delete: boolean, color: boolean}; 
+    modifications: {add: boolean, delete: boolean, color: boolean};
 }

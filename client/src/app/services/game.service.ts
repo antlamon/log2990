@@ -46,7 +46,7 @@ export class GameService {
     return this.http.get<IGame3D[]>(this.FREE_URL);
   }
 
-  public get3DGame(id: string): Promise<IGame3D> {
+  public async get3DGame(id: string): Promise<IGame3D> {
     const url: string = this.FREEONE_URL + "?id=" + id;
     (console as Console).log(url);
 

@@ -59,12 +59,12 @@ export class ListViewComponent implements OnInit {
   }
 
   public playSelectedSimpleGame(game: IGame): void {
-    this.router.navigate(["simple-game/" + game.id]);
+    this.router.navigate(["simple-game/" + game.id]).catch((error: Error) => console.error(error.message));
 
   }
 
   public playSelectedFreeGame(game: IGame3D): void {
-    this.router.navigate(["free-game/" + game.id]);
+    this.router.navigate(["free-game/" + game.id]).catch((error: Error) => console.error(error.message));
   }
 
 }

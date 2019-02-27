@@ -15,12 +15,13 @@
           <p id="typeObj">Type d'objets</p>
         </div>
         <select class="rightColumn" (change)="changeType($event.target.value)">
-          <option value={{type1}}> formes géométriques</option>
-          <option value={{type2}}>thématique </option>
+          <option value={{types[0]}}> formes géométriques</option>
+          <option value={{types[1]}}>thématique </option>
         </select>
         <div>
           <div *ngIf = "this.fileValidator.isValidObjNb(this.noObj)"><p id="noObj">Quantité d'objets</p></div>
           <div *ngIf = "!(this.fileValidator.isValidObjNb(this.noObj))" style="color:red"><p id="noObj">Quantité d'objets</p></div>
+          <p class = "p2" >Entre {{this.minObj}} et {{this.maxObj}}</p>
         </div>
         <div class="rightColumn">
           <input [(ngModel)]="noObj" placeholder="Nombre d'objets" name="noOBJ"/>
