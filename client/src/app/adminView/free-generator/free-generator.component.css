@@ -6,7 +6,7 @@
     margin-top: -275px; /* Negative half of height. */
     margin-left: -250px; /* Negative half of width. */
     width: 500px;
-    height: 575px;
+    height: 630px;
     display: flex;
     flex-direction: column;
     background: #f4f7f8;
