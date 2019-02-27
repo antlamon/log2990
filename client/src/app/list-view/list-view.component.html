@@ -1,140 +1,153 @@
-<div class = "whole-page">
-<div class="page-title">
+<div class="whole-page">
+  <div class="page-title">
     <h1>
-        JEUX
+      JEUX
     </h1>
-</div>
-<div class="gameList">
+  </div>
+  <div class="gameList">
 
     <div class="game-card-list">
-        <h2>2D</h2>
+      <h2>2D</h2>
+      <div *ngIf="simpleGames; else spinny">
         <div *ngFor="let game of simpleGames">
-            <div class="game-card">
-                <div class="game-card-title">{{game.name}}</div>
-                <div class="bottom-card">
-                    <div class="game-card-left-content">
-                        <div class="game-card-img-container"><img class="game-card-img" src={{game.originalImage}} alt=""></div>
-                        <div class="game-card-buttons" *ngIf="!isAdminMode">
-                            <div class="game-card-button-container"><button (click)="playSelectedSimpleGame(game)">JOUER</button></div>
-                            <div class="game-card-button-container"><button>CRÉER</button></div>
-                        </div>
-                        <div class="game-card-buttons" *ngIf="isAdminMode">
-                            <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
-                            <div class="game-card-button-container"><button (click)="deleteSimpleGames(game)">SUPPRIMER</button></div>
-                        </div>
-                    </div>
-                    <div class="game-card-right-content">
-                        <div class="top-container">
-                            <div class="top-title">TOP SOLO</div>
-                            <div class="top-score">
-                                <div class="number-column">
-                                    <div class="score-position">1</div>
-                                    <div class="score-position">2</div>
-                                    <div class="score-position">3</div>
-                                </div>
-                                <div class="name-column">
-                                    <div class="name">{{game.solo.first.name}}</div>
-                                    <div class="name">{{game.solo.second.name}}</div>
-                                    <div class="name">{{game.solo.third.name}}</div>
-                                </div>
-                                <div class="score-column">
-                                    <div class="scores">{{game.solo.first.score}}</div>
-                                    <div class="scores">{{game.solo.second.score}}</div>
-                                    <div class="scores">{{game.solo.third.score}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="top-container">
-                            <div class="top-title">TOP 1V1</div>
-                            <div class="top-score">
-                                <div class="number-column">
-                                    <div class="score-position">1</div>
-                                    <div class="score-position">2</div>
-                                    <div class="score-position">3</div>
-                                </div>
-                                <div class="name-column">
-                                    <div class="name">{{game.solo.first.name}}</div>
-                                    <div class="name">{{game.solo.second.name}}</div>
-                                    <div class="name">{{game.solo.third.name}}</div>
-                                </div>
-                                <div class="score-column">
-                                    <div class="scores">{{game.solo.first.score}}</div>
-                                    <div class="scores">{{game.solo.second.score}}</div>
-                                    <div class="scores">{{game.solo.third.score}}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          <div class="game-card">
+            <div class="game-card-title">{{game.name}}</div>
+            <div class="bottom-card">
+              <div class="game-card-left-content">
+                <div class="game-card-img-container"><img class="game-card-img" src={{game.originalImage}} alt=""></div>
+                <div class="game-card-buttons" *ngIf="!isAdminMode">
+                  <div class="game-card-button-container"><button (click)="playSelectedSimpleGame(game)">JOUER</button>
+                  </div>
+                  <div class="game-card-button-container"><button>CRÉER</button></div>
                 </div>
+                <div class="game-card-buttons" *ngIf="isAdminMode">
+                  <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
+                  <div class="game-card-button-container"><button (click)="deleteSimpleGames(game)">SUPPRIMER</button>
+                  </div>
+                </div>
+              </div>
+              <div class="game-card-right-content">
+                <div class="top-container">
+                  <div class="top-title">TOP SOLO</div>
+                  <div class="top-score">
+                    <div class="number-column">
+                      <div class="score-position">1</div>
+                      <div class="score-position">2</div>
+                      <div class="score-position">3</div>
+                    </div>
+                    <div class="name-column">
+                      <div class="name">{{game.solo.first.name}}</div>
+                      <div class="name">{{game.solo.second.name}}</div>
+                      <div class="name">{{game.solo.third.name}}</div>
+                    </div>
+                    <div class="score-column">
+                      <div class="scores">{{game.solo.first.score}}</div>
+                      <div class="scores">{{game.solo.second.score}}</div>
+                      <div class="scores">{{game.solo.third.score}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="top-container">
+                  <div class="top-title">TOP 1V1</div>
+                  <div class="top-score">
+                    <div class="number-column">
+                      <div class="score-position">1</div>
+                      <div class="score-position">2</div>
+                      <div class="score-position">3</div>
+                    </div>
+                    <div class="name-column">
+                      <div class="name">{{game.solo.first.name}}</div>
+                      <div class="name">{{game.solo.second.name}}</div>
+                      <div class="name">{{game.solo.third.name}}</div>
+                    </div>
+                    <div class="score-column">
+                      <div class="scores">{{game.solo.first.score}}</div>
+                      <div class="scores">{{game.solo.second.score}}</div>
+                      <div class="scores">{{game.solo.third.score}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <div class="game-card-list">
-        <h2>3D</h2>
+      <h2>3D</h2>
+      <div *ngIf="freeGames; else spinny">
         <div *ngFor="let game of freeGames">
-            <div class="game-card">
-                <div class="game-card-title">{{game.name}}</div>
-                <div class="bottom-card">
-                    <div class="game-card-left-content">
-                        <div class="game-card-img-container">
-                            <app-scene3-d-component class="game-card-img" [game]="game.originalScene" #scene
-                                [isCardMode]="true"></app-scene3-d-component>
-                        </div>
-                        <div class="game-card-buttons" *ngIf="!isAdminMode">
-                            <div class="game-card-button-container"><button (click)="playSelectedFreeGame(game)">JOUER</button></div>
-                            <div class="game-card-button-container"><button>CRÉER</button></div>
-                        </div>
-                        <div class="game-card-buttons" *ngIf="isAdminMode">
-                            <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
-                            <div class="game-card-button-container"><button (click)="deleteFreeGames(game)">SUPPRIMER</button></div>
-                        </div>
-                    </div>
-                    <div class="game-card-right-content">
-                        <div class="top-container">
-                            <div class="top-title">TOP SOLO</div>
-                            <div class="top-score">
-                                <div class="number-column">
-                                    <div class="score-position">1</div>
-                                    <div class="score-position">2</div>
-                                    <div class="score-position">3</div>
-                                </div>
-                                <div class="name-column">
-                                    <div class="name">{{game.solo.first.name}}</div>
-                                    <div class="name">{{game.solo.second.name}}</div>
-                                    <div class="name">{{game.solo.third.name}}</div>
-                                </div>
-                                <div class="score-column">
-                                    <div class="scores">{{game.solo.first.score}}</div>
-                                    <div class="scores">{{game.solo.second.score}}</div>
-                                    <div class="scores">{{game.solo.third.score}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="top-container">
-                            <div class="top-title">TOP 1V1</div>
-                            <div class="top-score">
-                                <div class="number-column">
-                                    <div class="score-position">1</div>
-                                    <div class="score-position">2</div>
-                                    <div class="score-position">3</div>
-                                </div>
-                                <div class="name-column">
-                                    <div class="name">{{game.solo.first.name}}</div>
-                                    <div class="name">{{game.solo.second.name}}</div>
-                                    <div class="name">{{game.solo.third.name}}</div>
-                                </div>
-                                <div class="score-column">
-                                    <div class="scores">{{game.solo.first.score}}</div>
-                                    <div class="scores">{{game.solo.second.score}}</div>
-                                    <div class="scores">{{game.solo.third.score}}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+          <div class="game-card">
+            <div class="game-card-title">{{game.name}}</div>
+            <div class="bottom-card">
+              <div class="game-card-left-content">
+                <div class="game-card-img-container">
+                  <app-scene3-d-component class="game-card-img" [game]="game.originalScene" #scene [isCardMode]="true">
+                  </app-scene3-d-component>
                 </div>
+                <div class="game-card-buttons" *ngIf="!isAdminMode">
+                  <div class="game-card-button-container"><button (click)="playSelectedFreeGame(game)">JOUER</button>
+                  </div>
+                  <div class="game-card-button-container"><button>CRÉER</button></div>
+                </div>
+                <div class="game-card-buttons" *ngIf="isAdminMode">
+                  <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
+                  <div class="game-card-button-container"><button (click)="deleteFreeGames(game)">SUPPRIMER</button>
+                  </div>
+                </div>
+              </div>
+              <div class="game-card-right-content">
+                <div class="top-container">
+                  <div class="top-title">TOP SOLO</div>
+                  <div class="top-score">
+                    <div class="number-column">
+                      <div class="score-position">1</div>
+                      <div class="score-position">2</div>
+                      <div class="score-position">3</div>
+                    </div>
+                    <div class="name-column">
+                      <div class="name">{{game.solo.first.name}}</div>
+                      <div class="name">{{game.solo.second.name}}</div>
+                      <div class="name">{{game.solo.third.name}}</div>
+                    </div>
+                    <div class="score-column">
+                      <div class="scores">{{game.solo.first.score}}</div>
+                      <div class="scores">{{game.solo.second.score}}</div>
+                      <div class="scores">{{game.solo.third.score}}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="top-container">
+                  <div class="top-title">TOP 1V1</div>
+                  <div class="top-score">
+                    <div class="number-column">
+                      <div class="score-position">1</div>
+                      <div class="score-position">2</div>
+                      <div class="score-position">3</div>
+                    </div>
+                    <div class="name-column">
+                      <div class="name">{{game.solo.first.name}}</div>
+                      <div class="name">{{game.solo.second.name}}</div>
+                      <div class="name">{{game.solo.third.name}}</div>
+                    </div>
+                    <div class="score-column">
+                      <div class="scores">{{game.solo.first.score}}</div>
+                      <div class="scores">{{game.solo.second.score}}</div>
+                      <div class="scores">{{game.solo.third.score}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-</div>
+<ng-template #spinny>
+  <div class="game-card">
+    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+  </div>
+</ng-template>
