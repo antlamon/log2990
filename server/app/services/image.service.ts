@@ -82,8 +82,7 @@ export class ImageService {
             }
         }
     }
-    private isInBound(x: number, y: number, height: number, width: number): boolean
-    {
+    private isInBound(x: number, y: number, height: number, width: number): boolean {
         return x >= 0 && x < height && y >= 0 && y < width;
     }
 
