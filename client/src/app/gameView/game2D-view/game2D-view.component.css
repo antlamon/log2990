@@ -2,35 +2,16 @@
 
 .chrono {
     position: absolute;
-    top: 10%;
-    right: 185px;
+    top: 800px;
+    left: 215px;
     font-size: 25px;
     font-weight: bold;
 }
 
 .compteur {
     position: absolute;
-    top: 5%;
-    right: 165px;
-    font-size: 25px;
-    font-weight: bold;
-}
-
-.messagesBox{
-    display: grid;
-    position: absolute;
-    width: 395px;
-    height: 100px;
-    top: 20px;
-    right: 40%;
-    background-color: white;
-    outline: 5px solid black;
-}
-
-.messagesBoxTitle {
-    background-color: #B1B7D4; 
-    height: 30px;
-    outline: 5px solid black;
+    top: 770px;
+    left: 215px;
     font-size: 25px;
     font-weight: bold;
 }
@@ -40,7 +21,7 @@
     outline: 5px solid black;
     height: 70px;
     top: 50px;
-    left: 20px;
+    left: 220px;
     position: absolute;
     display: inline-block;
     font-size: 50px;
@@ -53,7 +34,7 @@
 .divGames {
     position: absolute;
     top: 150px;
-    left: 20px;
+    left: 220px;
     width: 1480px;
     height: 600px;
     background-color: #919CD1;
