@@ -71,7 +71,7 @@ describe("Test for the socketServerManager", () => {
             expect(rejection).to.equal("123");
             done();
         });
-        sandbox.on(gameRoomService, "createNewGameRoom", async () => Promise.reject("123"));
+        sandbox.on(gameRoomService, "createNewGameRoom", async () => Promise.reject({ message: "123" }));
         mockClientSocket.emit(SocketsEvents.CREATE_GAME_ROOM);
     });
 
@@ -81,7 +81,16 @@ describe("Test for the socketServerManager", () => {
             done();
         });
         sandbox.on(gameRoomService, "checkDifference", async () => Promise.resolve("123"));
-        mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE, {gameRoomId : "123"});
+        mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE, { gameRoomId: "123" });
+    });
+
+    it("Should handle delete game room event", (done: Mocha.Done) => {
+        const spy: ChaiSpies.Spy = sandbox.on(gameRoomService, "deleteGameRoom", async () => Promise.resolve());
+        mockClientSocket.emit(SocketsEvents.DELETE_GAME_ROOM, "123");
+        setTimeout(() => {
+            expect(spy).to.have.been.called();
+            done();
+        }, CONNEXION_DELAY);
     });
 
     it("Should the socket disconnect, the user must be removed from userManager", (done: Mocha.Done) => {
@@ -90,7 +99,7 @@ describe("Test for the socketServerManager", () => {
         setTimeout(() => {
             expect(testManager["userManager"].users.length).to.equal(nbUser - 1);
             done();
-        },         CONNEXION_DELAY);
+        }, CONNEXION_DELAY);
     });
 
 });

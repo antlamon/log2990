@@ -24,6 +24,9 @@ export class SocketServerManager {
                 await this.handleNewGameRoom(socket, newGameMessage);
             });
             socket.on(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
+            socket.on(SocketsEvents.DELETE_GAME_ROOM, async (gameRoomId: string) => {
+                await this.handleDeleteGameRoom(socket, gameRoomId);
+            });
             socket.on("disconnect", () => {
                 this.userManager.removeUser(socket.client.id);
             });
@@ -40,13 +43,18 @@ export class SocketServerManager {
             socket.join(roomId);
             this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId);
         } catch (rejection) {
-            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection);
+            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection.message);
         }
     }
 
     private async handleCheckDifference(event: ImageClickMessage): Promise<void> {
         const update: GameRoomUpdate = await this.gameRoomService.checkDifference(event.gameRoomId, event.username, event.point);
         this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, event.gameRoomId, update);
+    }
+
+    private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {
+        socket.leave(gameRoomId);
+        await this.gameRoomService.deleteGameRoom(gameRoomId);
     }
 
     private emitRoomEvent<T>(event: string, room: string, data?: T): void {

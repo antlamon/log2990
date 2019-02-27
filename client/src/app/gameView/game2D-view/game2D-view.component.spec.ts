@@ -60,7 +60,7 @@ describe("Game2DViewComponent", () => {
             newImage: "testImage",
             differencesFound: 3,
         };
-        component.handleCheckDifference(update);
+        component["handleCheckDifference"](update);
         expect(component["simpleGame"].modifiedImage).toEqual(update.newImage);
         expect(component["differencesFound"]).toEqual(update.differencesFound);
         expect(spy).toHaveBeenCalled();
@@ -73,7 +73,7 @@ describe("Game2DViewComponent", () => {
             newImage: "testImage",
             differencesFound: -1,
         };
-        component.handleCheckDifference(update);
+        component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
     });
 
@@ -88,7 +88,7 @@ describe("Game2DViewComponent", () => {
         };
         const socketSpy: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.returnValue(Promise.resolve());
         spyOn(component["gameService"], "getSimpleGame").and.returnValue(of(fullGame));
-        component.getSimpleGame();
+        component["getSimpleGame"]();
         expect(component["simpleGame"]).toEqual(fullGame);
         expect(socketSpy).toHaveBeenCalled();
     });
