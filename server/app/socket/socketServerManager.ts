@@ -43,7 +43,7 @@ export class SocketServerManager {
             socket.join(roomId);
             this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId);
         } catch (rejection) {
-            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection);
+            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection.message);
         }
     }
 

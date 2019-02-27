@@ -1,5 +1,5 @@
-export class NAVIGATE_ERROR extends Error {
+export class NavigateError extends Error {
     public constructor(message: string) {
         super(message);
     }
-};
+}

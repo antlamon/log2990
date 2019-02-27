@@ -53,7 +53,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         return String(this.route.snapshot.paramMap.get("id"));
     }
 
-    public getSimpleGame(): void {
+    private getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
             .subscribe((response: IFullGame) => {
                 this.simpleGame = response;
@@ -68,13 +68,13 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             });
     }
 
-    public handleCreateGameRoom(rejection?: string): void {
-        if (rejection !== undefined) {
-            // error modal
+    private handleCreateGameRoom(rejection?: string): void {
+        if (rejection !== null) {
+            alert(rejection);
         }
     }
 
-    public handleCheckDifference(update: GameRoomUpdate): void {
+    private handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.disableClick = "disable-click";
