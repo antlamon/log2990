@@ -87,19 +87,23 @@ describe("Test for the socketServerManager", () => {
     it("Should handle delete game room event", (done: Mocha.Done) => {
         const spy: ChaiSpies.Spy = sandbox.on(gameRoomService, "deleteGameRoom", async () => Promise.resolve());
         mockClientSocket.emit(SocketsEvents.DELETE_GAME_ROOM, "123");
-        setTimeout(() => {
-            expect(spy).to.have.been.called();
-            done();
-        }, CONNEXION_DELAY);
+        setTimeout(
+            () => {
+                expect(spy).to.have.been.called();
+                done();
+            },
+            CONNEXION_DELAY);
     });
 
     it("Should the socket disconnect, the user must be removed from userManager", (done: Mocha.Done) => {
         nbUser = testManager["userManager"].users.length;
         mockClientSocket.disconnect();
-        setTimeout(() => {
-            expect(testManager["userManager"].users.length).to.equal(nbUser - 1);
-            done();
-        }, CONNEXION_DELAY);
+        setTimeout(
+            () => {
+                expect(testManager["userManager"].users.length).to.equal(nbUser - 1);
+                done();
+            },
+            CONNEXION_DELAY);
     });
 
 });

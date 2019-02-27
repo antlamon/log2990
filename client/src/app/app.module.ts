@@ -1,7 +1,7 @@
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { MatDialogModule } from "@angular/material";
+import { MatDialogModule, MatProgressSpinnerModule } from "@angular/material";
 import { MatCardModule } from "@angular/material/card";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -42,6 +42,7 @@ import { SocketService } from "./services/socket.service";
     AppRoutingModule,
     MatCardModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([])
   ],
