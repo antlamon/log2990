@@ -52,6 +52,10 @@ export class GameRoomService {
             differencesFound: ++gamer.differencesFound,
         };
     }
+
+    public async deleteGameRoom(gameRoomId: string): Promise<void> {
+        await Axios.delete(this.IDENTIFICATION_URL, { params: { gameRoomId: gameRoomId } });
+    }
 }
 
 interface GameRooms {

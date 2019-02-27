@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
@@ -12,7 +12,7 @@ import { SocketService } from "../../services/socket.service";
     templateUrl: "./game2D-view.component.html",
     styleUrls: ["./game2D-view.component.css"]
 })
-export class Game2DViewComponent implements OnInit {
+export class Game2DViewComponent implements OnInit, OnDestroy {
 
     public simpleGame: IFullGame;
     public differencesFound: number;
@@ -40,6 +40,11 @@ export class Game2DViewComponent implements OnInit {
 
     public ngOnInit(): void {
         this.getSimpleGame();
+    }
+
+    @HostListener("window:beforeunload")
+    public ngOnDestroy(): void {
+        this.socket.emitEvent(SocketsEvents.DELETE_SERVICE, this.simpleGame.card.id);
     }
 
     private getId(): string {
