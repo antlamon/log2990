@@ -54,7 +54,7 @@ export class SocketServerManager {
 
     private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {
         socket.leave(gameRoomId);
-        this.gameRoomService.deleteGameRoom(gameRoomId);
+        await this.gameRoomService.deleteGameRoom(gameRoomId);
     }
 
     private emitRoomEvent<T>(event: string, room: string, data?: T): void {
