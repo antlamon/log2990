@@ -5,7 +5,7 @@ import { ListViewComponent } from "./list-view/list-view.component";
 import {InitialComponent} from "./initial/initial.component";
 import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.component";
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
-import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
+import { ThematicSceneComponent } from "./scene3D/thematic-scene/thematic-scene.component";
 
 const routes: Routes = [
   { path: "admin", component: AdminMenuComponent },
@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: "", component: InitialComponent },
   { path: "simple-game/:id", component: Game2DViewComponent },
   { path: "free-game/:id", component: Game3DViewComponent },
-  { path: "models", component: Scene3DComponent },
+  { path: "models", component: ThematicSceneComponent },
 ];
 
 @NgModule({

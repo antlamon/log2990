@@ -22,14 +22,14 @@ export class Scene3DComponent implements AfterViewInit {
     position: { x: 0, y: 0, z: 0},
     size: 4,
     rotation: {x: 50, y: 50, z: 50},
-};
+  };
 
   private mockScene: IScene3D = {
     modified: false,
     backColor: 0x00000,
     objects: [this.obj3D],
     numObj: 1
-};
+  };
 
   public constructor(private renderService: RenderService) {
     this.isCardMode = false;
