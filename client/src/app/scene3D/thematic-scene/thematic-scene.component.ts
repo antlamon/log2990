@@ -27,8 +27,12 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   private scene: THREE.Scene;
 
-  private cameraZ: number = 30;
-  private cameraY: number = 20;
+  private zLight: number = -0.5;
+  private xLight: number = 1;
+
+  private cameraZ: number = -10;
+  private cameraX: number = 0;
+  private cameraY: number = 5;
 
   private light: THREE.Light;
 
@@ -37,6 +41,8 @@ export class ThematicSceneComponent implements AfterViewInit {
   private nearClippingPane: number = 0.1;
 
   private farClippingPane: number = 1000;
+
+  private skyBoxSize: number = 300;
 
   private skyLight: number = 0x606060;
 
@@ -76,6 +82,7 @@ export class ThematicSceneComponent implements AfterViewInit {
     this.createSkyBox();
     this.createCamera();
     this.createSceneSubjects();
+    // TO DO : remove controls when done testing
     this.controls = new THREE.OrbitControls(this.camera, this.container);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.25;
@@ -87,10 +94,12 @@ export class ThematicSceneComponent implements AfterViewInit {
   private createScene(): void {
     /* Scene */
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xbfd1e5);
+    this.scene.background = new THREE.Color(MAX_COLOR);
+
     this.scene.add(new THREE.HemisphereLight(this.skyLight, this.groundLight));
+
     this.light = new THREE.DirectionalLight(MAX_COLOR);
-    this.light.position.set(1, 0, -0.5);
+    this.light.position.set(this.xLight, 0, this.zLight);
     this.scene.add(this.light);
   }
 
@@ -104,7 +113,7 @@ export class ThematicSceneComponent implements AfterViewInit {
         side: THREE.BackSide
       });
     }
-    const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(300, 300, 300);
+    const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
     const skyMaterial: THREE.MeshFaceMaterial = new THREE.MeshFaceMaterial(materialArray);
     const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, skyMaterial);
     this.scene.add(skyBox);
@@ -118,8 +127,9 @@ export class ThematicSceneComponent implements AfterViewInit {
       this.nearClippingPane,
       this.farClippingPane
     );
-    this.camera.position.z = this.cameraZ;
+    this.camera.position.x = this.cameraX;
     this.camera.position.y = this.cameraY;
+    this.camera.position.z = this.cameraZ;
     this.scene.add(this.camera);
   }
 
