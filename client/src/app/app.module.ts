@@ -15,15 +15,16 @@ import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.componen
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
 import { InitialComponent } from "./initial/initial.component";
 import { ListViewComponent } from "./list-view/list-view.component";
-import { RenderService } from "./scene3D/scene3-d/render.service";
-import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
-import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
+import { RenderService } from "./scene3D/geometric-scene/render.service";
+import { Scene3DComponent } from "./scene3D/geometric-scene/scene3-d.component";
+import { ShapeCreatorService } from "./scene3D/geometric-scene/shape-creator.service";
 import { FileValidatorService } from "./services/file-validator.service";
 import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { ThematicSceneComponent } from "./scene3D/thematic-scene/thematic-scene.component";
-import { MedievalForestComponent } from "./scene3D/thematic-scene/medieval-forest/medieval-forest.component";
+import { MedievalForestService } from "./scene3D/thematic-scene/medieval-forest/medieval-forest.service";
+import { MedievalObjectService } from "./scene3D/thematic-scene/medieval-forest/medieval-objects/medieval-object.service";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,6 @@ import { MedievalForestComponent } from "./scene3D/thematic-scene/medieval-fores
     Scene3DComponent,
     Game3DViewComponent,
     ThematicSceneComponent,
-    MedievalForestComponent
   ],
   imports: [
     FormsModule,
@@ -60,7 +60,9 @@ import { MedievalForestComponent } from "./scene3D/thematic-scene/medieval-fores
     ModalService,
     FileValidatorService,
     RenderService,
-    ShapeCreatorService
+    ShapeCreatorService,
+    MedievalForestService,
+    MedievalObjectService,
   ],
   bootstrap: [AppComponent]
 })

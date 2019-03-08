@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MedievalForestComponent } from "./medieval-forest.component";
+import { MedievalForestComponent } from "./medieval-forest.service";
 
 describe("MedievalForestComponent", () => {
   let component: MedievalForestComponent;

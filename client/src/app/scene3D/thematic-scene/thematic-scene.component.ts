@@ -3,7 +3,8 @@ import "src/js/three";
 import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
-import { MedievalForestComponent } from "./medieval-forest/medieval-forest.component";
+import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
+import { IScene3D } from "../../../../../common/models/game3D";
 
 @Component({
   selector: "app-thematic-scene",
@@ -13,6 +14,7 @@ import { MedievalForestComponent } from "./medieval-forest/medieval-forest.compo
 export class ThematicSceneComponent implements AfterViewInit {
 
   @Input() public isCardMode: boolean;
+  @Input() public game: IScene3D;
 
   @ViewChild("container")
   private containerRef: ElementRef;
@@ -42,25 +44,11 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   private farClippingPane: number = 1000;
 
-  private skyBoxSize: number = 300;
-
   private skyLight: number = 0x606060;
 
   private groundLight: number = 0x404040;
 
-  private skyBoxURLs: string[] = [
-    "assets/clouds/right.png",
-    "assets/clouds/left.png",
-    "assets/clouds/top.png",
-    "assets/clouds/bottom.png",
-    "assets/clouds/back.png",
-    "assets/clouds/front.png",
-  ];
-  private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
-
-  public sceneSubjects: THREE.Object3D[];
-
-  public constructor() {
+  public constructor(private forestService: MedievalForestService) {
     this.isCardMode = false;
   }
   private get container(): HTMLDivElement {
@@ -79,9 +67,8 @@ export class ThematicSceneComponent implements AfterViewInit {
   }
   private initialize(): void {
     this.createScene();
-    this.createSkyBox();
+    this.forestService.createForest(this.scene, this.game);
     this.createCamera();
-    this.createSceneSubjects();
     // TO DO : remove controls when done testing
     this.controls = new THREE.OrbitControls(this.camera, this.container);
     this.controls.enableDamping = true;
@@ -94,7 +81,7 @@ export class ThematicSceneComponent implements AfterViewInit {
   private createScene(): void {
     /* Scene */
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(MAX_COLOR);
+    this.scene.background = new THREE.Color(this.game.backColor);
 
     this.scene.add(new THREE.HemisphereLight(this.skyLight, this.groundLight));
 
@@ -103,21 +90,6 @@ export class ThematicSceneComponent implements AfterViewInit {
     this.scene.add(this.light);
   }
 
-  private createSkyBox(): void {
-    const faceNb: number = 6;
-
-    const materialArray: THREE.MeshBasicMaterial[] = [];
-    for (let i: number = 0; i < faceNb; i++) {
-      materialArray[i] = new THREE.MeshBasicMaterial({
-        map: this.skyBoxLoader.load(this.skyBoxURLs[i]),
-        side: THREE.BackSide
-      });
-    }
-    const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
-    const skyMaterial: THREE.MeshFaceMaterial = new THREE.MeshFaceMaterial(materialArray);
-    const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, skyMaterial);
-    this.scene.add(skyBox);
-  }
   private createCamera(): void {
     /* Camera */
     const aspectRatio: number = this.getAspectRatio();
@@ -135,14 +107,6 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   private getAspectRatio(): number {
     return this.container.clientWidth / this.container.clientHeight;
-  }
-
-  private createSceneSubjects(): void {
-    this.sceneSubjects = [
-      // call the different subjects' constructor and let them add themselves to the scene
-      new MedievalForestComponent(this.scene),
-    ];
-
   }
 
   private startRenderingLoop(): void {
