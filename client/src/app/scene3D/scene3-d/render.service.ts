@@ -3,7 +3,6 @@ import * as THREE from "three";
 import { IScene3D } from "../../../../../common/models/game3D";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
-import GLTFLoader from "three-gltf-loader";
 
 @Injectable()
 export class RenderService {
@@ -28,8 +27,6 @@ export class RenderService {
 
   private skyLight: number = 0x606060;
   private groundLight: number = 0x404040;
-
-  private modelsLoader: GLTFLoader = new GLTFLoader();
 
   public constructor(private shapeService: ShapeCreatorService) { }
 
@@ -67,43 +64,6 @@ export class RenderService {
     this.light = new THREE.DirectionalLight(MAX_COLOR);
     this.light.position.set(0, 0, 1);
     this.scene.add(this.light);
-    // Load a glTF resource
-    this.modelsLoader.load(
-      // resource URL
-      "../../assets/scene.gltf",
-      // called when the resource is loaded
-      (gltf) => {
-
-        gltf.scene.children[0].scale.set(0.15, 0.15, 0.15);
-        gltf.scene.children[0].rotateX(50);
-        gltf.scene.children[0].rotateY(50);
-        gltf.scene.children[0].rotateZ(200);
-        gltf.scene.children[0].position.set(100,10,10);
-
-
-        this.scene.add(gltf.scene);
-
-        gltf.animations; // Array<THREE.AnimationClip>
-        gltf.scene; // THREE.Scene
-        gltf.scenes; // Array<THREE.Scene>
-        gltf.cameras; // Array<THREE.Camera>
-        gltf.asset; // Object
-
-      },
-      // called while loading is progressing
-      (xhr) => {
-
-        console.log((xhr.loaded / xhr.total * 100) + "% loaded");
-
-      },
-      // called when loading has errors
-      function (error) {
-
-        console.log('An error happened');
-
-      }
-    );
-
   }
   private createCamera(): void {
     /* Camera */
