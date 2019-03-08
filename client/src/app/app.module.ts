@@ -22,8 +22,8 @@ import { FileValidatorService } from "./services/file-validator.service";
 import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
-import { ThematicSceneComponent } from './scene3D/thematic-scene/thematic-scene.component';
-import { MedievalForestComponent } from './scene3D/thematic-scene/medieval-forest/medieval-forest.component';
+import { ThematicSceneComponent } from "./scene3D/thematic-scene/thematic-scene.component";
+import { MedievalForestComponent } from "./scene3D/thematic-scene/medieval-forest/medieval-forest.component";
 
 @NgModule({
   declarations: [
