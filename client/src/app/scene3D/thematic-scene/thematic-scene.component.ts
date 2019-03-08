@@ -42,6 +42,16 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   private groundLight: number = 0x404040;
 
+  private skyBoxURLs: string[] = [
+    "assets/clouds/right.png",
+    "assets/clouds/left.png",
+    "assets/clouds/top.png",
+    "assets/clouds/bottom.png",
+    "assets/clouds/back.png",
+    "assets/clouds/front.png",
+  ];
+  private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
+
   public sceneSubjects: THREE.Object3D[];
 
   public constructor() {
@@ -63,6 +73,7 @@ export class ThematicSceneComponent implements AfterViewInit {
   }
   private initialize(): void {
     this.createScene();
+    this.createSkyBox();
     this.createCamera();
     this.createSceneSubjects();
     this.controls = new THREE.OrbitControls(this.camera, this.container);
@@ -79,8 +90,24 @@ export class ThematicSceneComponent implements AfterViewInit {
     this.scene.background = new THREE.Color(0xbfd1e5);
     this.scene.add(new THREE.HemisphereLight(this.skyLight, this.groundLight));
     this.light = new THREE.DirectionalLight(MAX_COLOR);
-    this.light.position.set(0, 1, 1);
+    this.light.position.set(1, 0, -0.5);
     this.scene.add(this.light);
+  }
+
+  private createSkyBox(): void {
+    const faceNb: number = 6;
+
+    const materialArray: THREE.MeshBasicMaterial[] = [];
+    for (let i: number = 0; i < faceNb; i++) {
+      materialArray[i] = new THREE.MeshBasicMaterial({
+        map: this.skyBoxLoader.load(this.skyBoxURLs[i]),
+        side: THREE.BackSide
+      });
+    }
+    const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(300, 300, 300);
+    const skyMaterial: THREE.MeshFaceMaterial = new THREE.MeshFaceMaterial(materialArray);
+    const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, skyMaterial);
+    this.scene.add(skyBox);
   }
   private createCamera(): void {
     /* Camera */

@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ThematicSceneComponent } from './thematic-scene.component';
+import { ThematicSceneComponent } from "./thematic-scene.component";
 
-describe('ThematicSceneComponent', () => {
+describe("ThematicSceneComponent", () => {
   let component: ThematicSceneComponent;
   let fixture: ComponentFixture<ThematicSceneComponent>;
 
@@ -19,7 +19,7 @@ describe('ThematicSceneComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
