@@ -7,22 +7,25 @@ export class MedievalObjectService {
 
   private modelsLoader: GLTFLoader = new GLTFLoader();
 
-  private loadedObjects: Map<string, THREE.Object3D>;
+  private loadedObjects: Map<string, THREE.Object3D> = new Map();
 
-  public createObject(object: IObjet3D): THREE.Object3D {
-    if (!this.loadedObjects.get(object.type) === undefined) {
-      this.modelsLoader.load("../../assets/" + object.type + ".gltf",
-                             (gltf) => {
-          this.loadedObjects.set(object.type, gltf.scene.children[0]);
+  public createObject(object: IObjet3D): Promise<THREE.Object3D> {
+    return new Promise((resolve, reject) => {
+      if (!this.loadedObjects.get(object.type)) {
+        this.modelsLoader.load("../../assets/" + object.type + ".gltf",
+                               (gltf) => {
+            this.loadedObjects.set(object.type, gltf.scene.children[0]);
 
-          return this.setPositionParameters(gltf.scene.children[0].clone(), object);
-        }
-      );
-      // TODO: throw an error, use the error callback in the loader 
-      return null;
-    } else {
-      return this.setPositionParameters(this.loadedObjects.get(object.type).clone(), object);
-    }
+            resolve(this.setPositionParameters(gltf.scene.children[0].clone(), object));
+          },
+                               (loading) => {
+            // TODO: send loading message to user
+          }
+        );
+      } else {
+        resolve(this.setPositionParameters(this.loadedObjects.get(object.type).clone(), object));
+      }
+    });
   }
 
   private setPositionParameters(object: THREE.Object3D, parameters: IObjet3D): THREE.Object3D {

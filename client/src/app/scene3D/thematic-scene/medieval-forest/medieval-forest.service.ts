@@ -33,8 +33,8 @@ export class MedievalForestService {
       color: 0x000000,
       texture: "",
       position: { x: 0, y: 0, z: 0},
-      size: 0.0005,
-      rotation: {x: 0, y: 45, z: 0},
+      size: 0.005,
+      rotation: {x: 0, y: 0, z: 0},
     };
   }
 
@@ -44,7 +44,9 @@ export class MedievalForestService {
     this.createSkyBox();
     this.createFloor();
     this.addCastle();
-    this.addGameObjects();
+    if (this.gameRef) {
+      this.addGameObjects();
+    }
   }
   private createSkyBox(): void {
     this.textureLoader = new THREE.TextureLoader();
@@ -80,12 +82,16 @@ export class MedievalForestService {
   }
 
   private addCastle(): void {
-    this.medievalService.createObject(this.castle);
+    this.medievalService.createObject(this.castle).then((castle: THREE.Object3D) => {
+      this.sceneRef.add(castle);
+    });
   }
 
   private addGameObjects(): void {
     for (const game of this.gameRef.objects) {
-      this.medievalService.createObject(game);
+      this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
+        this.sceneRef.add(obj);
+      });
     }
   }
 

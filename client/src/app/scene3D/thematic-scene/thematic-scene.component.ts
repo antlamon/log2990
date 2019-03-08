@@ -81,7 +81,7 @@ export class ThematicSceneComponent implements AfterViewInit {
   private createScene(): void {
     /* Scene */
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(this.game.backColor);
+    this.scene.background = new THREE.Color(MAX_COLOR);
 
     this.scene.add(new THREE.HemisphereLight(this.skyLight, this.groundLight));
 

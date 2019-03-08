@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MedievalForestComponent } from "./medieval-forest.service";
+import { MedievalForestService } from "./medieval-forest.service";
 
-describe("MedievalForestComponent", () => {
-  let component: MedievalForestComponent;
-  let fixture: ComponentFixture<MedievalForestComponent>;
+describe("MedievalForestService", () => {
+  let component: MedievalForestService;
+  let fixture: ComponentFixture<MedievalForestService>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MedievalForestComponent ]
+      declarations: [ MedievalForestService ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MedievalForestComponent);
+    fixture = TestBed.createComponent(MedievalForestService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
