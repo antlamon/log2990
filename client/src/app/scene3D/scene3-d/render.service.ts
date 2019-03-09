@@ -12,6 +12,9 @@ export class RenderService {
 
   private camera: THREE.PerspectiveCamera;
 
+  private sensitivity: number = 0.002;
+  private press: boolean;
+
   private renderer: THREE.WebGLRenderer;
 
   private scene: THREE.Scene;
@@ -91,7 +94,10 @@ export class RenderService {
     this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
 
     this.container.appendChild(this.renderer.domElement);
-    document.body.addEventListener( "keydown", this.onKeyDown, false );
+    document.addEventListener( "keydown", this.onKeyDown, false );
+    this.renderer.domElement.addEventListener( "mousemove", this.onMouseMove, false );
+    this.renderer.domElement.addEventListener("mousedown", (event: MouseEvent) => { if (event.button === 2) {this.press = true; }});
+    this.renderer.domElement.addEventListener("mouseup", (event: MouseEvent) => { if (event.button === 2) {this.press = false; }});
     this.render();
   }
 
@@ -115,6 +121,14 @@ export class RenderService {
       this.camera.translateX(-3);
       break;
       default: break;
+    }
+  }
+  private onMouseMove = (event: MouseEvent) => {
+    if (!this.press) { return; }
+
+    if (event.button === 0) {
+      this.camera.rotation.y -= event.movementX * this.sensitivity;
+      this.camera.rotation.x -= event.movementY * this.sensitivity;
     }
   }
 }
