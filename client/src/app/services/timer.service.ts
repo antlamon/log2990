@@ -7,7 +7,6 @@ export class TimerService {
 
   public readonly CONVERSION_SEC_TO_MILI: number = 1000;
   public readonly CONVERSION_MIN_TO_SEC: number = 60;
-  public currentTime: String;
   public nbSeconds: number;
   public nbMinutes: number;
   private timerEnd: NodeJS.Timeout;
@@ -21,8 +20,8 @@ export class TimerService {
     this.nbSeconds = 0;
     this.nbMinutes = 0;
     this.timerEnd = setTimeout(endFunction, this.CONVERSION_SEC_TO_MILI * (endTime.seconds + this.CONVERSION_MIN_TO_SEC * endTime.minutes));
-    setTimeout(this.stopTimer, this.CONVERSION_SEC_TO_MILI * (endTime.seconds + this.CONVERSION_MIN_TO_SEC * endTime.minutes));
-    this.timerUpdate = setInterval(this.updateTime, this.CONVERSION_SEC_TO_MILI);
+    setTimeout(this.stopTimer.bind(this), this.CONVERSION_SEC_TO_MILI * (endTime.seconds + this.CONVERSION_MIN_TO_SEC * endTime.minutes));
+    this.timerUpdate = setInterval(this.updateTime.bind(this), this.CONVERSION_SEC_TO_MILI);
 
   }
   public stopTimer(): void {
