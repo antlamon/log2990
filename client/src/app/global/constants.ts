@@ -5,3 +5,5 @@ export interface KeysMap {
 }
 
 export const KEYS: KeysMap = {"A": 65, "D": 68, "S": 83, "W": 87, "T": 84};
+
+export enum CLICK {left, center, right}

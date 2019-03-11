@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { IScene3D } from "../../../../../common/models/game3D";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
-import { KEYS } from "src/app/global/constants";
+import { CLICK, KEYS } from "src/app/global/constants";
 
 @Injectable()
 export class RenderService {
@@ -27,6 +27,7 @@ export class RenderService {
 
   private nearClippingPane: number = 1;
 
+  private movementSpeed: number = 3;
   private farClippingPane: number = 3000;
 
   private skyLight: number = 0x606060;
@@ -96,8 +97,9 @@ export class RenderService {
     this.container.appendChild(this.renderer.domElement);
     document.addEventListener( "keydown", this.onKeyDown, false );
     this.renderer.domElement.addEventListener( "mousemove", this.onMouseMove, false );
-    this.renderer.domElement.addEventListener("mousedown", (event: MouseEvent) => { if (event.button === 2) {this.press = true; }});
-    this.renderer.domElement.addEventListener("mouseup", (event: MouseEvent) => { if (event.button === 2) {this.press = false; }});
+    this.renderer.domElement.addEventListener( "contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false );
+    this.renderer.domElement.addEventListener("mousedown", this.onMouseDown, false);
+    this.renderer.domElement.addEventListener("mouseup", this.onMouseUp, false);
     this.render();
   }
 
@@ -109,16 +111,16 @@ export class RenderService {
   private onKeyDown = (event: KeyboardEvent) => {
     switch (event.keyCode ) {
       case KEYS["S"]: // up
-      this.camera.translateZ(3);
+      this.camera.translateZ(this.movementSpeed);
       break;
       case KEYS["W"]: // down
-      this.camera.translateZ(-3);
+      this.camera.translateZ(-this.movementSpeed);
       break;
       case KEYS["D"]: // up
-      this.camera.translateX(3);
+      this.camera.translateX(this.movementSpeed);
       break;
       case KEYS["A"]: // down
-      this.camera.translateX(-3);
+      this.camera.translateX(-this.movementSpeed);
       break;
       default: break;
     }
@@ -129,6 +131,16 @@ export class RenderService {
     if (event.button === 0) {
       this.camera.rotation.y -= event.movementX * this.sensitivity;
       this.camera.rotation.x -= event.movementY * this.sensitivity;
+    }
+  }
+  private onMouseUp = (event: MouseEvent) => {
+    if (event.button === CLICK.right) {
+      this.press = false;
+    }
+  }
+  private onMouseDown = (event: MouseEvent) => {
+    if (event.button === CLICK.right) {
+      this.press = true;
     }
   }
 }
