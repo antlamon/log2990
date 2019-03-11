@@ -2,7 +2,7 @@ import { async, TestBed, ComponentFixture } from "@angular/core/testing";
 import { Scene3DComponent } from "./scene3-d.component";
 import { RenderService } from "./render.service";
 import { ShapeCreatorService } from "./shape-creator.service";
-import { IScene3D } from "../../../../../common/models/game3D";
+import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 
 describe("Scene3DComponent", () => {
@@ -22,6 +22,20 @@ describe("Scene3DComponent", () => {
     backColor: 0x00000,
     objects: [obj3D],
     numObj: 1
+};
+
+  const mockGame: IGame3D = {
+  name: "mock",
+  id: "mockid",
+  originalScene: mockScene,
+  modifiedScene: {
+    modified: true,
+    backColor: 0x00000,
+    objects: [obj3D],
+    numObj: 1
+  },
+  solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
+  multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
 };
 
   beforeEach(async(() => {
@@ -73,7 +87,7 @@ describe("Scene3DComponent", () => {
       expect(spyInitialize).toHaveBeenCalledTimes(0);
     });
     it("should call the scene renderer if valid game is given", () => {
-      component["game"] = mockScene;
+      component["game"] = mockGame;
       const dummyCanva: HTMLCanvasElement = document.createElement("canvas");
       component["container"].appendChild(dummyCanva);
       const spyInitialize: jasmine.Spy = spyOn(component["renderService"], "initialize");

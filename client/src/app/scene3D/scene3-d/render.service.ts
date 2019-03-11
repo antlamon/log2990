@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import { IScene3D } from "../../../../../common/models/game3D";
+import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import { CLICK, KEYS } from "src/app/global/constants";
@@ -8,16 +8,19 @@ import { CLICK, KEYS } from "src/app/global/constants";
 @Injectable()
 export class RenderService {
 
-  private container: HTMLDivElement;
+  private containerOriginal: HTMLDivElement;
+  private containerModif: HTMLDivElement;
 
   private camera: THREE.PerspectiveCamera;
 
   private sensitivity: number = 0.002;
   private press: boolean;
 
-  private renderer: THREE.WebGLRenderer;
+  private rendererO: THREE.WebGLRenderer;
+  private rendererM: THREE.WebGLRenderer;
 
-  private scene: THREE.Scene;
+  private sceneOriginal: THREE.Scene;
+  private sceneModif: THREE.Scene;
 
   private cameraZ: number = 500;
 
@@ -35,15 +38,21 @@ export class RenderService {
 
   public constructor(private shapeService: ShapeCreatorService) {}
 
-  public initialize(container: HTMLDivElement, scen: IScene3D): void {
+  public initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): void {
 
-    this.container = container;
+    this.containerOriginal = containerO;
+    this.sceneOriginal = this.createScene(game.originalScene);
 
-    this.createScene(scen);
-
-    for (const obj of scen.objects) {
-      this.scene.add(this.shapeService.createShape(obj));
+    if (containerM !== null) {
+      this.containerModif = containerM;
+      this.sceneModif = this.createScene(game.modifiedScene);
+    } else {
+      this.sceneModif = undefined;
+      this.rendererM = undefined;
     }
+
+    this.createCamera();
+
     this.startRenderingLoop();
   }
 
@@ -56,19 +65,24 @@ export class RenderService {
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    this.rendererO.setSize(this.containerOriginal.clientWidth, this.containerOriginal.clientHeight);
   }
 
-  private createScene(scene: IScene3D): void {
+  private createScene(iScene: IScene3D): THREE.Scene {
     /* Scene */
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(scene.backColor);
-    this.createCamera();
-    this.scene.add( new THREE.HemisphereLight( this.skyLight, this.groundLight ) );
+    const scene: THREE.Scene = new THREE.Scene();
+    scene.background = new THREE.Color(iScene.backColor);
+
+    scene.add( new THREE.HemisphereLight( this.skyLight, this.groundLight ) );
     this.light = new THREE.DirectionalLight( MAX_COLOR );
     this.light.position.set( 0, 0, 1 );
-    this.scene.add(this.light);
+    scene.add(this.light);
 
+    for (const obj of iScene.objects) {
+      scene.add(this.shapeService.createShape(obj));
+    }
+
+    return scene;
   }
   private createCamera(): void {
     /* Camera */
@@ -78,35 +92,59 @@ export class RenderService {
       aspectRatio,
       this.nearClippingPane,
       this.farClippingPane
-    );
+      );
     this.camera.position.z = this.cameraZ;
-    this.scene.add(this.camera);
+    this.sceneOriginal.add(this.camera);
+    if (this.sceneModif !== undefined) {
+      this.sceneModif.add(this.camera);
+    }
   }
 
   private getAspectRatio(): number {
-    return this.container.clientWidth / this.container.clientHeight;
+    return this.containerOriginal.clientWidth / this.containerOriginal.clientHeight;
   }
 
   private startRenderingLoop(): void {
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.BasicShadowMap;
-    this.renderer.setPixelRatio(devicePixelRatio);
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
 
-    this.container.appendChild(this.renderer.domElement);
     document.addEventListener( "keydown", this.onKeyDown, false );
-    this.renderer.domElement.addEventListener( "mousemove", this.onMouseMove, false );
-    this.renderer.domElement.addEventListener( "contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false );
-    this.renderer.domElement.addEventListener("mousedown", this.onMouseDown, false);
-    this.renderer.domElement.addEventListener("mouseup", this.onMouseUp, false);
+
+    this.rendererO = this.createRenderer(this.containerOriginal);
+    if (this.sceneModif !== undefined) {
+      this.rendererM = this.createRenderer(this.containerModif);
+    }
     this.render();
+  }
+
+  private createRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
+
+    const renderer: THREE.WebGLRenderer = this.initializeRenderer(container);
+    container.appendChild(renderer.domElement);
+
+    renderer.domElement.addEventListener( "mousemove", this.onMouseMove, false );
+    renderer.domElement.addEventListener( "contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false );
+    renderer.domElement.addEventListener("mousedown", this.onMouseDown, false);
+    renderer.domElement.addEventListener("mouseup", this.onMouseUp, false);
+
+    return renderer;
+  }
+
+  private initializeRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
+    const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.BasicShadowMap;
+    renderer.setPixelRatio(devicePixelRatio);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+
+    return renderer;
   }
 
   private render(): void {
     requestAnimationFrame(() => this.render());
 
-    this.renderer.render(this.scene, this.camera);
+    this.rendererO.render(this.sceneOriginal, this.camera);
+    if (this.rendererM !== undefined) {
+      this.rendererM.render(this.sceneModif, this.camera);
+    }
   }
   private onKeyDown = (event: KeyboardEvent) => {
     switch (event.keyCode ) {
