@@ -32,8 +32,8 @@ export class ThematicSceneComponent implements AfterViewInit {
   private zLight: number = -0.5;
   private xLight: number = 1;
 
-  private cameraZ: number = -10;
-  private cameraX: number = 0;
+  private cameraZ: number = -20;
+  private cameraX: number = 5;
   private cameraY: number = 5;
 
   private light: THREE.Light;
@@ -44,7 +44,7 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   private farClippingPane: number = 1000;
 
-  private skyLight: number = 0x606060;
+  private skyLight: number = 0xFFFFFF;
 
   private groundLight: number = 0x404040;
 
