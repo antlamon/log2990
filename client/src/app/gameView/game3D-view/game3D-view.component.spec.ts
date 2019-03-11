@@ -8,6 +8,7 @@ import { IObjet3D } from "../../../../../common/models/objet3D";
 import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
 import { ITop3 } from "../../../../../common/models/top3";
 import { AppRoutingModule } from "src/app/app-routing.module";
+import { MatProgressSpinnerModule } from "@angular/material";
 const mockObjects: IObjet3D[] = [];
 const mockOkScene: IScene3D = {
   modified: false,
@@ -34,7 +35,7 @@ describe("Game3DViewComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [Game3DViewComponent],
-            imports: [HttpClientModule, RouterTestingModule],
+            imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
             providers: [RenderService, ShapeCreatorService, AppRoutingModule]
         })
             .compileComponents().then(() => { }, (error: Error) => {

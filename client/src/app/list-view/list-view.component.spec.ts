@@ -13,6 +13,7 @@ import { IGame } from "../../../../common/models/game";
 import { ITop3 } from "../../../../common/models/top3";
 import { IGame3D } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
+import { MatProgressSpinnerModule } from "@angular/material";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -39,7 +40,8 @@ describe("ListViewComponent", () => {
       imports: [
         HttpClientModule,
         AppRoutingModule,
-        FormsModule
+        FormsModule,
+        MatProgressSpinnerModule
       ],
       declarations: [
         ListViewComponent,
