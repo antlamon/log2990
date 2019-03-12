@@ -13,8 +13,6 @@ export interface IGame3D {
 }
 
 export interface IScene3D {
-    modified: boolean; // TODO: remove ? whats the use of this attribute
-    numObj: number;
     objects: IObjet3D[];
     backColor: number;
 }

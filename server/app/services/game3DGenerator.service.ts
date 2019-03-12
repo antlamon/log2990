@@ -54,8 +54,6 @@ export class Game3DGeneratorService {
         let backGroundColor: number = 0;
         const objects: IObjet3D[] = [];
         const newScene: IScene3D = {
-            modified: false,
-            numObj: quantity,
             objects: objects,
             backColor: backGroundColor,
             };
@@ -74,8 +72,6 @@ export class Game3DGeneratorService {
         let backGroundColor: number = 0;
         const objects: IObjet3D[] = [];
         const newScene: IScene3D = {
-            modified: false,
-            numObj: quantity,
             objects: objects,
             backColor: backGroundColor,
             };
