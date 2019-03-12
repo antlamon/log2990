@@ -56,12 +56,6 @@ export class RenderService {
     this.startRenderingLoop();
   }
 
-  public random(min: number, max: number): number {
-
-    return Math.random() * (max - min + 1) + min;
-
-  }
-
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();
     this.camera.updateProjectionMatrix();
