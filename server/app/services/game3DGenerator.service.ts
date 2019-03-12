@@ -27,56 +27,69 @@ export class Game3DGeneratorService {
         return this.generateGame(form);
 
     }
-    private generateObjGeometricBackground(objects: IObjet3D[], quantity: number): number {
+
+    private generateGame(form: IGame3DForm): IGame3D {
+
+        let originalScene: IScene3D;
+
+        if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
+            originalScene = this.generateObjGeometricScene(form.objectQty);
+        } else if ( form.objectType === THEMATIC_TYPE_NAME) {
+            originalScene = this.generateObjThematicScene(form.objectQty);
+        } else {
+            throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
+        }
+
+        return {
+            name: form.name,
+            id: (new ObjectID()).toHexString(),
+            originalScene: originalScene,
+            modifiedScene: this.game3DModificator.createModifScene(originalScene, form.objectType, form.modifications),
+            solo: this.top3RandomOrder(),
+            multi: this.top3RandomOrder(),
+        };
+    }
+
+    private generateObjGeometricScene(quantity: number): IScene3D {
         let backGroundColor: number = 0;
+        const objects: IObjet3D[] = [];
+        const newScene: IScene3D = {
+            modified: false,
+            numObj: quantity,
+            objects: objects,
+            backColor: backGroundColor,
+            };
+
         for (let i: number = 0; i < quantity; i++) {
             const obj: IObjet3D = this.objectGenerator.generateRandomGeometricObject(objects);
-            objects.push(obj);
+            newScene.objects.push(obj);
             do  {
                 backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
             } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color));
         }
 
-        return backGroundColor;
+        return newScene;
     }
-    private generateObjThematicBackground(objects: IObjet3D[], quantity: number): number {
+    private generateObjThematicScene(quantity: number): IScene3D {
+        let backGroundColor: number = 0;
+        const objects: IObjet3D[] = [];
+        const newScene: IScene3D = {
+            modified: false,
+            numObj: quantity,
+            objects: objects,
+            backColor: backGroundColor,
+            };
 
         for (let i: number = 0; i < quantity; i++) {
-            const obj: IObjet3D = this.objectGenerator.generateRandomThematicObject(objects);
-            objects.push(obj);
+            const obj: IObjet3D = this.objectGenerator.generateRandomGeometricObject(objects);
+            newScene.objects.push(obj);
+            do  {
+                backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
+            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color));
         }
 
-        return this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR);
-    }
+        return newScene;
 
-    private generateGame(form: IGame3DForm): IGame3D {
-
-        const randomObjects: IObjet3D[] = [];
-
-        let backGroundColor: number = 0;
-
-        if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
-            backGroundColor = this.generateObjGeometricBackground(randomObjects, form.objectQty);
-        } else if ( form.objectType === THEMATIC_TYPE_NAME) {
-            backGroundColor = this.generateObjThematicBackground(randomObjects, form.objectQty);
-        } else {
-            throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
-        }
-
-        const scene: IScene3D = { modified: false,
-                                  objects: randomObjects,
-                                  numObj: form.objectQty,
-                                  backColor: backGroundColor,
-                                };
-
-        return {
-            name: form.name,
-            id: (new ObjectID()).toHexString(),
-            originalScene: scene,
-            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications),
-            solo: this.top3RandomOrder(),
-            multi: this.top3RandomOrder(),
-        };
     }
 
     public top3RandomOrder(): ITop3 {
