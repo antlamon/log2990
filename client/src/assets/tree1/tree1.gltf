@@ -462,7 +462,7 @@
       "uri": "textures/branch_diffuse.png"
     },
     {
-      "uri": "textures/branch_specularGlossiness.png"
+      "uri": "textures/branch_normal.png"
     },
     {
       "uri": "textures/branch_normal.png"

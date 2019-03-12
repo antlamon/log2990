@@ -128,6 +128,9 @@ export class MedievalForestService {
   }
 
   private addCastle(): void {
+    this.medievalService.createObject(this.guard).then((castle: THREE.Object3D) => {
+      this.sceneRef.add(castle);
+    });
     this.medievalService.createObject(this.castle).then((castle: THREE.Object3D) => {
       this.sceneRef.add(castle);
     });
@@ -141,9 +144,6 @@ export class MedievalForestService {
       this.sceneRef.add(castle);
     });
     this.medievalService.createObject(this.rock).then((castle: THREE.Object3D) => {
-      this.sceneRef.add(castle);
-    });
-    this.medievalService.createObject(this.guard).then((castle: THREE.Object3D) => {
       this.sceneRef.add(castle);
     });
   }

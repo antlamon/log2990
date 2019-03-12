@@ -12,7 +12,7 @@ export class MedievalObjectService {
   public createObject(object: IObjet3D): Promise<THREE.Object3D> {
     return new Promise((resolve, reject) => {
       if (!this.loadedObjects.get(object.type)) {
-        this.modelsLoader.load("../../assets/" + object.type + ".gltf",
+        this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
                                (gltf) => {
             this.loadedObjects.set(object.type, gltf.scene.children[0]);
             resolve(this.setPositionParameters(gltf.scene.children[0].clone(), object));

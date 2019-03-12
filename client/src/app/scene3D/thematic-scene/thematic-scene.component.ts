@@ -84,7 +84,6 @@ export class ThematicSceneComponent implements AfterViewInit {
     this.scene.background = new THREE.Color(MAX_COLOR);
 
     this.scene.add(new THREE.HemisphereLight(this.skyLight, this.groundLight));
-
     this.light = new THREE.DirectionalLight(MAX_COLOR);
     this.light.position.set(this.xLight, 0, this.zLight);
     this.scene.add(this.light);
