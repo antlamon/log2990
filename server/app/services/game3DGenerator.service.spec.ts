@@ -51,10 +51,8 @@ const obj3D: IObjet3D = {
 };
 
 const mockScene: IScene3D = {
-    modified: false,
     backColor: 0x00000,
     objects: [obj3D],
-    numObj: 1,
 };
 
 const mock3DGame: IGame3D = {

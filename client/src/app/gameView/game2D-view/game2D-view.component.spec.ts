@@ -8,6 +8,7 @@ import { GameRoomUpdate } from "../../../../../common/communication/message";
 import { IFullGame, IGame } from "../../../../../common/models/game";
 import { ITop3 } from "../../../../../common/models/top3";
 import { Game2DViewComponent } from "./game2D-view.component";
+import { MatProgressSpinnerModule } from "@angular/material";
 
 const mockedGame: IGame = {
     id: "mockedID",
@@ -28,7 +29,7 @@ describe("Game2DViewComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [Game2DViewComponent],
-            imports: [RouterTestingModule, HttpClientModule],
+            imports: [RouterTestingModule, HttpClientModule, MatProgressSpinnerModule],
             providers: [IndexService, AppRoutingModule],
         })
             .compileComponents().then(() => { }, (error: Error) => {

@@ -79,10 +79,8 @@ const mockTypeModifColor: {add: boolean, delete: boolean, color: boolean} = {add
 const mockObjects: IObjet3D[] = [obj3D1, obj3D2, obj3D3, obj3D4, obj3D5, obj3D6, obj3D7, obj3D8];
 
 const mockScene: IScene3D = {
-    numObj: mockObjects.length,
     backColor: 0x0000,
     objects: mockObjects,
-    modified: true,
 };
 
 const expect: Chai.ExpectStatic = chai.expect;

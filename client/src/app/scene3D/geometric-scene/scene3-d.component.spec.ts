@@ -18,10 +18,8 @@ describe("Scene3DComponent", () => {
 };
 
   const mockScene: IScene3D = {
-    modified: false,
     backColor: 0x00000,
     objects: [obj3D],
-    numObj: 1
 };
 
   beforeEach(async(() => {

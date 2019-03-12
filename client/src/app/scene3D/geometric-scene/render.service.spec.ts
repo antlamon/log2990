@@ -32,8 +32,6 @@ describe("renderService", () => {
   };
   const mockObjects: IObjet3D[] = [cone, cube, cylinder];
   const mockOkScene: IScene3D = {
-    modified: false,
-    numObj: mockObjects.length,
     objects: mockObjects,
     backColor: 0xFF0F0F,
   };
@@ -71,7 +69,7 @@ describe("renderService", () => {
     it("should call createShape the right amount of times", () => {
       spyOn(component["shapeService"], "createShape");
       component.initialize(container, mockOkScene);
-      expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockOkScene.numObj);
+      expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockOkScene.objects.length);
     });
   });
   describe("Test for the resize function", () => {

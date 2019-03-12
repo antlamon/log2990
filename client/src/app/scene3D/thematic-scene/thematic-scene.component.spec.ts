@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ThematicSceneComponent } from "./thematic-scene.component";
+import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
+import { MedievalObjectService } from "./medieval-forest/medieval-objects/medieval-object.service";
 
 describe("ThematicSceneComponent", () => {
   let component: ThematicSceneComponent;
@@ -8,7 +10,8 @@ describe("ThematicSceneComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ThematicSceneComponent ]
+      declarations: [ ThematicSceneComponent ],
+      providers: [ MedievalForestService, MedievalObjectService ],
     })
     .compileComponents();
   }));

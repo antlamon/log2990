@@ -8,11 +8,13 @@ import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.compone
 import { SimpleGeneratorComponent } from "../adminView/simple-generator/simple-generator.component";
 import { FreeGeneratorComponent } from "../adminView/free-generator/free-generator.component";
 import { FormsModule } from "@angular/forms";
-import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { IGame } from "../../../../common/models/game";
 import { ITop3 } from "../../../../common/models/top3";
 import { IGame3D } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
+import { Scene3DComponent } from "../scene3D/geometric-scene/scene3-d.component";
+import { ThematicSceneComponent } from "../scene3D/thematic-scene/thematic-scene.component";
+import { MatProgressSpinnerModule } from "@angular/material";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -24,8 +26,8 @@ const mockSimple: IGame = {
 const mockGame3D: IGame3D = {
   name: "mock3DName",
   id: "",
-  originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
-  modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
+  originalScene: { objects: [], backColor: -1, },
+  modifiedScene: { objects: [], backColor: -1, },
   solo: { } as ITop3,
   multi: { } as ITop3,
 };
@@ -39,7 +41,8 @@ describe("ListViewComponent", () => {
       imports: [
         HttpClientModule,
         AppRoutingModule,
-        FormsModule
+        FormsModule,
+        MatProgressSpinnerModule
       ],
       declarations: [
         ListViewComponent,
@@ -50,7 +53,8 @@ describe("ListViewComponent", () => {
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
         Scene3DComponent,
-        Game3DViewComponent
+        Game3DViewComponent,
+        ThematicSceneComponent,
       ]
     })
       .compileComponents().then(() => { }, (error: Error) => { });
