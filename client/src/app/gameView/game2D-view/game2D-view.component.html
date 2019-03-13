@@ -4,15 +4,18 @@
 <div class="divGames">
   <div class="gameImage">
     <p>Image originale:</p>
-    <div class="mockImages" [ngClass]="blockedCursor"><img class="game-card-img" [ngClass]="disableClick"
-        (click)="sendClick($event)" src={{simpleGame?.card.originalImage}} alt=""></div>
+    <div class="mockImages" [ngClass]="blockedCursor">
+      <img *ngIf="simpleGame; else spinny" class="game-card-img" [ngClass]="disableClick" (click)="sendClick($event)" src={{simpleGame.card.originalImage}} alt="">
+    </div>
   </div>
   <div class="gameImage">
     <p>Image avec les différences:</p>
-    <div class="mockImages" [ngClass]="blockedCursor"><img class="game-card-img" [ngClass]="disableClick"
-        (click)="sendClick($event)" src={{simpleGame?.modifiedImage}} alt=""></div>
+    <div class="mockImages" [ngClass]="blockedCursor">
+      <img *ngIf="simpleGame; else spinny" class="game-card-img" [ngClass]="disableClick" (click)="sendClick($event)" src={{simpleGame.modifiedImage}} alt="">
+    </div>
   </div>
 </div>
 <div class="messagesBox">
   <div class="messagesBoxTitle"> Messages </div>
 </div>
+<ng-template #spinny><mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner></ng-template>

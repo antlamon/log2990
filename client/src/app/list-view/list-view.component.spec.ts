@@ -13,6 +13,7 @@ import { IGame } from "../../../../common/models/game";
 import { ITop3 } from "../../../../common/models/top3";
 import { IGame3D } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
+import { MatProgressSpinnerModule } from "@angular/material";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -39,7 +40,8 @@ describe("ListViewComponent", () => {
       imports: [
         HttpClientModule,
         AppRoutingModule,
-        FormsModule
+        FormsModule,
+        MatProgressSpinnerModule
       ],
       declarations: [
         ListViewComponent,
@@ -107,6 +109,30 @@ describe("ListViewComponent", () => {
       component.freeGames = [];
       component.deleteFreeGames(mockGame3D);
       expect(gameServiceSpy).toHaveBeenCalledTimes(0);
+    });
+  });
+  describe("Adding games", () => {
+    it("Adding a simple games should change the simple games array", () => {
+      component.simpleGames = [];
+      component.addSimpleGame(mockSimple);
+      expect(component.simpleGames.length).toEqual(1);
+    });
+    it("Adding a free games should change the simple games array", () => {
+      component.freeGames = [];
+      component.addFreeGame(mockGame3D);
+      expect(component.freeGames.length).toEqual(1);
+    });
+  });
+  describe("Removing games", () => {
+    it("Dleting a simple games should change the simple games array", () => {
+      component.simpleGames = [mockSimple];
+      component.removeSimpleGame(mockSimple.id);
+      expect(component.simpleGames.length).toEqual(0);
+    });
+    it("Adding a free games should change the simple games array", () => {
+      component.freeGames = [mockGame3D];
+      component.removeFreeGame(mockGame3D.id);
+      expect(component.freeGames.length).toEqual(0);
     });
   });
 
