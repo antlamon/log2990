@@ -6,6 +6,7 @@ import { SocketsEvents } from "../../../../../common/communication/socketsEvents
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
+import { TimerService } from "src/app/services/timer.service";
 
 @Component({
     selector: "app-game2d-view",
@@ -29,7 +30,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private gameService: GameService,
         private socket: SocketService,
         private route: ActivatedRoute,
-        private index: IndexService
+        private index: IndexService,
+        private timer: TimerService
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -68,6 +70,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                     differenceImage: this.simpleGame.differenceImage
                 };
                 this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
+                this.timer.startTimer({minutes: 7, seconds: 0}, this.finishGame.bind(this));
             });
     }
 
@@ -93,11 +96,15 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             this.simpleGame.modifiedImage = update.newImage;
             this.differencesFound = update.differencesFound;
             if (this.differencesFound === this.NB_MAX_DIFF) {
-                this.victorySound.play().catch((error: Error) => console.error(error.message));
+                this.finishGame();
             } else {
                 this.correctSound.play().catch((error: Error) => console.error(error.message));
             }
         }
+    }
+    private finishGame(): void {
+        this.timer.stopTimer();
+        this.victorySound.play().catch((error: Error) => console.error(error.message));
     }
 
     public sendClick(event: MouseEvent): void {

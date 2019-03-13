@@ -37,9 +37,15 @@ describe("TimerService", () => {
       const service: TimerService = TestBed.get(TimerService);
       service.startTimer({minutes: 0, seconds: 2}, () => {});
       setTimeout(() => {
-        expect(service.getTime()).toEqual({minutes: 0, seconds: 2});
+        expect(service.getTimeAsString()).toEqual("00:02");
         done();
       },         testDelay );
+    });
+    it("Time should be formatted correctly", () => {
+      const service: TimerService = TestBed.get(TimerService);
+      service.nbMinutes = service.FORMAT_ZERO_MAX + 1;
+      service.nbSeconds = service.FORMAT_ZERO_MAX - 1;
+      expect(service.getTimeAsString()).toEqual("10:08");
     });
   });
 });

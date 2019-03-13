@@ -7,6 +7,7 @@ export class TimerService {
 
   public readonly CONVERSION_SEC_TO_MILI: number = 1000;
   public readonly CONVERSION_MIN_TO_SEC: number = 60;
+  public readonly FORMAT_ZERO_MAX: number = 9;
   public nbSeconds: number;
   public nbMinutes: number;
   private timerEnd: NodeJS.Timeout;
@@ -28,8 +29,18 @@ export class TimerService {
     clearTimeout(this.timerEnd);
     clearInterval(this.timerUpdate);
   }
-  public getTime(): ITime {
-    return {minutes: this.nbMinutes, seconds: this.nbSeconds};
+  public getTimeAsString(): string {
+    let time: string = "";
+    if (this.nbMinutes <= this.FORMAT_ZERO_MAX) {
+      time += "0";
+    }
+    time += this.nbMinutes + ":";
+    if (this.nbSeconds <= this.FORMAT_ZERO_MAX) {
+      time += "0";
+    }
+    time += this.nbSeconds;
+
+    return time;
   }
   private updateTime(): void {
     this.nbSeconds++;
