@@ -1,0 +1,10 @@
+.error-popup {
+    position: absolute;
+    color: white;
+    font-size: large;
+    cursor: not-allowed;
+    background: black;
+    border: 2px groove black;
+    border-radius: 3px;
+    user-select: none;
+}

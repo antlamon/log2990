@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
@@ -6,6 +6,7 @@ import { SocketsEvents } from "../../../../../common/communication/socketsEvents
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
+import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 
 @Component({
     selector: "app-game2d-view",
@@ -24,6 +25,10 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
     private victorySound: HTMLAudioElement;
+
+    @ViewChild(ErrorPopupComponent)
+    private errorPopup: ErrorPopupComponent;
+    private lastClick: MouseEvent;
 
     public constructor(
         private gameService: GameService,
@@ -80,10 +85,12 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
+            this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
             this.disableClick = "disable-click";
             this.blockedCursor = "cursor-not-allowed";
             setTimeout(
                 () => {
+                    this.errorPopup.hidePopup();
                     this.disableClick = "";
                     this.blockedCursor = "";
                 },
@@ -112,6 +119,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             username: this.index.username,
         };
 
+        this.lastClick = event;
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE, imageClickMessage);
     }
 }

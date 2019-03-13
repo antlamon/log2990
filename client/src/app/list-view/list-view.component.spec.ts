@@ -14,6 +14,7 @@ import { ITop3 } from "../../../../common/models/top3";
 import { IGame3D } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
+import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -52,7 +53,8 @@ describe("ListViewComponent", () => {
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
         Scene3DComponent,
-        Game3DViewComponent
+        Game3DViewComponent,
+        ErrorPopupComponent
       ]
     })
       .compileComponents().then(() => { }, (error: Error) => { });

@@ -22,6 +22,7 @@ import { FileValidatorService } from "./services/file-validator.service";
 import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
+import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { SocketService } from "./services/socket.service";
     SimpleGeneratorComponent,
     Game2DViewComponent,
     Scene3DComponent,
-    Game3DViewComponent
+    Game3DViewComponent,
+    ErrorPopupComponent
   ],
   imports: [
     FormsModule,
