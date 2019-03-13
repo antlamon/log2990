@@ -2,30 +2,27 @@ import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
 import { IScene3D } from "../../../../../common/models/game3D";
-import { IObjet3D } from "../../../../../common/models/objet3D";
+import { IObjet3D, IShape3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 
 describe("renderService", () => {
-  const cone: IObjet3D = {
+  const cone: IShape3D = {
     type: "cone",
     color: 0,
-    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const cube: IObjet3D = {
+  const cube: IShape3D = {
     type: "cube",
     color: 0,
-    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
   };
-  const cylinder: IObjet3D = {
+  const cylinder: IShape3D = {
     type: "cylinder",
     color: 0,
-    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},

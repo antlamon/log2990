@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
-import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
+import { IObjet3D, MAX_COLOR, IShape3D } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { FormValidatorService } from "./formValidator.service";
@@ -63,7 +63,7 @@ export class Game3DGeneratorService {
             newScene.objects.push(obj);
             do  {
                 backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
-            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color));
+            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, (objects[i] as IShape3D).color));
         }
 
         return newScene;
@@ -81,7 +81,7 @@ export class Game3DGeneratorService {
             newScene.objects.push(obj);
             do  {
                 backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
-            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color));
+            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, (objects[i] as IShape3D).color));
         }
 
         return newScene;

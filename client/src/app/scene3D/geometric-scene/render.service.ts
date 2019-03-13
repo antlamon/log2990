@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IScene3D } from "../../../../../common/models/game3D";
-import { MAX_COLOR } from "../../../../../common/models/objet3D";
+import { MAX_COLOR, IShape3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 
 @Injectable()
@@ -37,7 +37,7 @@ export class RenderService {
     this.createScene(scen);
 
     for (const obj of scen.objects) {
-      this.scene.add(this.shapeService.createShape(obj));
+      this.scene.add(this.shapeService.createShape(obj as IShape3D));
     }
 
     this.startRenderingLoop();

@@ -11,12 +11,6 @@ export class MedievalForestService {
   private sceneRef: THREE.Scene;
   private gameRef: IScene3D;
   private castle: IObjet3D;
-  // example of objects to add in a game
-  private chest: IObjet3D;
-  private tree1: IObjet3D;
-  private tree2: IObjet3D;
-  private rock: IObjet3D;
-  private guard: IObjet3D;
 
   private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
   private forestSize: number = 60;
@@ -34,52 +28,8 @@ export class MedievalForestService {
   public constructor(private medievalService: MedievalObjectService) {
     this.castle = {
       type: "castle",
-      color: 0x000000,
-      texture: "",
       position: { x: 0, y: 0, z: 0},
       size: 0.015,
-      rotation: {x: 0, y: 0, z: 0},
-    };
-    // here are some examples for the games, the castle will always be there, but those are objects that 
-    // could move, rotate, etc according to what the game generator gave us
-    this.chest = {
-      type: "chest",
-      color: 0x000000,
-      texture: "",
-      position: { x: 2, y: 0.5, z: 0},
-      size: 1,
-      rotation: {x: 0, y: 0, z: 0},
-    };
-    this.tree1 = {
-      type: "tree1",
-      color: 0x000000,
-      texture: "",
-      position: { x: 5, y: 0.5, z: 20},
-      size: 0.03,
-      rotation: {x: 0, y: 0, z: 0},
-    };
-    this.tree2 = {
-      type: "tree2",
-      color: 0x000000,
-      texture: "",
-      position: { x: 10, y: 0, z: 10},
-      size: 0.5,
-      rotation: {x: 0, y: 0, z: 0},
-    };
-    this.rock = {
-      type: "rock",
-      color: 0x000000,
-      texture: "",
-      position: { x: 10, y: 1, z: 8},
-      size: 0.1,
-      rotation: {x: 0, y: 0, z: 0},
-    };
-    this.guard = {
-      type: "guard",
-      color: 0x000000,
-      texture: "",
-      position: { x: 3, y: 0, z: 5},
-      size: 0.02,
       rotation: {x: 0, y: 0, z: 0},
     };
   }
@@ -128,22 +78,7 @@ export class MedievalForestService {
   }
 
   private addCastle(): void {
-    this.medievalService.createObject(this.guard).then((castle: THREE.Object3D) => {
-      this.sceneRef.add(castle);
-    });
     this.medievalService.createObject(this.castle).then((castle: THREE.Object3D) => {
-      this.sceneRef.add(castle);
-    });
-    this.medievalService.createObject(this.chest).then((castle: THREE.Object3D) => {
-      this.sceneRef.add(castle);
-    });
-    this.medievalService.createObject(this.tree1).then((castle: THREE.Object3D) => {
-      this.sceneRef.add(castle);
-    });
-    this.medievalService.createObject(this.tree2).then((castle: THREE.Object3D) => {
-      this.sceneRef.add(castle);
-    });
-    this.medievalService.createObject(this.rock).then((castle: THREE.Object3D) => {
       this.sceneRef.add(castle);
     });
   }

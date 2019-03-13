@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
-import { IObjet3D, INITIAL_OBJECT_SIZE } from "../../../../../common/models/objet3D";
+import { INITIAL_OBJECT_SIZE, IShape3D } from "../../../../../common/models/objet3D";
 import * as THREE from "three";
-// import { GEOMETRIC_TYPE_NAME } from "../../../../../common/models/game3D";
 
 @Injectable({
   providedIn: "root"
@@ -25,7 +24,7 @@ export class ShapeCreatorService {
     this.createTetrahedron();
   }
 
-  public createShape(obj: IObjet3D): THREE.Mesh {
+  public createShape(obj: IShape3D): THREE.Mesh {
 
     const shape: THREE.Mesh = this.map.get(obj.type).clone();
 

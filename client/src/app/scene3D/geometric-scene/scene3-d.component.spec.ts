@@ -3,15 +3,14 @@ import { Scene3DComponent } from "./scene3-d.component";
 import { RenderService } from "./render.service";
 import { ShapeCreatorService } from "./shape-creator.service";
 import { IScene3D } from "../../../../../common/models/game3D";
-import { IObjet3D } from "../../../../../common/models/objet3D";
+import { IShape3D } from "../../../../../common/models/objet3D";
 
 describe("Scene3DComponent", () => {
   let component: Scene3DComponent;
   let fixture: ComponentFixture<Scene3DComponent>;
-  const obj3D: IObjet3D = {
+  const obj3D: IShape3D = {
     type: "cube",
     color: 0,
-    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
