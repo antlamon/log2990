@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, ViewChild, HostListener, Input } from "@angular/core";
 import { RenderService } from "./render.service";
-import { IScene3D } from "../../../../../common/models/game3D";
+import { IGame3D } from "../../../../../common/models/game3D";
 
 @Component({
   selector: "app-scene3-d-component",
@@ -10,7 +10,7 @@ import { IScene3D } from "../../../../../common/models/game3D";
 
 export class Scene3DComponent implements AfterViewInit {
 
-  @Input() public game: IScene3D;
+  @Input() public game: IGame3D;
   @Input() public isCardMode: boolean;
   public imageBase64: string;
   private readonly RENDERERING_DELAY: number = 5;
@@ -32,8 +32,8 @@ export class Scene3DComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    if (this.game) {
-      this.renderService.initialize(this.container, this.game);
+    if ( this.game !== undefined) {
+      this.renderService.initialize(this.container, null, this.game);
       setTimeout(() => {
         this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
       },         this.RENDERERING_DELAY); // make sure scene is rendered before

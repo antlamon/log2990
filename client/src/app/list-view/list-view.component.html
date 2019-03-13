@@ -83,7 +83,7 @@
             <div class="bottom-card">
               <div class="game-card-left-content">
                 <div class="game-card-img-container">
-                  <app-scene3-d-component class="game-card-img" [game]="game.originalScene" #scene [isCardMode]="true">
+                  <app-scene3-d-component class="game-card-img" [game]="game" #scene [isCardMode]="true">
                   </app-scene3-d-component>
                 </div>
                 <div class="game-card-buttons" *ngIf="!isAdminMode">
@@ -127,14 +127,14 @@
                       <div class="score-position">3</div>
                     </div>
                     <div class="name-column">
-                      <div class="name">{{game.solo.first.name}}</div>
-                      <div class="name">{{game.solo.second.name}}</div>
-                      <div class="name">{{game.solo.third.name}}</div>
+                      <div class="name">{{game.multi.first.name}}</div>
+                      <div class="name">{{game.multi.second.name}}</div>
+                      <div class="name">{{game.multi.third.name}}</div>
                     </div>
                     <div class="score-column">
-                      <div class="scores">{{game.solo.first.score}}</div>
-                      <div class="scores">{{game.solo.second.score}}</div>
-                      <div class="scores">{{game.solo.third.score}}</div>
+                      <div class="scores">{{game.multi.first.score}}</div>
+                      <div class="scores">{{game.multi.second.score}}</div>
+                      <div class="scores">{{game.multi.third.score}}</div>
                     </div>
                   </div>
                 </div>

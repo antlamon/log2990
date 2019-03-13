@@ -9,7 +9,6 @@ import { IFullGame, IGame } from "../../../../../common/models/game";
 import { ITop3 } from "../../../../../common/models/top3";
 import { Game2DViewComponent } from "./game2D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
-
 const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",

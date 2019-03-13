@@ -24,7 +24,7 @@ const mockGame3D: IGame3D = {
     multi: { } as ITop3,
   };
 
-const nbRenderCall: number = 2;
+const nbRenderCall: number = 1;
 const delay: number = 10;
 describe("Game3DViewComponent", () => {
     let component: Game3DViewComponent;

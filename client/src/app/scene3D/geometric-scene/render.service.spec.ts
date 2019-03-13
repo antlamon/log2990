@@ -1,7 +1,7 @@
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
-import { IScene3D } from "../../../../../common/models/game3D";
+import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
 import { IObjet3D, IShape3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 
@@ -32,7 +32,21 @@ describe("renderService", () => {
     objects: mockObjects,
     backColor: 0xFF0F0F,
   };
-  const container: HTMLDivElement = document.createElement("div");
+
+  const mockGame: IGame3D = {
+    name: "mock",
+    id: "mockid",
+    originalScene: mockOkScene,
+    modifiedScene: {
+      backColor: 0x00000,
+      objects: [cylinder],
+    },
+    solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
+    multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
+  };
+
+  const container1: HTMLDivElement = document.createElement("div");
+  const container2: HTMLDivElement = document.createElement("div");
   const component: RenderService = new RenderService(new ShapeCreatorService());
 
   beforeEach(async(() => {
@@ -46,34 +60,26 @@ describe("renderService", () => {
     expect(service).toBeTruthy();
   }));
 
-  describe("Test for the function random", () => {
-    it("should return a number between the max / min paremeters (included)", () => {
-      const max: number = 200, min: number = 10;
-      const nb: number = component.random(min, max);
-      expect(nb).toBeGreaterThanOrEqual(min);
-      expect(nb).toBeLessThanOrEqual(max);
-    });
-  });
   describe("Test for calls within the initialize function", () => {
     it("container property should be properly affected", () => {
-      component.initialize(container, mockOkScene);
-      expect(component["container"]).toEqual(container);
+      component.initialize(container1, container2, mockGame);
+      expect(component["containerOriginal"]).toEqual(container1);
     });
     it("should give the background color given in parameters at creation", () => {
-      component.initialize(container, mockOkScene);
-      expect(component["scene"].background).toEqual(new THREE.Color(mockOkScene.backColor));
+      component.initialize(container1, container2, mockGame);
+      expect(component["sceneOriginal"].background).toEqual(new THREE.Color(mockOkScene.backColor));
     });
     it("should call createShape the right amount of times", () => {
       spyOn(component["shapeService"], "createShape");
-      component.initialize(container, mockOkScene);
+      component.initialize(container1, null, mockGame);
       expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockOkScene.objects.length);
     });
   });
   describe("Test for the resize function", () => {
     it("should change the camera aspect ratio for the new one", () => {
       component.onResize();
-      const width: number = component["container"].clientWidth;
-      const height: number = component["container"].clientHeight;
+      const width: number = component["containerOriginal"].clientWidth;
+      const height: number = component["containerOriginal"].clientHeight;
       expect(component["camera"].aspect).toEqual(width / height);
     });
     it("should update the projection matrix", () => {
@@ -82,10 +88,10 @@ describe("renderService", () => {
       expect(spyProjectionMatrix).toHaveBeenCalled();
     });
     it("should set the new size when resized", () => {
-      const spyRenderer: jasmine.Spy = spyOn(component["renderer"], "setSize");
+      const spyRenderer: jasmine.Spy = spyOn(component["rendererO"], "setSize");
       component.onResize();
-      const width: number = component["container"].clientWidth;
-      const height: number = component["container"].clientHeight;
+      const width: number = component["containerOriginal"].clientWidth;
+      const height: number = component["containerOriginal"].clientHeight;
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
     });
   });
