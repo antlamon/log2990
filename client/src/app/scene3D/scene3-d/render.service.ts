@@ -75,7 +75,6 @@ export class RenderService {
 
     for (const obj of iScene.objects) {
       const object: THREE.Mesh = this.shapeService.createShape(obj);
-      // object.addEventListener("mouseDown", (event: MouseEvent) => {scene.background = new THREE.Color(0xFFFFFF); });
       scene.add(object);
     }
 
@@ -173,8 +172,18 @@ export class RenderService {
     }
   }
   private onMouseDown = (event: MouseEvent) => {
-    if (event.button === CLICK.right) {
-      this.press = true;
+    switch (event.button) {
+      case (CLICK.right):
+        this.press = true;
+        break;
+      case (CLICK.left):
+        this.identifyDiff(event);
+        break;
+      default:
     }
+  }
+
+  private identifyDiff(event: MouseEvent): void {
+    return;
   }
 }
