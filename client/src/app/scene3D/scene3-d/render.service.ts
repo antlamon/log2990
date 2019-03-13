@@ -13,8 +13,9 @@ export class RenderService {
 
   private camera: THREE.PerspectiveCamera;
 
-  private sensitivity: number = 0.002;
+  private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
+  private isGame: boolean;
 
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
@@ -44,11 +45,11 @@ export class RenderService {
     this.sceneOriginal = this.createScene(game.originalScene);
 
     if (containerM !== null) {
+      this.isGame = true;
       this.containerModif = containerM;
       this.sceneModif = this.createScene(game.modifiedScene);
     } else {
-      this.sceneModif = undefined;
-      this.rendererM = undefined;
+      this.isGame = false;
     }
 
     this.createCamera();
@@ -73,7 +74,9 @@ export class RenderService {
     scene.add(this.light);
 
     for (const obj of iScene.objects) {
-      scene.add(this.shapeService.createShape(obj));
+      const object: THREE.Mesh = this.shapeService.createShape(obj);
+      // object.addEventListener("mouseDown", (event: MouseEvent) => {scene.background = new THREE.Color(0xFFFFFF); });
+      scene.add(object);
     }
 
     return scene;
@@ -103,7 +106,7 @@ export class RenderService {
     document.addEventListener( "keydown", this.onKeyDown, false );
 
     this.rendererO = this.createRenderer(this.containerOriginal);
-    if (this.sceneModif !== undefined) {
+    if (this.isGame) {
       this.rendererM = this.createRenderer(this.containerModif);
     }
     this.render();
@@ -136,7 +139,7 @@ export class RenderService {
     requestAnimationFrame(() => this.render());
 
     this.rendererO.render(this.sceneOriginal, this.camera);
-    if (this.rendererM !== undefined) {
+    if (this.isGame) {
       this.rendererM.render(this.sceneModif, this.camera);
     }
   }
@@ -160,10 +163,9 @@ export class RenderService {
   private onMouseMove = (event: MouseEvent) => {
     if (!this.press) { return; }
 
-    if (event.button === 0) {
-      this.camera.rotation.y -= event.movementX * this.sensitivity;
-      this.camera.rotation.x -= event.movementY * this.sensitivity;
-    }
+    // TODO: fix rotation after moving
+    this.camera.rotation.y -= event.movementX * this.SENSITIVITY;
+    this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
   }
   private onMouseUp = (event: MouseEvent) => {
     if (event.button === CLICK.right) {
