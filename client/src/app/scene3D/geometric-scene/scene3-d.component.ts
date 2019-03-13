@@ -19,12 +19,18 @@ export class Scene3DComponent implements AfterViewInit {
     this.isCardMode = false;
   }
 
-  private get container(): HTMLDivElement {
-    return this.containerRef.nativeElement;
+  private get containerO(): HTMLDivElement {
+    return this.containerRefO.nativeElement;
+  }
+  private get containerM(): HTMLDivElement {
+    return this.containerRefM.nativeElement;
   }
 
-  @ViewChild("container")
-  private containerRef: ElementRef;
+  @ViewChild("containerO")
+  private containerRefO: ElementRef;
+
+  @ViewChild("containerM")
+  private containerRefM: ElementRef;
 
   @HostListener("window:resize", ["$event"])
   public onResize(): void {
@@ -33,12 +39,13 @@ export class Scene3DComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     if ( this.game !== undefined) {
-      this.renderService.initialize(this.container, null, this.game);
+      this.renderService.initialize(this.containerO, this.containerM, this.game);
       setTimeout(() => {
-        this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
+        this.imageBase64 = ((this.containerO).children[0] as HTMLCanvasElement).toDataURL();
       },         this.RENDERERING_DELAY); // make sure scene is rendered before
     }
-    this.container.style.display = this.isCardMode ? "none" : "block";
+    this.containerO.style.display = this.isCardMode ? "none" : "block";
+    this.containerM.style.display = this.isCardMode ? "none" : "block";
   }
 
 }

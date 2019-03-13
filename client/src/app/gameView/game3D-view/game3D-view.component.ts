@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
-import { RenderService } from "src/app/scene3D/geometric-scene/render.service";
+//import { RenderService } from "src/app/scene3D/geometric-scene/render.service";
 
 @Component({
     selector: "app-game3d-view",
@@ -11,18 +11,18 @@ import { RenderService } from "src/app/scene3D/geometric-scene/render.service";
 })
 export class Game3DViewComponent implements OnInit {
 
-    @ViewChild("originalContainer")
-    private originalContainerRef: ElementRef;
+    // @ViewChild("originalContainer")
+    // private originalContainerRef: ElementRef;
 
-    @ViewChild("modifiedContainer")
-    private modifiedContainerRef: ElementRef;
+    // @ViewChild("modifiedContainer")
+    // private modifiedContainerRef: ElementRef;
 
     public game3D: IGame3D;
 
     public constructor(
         private gameService: GameService,
         private route: ActivatedRoute,
-        private render: RenderService,
+        //private render: RenderService,
     ) { }
 
     public ngOnInit(): void {
@@ -34,19 +34,18 @@ export class Game3DViewComponent implements OnInit {
         return String(this.route.snapshot.paramMap.get("id"));
     }
 
-    private get originalContainer(): HTMLDivElement {
-        return this.originalContainerRef.nativeElement;
-    }
+    // private get originalContainer(): HTMLDivElement {
+    //     return this.originalContainerRef.nativeElement;
+    // }
 
-    private get modifiedContainer(): HTMLDivElement {
-        return this.modifiedContainerRef.nativeElement;
-    }
+    // private get modifiedContainer(): HTMLDivElement {
+    //     return this.modifiedContainerRef.nativeElement;
+    // }
 
     public get3DGame(): void {
         this.gameService.get3DGame(this.getId())
             .then((response: IGame3D) => {
                 this.game3D = response;
-                this.render.initialize(this.originalContainer, this.modifiedContainer, this.game3D);
             })
             .catch(() => "get3DGame");
     }

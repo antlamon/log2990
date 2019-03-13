@@ -75,7 +75,6 @@ export class RenderService {
 
     for (const obj of iScene.objects) {
       const object: THREE.Mesh = this.shapeService.createShape(obj as IShape3D);
-      // object.addEventListener("mouseDown", (event: MouseEvent) => {scene.background = new THREE.Color(0xFFFFFF); });
       scene.add(object);
     }
 

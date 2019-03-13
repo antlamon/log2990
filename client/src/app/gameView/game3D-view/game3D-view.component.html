@@ -2,14 +2,15 @@
 <div class="chrono">Temps restant: 00:00</div>
 <div class="compteur">Différences trouvées: 0</div>
 <div class="divGames">
-  <div class="gameImage">
+  <!-- <div class="gameImage">
     <p>Image originale:</p>
     <div #originalContainer class="game-card-img"></div>
   </div>
   <div class="gameImage">
     <p>Image avec les différences:</p>
     <div #modifiedContainer class="game-card-img"></div>
-  </div>
+  </div> -->
+  <app-scene3-d-component [game] = "game3D" [isCardMode] = "false"></app-scene3-d-component>
 </div>
 <div class="messagesBox">
   <div class="messagesBoxTitle"> Messages </div>
