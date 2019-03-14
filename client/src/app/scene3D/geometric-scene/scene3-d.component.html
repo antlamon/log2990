@@ -1,3 +1,6 @@
+<div class = "gameView">
 <div #containerO class = "scene3D"></div>
 <div #containerM class = "scene3D"></div>
-<img *ngIf="isCardMode" src="{{imageBase64}}">
+</div>
+<img *ngIf="isCardMode" [src]="this.imageBase64" #image>
+
