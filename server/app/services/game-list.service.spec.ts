@@ -41,7 +41,7 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: {} as ITop3,
+    solo: {first: {name: "allo", score: "asd"}, second: {name: "allo", score: "asd"}, third: {name: "allo", score: "asd"}} as ITop3,
     multi: {} as ITop3,
 };
 const mockedFullGame: IFullGame = {
