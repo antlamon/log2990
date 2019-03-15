@@ -10,10 +10,11 @@ export class MedievalForestService {
 
   private sceneRef: THREE.Scene;
   private gameRef: IScene3D;
-  private castle: IObjet3D;
+  private castleWorld: IObjet3D;
 
   private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
   private forestSize: number = 60;
+  private skyBoxSize: number = 300;
   private skyBoxURLs: string[] = [
     "assets/clouds/right.png",
     "assets/clouds/left.png",
@@ -26,10 +27,11 @@ export class MedievalForestService {
   private textureLoader: THREE.TextureLoader;
 
   public constructor(private medievalService: MedievalObjectService) {
-    this.castle = {
-      type: "castle",
-      position: { x: 0, y: 0, z: 0},
-      size: 0.015,
+
+    this.castleWorld = {
+      type: "castleWorld",
+      position: {x: 0 , y: 0, z: 0},
+      size: 1,
       rotation: {x: 0, y: 0, z: 0},
     };
   }
@@ -39,7 +41,7 @@ export class MedievalForestService {
     this.gameRef = game;
     this.createSkyBox();
     this.createFloor();
-    this.addCastle();
+    this.buildWorld();
     if (this.gameRef) {
       this.addGameObjects();
     }
@@ -56,17 +58,13 @@ export class MedievalForestService {
       });
     }
 
-    const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.forestSize, this.forestSize, this.forestSize);
+    const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
     const skyMaterial: THREE.MeshFaceMaterial = new THREE.MeshFaceMaterial(materialArray);
     const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, skyMaterial);
     this.sceneRef.add(skyBox);
   }
 
   private createFloor(): void {
-    // TODO: might be cool to implement an algorithm to have some hills / mountains
-    // found some algorithms but it would require complex functions... check if cool enough
-    // for the complexity it adds
-
     const geometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(this.forestSize, this.forestSize);
     // tslint:disable-next-line:no-magic-numbers
     geometry.rotateX(-Math.PI / 2);
@@ -77,9 +75,9 @@ export class MedievalForestService {
     this.sceneRef.add(floor);
   }
 
-  private addCastle(): void {
-    this.medievalService.createObject(this.castle).then((castle: THREE.Object3D) => {
-      this.sceneRef.add(castle);
+  private buildWorld(): void {
+    this.medievalService.createObject(this.castleWorld).then((world: THREE.Object3D) => {
+      this.sceneRef.add(world);
     });
   }
 
