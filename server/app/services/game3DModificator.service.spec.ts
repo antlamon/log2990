@@ -104,19 +104,19 @@ describe("Game3D Modificator service", () => {
 
     describe("Modifying the objects should work, whatever the type, if there is modifications", () => {
         it("Should return an array with 7 added objects", async () => {
-            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd).objects.length).
+            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd, []).objects.length).
                 to.eql(mockObjects.length + Game3DModificatorService.NB_DIFF);
         });
 
         it("Should return an array with only 1 object", async () => {
 
-            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete).objects.length).
+            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete, []).objects.length).
                 to.eql(mockObjects.length - Game3DModificatorService.NB_DIFF);
         });
 
         it("Should return an array with 7 geometric modified objects", async () => {
 
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
             let count: number = 0;
             for (let i: number = 0; i < mockObjects.length; i++) {
                 if (newObj.objects[i].color !== mockObjects[i].color) {
@@ -128,7 +128,7 @@ describe("Game3D Modificator service", () => {
         it("Should return an array with 7 thematic modified objects", async () => {
             // to modify with texture next sprint
 
-            const newObj: IScene3D = service.createModifScene(mockScene, THEMATIC_TYPE_NAME, mockTypeModifColor);
+            const newObj: IScene3D = service.createModifScene(mockScene, THEMATIC_TYPE_NAME, mockTypeModifColor, []);
             let count: number = 0;
             for (let i: number = 0; i < mockObjects.length; i++) {
                 if (newObj.objects[i].texture !== mockObjects[i].texture) {
@@ -139,7 +139,7 @@ describe("Game3D Modificator service", () => {
         });
         it("Should return an array with 7 geometric modified objects. The undmodified attributes should stay the same", async () => {
 
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
             let count: number = 0;
             for (let i: number = 0; i < mockObjects.length; i++) {
                 if (newObj.objects[i].color !== mockObjects[i].color) {
@@ -154,14 +154,14 @@ describe("Game3D Modificator service", () => {
         });
         it("If type of modification add or delete is choosed, the numbers of objects should not be the same", async () => {
 
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd);
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd, []);
             expect(newObj.numObj).to.not.eql(mockScene.numObj);
-            const newObjDel: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete);
+            const newObjDel: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete, []);
             expect(newObjDel.numObj).to.not.eql(mockScene.numObj);
         });
         it("If type of modification add or delete isnt choosed, the numbers of objects should be the same", async () => {
 
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
             expect(newObj.numObj).to.eql(mockScene.numObj);
         });
 

@@ -2,7 +2,7 @@ import { ObjectID } from "bson";
 import { inject, injectable } from "inversify";
 import { TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
@@ -15,7 +15,6 @@ import { ObjectGeneratorService } from "./objectGenerator.service";
 export class Game3DGeneratorService {
 
     private readonly PALE_COLOR: number = 0x0F0F0F;
-
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService,
                        @inject(TYPES.FormValidatorService) private formValidator: FormValidatorService) {}
@@ -52,9 +51,8 @@ export class Game3DGeneratorService {
     private generateGame(form: IGame3DForm): IGame3D {
 
         const randomObjects: IObjet3D[] = [];
-
         let backGroundColor: number = 0;
-
+        let tempDifferences: [string, number][] =[];
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             backGroundColor = this.generateObjGeometricBackground(randomObjects, form.objectQty);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
@@ -73,9 +71,10 @@ export class Game3DGeneratorService {
             name: form.name,
             id: (new ObjectID()).toHexString(),
             originalScene: scene,
-            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications),
+            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications, tempDifferences),
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
+            differencesIndex: tempDifferences,
         };
     }
 

@@ -50,6 +50,7 @@ describe("renderService", () => {
     },
     solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
     multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
+    differencesIndex: [],
   };
 
   const container1: HTMLDivElement = document.createElement("div");

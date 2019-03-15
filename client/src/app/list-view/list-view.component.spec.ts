@@ -29,6 +29,7 @@ const mockGame3D: IGame3D = {
   modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
   solo: { } as ITop3,
   multi: { } as ITop3,
+  differencesIndex: [],
 };
 
 describe("ListViewComponent", () => {
