@@ -27,6 +27,19 @@ export class MedievalObjectService {
     });
   }
 
+  public createWorld(object: IObjet3D): Promise<THREE.Object3D> {
+    return new Promise((resolve, reject) => {
+        this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
+                               (gltf) => {
+            resolve(this.setPositionParameters(gltf.scene, object));
+          },
+                               (loading) => {
+            // TODO: send loading message to user
+          }
+        );
+    });
+  }
+
   private setPositionParameters(object: THREE.Object3D, parameters: IObjet3D): THREE.Object3D {
 
     object.scale.set(parameters.size, parameters.size, parameters.size);

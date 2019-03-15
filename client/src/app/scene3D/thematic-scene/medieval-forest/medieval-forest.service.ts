@@ -8,8 +8,22 @@ import { IObjet3D } from "../../../../../../common/models/objet3D";
 
 export class MedievalForestService {
 
+  // mock objects for tests
+  private obj: IObjet3D[] = [
+    {
+      type: "rock",
+      position: { x: 0, y: 0, z: -10},
+      size: 1,
+      rotation: {x: 0, y: 0, z: 0},
+    }
+
+  ];
+  // mocking a sccene
+  private gameRef: IScene3D = {
+    objects: this.obj,
+    backColor: 0xFFFF,
+  };
   private sceneRef: THREE.Scene;
-  private gameRef: IScene3D;
   private castleWorld: IObjet3D;
 
   private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
@@ -76,17 +90,20 @@ export class MedievalForestService {
   }
 
   private buildWorld(): void {
-    this.medievalService.createObject(this.castleWorld).then((world: THREE.Object3D) => {
+    this.medievalService.createWorld(this.castleWorld).then((world: THREE.Object3D) => {
+      this.sceneRef.add(world);
+    });
+    this.medievalService.createObject(this.obj[0]).then((world: THREE.Object3D) => {
       this.sceneRef.add(world);
     });
   }
 
   private addGameObjects(): void {
-    for (const game of this.gameRef.objects) {
-      this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
-        this.sceneRef.add(obj);
-      });
-    }
+    // for (const game of this.gameRef.objects) {
+    //   this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
+    //     this.sceneRef.add(obj);
+    //   });
+    // }
   }
 
 }
