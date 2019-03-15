@@ -100,17 +100,11 @@ describe("FileValidatorService", () => {
       const min: number = NO_MIN_OBJECTS;
       expect(service.isValidObjNb(min.toString())).toEqual(true);
     });
-    it("No number bigger than the constant NO_OBJ_MAX", () => {
-      const delta: number = 10;
-      const veryMAX: number = NO_MAX_OBJECTS + delta;
-
-      expect(service.isValidObjNb(veryMAX.toString())).toEqual(false);
-    });
-    it("No number below the constant NO_OBJ_MIN", () => {
+    it("No number aboce NO_OBJ_MAX should be accepted", () => {
       const tooMuch: number = NO_MAX_OBJECTS + 1;
       expect(service.isValidObjNb(tooMuch.toString())).toEqual(false);
     });
-    it("should accept number equal to the constant NO_OBJ_MIN", () => {
+    it("should accept number equal to the constant NO_OBJ_MAX", () => {
       const max: number = NO_MAX_OBJECTS;
       expect(service.isValidObjNb(max.toString())).toEqual(true);
     });
@@ -136,17 +130,17 @@ describe("FileValidatorService", () => {
       expect(service.isValidGameName("")).toEqual(false);
     });
   });
-  describe("Test for the name of the username", () => {
-    it("A name longer than 10 characters should return false", () => {
+  describe("Test for the username validation", () => {
+    it("A username longer than 10 characters should return false", () => {
       expect(service.isValidName("abcdefghijklmnopqrstuvwxyz")).toEqual(false);
     });
-    it("A name shorter than 3 characters should return false", () => {
+    it("A username shorter than 3 characters should return false", () => {
       expect(service.isValidName("az")).toEqual(false);
     });
-    it("A name that contains between 3 and 15 characters should return true", () => {
+    it("A username that contains between 3 and 15 characters should return true", () => {
       expect(service.isValidName("nomdujeu")).toEqual(true);
     });
-    it("A NULL name should return false", () => {
+    it("A NULL username should return false", () => {
       expect(service.isValidName("")).toEqual(false);
     });
   });
