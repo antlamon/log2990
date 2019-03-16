@@ -15,7 +15,43 @@ export class MedievalForestService {
       position: { x: 0, y: 0, z: -10},
       size: 1,
       rotation: {x: 0, y: 0, z: 0},
-    }
+    },
+    {
+      type: "tree3",
+      position: { x: 5, y: 0, z: -10},
+      size: 1,
+      rotation: {x: 0, y: 0, z: 0},
+    },
+    {
+      type: "tree1",
+      position: { x: 10, y: 0, z: -10},
+      size: 1,
+      rotation: {x: 0, y: 0, z: 0},
+    },
+    {
+      type: "balista",
+      position: { x: 15, y: 0, z: -10},
+      size: 1,
+      rotation: {x: 0, y: 0, z: 0},
+    },
+    {
+      type: "dragon",
+      position: { x: 15, y: 10, z: -10},
+      size: 1,
+      rotation: {x: 0, y: 0, z: 0},
+    },
+    {
+      type: "knight",
+      position: { x: 5, y: 0, z: -5},
+      size: 1,
+      rotation: {x: 0, y: 0, z: 0},
+    },
+    {
+      type: "guard",
+      position: { x: 0, y: 0, z: -5},
+      size: 0.018,
+      rotation: {x: 0, y: 0, z: 0},
+    },
 
   ];
   // mocking a sccene
@@ -52,7 +88,8 @@ export class MedievalForestService {
 
   public createForest(scene: THREE.Scene, game: IScene3D): void {
     this.sceneRef = scene;
-    this.gameRef = game;
+    // while we use the mock .... 
+    //this.gameRef = game;
     this.createSkyBox();
     this.createFloor();
     this.buildWorld();
@@ -93,17 +130,14 @@ export class MedievalForestService {
     this.medievalService.createWorld(this.castleWorld).then((world: THREE.Object3D) => {
       this.sceneRef.add(world);
     });
-    this.medievalService.createObject(this.obj[0]).then((world: THREE.Object3D) => {
-      this.sceneRef.add(world);
-    });
   }
 
   private addGameObjects(): void {
-    // for (const game of this.gameRef.objects) {
-    //   this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
-    //     this.sceneRef.add(obj);
-    //   });
-    // }
+    for (const game of this.gameRef.objects) {
+      this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
+        this.sceneRef.add(obj);
+      });
+    }
   }
 
 }

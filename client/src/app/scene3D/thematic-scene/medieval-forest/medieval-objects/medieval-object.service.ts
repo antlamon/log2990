@@ -15,6 +15,7 @@ export class MedievalObjectService {
         this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
                                (gltf) => {
             this.loadedObjects.set(object.type, gltf.scene);
+            console.log(object.type);
             resolve(this.setPositionParameters(gltf.scene, object));
           },
                                (loading) => {

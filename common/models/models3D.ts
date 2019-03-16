@@ -1,4 +1,4 @@
 export const MODELS_3D: string[] = [
-    "castle", "rock", "guard", "tree1", "tree2", "chest"
+    "dragon", "rock", "balista", "tree1", "tree3", "knight"
 ]
 // TODO: add some more. 
