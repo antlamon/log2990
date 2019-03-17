@@ -57,7 +57,7 @@ export class Game3DModificatorService {
                 if (typeObj === GEOMETRIC_TYPE_NAME) {
                     return this.changeColor(obj);
                 } else {
-                    return this.changeColor(obj); /*this.changeTexture(obj);*/
+                    return obj; /*this.changeTexture(obj);*/ // TODO: CHANGE FOR TEXTURE MODIF
                 }
             }
 
@@ -71,7 +71,7 @@ export class Game3DModificatorService {
         if (typeObj === GEOMETRIC_TYPE_NAME) {
             objects.push(this.objectGenerator.generateRandomGeometricObject(objects));
         } else {
-            objects.push(this.objectGenerator.generateRandomThematicObject(objects));
+            this.objectGenerator.addRandomThematicObject("guard", 1, objects);
         }
     }
 

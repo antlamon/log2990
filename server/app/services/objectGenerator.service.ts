@@ -1,5 +1,4 @@
 import { injectable } from "inversify";
-import { MODELS_3D } from "../../../common/models/models3D";
 import { IModel3D, INITIAL_OBJECT_SIZE, IObjet3D, IShape3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
 
@@ -12,6 +11,8 @@ export class ObjectGeneratorService {
     private readonly BLACK: number = 0xFFFFFF;
     private readonly B0X_LENGHT: number = 280;
     private readonly MAX_ROTATION: number = 360;
+    private readonly CASTLE_POSITION_X: number = 10; // right / left
+    private readonly CASTLE_POSITION_Z: number = 10; // front / back
 
     public generateRandomGeometricObject(objects: IObjet3D[]): IShape3D {
         const genericObject: IShape3D = this.generateRandom3DShapes(objects);
@@ -19,25 +20,32 @@ export class ObjectGeneratorService {
 
         return genericObject;
     }
-    public generateRandomThematicObject(objects: IObjet3D[]): IModel3D {
-        return {
-            type: this.randomMedievalModels(),
+    public addRandomThematicObject(type: string, qty: number, objects: IObjet3D[]): void {
+        const obj: IModel3D = {
+            type: type,
             texture: "", // we keep the original one for the original scene
-            position: this.generatePosition(objects),
+            position: this.generatePosition(objects, true),
             size: this.random1Interval(this.MIN_SCALE, this.MAX_SCALE), // scale between 50% and 150% of a reference size
             rotation: {
-                x: this.randomInt(0, this.MAX_ROTATION),
-                y: this.randomInt(0, this.MAX_ROTATION),
+                x: 0,
+                y: 0,
                 z: this.randomInt(0, this.MAX_ROTATION),
             },
         };
+        for (let i: number = 0; i < qty; i++) {
+            objects.push(obj);
+            obj.position = this.generatePosition(objects, true);
+            obj.size = this.random1Interval(this.MIN_SCALE, this.MAX_SCALE);
+            obj.rotation.z = this.randomInt(0, this.MAX_ROTATION);
+        }
+
     }
 
     private generateRandom3DShapes(objects: IObjet3D[]): IShape3D {
         return {
             type: this.randomShape(),
             color: 0,
-            position: this.generatePosition(objects),
+            position: this.generatePosition(objects, false),
             size: this.random1Interval(this.MIN_SCALE, this.MAX_SCALE), // scale between 50% and 150% of a reference size
             rotation: {
                 x: this.randomInt(0, this.MAX_ROTATION),
@@ -47,13 +55,13 @@ export class ObjectGeneratorService {
         };
     }
 
-    private generatePosition(objects: IObjet3D[]): {x: number, y: number, z: number} {
+    private generatePosition(objects: IObjet3D[], isThemed: boolean): {x: number, y: number, z: number} {
         let position: {x: number, y: number, z: number};
         let valid: boolean;
         do {
             position = {
                 x: this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
-                y: this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
+                y: isThemed ? 0 : this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
                 z: this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
             };
             valid = true;
@@ -64,21 +72,21 @@ export class ObjectGeneratorService {
                 valid = false;
                 }
             }
+            if (isThemed) {
+                if (Math.pow(this.CASTLE_POSITION_X - position.x, 2) + Math.pow(position.z - this.CASTLE_POSITION_Z, 2)
+                < Math.pow( INITIAL_OBJECT_SIZE * this.MAX_SCALE, 2)) {
+                valid = false;
+                }
+            }
         } while (!valid);
 
         return position;
-
     }
+
     private randomShape(): string {
         const index: number = this.randomInt(0, SHAPES_SIZE - 1);
 
         return Shapes[index];
-    }
-
-    private randomMedievalModels(): string {
-        const index: number = this.randomInt(0, MODELS_3D.length - 1);
-
-        return MODELS_3D[index];
     }
 
     public randomInt(min: number, max: number): number {
