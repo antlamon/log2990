@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { GEOMETRIC_TYPE_NAME, IScene3D } from "../../../common/models/game3D";
 import { IObjet3D, IShape3D , MAX_COLOR } from "../../../common/models/objet3D";
+import { MODELS_3D } from "../../../common/models/models3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -71,7 +72,8 @@ export class Game3DModificatorService {
         if (typeObj === GEOMETRIC_TYPE_NAME) {
             objects.push(this.objectGenerator.generateRandomGeometricObject(objects));
         } else {
-            this.objectGenerator.addRandomThematicObject("guard", 1, objects);
+            const index: number = Math.floor(Math.random() * (MODELS_3D.length + 1));
+            this.objectGenerator.addRandomThematicObject(MODELS_3D[index], 1, objects);
         }
     }
 
