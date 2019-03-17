@@ -11,6 +11,7 @@ export class ObjectGeneratorService {
     private readonly BLACK: number = 0xFFFFFF;
     private readonly B0X_LENGHT: number = 280;
     private readonly MAX_ROTATION: number = 360;
+    private readonly CASTLE_WORLD: number = 60;
     private readonly CASTLE_POSITION_X: number = 10; // right / left
     private readonly CASTLE_POSITION_Z: number = 10; // front / back
 
@@ -24,7 +25,7 @@ export class ObjectGeneratorService {
         const obj: IModel3D = {
             type: type,
             texture: "", // we keep the original one for the original scene
-            position: this.generatePosition(objects, true),
+            position: this.generatePosition(objects, true, this.CASTLE_WORLD),
             size: this.random1Interval(this.MIN_SCALE, this.MAX_SCALE), // scale between 50% and 150% of a reference size
             rotation: {
                 x: 0,
@@ -34,7 +35,7 @@ export class ObjectGeneratorService {
         };
         for (let i: number = 0; i < qty; i++) {
             objects.push(obj);
-            obj.position = this.generatePosition(objects, true);
+            obj.position = this.generatePosition(objects, true, this.CASTLE_WORLD);
             obj.size = this.random1Interval(this.MIN_SCALE, this.MAX_SCALE);
             obj.rotation.z = this.randomInt(0, this.MAX_ROTATION);
         }
@@ -45,7 +46,7 @@ export class ObjectGeneratorService {
         return {
             type: this.randomShape(),
             color: 0,
-            position: this.generatePosition(objects, false),
+            position: this.generatePosition(objects, false, this.B0X_LENGHT),
             size: this.random1Interval(this.MIN_SCALE, this.MAX_SCALE), // scale between 50% and 150% of a reference size
             rotation: {
                 x: this.randomInt(0, this.MAX_ROTATION),
@@ -55,14 +56,14 @@ export class ObjectGeneratorService {
         };
     }
 
-    private generatePosition(objects: IObjet3D[], isThemed: boolean): {x: number, y: number, z: number} {
+    private generatePosition(objects: IObjet3D[], isThemed: boolean, worldSize: number): {x: number, y: number, z: number} {
         let position: {x: number, y: number, z: number};
         let valid: boolean;
         do {
             position = {
-                x: this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
-                y: isThemed ? 0 : this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
-                z: this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
+                x: this.randomInt(-worldSize, worldSize),
+                y: isThemed ? 0 : this.randomInt(-worldSize, worldSize),
+                z: this.randomInt(-worldSize, worldSize),
             };
             valid = true;
             for (const obj of objects) {
@@ -73,8 +74,8 @@ export class ObjectGeneratorService {
                 }
             }
             if (isThemed) {
-                if (Math.pow(this.CASTLE_POSITION_X - position.x, 2) + Math.pow(position.z - this.CASTLE_POSITION_Z, 2)
-                < Math.pow( INITIAL_OBJECT_SIZE * this.MAX_SCALE, 2)) {
+                if (position.x < this.CASTLE_POSITION_X && position.x > -this.CASTLE_POSITION_X &&
+                    position.z < this.CASTLE_POSITION_Z && position.z > -this.CASTLE_POSITION_Z ) {
                 valid = false;
                 }
             }
