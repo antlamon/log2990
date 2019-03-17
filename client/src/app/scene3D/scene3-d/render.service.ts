@@ -170,7 +170,6 @@ export class RenderService {
         break;
       case KEYS["T"]:
         this.cheatModeActivated = !this.cheatModeActivated;
-        console.log(this.differencesIndex);
         if (this.cheatModeActivated) {
           this.startCheatMode();
         } else {
@@ -210,12 +209,12 @@ export class RenderService {
   }
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
 
-    for (let i: number = 0; i < this.differencesIndex.length; ++i) {
-      if (this.differencesIndex[i][0] === ORIGINAL) {
-        this.sceneOriginal.getObjectByName(this.differencesIndex[i][1].toString()).visible = visible;
+    for (const diff of this.differencesIndex) {
+      if (diff[0] === ORIGINAL) {
+        this.sceneOriginal.getObjectByName(diff[1].toString()).visible = visible;
       }
-      if (this.differencesIndex[i][0] === MODIFIED) {
-        this.sceneModif.getObjectByName(this.differencesIndex[i][1].toString()).visible = visible;
+      if (diff[0] === MODIFIED) {
+        this.sceneModif.getObjectByName(diff[1].toString()).visible = visible;
       }
     }
   }

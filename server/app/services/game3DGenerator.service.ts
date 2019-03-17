@@ -52,7 +52,7 @@ export class Game3DGeneratorService {
 
         const randomObjects: IObjet3D[] = [];
         let backGroundColor: number = 0;
-        let tempDifferences: [string, number][] =[];
+        let tempDifferences: [string, number][] = [];
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             backGroundColor = this.generateObjGeometricBackground(randomObjects, form.objectQty);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
