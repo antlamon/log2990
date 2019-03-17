@@ -84,6 +84,7 @@ const mockGame3D: IGame3D = {
     modifiedScene: {  objects: [], backColor: -1, },
     solo: {} as ITop3,
     multi: {} as ITop3,
+    isThemed: false,
 };
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);

@@ -22,6 +22,7 @@ const mockGame3D: IGame3D = {
     modifiedScene: mockOkScene,
     solo: { } as ITop3,
     multi: { } as ITop3,
+    isThemed: false,
   };
 
 const nbRenderCall: number = 1;

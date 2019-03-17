@@ -4,7 +4,7 @@ import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
-import { IScene3D } from "../../../../../common/models/game3D";
+import { IGame3D } from "../../../../../common/models/game3D";
 
 @Component({
   selector: "app-thematic-scene",
@@ -14,18 +14,15 @@ import { IScene3D } from "../../../../../common/models/game3D";
 export class ThematicSceneComponent implements AfterViewInit {
 
   @Input() public isCardMode: boolean;
-  @Input() public game: IScene3D;
+  @Input() public game: IGame3D;
+  public imageBase64: string;
 
   @ViewChild("container")
   private containerRef: ElementRef;
 
-  public imageBase64: string;
-
   private camera: THREE.PerspectiveCamera;
 
   private renderer: THREE.WebGLRenderer;
-
-  private controls: THREE.OrbitControls;
 
   private scene: THREE.Scene;
 
@@ -63,19 +60,20 @@ export class ThematicSceneComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    this.initialize();
+    if ( this.game !== undefined && this.game.isThemed) {
+      this.initialize();
+      Promise.all(this.forestService.getPromises()).then(() => {
+        this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
+      }
+      );
+    }
+    this.container.style.display = this.isCardMode ? "none" : "block";
   }
   private initialize(): void {
-    this.createScene();
-    this.forestService.createForest(this.scene, this.game);
-    this.createCamera();
-    // TO DO : remove controls when done testing
-    this.controls = new THREE.OrbitControls(this.camera, this.container);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.25;
-    this.controls.enableZoom = true;
-
-    this.startRenderingLoop();
+      this.createScene();
+      this.forestService.createForest(this.scene, this.game.originalScene);
+      this.createCamera();
+      this.startRenderingLoop();
   }
 
   private createScene(): void {
@@ -121,7 +119,6 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   private render(): void {
     requestAnimationFrame(() => this.render());
-    this.controls.update();
     this.renderer.render(this.scene, this.camera);
   }
 

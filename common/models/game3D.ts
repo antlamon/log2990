@@ -9,6 +9,7 @@ export interface IGame3D {
     modifiedScene: IScene3D;
     solo: ITop3;
     multi: ITop3;
+    isThemed: boolean;
 
 }
 

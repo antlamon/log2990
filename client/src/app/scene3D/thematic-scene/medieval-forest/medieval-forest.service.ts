@@ -8,57 +8,8 @@ import { IObjet3D } from "../../../../../../common/models/objet3D";
 
 export class MedievalForestService {
 
-  // mock objects for tests
-  private obj: IObjet3D[] = [
-    {
-      type: "rock",
-      position: { x: 0, y: 0, z: -10},
-      size: 1,
-      rotation: {x: 0, y: 0, z: 0},
-    },
-    {
-      type: "tree3",
-      position: { x: 5, y: 0, z: -10},
-      size: 1,
-      rotation: {x: 0, y: 0, z: 0},
-    },
-    {
-      type: "tree1",
-      position: { x: 10, y: 0, z: -10},
-      size: 1,
-      rotation: {x: 0, y: 0, z: 0},
-    },
-    {
-      type: "balista",
-      position: { x: 15, y: 0, z: -10},
-      size: 1,
-      rotation: {x: 0, y: 0, z: 0},
-    },
-    {
-      type: "dragon",
-      position: { x: 15, y: 10, z: -10},
-      size: 1,
-      rotation: {x: 0, y: 0, z: 0},
-    },
-    {
-      type: "knight",
-      position: { x: 5, y: 0, z: -5},
-      size: 1,
-      rotation: {x: 0, y: 0, z: 0},
-    },
-    {
-      type: "guard",
-      position: { x: 0, y: 0, z: -5},
-      size: 0.018,
-      rotation: {x: 0, y: 0, z: 0},
-    },
+  private gameRef: IScene3D;
 
-  ];
-  // mocking a sccene
-  private gameRef: IScene3D = {
-    objects: this.obj,
-    backColor: 0xFFFF,
-  };
   private sceneRef: THREE.Scene;
   private castleWorld: IObjet3D;
 
@@ -76,20 +27,24 @@ export class MedievalForestService {
 
   private textureLoader: THREE.TextureLoader;
 
-  public constructor(private medievalService: MedievalObjectService) {
+  private promises: Promise<void>[];
 
+  public constructor(private medievalService: MedievalObjectService) {
+    this.promises = [];
     this.castleWorld = {
       type: "castleWorld",
-      position: {x: 0 , y: 0, z: 0},
+      position: { x: 0, y: 0, z: 0 },
       size: 1,
-      rotation: {x: 0, y: 0, z: 0},
+      rotation: { x: 0, y: 0, z: 0 },
     };
+  }
+  public getPromises(): Promise<void>[] {
+    return this.promises;
   }
 
   public createForest(scene: THREE.Scene, game: IScene3D): void {
     this.sceneRef = scene;
-    // while we use the mock .... 
-    //this.gameRef = game;
+    this.gameRef = game;
     this.createSkyBox();
     this.createFloor();
     this.buildWorld();
@@ -103,10 +58,13 @@ export class MedievalForestService {
     const materialArray: THREE.MeshBasicMaterial[] = [];
 
     for (let i: number = 0; i < faceNb; i++) {
-      materialArray[i] = new THREE.MeshBasicMaterial({
-        map: this.skyBoxLoader.load(this.skyBoxURLs[i]),
-        side: THREE.BackSide
-      });
+      this.promises.push( new Promise( (resolve, reject) => {
+          materialArray[i] = new THREE.MeshBasicMaterial({
+            map: this.skyBoxLoader.load(this.skyBoxURLs[i], () => resolve()),
+            side: THREE.BackSide
+          });
+        })
+      );
     }
 
     const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
@@ -120,7 +78,11 @@ export class MedievalForestService {
     // tslint:disable-next-line:no-magic-numbers
     geometry.rotateX(-Math.PI / 2);
     let material: THREE.MeshPhongMaterial;
-    material = new THREE.MeshPhongMaterial({ map: this.textureLoader.load(("assets/" + "grass.jpg")) });
+    this.promises.push( new Promise( (resolve, reject) => {
+      material = new THREE.MeshPhongMaterial({
+        map: this.textureLoader.load(("assets/" + "grass.jpg"), () => resolve())
+      });
+    }));
     const floor: THREE.Mesh = new THREE.Mesh(geometry, material);
 
     this.sceneRef.add(floor);
@@ -134,9 +96,9 @@ export class MedievalForestService {
 
   private addGameObjects(): void {
     for (const game of this.gameRef.objects) {
-      this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
+      this.promises.push(this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
         this.sceneRef.add(obj);
-      });
+      }));
     }
   }
 
