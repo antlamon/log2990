@@ -9,7 +9,7 @@ export interface User {
 @injectable()
 export class UsersManager {
 
-    public users: User[];
+    private users: User[];
 
     public constructor() {
         this.users = [];

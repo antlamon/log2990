@@ -15,7 +15,6 @@ import { ObjectGeneratorService } from "./objectGenerator.service";
 export class Game3DGeneratorService {
 
     private readonly PALE_COLOR: number = 0x0F0F0F;
-
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService,
                        @inject(TYPES.FormValidatorService) private formValidator: FormValidatorService) {}
@@ -30,12 +29,12 @@ export class Game3DGeneratorService {
 
     private generateGame(form: IGame3DForm): IGame3D {
 
-        let originalScene: IScene3D;
+        let scene: IScene3D;
 
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
-            originalScene = this.generateObjGeometricScene(form.objectQty);
+            scene = this.generateObjGeometricScene(form.objectQty);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
-            originalScene = this.generateObjThematicScene(form.objectQty);
+            scene = this.generateObjThematicScene(form.objectQty);
         } else {
             throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
         }
@@ -43,10 +42,11 @@ export class Game3DGeneratorService {
         return {
             name: form.name,
             id: (new ObjectID()).toHexString(),
-            originalScene: originalScene,
-            modifiedScene: this.game3DModificator.createModifScene(originalScene, form.objectType, form.modifications),
+            originalScene: scene,
+            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications, tempDifferences),
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
+            differencesIndex: tempDifferences,
         };
     }
 

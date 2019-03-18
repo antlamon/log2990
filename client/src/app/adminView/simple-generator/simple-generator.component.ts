@@ -99,7 +99,7 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
   public submit(): boolean {
     this.errorsMessages = [];
-    if (this.modifiedFileIsOK && this.originalFileIsOK && this.fileValidator.isValidGameName(this.gameName)) {
+    if (this.filesAreValid() && this.fileValidator.isValidGameName(this.gameName)) {
       const newGame: ISimpleForm = { name: this.gameName,
                                      originalImage: this.originalFile, modifiedImage: this.modifiedFile };
       this.gameService.createSimpleGame(newGame).subscribe((message: Message) => {
@@ -117,6 +117,9 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     }
 
     return false;
+  }
+  private filesAreValid(): boolean {
+    return this.modifiedFileIsOK && this.originalFileIsOK;
   }
   private showErrors(): void {
     if (!this.fileValidator.isValidGameName(this.gameName)) {

@@ -70,7 +70,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                     differenceImage: this.simpleGame.differenceImage
                 };
                 this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
-                this.timer.startTimer({minutes: 7, seconds: 0}, this.finishGame.bind(this));
+                this.timer.startTimer();
             });
     }
 

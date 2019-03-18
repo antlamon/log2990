@@ -9,6 +9,7 @@ export interface IGame3D {
     modifiedScene: IScene3D;
     solo: ITop3;
     multi: ITop3;
+    differencesIndex: [string,number][];
 
 }
 
@@ -20,3 +21,5 @@ export const GEOMETRIC_TYPE_NAME: string = "geometric";
 export const THEMATIC_TYPE_NAME: string = "thematic";
 export const NO_MIN_OBJECTS: number = 10;
 export const NO_MAX_OBJECTS: number = 200;
+export const MODIFIED: string = "mod";
+export const ORIGINAL: string = "original";

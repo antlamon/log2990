@@ -61,6 +61,7 @@ const mock3DGame: IGame3D = {
     modifiedScene: mockScene,
     solo: { } as ITop3,
     multi: { } as ITop3,
+    differencesIndex: [],
 };
 
 const expect: Chai.ExpectStatic = chai.expect;

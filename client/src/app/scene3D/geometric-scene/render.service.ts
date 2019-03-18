@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
-import { MAX_COLOR, IShape3D } from "../../../../../common/models/objet3D";
+import { IScene3D, IGame3D, MODIFIED, ORIGINAL } from "../../../../../common/models/game3D";
+import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import { CLICK, KEYS } from "src/app/global/constants";
 
 @Injectable()
 export class RenderService {
+  private readonly FLASH_TIME: number = 125;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -16,6 +17,7 @@ export class RenderService {
   private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
   private isGame: boolean;
+  private cheatModeActivated: boolean;
 
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
@@ -37,13 +39,19 @@ export class RenderService {
   private skyLight: number = 0x606060;
   private groundLight: number = 0x404040;
 
-  public constructor(private shapeService: ShapeCreatorService) { }
+  private differencesIndex: [string, number][] = [];
+  private timeOutDiff: NodeJS.Timeout;
+  private diffAreVisible: boolean;
+
+  public constructor(private shapeService: ShapeCreatorService) {}
 
   public initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): void {
 
     this.containerOriginal = containerO;
+    this.differencesIndex = game.differencesIndex;
+    this.diffAreVisible = true;
     this.sceneOriginal = this.createScene(game.originalScene);
-
+    this.cheatModeActivated = false;
     if (containerM !== null) {
       this.isGame = true;
       this.containerModif = containerM;
@@ -73,9 +81,13 @@ export class RenderService {
     this.light.position.set( 0, 0, 1 );
     scene.add(this.light);
 
+    let index: number = 0;
     for (const obj of iScene.objects) {
-      const object: THREE.Mesh = this.shapeService.createShape(obj as IShape3D);
+      const object: THREE.Mesh = this.shapeService.createShape(obj);
+      object.name = index.toString();
+      // object.addEventListener("mouseDown", (event: MouseEvent) => {scene.background = new THREE.Color(0xFFFFFF); });
       scene.add(object);
+      index++;
     }
 
     return scene;
@@ -145,17 +157,25 @@ export class RenderService {
   private onKeyDown = (event: KeyboardEvent) => {
     switch (event.keyCode ) {
       case KEYS["S"]: // up
-      this.camera.translateZ(this.movementSpeed);
-      break;
+        this.camera.translateZ(this.movementSpeed);
+        break;
       case KEYS["W"]: // down
-      this.camera.translateZ(-this.movementSpeed);
-      break;
+        this.camera.translateZ(-this.movementSpeed);
+        break;
       case KEYS["D"]: // up
-      this.camera.translateX(this.movementSpeed);
-      break;
+        this.camera.translateX(this.movementSpeed);
+        break;
       case KEYS["A"]: // down
-      this.camera.translateX(-this.movementSpeed);
-      break;
+        this.camera.translateX(-this.movementSpeed);
+        break;
+      case KEYS["T"]:
+        this.cheatModeActivated = !this.cheatModeActivated;
+        if (this.cheatModeActivated) {
+          this.startCheatMode();
+        } else {
+          this.stopCheatMode();
+        }
+        break;
       default: break;
     }
   }
@@ -174,6 +194,28 @@ export class RenderService {
   private onMouseDown = (event: MouseEvent) => {
     if (event.button === CLICK.right) {
       this.press = true;
+    }
+  }
+  private startCheatMode(): void {
+    this.timeOutDiff = setInterval(this.flashObjects.bind(this), this.FLASH_TIME);
+  }
+  private stopCheatMode(): void {
+    clearInterval(this.timeOutDiff);
+    this.changeVisibilityOfDifferencesObjects(true);
+  }
+  private flashObjects(): void {
+   this.diffAreVisible = !this.diffAreVisible;
+   this.changeVisibilityOfDifferencesObjects(this.diffAreVisible);
+  }
+  private changeVisibilityOfDifferencesObjects(visible: boolean): void {
+
+    for (const diff of this.differencesIndex) {
+      if (diff[0] === ORIGINAL) {
+        this.sceneOriginal.getObjectByName(diff[1].toString()).visible = visible;
+      }
+      if (diff[0] === MODIFIED) {
+        this.sceneModif.getObjectByName(diff[1].toString()).visible = visible;
+      }
     }
   }
 }
