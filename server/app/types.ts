@@ -17,6 +17,8 @@ const TYPES =  {
         ObjectGeneratorService: Symbol("ObjectGeneratorService"),
         IdentificationController: Symbol("IdentificationController"),
         IdentificationServiceManager: Symbol("IdentificationServiceManager"),
+        Identification3DController: Symbol("Identification3DController"),
+        Identification3DService: Symbol("Identification3DService"),
         GameRoomService: Symbol("GameRoomService"),
         FormValidatorService: Symbol("FormValidatorService"),
 };

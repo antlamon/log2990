@@ -164,14 +164,6 @@ export class RenderService {
   }
   private onMouseMove = (event: MouseEvent) => {
 
-    if ( event.clientX < this.rendererM.domElement.offsetLeft) {
-      this.mouse.x = ((event.clientX - this.rendererO.domElement.offsetLeft) / this.rendererO.domElement.offsetWidth) * 2 - 1;
-      this.mouse.y = -((event.clientY - this.rendererO.domElement.offsetTop) / this.rendererO.domElement.offsetHeight) * 2 + 1;
-    } else {
-      this.mouse.x = ((event.clientX - this.rendererM.domElement.offsetLeft) / this.rendererM.domElement.offsetWidth) * 2 - 1;
-      this.mouse.y = -((event.clientY - this.rendererM.domElement.offsetTop) / this.rendererM.domElement.offsetHeight) * 2 + 1;
-    }
-
     if (!this.press) { return; }
 
     // TODO: fix rotation after moving
@@ -197,12 +189,24 @@ export class RenderService {
   }
 
   private identifyDiff(event: MouseEvent): void {
+    console.log(this.containerOriginal.offsetLeft)
+    console.log(this.containerOriginal.offsetTop)
+    console.log(event.clientX)
+    console.log(event.clientY)
+    if ( event.clientX < this.containerModif.offsetLeft) {
+      this.mouse.x = ((event.clientX - this.containerOriginal.offsetLeft) / this.containerOriginal.offsetWidth) * 2 - 1;
+      this.mouse.y = -((event.clientY - this.containerOriginal.offsetTop) / this.containerOriginal.offsetHeight) * 2 + 1;
+    } else {
+      this.mouse.x = ((event.clientX - this.containerModif.offsetLeft) / this.containerModif.offsetWidth) * 2 - 1;
+      this.mouse.y = -((event.clientY - this.containerModif.offsetTop) / this.containerModif.offsetHeight) * 2 + 1;
+    }
+
     this.raycaster.setFromCamera( this.mouse, this.camera );
     const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneOriginal.children);
     console.log(this.mouse);
     if (intersects.length > 0) {
       //const obj: THREE.Object3D = intersects[0].object;
-      this.sceneOriginal.background = new THREE.Color(0x00000);
+      this.sceneOriginal.background = new THREE.Color(0x000000);
     }
   }
 }

@@ -3,6 +3,7 @@ import { Application } from "./app";
 import { ConnexionController } from "./controllers/connexion.controller";
 import { GameListController } from "./controllers/game-list.controller";
 import { IdentificationController } from "./controllers/identification.controller";
+import { Identification3DController } from "./controllers/identification3D.controller";
 import { ImageController } from "./controllers/image.controller";
 import { Server } from "./server";
 import { ConnexionService } from "./services/connexion.service";
@@ -14,6 +15,7 @@ import { Game3DGeneratorService } from "./services/game3DGenerator.service";
 import { Game3DModificatorService } from "./services/game3DModificator.service";
 import { GameRoomService } from "./services/gameRoom.service";
 import { IdentificationServiceManager } from "./services/identification.service.manager";
+import { Identification3DService } from "./services/identification3D.service";
 import { ImageService } from "./services/image.service";
 import { ObjectGeneratorService } from "./services/objectGenerator.service";
 import { UsersManager } from "./services/users.service";
@@ -45,6 +47,9 @@ container.bind(TYPES.DatabaseService).to(DatabaseService).inSingletonScope();
 
 container.bind(TYPES.IdentificationController).to(IdentificationController);
 container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManager);
+
+container.bind(TYPES.Identification3DController).to(Identification3DController);
+container.bind(TYPES.Identification3DService).to(Identification3DService);
 
 container.bind(TYPES.GameRoomService).to(GameRoomService);
 container.bind(TYPES.FormValidatorService).to(FormValidatorService);
