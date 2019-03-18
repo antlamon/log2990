@@ -1,7 +1,6 @@
-import { Identification3DService } from "./identification3D.service";
+// import { Identification3DService } from "./identification3D.service";
 
-describe("Identification 3D tests", () => {
+// describe("Identification 3D tests", () => {
 
-    let service: Identification3DService;
-
-});
+//     let service: Identification3DService;
+// });
