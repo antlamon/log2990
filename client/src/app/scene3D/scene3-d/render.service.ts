@@ -17,6 +17,9 @@ export class RenderService {
   private press: boolean;
   private isGame: boolean;
 
+  private mouse: THREE.Vector2 = new THREE.Vector2();
+  private raycaster: THREE.Raycaster;
+
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
 
@@ -103,7 +106,7 @@ export class RenderService {
   private startRenderingLoop(): void {
 
     document.addEventListener( "keydown", this.onKeyDown, false );
-
+    this.raycaster = new THREE.Raycaster();
     this.rendererO = this.createRenderer(this.containerOriginal);
     if (this.isGame) {
       this.rendererM = this.createRenderer(this.containerModif);
@@ -160,6 +163,15 @@ export class RenderService {
     }
   }
   private onMouseMove = (event: MouseEvent) => {
+
+    if ( event.clientX < this.rendererM.domElement.offsetLeft) {
+      this.mouse.x = ((event.clientX - this.rendererO.domElement.offsetLeft) / this.rendererO.domElement.offsetWidth) * 2 - 1;
+      this.mouse.y = -((event.clientY - this.rendererO.domElement.offsetTop) / this.rendererO.domElement.offsetHeight) * 2 + 1;
+    } else {
+      this.mouse.x = ((event.clientX - this.rendererM.domElement.offsetLeft) / this.rendererM.domElement.offsetWidth) * 2 - 1;
+      this.mouse.y = -((event.clientY - this.rendererM.domElement.offsetTop) / this.rendererM.domElement.offsetHeight) * 2 + 1;
+    }
+
     if (!this.press) { return; }
 
     // TODO: fix rotation after moving
@@ -167,14 +179,10 @@ export class RenderService {
     this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
   }
   private onMouseUp = (event: MouseEvent) => {
-    if (event.button === CLICK.right) {
-      this.press = false;
-    }
-  }
-  private onMouseDown = (event: MouseEvent) => {
+
     switch (event.button) {
       case (CLICK.right):
-        this.press = true;
+        this.press = false;
         break;
       case (CLICK.left):
         this.identifyDiff(event);
@@ -182,8 +190,19 @@ export class RenderService {
       default:
     }
   }
+  private onMouseDown = (event: MouseEvent) => {
+    if (event.button === CLICK.right) {
+      this.press = true;
+    }
+  }
 
   private identifyDiff(event: MouseEvent): void {
-    return;
+    this.raycaster.setFromCamera( this.mouse, this.camera );
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneOriginal.children);
+    console.log(this.mouse);
+    if (intersects.length > 0) {
+      //const obj: THREE.Object3D = intersects[0].object;
+      this.sceneOriginal.background = new THREE.Color(0x00000);
+    }
   }
 }
