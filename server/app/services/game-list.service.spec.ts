@@ -242,13 +242,5 @@ describe("GameList service", () => {
             });
 
         });
-        describe("Random generator", () => {
-            it("The returned number should be below or equal the upper bound", () => {
-                expect(service.randomNumberGenerator(0, upperBound) <= upperBound).to.be.equal(true);
-            });
-            it("The returned number should be above or euqalthe lower bound", () => {
-                expect(service.randomNumberGenerator(lowerBound, lowerBound * 2) >= lowerBound).to.be.equal(true);
-            });
-        });
     });
 });

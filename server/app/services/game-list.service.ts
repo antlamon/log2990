@@ -120,10 +120,6 @@ export class GameListService {
         });
 
     }
-
-    public randomNumberGenerator(min: number, max: number): number {
-        return Math.floor(Math.random() * (max - min + 1) + min);
-    }
     private get simpleCollection(): Collection {
         if (this._simpleCollection == null) {
             this._simpleCollection = this.databaseService.db.collection(this.SIMPLE_COLLECTION);
