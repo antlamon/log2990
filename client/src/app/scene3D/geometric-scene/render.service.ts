@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IScene3D, IGame3D, MODIFIED, ORIGINAL } from "../../../../../common/models/game3D";
-import { MAX_COLOR } from "../../../../../common/models/objet3D";
+import { MAX_COLOR, IShape3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import { CLICK, KEYS } from "src/app/global/constants";
 
@@ -83,7 +83,7 @@ export class RenderService {
 
     let index: number = 0;
     for (const obj of iScene.objects) {
-      const object: THREE.Mesh = this.shapeService.createShape(obj);
+      const object: THREE.Mesh = this.shapeService.createShape(obj as IShape3D);
       object.name = index.toString();
       // object.addEventListener("mouseDown", (event: MouseEvent) => {scene.background = new THREE.Color(0xFFFFFF); });
       scene.add(object);

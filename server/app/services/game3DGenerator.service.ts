@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import { TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME, } from "../../../common/models/game3D";
-import { IObjet3D, MAX_COLOR, IShape3D } from "../../../common/models/objet3D";
+import { IObjet3D, IShape3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { FormValidatorService } from "./formValidator.service";
@@ -30,7 +30,7 @@ export class Game3DGeneratorService {
     private generateGame(form: IGame3DForm): IGame3D {
 
         let scene: IScene3D;
-
+        const tempDifferences: [string, number][] = [];
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             scene = this.generateObjGeometricScene(form.objectQty);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {

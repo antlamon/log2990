@@ -96,6 +96,7 @@ export class Game3DModificatorService {
             rotation: obj.rotation,
         };
     }
+    // tslint:disable-next-line:no-suspicious-comment
     // TODO: ADAPT TO NEW interface
     /*private changeTexture(obj: IObjet3D): IObjet3D {
 

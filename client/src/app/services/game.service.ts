@@ -72,6 +72,7 @@ export class GameService {
 
     return this.http.post<Message>(this.FREE_URL, game, {
       headers: new HttpHeaders({
+        // tslint:disable-next-line:no-suspicious-comment
         // TODO: create const
         "Content-Type": "application/json"
       })

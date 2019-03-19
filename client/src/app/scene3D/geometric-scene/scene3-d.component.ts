@@ -48,11 +48,11 @@ export class Scene3DComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    this.containerO.style.display = this.isCardMode ? "none" : "block";
+    this.containerM.style.display = this.isCardMode ? "none" : "block";
     if (this.game) {
       this.render();
     }
-    this.containerO.style.display = this.isCardMode ? "none" : "block";
-    this.containerM.style.display = this.isCardMode ? "none" : "block";
   }
 
   private render(): void {

@@ -35,7 +35,7 @@ export class ShapeCreatorService {
     shape.rotation.x = obj.rotation.x;
     shape.rotation.y = obj.rotation.y;
     shape.rotation.z = obj.rotation.z;
-    shape.material = obj.color !== 0 ?
+    shape.material = obj.color !== undefined ?
       new THREE.MeshPhongMaterial({color: obj.color }) :
       new THREE.MeshPhongMaterial({map: this.textureLoader.load(("assets/" + "marble1" + ".jpg")) });
 
