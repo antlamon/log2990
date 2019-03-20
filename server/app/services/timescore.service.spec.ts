@@ -44,7 +44,7 @@ describe("Test for TimeScoreService", () => {
     before((done: Mocha.Done) => {
         container.snapshot();
         service = container.get<TimeScoreService>(TYPES.TimeScoreService);
-        mongoClient.connect("mongodb://localhost:27017/myproject", {}, (err: Error, db: Db) => {
+        mongoClient.connect("mongodb://localhost:27017/myproject2", {}, (err: Error, db: Db) => {
             mockSimpleCollection = db.collection(service["SIMPLE_COLLECTION"]);
             mockFreeCollection = db.collection(service["FREE_COLLECTION"]);
             service["_freeCollection"] = mockFreeCollection;
@@ -62,15 +62,26 @@ describe("Test for TimeScoreService", () => {
     });
 
     describe("Test for the function resetBestScore", () => {
-        it("Check if game score for solo and multi have changed name", async () => {
+        it("Check if game score for solo and multi have changed name for a simple game reset and function returned true", async () => {
             await service.resetBestScore(service["SIMPLE_COLLECTION"], "mockedID");
-            await mockSimpleCollection.findOne({"card.id": "mockedID"}).then((game: IFullGame) => {
+            await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                 expect(game.card.solo.first.name).to.equal("GoodComputer");
                 expect(game.card.solo.second.name).to.equal("MediumComputer");
                 expect(game.card.solo.third.name).to.equal("BadComputer");
                 expect(game.card.multi.first.name).to.equal("GoodComputer");
                 expect(game.card.multi.second.name).to.equal("MediumComputer");
                 expect(game.card.multi.third.name).to.equal("BadComputer");
+            });
+        });
+        it("Check if game score for solo and multi have changed name for a free game reset and function returned true", async () => {
+            await service.resetBestScore(service["FREE_COLLECTION"], mockGame3D.id);
+            await mockFreeCollection.findOne({id: mockGame3D.id}).then((game: IGame3D) => {
+                expect(game.solo.first.name).to.equal("GoodComputer");
+                expect(game.solo.second.name).to.equal("MediumComputer");
+                expect(game.solo.third.name).to.equal("BadComputer");
+                expect(game.multi.first.name).to.equal("GoodComputer");
+                expect(game.multi.second.name).to.equal("MediumComputer");
+                expect(game.multi.third.name).to.equal("BadComputer");
             });
         });
     });

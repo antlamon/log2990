@@ -1,8 +1,9 @@
 import { inject, injectable } from "inversify";
-import { Collection, FindOneOptions } from "mongodb";
+import { Collection, FindOneOptions, FindAndModifyWriteOpResultObject } from "mongodb";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { DatabaseClient } from "./database.client";
+import { IGame3D } from "../../../common/models/game3D";
 
 @injectable()
 export class TimeScoreService {
@@ -18,20 +19,29 @@ export class TimeScoreService {
     public constructor(@inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) {
 }
 
-    public resetBestScore(gameType: string, id: string): Promise<boolean> {
+    public async resetBestScore(gameType: string, id: string): Promise<boolean> {
         // get le jeu
         if (gameType === this.SIMPLE_COLLECTION) {
-            return this.simpleCollection.findOneAndUpdate(
-                {"card.id": id}, {"card.solo": this.top3RandomOrder(), "card.multi": this.top3RandomOrder()}).then(() => {
-                    return true; //todo check if something updated
-                });
+           return this.simpleCollection.findOne({card: {id}}).then( async () => {
+                return this.simpleCollection.findOneAndUpdate(
+                    {card: {id}}, {card: {id: id, solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}}).then(
+                        (res: FindAndModifyWriteOpResultObject) => {
+
+                        return true; //todo check if something updated
+                    });
+            });
         }
         if (gameType === this.FREE_COLLECTION) {
-            return this.freeCollection.findOneAndUpdate(
-                {"id": id}, {"solo": this.top3RandomOrder(), "multi": this.top3RandomOrder()}).then(() => {
-                    return true; //todo check if something updated
-                });
-        }
+            return this.freeCollection.findOne({id: id}).then( async (game: IGame3D) => {
+                return this.freeCollection.findOneAndUpdate(
+                     {id}, {...game,
+                            solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}).then(
+                         (res: FindAndModifyWriteOpResultObject) => {
+ 
+                         return true; //todo check if something updated
+                     });
+             });
+         }
 
         return new Promise<boolean>(() => false);
     }
@@ -55,7 +65,7 @@ export class TimeScoreService {
     }
     private randomNumber(min: number, max: number): number {
 
-        return Math.random() * (max - min + 1) + min;
+        return Math.round(Math.random() * (max - min + 1) + min);
     }
     public async changeHighScore(userName: string, gameType: string,
                                  gameMode: string, id: string, nbMinutes: number, nbSeconds: number):  Promise<boolean> {
