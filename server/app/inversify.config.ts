@@ -17,7 +17,7 @@ import { GameRoomService } from "./services/gameRoom.service";
 import { IdentificationServiceManager } from "./services/identification.service.manager";
 import { ImageService } from "./services/image.service";
 import { ObjectGeneratorService } from "./services/objectGenerator.service";
-import { TimeScoreService } from "./services/timescore.service.manager";
+import { TimeScoreService } from "./services/timescore.service";
 import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
@@ -52,6 +52,6 @@ container.bind(TYPES.GameRoomService).to(GameRoomService);
 container.bind(TYPES.FormValidatorService).to(FormValidatorService);
 
 container.bind(TYPES.TimeScoreController).to(TimescoreController);
-container.bind(TYPES.TimeScoreServiceManager).to(TimeScoreService);
+container.bind(TYPES.TimeScoreService).to(TimeScoreService);
 
 export { container };

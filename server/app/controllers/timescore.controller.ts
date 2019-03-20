@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
-import { TimeScoreService } from "../services/timescore.service.manager";
+import { TimeScoreService } from "../services/timescore.service";
 import { TYPES } from "../types";
 
 @injectable()
@@ -8,7 +8,7 @@ export class TimescoreController {
 
     public static readonly URL: string = "/api/timescore";
 
-    public constructor(@inject(TYPES.TimeScoreServiceManager) private timeScoreService: TimeScoreService) { }
+    public constructor(@inject(TYPES.TimeScoreService) private timeScoreService: TimeScoreService) { }
 
     public get router(): Router {
         const router: Router = Router();

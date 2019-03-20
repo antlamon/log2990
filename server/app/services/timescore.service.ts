@@ -61,7 +61,7 @@ export class TimeScoreService {
                                  gameMode: string, id: string, nbMinutes: number, nbSeconds: number):  Promise<boolean> {
         const temp: ITop3 | null = await this.getHighScore(gameType, gameMode, id);
         if (temp === null) {
-            return new Promise<boolean>(() => false);
+            return false;
         }
         if (this.compareScores(nbMinutes, nbSeconds, temp.first.score)) {
             await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, "first");

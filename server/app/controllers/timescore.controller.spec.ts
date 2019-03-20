@@ -5,7 +5,7 @@ import supertest = require("supertest");
 import { Application } from "../app";
 import { container } from "../inversify.config";
 import { ImageService } from "../services/image.service";
-import { TimeScoreService } from "../services/timescore.service.manager";
+import { TimeScoreService } from "../services/timescore.service";
 import { TYPES } from "../types";
 
 const expect: Chai.ExpectStatic = chai.expect;
@@ -17,7 +17,7 @@ describe("TimeScore Controller", () => {
 
     before(() => {
         container.snapshot();
-        const timeScoreService: TimeScoreService = container.get(TYPES.TimeScoreServiceManager);
+        const timeScoreService: TimeScoreService = container.get(TYPES.TimeScoreService);
         sandbox.on(timeScoreService, "changeHighScore", () => Promise.resolve(true));
         sandbox.on(timeScoreService, "resetBestScore", () => Promise.resolve(true));
         container.rebind(TYPES.IdentificationServiceManager).toConstantValue(timeScoreService);
