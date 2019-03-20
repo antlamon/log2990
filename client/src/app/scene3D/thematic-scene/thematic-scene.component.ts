@@ -4,7 +4,7 @@ import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
 import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
-import { IGame3D } from "../../../../../common/models/game3D";
+import { IGame3D, MOCK_THEMED_GAME } from "../../../../../common/models/game3D";
 import { ISceneContainer } from "../ISceneContainer";
 import { SceneBuilderService } from "src/app/services/scene-builder.service";
 
@@ -16,7 +16,7 @@ import { SceneBuilderService } from "src/app/services/scene-builder.service";
 export class ThematicSceneComponent implements AfterViewInit, ISceneContainer {
 
   @Input() public isCardMode: boolean;
-  @Input() public game: IGame3D;
+  @Input() public game: IGame3D = MOCK_THEMED_GAME;
   public imageBase64: string;
   public containerO: HTMLDivElement;
   public containerM: HTMLDivElement;
