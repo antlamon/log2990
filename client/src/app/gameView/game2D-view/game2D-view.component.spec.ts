@@ -84,4 +84,15 @@ describe("Game2DViewComponent", () => {
         expect(spy).toHaveBeenCalled();
     });
 
+    it("handle check difference should play the victory sound", async () => {
+        const spy: jasmine.Spy = spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+        const update: GameRoomUpdate = {
+            username: "test",
+            newImage: "testImage",
+            differencesFound: 7,
+        };
+        component["handleCheckDifference"](update);
+        expect(spy).toHaveBeenCalled();
+    });
+
 });

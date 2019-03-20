@@ -102,9 +102,12 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             }
         }
     }
+
     private finishGame(): void {
         this.timer.stopTimer();
+        this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
+        this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
     }
 
     public sendClick(event: MouseEvent): void {
