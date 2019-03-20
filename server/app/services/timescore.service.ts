@@ -1,9 +1,10 @@
 import { inject, injectable } from "inversify";
-import { Collection, FindOneOptions, FindAndModifyWriteOpResultObject } from "mongodb";
+import { Collection, FindAndModifyWriteOpResultObject, FindOneOptions } from "mongodb";
+import { IGame3D } from "../../../common/models/game3D";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { DatabaseClient } from "./database.client";
-import { IGame3D } from "../../../common/models/game3D";
+import { IFullGame } from "../../../common/models/game";
 
 @injectable()
 export class TimeScoreService {
@@ -17,30 +18,30 @@ export class TimeScoreService {
     private _freeCollection: Collection;
 
     public constructor(@inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) {
-}
+    }
 
     public async resetBestScore(gameType: string, id: string): Promise<boolean> {
         // get le jeu
         if (gameType === this.SIMPLE_COLLECTION) {
-           return this.simpleCollection.findOne({card: {id}}).then( async () => {
+           return this.simpleCollection.findOne({"card.id": id}).then( async (game: IFullGame) => {
                 return this.simpleCollection.findOneAndUpdate(
-                    {card: {id}}, {card: {id: id, solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}}).then(
+                    {card: {id}}, {$set: {card: {id: id, solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}}}).then(
                         (res: FindAndModifyWriteOpResultObject) => {
 
                         return true; //todo check if something updated
-                    });
-            });
+                    }).catch();
+            }).catch();
         }
         if (gameType === this.FREE_COLLECTION) {
             return this.freeCollection.findOne({id: id}).then( async (game: IGame3D) => {
                 return this.freeCollection.findOneAndUpdate(
-                     {id}, {...game,
-                            solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}).then(
+                     {id}, {$set: {...game,
+                                   solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}}).then(
                          (res: FindAndModifyWriteOpResultObject) => {
  
                          return true; //todo check if something updated
-                     });
-             });
+                     }).catch();
+             }).catch();
          }
 
         return new Promise<boolean>(() => false);
@@ -51,7 +52,8 @@ export class TimeScoreService {
             scores.push([this.randomNumber(TimeScoreService.MIN_TIME_TOP_3, TimeScoreService.MAX_TIME_TOP_3),
                          this.randomNumber(0, TimeScoreService.MAX_NB_SECONDS)]);
         }
-        scores.sort((x: [number, number]) => x[0] * TimeScoreService.MAX_NB_SECONDS + x[1]);
+        scores.sort((x: [number, number], y: [number, number]) => x[0] * TimeScoreService.MAX_NB_SECONDS + x[1] -
+        y[0] * TimeScoreService.MAX_NB_SECONDS + y[1]);
 
         return { first: {name: "GoodComputer",  score: this.formatTimeScore(scores[0][0], scores[0][1])},
                  second: {name: "MediumComputer", score: this.formatTimeScore(scores[1][0], scores[1][1])},
@@ -61,7 +63,7 @@ export class TimeScoreService {
         return this.formatTime(nbMinutes) + ":" + this.formatTime(nbSeconds);
     }
     private formatTime(time: number): string {
-        return (time < TimeScoreService.TEN) ? "0" : "" + time.toString();
+        return ((time < TimeScoreService.TEN) ? "0" : "") + time.toString();
     }
     private randomNumber(min: number, max: number): number {
 

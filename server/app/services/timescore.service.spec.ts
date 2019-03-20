@@ -63,7 +63,7 @@ describe("Test for TimeScoreService", () => {
 
     describe("Test for the function resetBestScore", () => {
         it("Check if game score for solo and multi have changed name for a simple game reset and function returned true", async () => {
-            await service.resetBestScore(service["SIMPLE_COLLECTION"], "mockedID");
+            expect(await service.resetBestScore(service["SIMPLE_COLLECTION"], "mockedID")).to.equal(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                 expect(game.card.solo.first.name).to.equal("GoodComputer");
                 expect(game.card.solo.second.name).to.equal("MediumComputer");
@@ -74,7 +74,7 @@ describe("Test for TimeScoreService", () => {
             });
         });
         it("Check if game score for solo and multi have changed name for a free game reset and function returned true", async () => {
-            await service.resetBestScore(service["FREE_COLLECTION"], mockGame3D.id);
+            expect(await service.resetBestScore(service["FREE_COLLECTION"], mockGame3D.id)).to.equal(true);
             await mockFreeCollection.findOne({id: mockGame3D.id}).then((game: IGame3D) => {
                 expect(game.solo.first.name).to.equal("GoodComputer");
                 expect(game.solo.second.name).to.equal("MediumComputer");
