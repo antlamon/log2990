@@ -198,10 +198,11 @@ export class RenderService {
       this.calculateMouse(event, this.containerModif);
     }
     this.raycaster.setFromCamera( this.mouse, this.camera );
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneOriginal.children);
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children);
     if (intersects.length > 0) {
-      this.sceneOriginal.background = new THREE.Color(0x000000);
-      const obj: THREE.Object3D = intersects[0].object;
+
+      const obj: THREE.Mesh = intersects[0].object as THREE.Mesh;
+      obj.material = new THREE.MeshPhongMaterial({map: new THREE.TextureLoader().load(("assets/marble1.jpg")) });
 
       return obj.position;
     } else {
@@ -210,7 +211,7 @@ export class RenderService {
     }
   }
 
-  private calculateMouse(event: MouseEvent, container: HTMLDivElement) {
+  private calculateMouse(event: MouseEvent, container: HTMLDivElement): void {
     const MULTI: number = 2;
     this.mouse.x = (event.offsetX  / container.offsetWidth) * MULTI - 1;
     this.mouse.y = -(event.offsetY / container.offsetHeight) * MULTI + 1;
