@@ -11,7 +11,7 @@ const TYPES =  {
         GameListController: Symbol.for("GameListController"),
         UserManager: Symbol("UserManager"),
         SocketServerManager: Symbol("SocketServerManager"),
-        DatabaseService: Symbol("DatabaseService"),
+        DatabaseClient: Symbol("DatabaseClient"),
         Game3DGeneratorService: Symbol("Game3DGeneratorService"),
         Game3DModificatorService: Symbol("Game3DModificatorService"),
         ObjectGeneratorService: Symbol("ObjectGeneratorService"),

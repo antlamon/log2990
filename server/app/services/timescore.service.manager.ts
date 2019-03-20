@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import { ITop3 } from "../../../common/models/top3";
-import {DatabaseClient} from "";
+import { DatabaseClient } from "./database.client";
 
 @injectable()
 export class TimeScoreService {
@@ -8,6 +8,9 @@ export class TimeScoreService {
     public static readonly TEN: number = 10;
     public static readonly MAX_TIME_TOP_3: number = 30;
     public static readonly MAX_NB_SECONDS: number = 60;
+
+    public constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseClient) {
+}
 
     public resetBestScore(typeGame: string, id: string): Promise<boolean> {
         // get le jeu

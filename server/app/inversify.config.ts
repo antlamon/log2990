@@ -41,7 +41,7 @@ container.bind(TYPES.ObjectGeneratorService).to(ObjectGeneratorService);
 
 container.bind(TYPES.UserManager).to(UsersManager).inSingletonScope();
 container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonScope();
-container.bind(TYPES.DatabaseService).to(DatabaseClient).inSingletonScope();
+container.bind(TYPES.DatabaseClient).to(DatabaseClient).inSingletonScope();
 
 container.bind(TYPES.IdentificationController).to(IdentificationController);
 container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManager);

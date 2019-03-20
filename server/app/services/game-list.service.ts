@@ -24,7 +24,7 @@ export class GameListService {
 
     public constructor( @inject(TYPES.SocketServerManager) private socketController: SocketServerManager,
                         @inject(TYPES.Game3DGeneratorService) private game3DGenerator: Game3DGeneratorService,
-                        @inject(TYPES.DatabaseService) private databaseService: DatabaseClient) {
+                        @inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
@@ -122,14 +122,14 @@ export class GameListService {
     }
     private get simpleCollection(): Collection {
         if (this._simpleCollection == null) {
-            this._simpleCollection = this.databaseService.db.collection(this.SIMPLE_COLLECTION);
+            this._simpleCollection = this.databaseClient.db.collection(this.SIMPLE_COLLECTION);
         }
 
         return this._simpleCollection;
     }
     private get freeCollection(): Collection {
         if (this._freeCollection == null) {
-            this._freeCollection = this.databaseService.db.collection(this.FREE_COLLECTION);
+            this._freeCollection = this.databaseClient.db.collection(this.FREE_COLLECTION);
         }
 
         return this._freeCollection;
