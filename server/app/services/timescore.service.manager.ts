@@ -1,5 +1,7 @@
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
+import { Collection } from "mongodb";
 import { ITop3 } from "../../../common/models/top3";
+import { TYPES } from "../types";
 import { DatabaseClient } from "./database.client";
 
 @injectable()
@@ -8,8 +10,12 @@ export class TimeScoreService {
     public static readonly TEN: number = 10;
     public static readonly MAX_TIME_TOP_3: number = 30;
     public static readonly MAX_NB_SECONDS: number = 60;
+    private readonly SIMPLE_COLLECTION: string = "simple-games";
+    private readonly FREE_COLLECTION: string = "free-games";
+    private _simpleCollection: Collection;
+    private _freeCollection: Collection;
 
-    public constructor(@inject(TYPES.DatabaseService) private databaseService: DatabaseClient) {
+    public constructor(@inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) {
 }
 
     public resetBestScore(typeGame: string, id: string): Promise<boolean> {
@@ -64,5 +70,19 @@ export class TimeScoreService {
         const time: string[] = score.split(":");
 
         return (+time[0] * TimeScoreService.MAX_NB_SECONDS + +time[1] ) < (nbMinutes * TimeScoreService.MAX_NB_SECONDS + nbSeconds);
+    }
+    private get simpleCollection(): Collection {
+        if (this._simpleCollection == null) {
+            this._simpleCollection = this.databaseClient.db.collection(this.SIMPLE_COLLECTION);
+        }
+
+        return this._simpleCollection;
+    }
+    private get freeCollection(): Collection {
+        if (this._freeCollection == null) {
+            this._freeCollection = this.databaseClient.db.collection(this.FREE_COLLECTION);
+        }
+
+        return this._freeCollection;
     }
  }
