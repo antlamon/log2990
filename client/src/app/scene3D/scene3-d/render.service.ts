@@ -190,20 +190,13 @@ export class RenderService {
 
   private identifyDiff(event: MouseEvent): THREE.Vector3 {
 
-    const URL: string = "api/identification3D";
-    const MULTI: number = 2;
-    console.log(this.containerOriginal.offsetLeft);
-    console.log(this.containerOriginal.offsetTop);
-    console.log(event.clientX);
-    console.log(event.clientY);
-    if ( event.clientX < this.containerModif.offsetLeft) {
-      this.mouse.x = ((event.clientX - this.containerOriginal.offsetLeft) / this.containerOriginal.offsetWidth) * MULTI - 1;
-      this.mouse.y = -((event.clientY - this.containerOriginal.offsetTop) / this.containerOriginal.offsetHeight) * MULTI + 1;
-    } else {
-      this.mouse.x = ((event.clientX - this.containerModif.offsetLeft) / this.containerModif.offsetWidth) * MULTI - 1;
-      this.mouse.y = -((event.clientY - this.containerModif.offsetTop) / this.containerModif.offsetHeight) * MULTI + 1;
-    }
+    //const URL: string = "api/identification3D";
 
+    if ( event.clientX < this.containerModif.offsetLeft) {
+      this.calculateMouse(event, this.containerOriginal);
+    } else {
+      this.calculateMouse(event, this.containerModif);
+    }
     this.raycaster.setFromCamera( this.mouse, this.camera );
     const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneOriginal.children);
     if (intersects.length > 0) {
@@ -215,5 +208,11 @@ export class RenderService {
 
       return new THREE.Vector3(0, 0, 0);
     }
+  }
+
+  private calculateMouse(event: MouseEvent, container: HTMLDivElement) {
+    const MULTI: number = 2;
+    this.mouse.x = (event.offsetX  / container.offsetWidth) * MULTI - 1;
+    this.mouse.y = -(event.offsetY / container.offsetHeight) * MULTI + 1;
   }
 }
