@@ -24,9 +24,10 @@ const mockGame3D: IGame3D = {
     modifiedScene: mockOkScene,
     solo: { } as ITop3,
     multi: { } as ITop3,
+    differencesIndex: [],
   };
 
-const nbRenderCall: number = 2;
+const nbRenderCall: number = 1;
 const delay: number = 10;
 describe("Game3DViewComponent", () => {
     let component: Game3DViewComponent;

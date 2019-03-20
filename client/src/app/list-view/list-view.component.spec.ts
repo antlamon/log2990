@@ -30,6 +30,7 @@ const mockGame3D: IGame3D = {
   modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
   solo: { } as ITop3,
   multi: { } as ITop3,
+  differencesIndex: [],
 };
 
 describe("ListViewComponent", () => {
@@ -86,6 +87,7 @@ describe("ListViewComponent", () => {
   describe("Delete functions", () => {
     it("Deleting an existing simple games should call the game service", () => {
       const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
+      spyOn(window, "confirm").and.returnValue(true);
       component.simpleGames = [];
       component.simpleGames.push(mockSimple);
       component.deleteSimpleGames(mockSimple);
@@ -100,6 +102,7 @@ describe("ListViewComponent", () => {
     });
     it("Deleting an existing free games should call the game service", () => {
       const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
+      spyOn(window, "confirm").and.returnValue(true);
       component.freeGames = [];
       component.freeGames.push(mockGame3D);
       component.deleteFreeGames(mockGame3D);
@@ -126,7 +129,7 @@ describe("ListViewComponent", () => {
     });
   });
   describe("Removing games", () => {
-    it("Dleting a simple games should change the simple games array", () => {
+    it("Deleting a simple games should change the simple games array", () => {
       component.simpleGames = [mockSimple];
       component.removeSimpleGame(mockSimple.id);
       expect(component.simpleGames.length).toEqual(0);

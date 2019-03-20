@@ -7,8 +7,9 @@ export class TimerService {
 
   public readonly CONVERSION_SEC_TO_MILI: number = 1000;
   public readonly CONVERSION_MIN_TO_SEC: number = 60;
-  public nbSeconds: number;
-  public nbMinutes: number;
+  public readonly FORMAT_ZERO_MAX: number = 9;
+  private nbSeconds: number;
+  private nbMinutes: number;
   private timerEnd: NodeJS.Timeout;
   private timerUpdate: NodeJS.Timeout;
   public constructor() {
@@ -16,11 +17,9 @@ export class TimerService {
     this.nbMinutes = 0;
    }
 
-  public startTimer(endTime: ITime, endFunction: () => void): void {
+  public startTimer(): void {
     this.nbSeconds = 0;
     this.nbMinutes = 0;
-    this.timerEnd = setTimeout(endFunction, this.CONVERSION_SEC_TO_MILI * (endTime.seconds + this.CONVERSION_MIN_TO_SEC * endTime.minutes));
-    setTimeout(this.stopTimer.bind(this), this.CONVERSION_SEC_TO_MILI * (endTime.seconds + this.CONVERSION_MIN_TO_SEC * endTime.minutes));
     this.timerUpdate = setInterval(this.updateTime.bind(this), this.CONVERSION_SEC_TO_MILI);
 
   }
@@ -28,8 +27,18 @@ export class TimerService {
     clearTimeout(this.timerEnd);
     clearInterval(this.timerUpdate);
   }
-  public getTime(): ITime {
-    return {minutes: this.nbMinutes, seconds: this.nbSeconds};
+  public getTimeAsString(): string {
+    let time: string = "";
+    if (this.nbMinutes <= this.FORMAT_ZERO_MAX) {
+      time += "0";
+    }
+    time += this.nbMinutes + ":";
+    if (this.nbSeconds <= this.FORMAT_ZERO_MAX) {
+      time += "0";
+    }
+    time += this.nbSeconds;
+
+    return time;
   }
   private updateTime(): void {
     this.nbSeconds++;
@@ -37,7 +46,6 @@ export class TimerService {
       this.nbMinutes++;
       this.nbSeconds = 0;
     }
-    this.timerUpdate = setInterval(this.updateTime, this.CONVERSION_SEC_TO_MILI);
   }
 }
 export interface ITime {
