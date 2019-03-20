@@ -1,8 +1,7 @@
-div {
+.scene3D {
     width: 1920px;
     height: 1080px;
 }
-
 img {
     max-width:100%;
     height: 100%;

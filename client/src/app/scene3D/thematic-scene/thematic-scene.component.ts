@@ -1,125 +1,61 @@
-import { Component, Input, AfterViewInit, ViewChild, ElementRef, HostListener } from "@angular/core";
+import { Component, Input, AfterViewInit, ViewChild, ElementRef } from "@angular/core";
 import "src/js/three";
 import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
-import { MAX_COLOR } from "../../../../../common/models/objet3D";
+import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
 import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
 import { IGame3D } from "../../../../../common/models/game3D";
+import { ISceneContainer } from "../ISceneContainer";
+import { SceneBuilderService } from "src/app/services/scene-builder.service";
 
 @Component({
   selector: "app-thematic-scene",
   templateUrl: "./thematic-scene.component.html",
   styleUrls: ["./thematic-scene.component.css"]
 })
-export class ThematicSceneComponent implements AfterViewInit {
+export class ThematicSceneComponent implements AfterViewInit, ISceneContainer {
 
   @Input() public isCardMode: boolean;
   @Input() public game: IGame3D;
   public imageBase64: string;
+  public containerO: HTMLDivElement;
+  public containerM: HTMLDivElement;
 
-  @ViewChild("container")
-  private containerRef: ElementRef;
-
-  private camera: THREE.PerspectiveCamera;
-
-  private renderer: THREE.WebGLRenderer;
-
-  private scene: THREE.Scene;
+  @ViewChild("containerO")
+  private containerOriginalRef: ElementRef;
+  @ViewChild("containerM")
+  private containerModifRef: ElementRef;
 
   private zLight: number = -0.5;
   private xLight: number = 1;
-
-  private cameraZ: number = -20;
-  private cameraX: number = 5;
-  private cameraY: number = 5;
-
   private light: THREE.Light;
-
-  private fieldOfView: number = 90;
-
-  private nearClippingPane: number = 0.1;
-
-  private farClippingPane: number = 1000;
-
   private skyLight: number = 0xFFFFFF;
-
   private groundLight: number = 0x404040;
 
-  public constructor(private forestService: MedievalForestService) {
+  public constructor(private forestService: MedievalForestService, private builderService: SceneBuilderService) {
     this.isCardMode = false;
   }
-  private get container(): HTMLDivElement {
-    return this.containerRef.nativeElement;
-  }
-
-  @HostListener("window:resize", ["$event"])
-  public onResize(): void {
-    this.camera.aspect = this.getAspectRatio();
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-  }
-
   public ngAfterViewInit(): void {
+    this.containerO = this.containerOriginalRef.nativeElement;
+    this.containerM = this.containerModifRef.nativeElement;
+
     if ( this.game !== undefined && this.game.isThemed) {
-      this.initialize();
+      this.builderService.initialize(this);
       Promise.all(this.forestService.getPromises()).then(() => {
-        this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
-      }
-      );
+        this.imageBase64 = ((this.containerO).children[0] as HTMLCanvasElement).toDataURL();
+      });
     }
-    this.container.style.display = this.isCardMode ? "none" : "block";
-  }
-  private initialize(): void {
-      this.createScene();
-      this.forestService.createForest(this.scene, this.game.originalScene);
-      this.createCamera();
-      this.startRenderingLoop();
+    this.containerO.style.display = this.isCardMode ? "none" : "block";
+    this.containerM.style.display = this.isCardMode ? "none" : "block";
   }
 
-  private createScene(): void {
-    /* Scene */
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(MAX_COLOR);
-
-    this.scene.add(new THREE.HemisphereLight(this.skyLight, this.groundLight));
+  public addLightToScene(scene: THREE.Scene): void {
+    scene.add(new THREE.HemisphereLight(this.skyLight, this.groundLight));
     this.light = new THREE.DirectionalLight(MAX_COLOR);
     this.light.position.set(this.xLight, 0, this.zLight);
-    this.scene.add(this.light);
+    scene.add(this.light);
   }
-
-  private createCamera(): void {
-    /* Camera */
-    const aspectRatio: number = this.getAspectRatio();
-    this.camera = new THREE.PerspectiveCamera(
-      this.fieldOfView,
-      aspectRatio,
-      this.nearClippingPane,
-      this.farClippingPane
-    );
-    this.camera.position.x = this.cameraX;
-    this.camera.position.y = this.cameraY;
-    this.camera.position.z = this.cameraZ;
-    this.scene.add(this.camera);
+  public addObjectsToScene(scene: THREE.Scene, obj: IObjet3D[]): void {
+    this.forestService.createForest(scene, obj);
   }
-
-  private getAspectRatio(): number {
-    return this.container.clientWidth / this.container.clientHeight;
-  }
-
-  private startRenderingLoop(): void {
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.BasicShadowMap;
-    this.renderer.setPixelRatio(devicePixelRatio);
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-
-    this.container.appendChild(this.renderer.domElement);
-    this.render();
-  }
-
-  private render(): void {
-    requestAnimationFrame(() => this.render());
-    this.renderer.render(this.scene, this.camera);
-  }
-
 }

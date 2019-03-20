@@ -15,6 +15,7 @@ import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.compone
 import { Scene3DComponent } from "../scene3D/geometric-scene/scene3-d.component";
 import { ThematicSceneComponent } from "../scene3D/thematic-scene/thematic-scene.component";
 import { MatProgressSpinnerModule } from "@angular/material";
+import {} from "jasmine";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -30,6 +31,7 @@ const mockGame3D: IGame3D = {
   modifiedScene: { objects: [], backColor: -1, },
   solo: { } as ITop3,
   multi: { } as ITop3,
+  isThemed: false,
 };
 
 describe("ListViewComponent", () => {

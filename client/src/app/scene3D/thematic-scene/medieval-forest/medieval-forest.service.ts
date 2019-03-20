@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { IScene3D } from "../../../../../../common/models/game3D";
 import { MedievalObjectService } from "./medieval-objects/medieval-object.service";
 import { Injectable } from "@angular/core";
 import { IObjet3D } from "../../../../../../common/models/objet3D";
@@ -7,8 +6,6 @@ import { IObjet3D } from "../../../../../../common/models/objet3D";
 @Injectable()
 
 export class MedievalForestService {
-
-  private gameRef: IScene3D;
 
   private sceneRef: THREE.Scene;
   private castleWorld: IObjet3D;
@@ -42,15 +39,12 @@ export class MedievalForestService {
     return this.promises;
   }
 
-  public createForest(scene: THREE.Scene, game: IScene3D): void {
+  public createForest(scene: THREE.Scene, obj: IObjet3D[]): void {
     this.sceneRef = scene;
-    this.gameRef = game;
     this.createSkyBox();
     this.createFloor();
     this.buildWorld();
-    if (this.gameRef) {
-      this.addGameObjects();
-    }
+    this.addGameObjects(obj);
   }
   private createSkyBox(): void {
     this.textureLoader = new THREE.TextureLoader();
@@ -68,8 +62,7 @@ export class MedievalForestService {
     }
 
     const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
-    const skyMaterial: THREE.MeshFaceMaterial = new THREE.MeshFaceMaterial(materialArray);
-    const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, skyMaterial);
+    const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
     this.sceneRef.add(skyBox);
   }
 
@@ -94,12 +87,12 @@ export class MedievalForestService {
     });
   }
 
-  private addGameObjects(): void {
-    for (const game of this.gameRef.objects) {
-      this.promises.push(this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
-        this.sceneRef.add(obj);
-      }));
-    }
+  private addGameObjects(objects: IObjet3D[]): void {
+      for (const game of objects) {
+        this.promises.push(this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
+          this.sceneRef.add(obj);
+        }));
+      }
   }
 
 }
