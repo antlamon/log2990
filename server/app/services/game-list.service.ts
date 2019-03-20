@@ -9,7 +9,7 @@ import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/mode
 import { IGame3D } from "../../../common/models/game3D";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
-import { DatabaseService } from "./database.service";
+import { DatabaseClient } from "./database.client";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
 
 @injectable()
@@ -24,7 +24,7 @@ export class GameListService {
 
     public constructor( @inject(TYPES.SocketServerManager) private socketController: SocketServerManager,
                         @inject(TYPES.Game3DGeneratorService) private game3DGenerator: Game3DGeneratorService,
-                        @inject(TYPES.DatabaseService) private databaseService: DatabaseService) {
+                        @inject(TYPES.DatabaseService) private databaseService: DatabaseClient) {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {

@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
-import { Message } from "../../../common/communication/message";
 import { ITop3 } from "../../../common/models/top3";
+import {DatabaseClient} from "";
 
 @injectable()
 export class TimeScoreService {
@@ -59,6 +59,7 @@ export class TimeScoreService {
     }
     private compareScores(nbMinutes: number, nbSeconds: number, score: string): boolean {
         const time: string[] = score.split(":");
+
         return (+time[0] * TimeScoreService.MAX_NB_SECONDS + +time[1] ) < (nbMinutes * TimeScoreService.MAX_NB_SECONDS + nbSeconds);
     }
  }
