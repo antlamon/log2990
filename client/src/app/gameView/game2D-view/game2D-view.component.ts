@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import { Component, HostListener, OnDestroy, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
@@ -31,7 +31,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private socket: SocketService,
         private route: ActivatedRoute,
         private index: IndexService,
-        private timer: TimerService
+        private timer: TimerService,
+        private ref: ChangeDetectorRef
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -61,6 +62,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
             .subscribe((response: IFullGame) => {
+                this.ref.detach();
                 this.simpleGame = response;
                 const newGameMessage: NewGameMessage = {
                     username: this.index.username,
@@ -70,7 +72,6 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                     differenceImage: this.simpleGame.differenceImage
                 };
                 this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
-                this.timer.startTimer();
             });
     }
 
@@ -78,6 +79,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         if (rejection !== null) {
             alert(rejection);
         }
+        this.ref.reattach();
+        this.timer.startTimer();
     }
 
     private handleCheckDifference(update: GameRoomUpdate): void {
