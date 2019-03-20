@@ -77,14 +77,16 @@
     <div class="game-card-list">
       <h2>3D</h2>
       <div *ngIf="freeGames; else spinny">
-        <div *ngFor="let game of freeGames">
+        <ng-container *ngFor="let game of freeGames">
           <div class="game-card">
             <div class="game-card-title">{{game.name}}</div>
             <div class="bottom-card">
               <div class="game-card-left-content">
                 <div class="game-card-img-container">
-                  <app-scene3-d-component class="game-card-img" [game]="game" #scene [isCardMode]="true">
+                  <app-scene3-d-component *ngIf="!game.isThemed" class="game-card-img" [game]="game" #scene [isCardMode]="true">
                   </app-scene3-d-component>
+                  <app-thematic-scene *ngIf="game.isThemed" class="game-card-img" [game]="game" #scene [isCardMode]="true">
+                  </app-thematic-scene>
                 </div>
                 <div class="game-card-buttons" *ngIf="!isAdminMode">
                   <div class="game-card-button-container"><button (click)="playSelectedFreeGame(game)">JOUER</button>
@@ -141,7 +143,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>

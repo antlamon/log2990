@@ -12,9 +12,11 @@ import { FreeGeneratorComponent } from "./adminView/free-generator/free-generato
 import { SimpleGeneratorComponent } from "./adminView/simple-generator/simple-generator.component";
 import { ListViewComponent } from "./list-view/list-view.component";
 import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.component";
-import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
+import { Scene3DComponent } from "./scene3D/geometric-scene/scene3-d.component";
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
+import { ThematicSceneComponent } from "./scene3D/thematic-scene/thematic-scene.component";
 import { MatProgressSpinnerModule } from "@angular/material";
+
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,7 +29,8 @@ describe("AppComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent
+        Scene3DComponent,
+        ThematicSceneComponent,
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule],
       providers: [IndexService]

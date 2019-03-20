@@ -59,13 +59,10 @@
     position: absolute;
     top: 190px;
     left: 20px;
-    width: 1480px;
-    height: 600px;
+    width: 90%;
+    height: 75%;
     background-color: #919CD1;
     outline: 5px solid black;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
     align-items: center;
 }
 

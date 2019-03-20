@@ -80,10 +80,11 @@ const lowerBound: number = 5;
 const mockGame3D: IGame3D = {
     name: "mock3DName",
     id: "123",
-    originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
-    modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
+    originalScene: {  objects: [], backColor: -1, },
+    modifiedScene: {  objects: [], backColor: -1, },
     solo: {} as ITop3,
     multi: {} as ITop3,
+    isThemed: false,
 };
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);

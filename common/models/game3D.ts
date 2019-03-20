@@ -9,12 +9,11 @@ export interface IGame3D {
     modifiedScene: IScene3D;
     solo: ITop3;
     multi: ITop3;
+    isThemed: boolean;
 
 }
 
 export interface IScene3D {
-    modified: boolean;
-    numObj: number;
     objects: IObjet3D[];
     backColor: number;
 }

@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { GEOMETRIC_TYPE_NAME, IScene3D } from "../../../common/models/game3D";
-import { IObjet3D, MAX_COLOR  } from "../../../common/models/objet3D";
+import { IObjet3D, IShape3D , MAX_COLOR } from "../../../common/models/objet3D";
+import { MODELS_3D } from "../../../common/models/models3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -35,8 +36,7 @@ export class Game3DModificatorService {
             }
         }
 
-        return {modified: true,
-                numObj: modifiedObjects.length,
+        return {
                 objects: modifiedObjects,
                 backColor: originalScene.backColor };
 
@@ -58,7 +58,7 @@ export class Game3DModificatorService {
                 if (typeObj === GEOMETRIC_TYPE_NAME) {
                     return this.changeColor(obj);
                 } else {
-                    return this.changeTexture(obj);
+                    return obj; /*this.changeTexture(obj);*/ // TODO: CHANGE FOR TEXTURE MODIF
                 }
             }
 
@@ -72,27 +72,27 @@ export class Game3DModificatorService {
         if (typeObj === GEOMETRIC_TYPE_NAME) {
             objects.push(this.objectGenerator.generateRandomGeometricObject(objects));
         } else {
-            objects.push(this.objectGenerator.generateRandomThematicObject(objects));
+            const index: number = Math.floor(Math.random() * (MODELS_3D.length + 1));
+            this.objectGenerator.addRandomThematicObject(MODELS_3D[index], 1, objects);
         }
     }
 
-    private changeColor(obj: IObjet3D): IObjet3D {
+    private changeColor(obj: IObjet3D): IShape3D {
         let newColor: number;
         do {
             newColor = this.objectGenerator.randomInt(0x000000, MAX_COLOR);
-        } while (!this.isEnoughContrast(obj.color, newColor));
+        } while (!this.isEnoughContrast((obj as IShape3D).color, newColor));
 
         return {
             type: obj.type,
             color: newColor,
-            texture: "",
             position: obj.position,
             size: obj.size,
             rotation: obj.rotation,
         };
     }
-
-    private changeTexture(obj: IObjet3D): IObjet3D {
+    // TODO: ADAPT TO NEW interface
+    /*private changeTexture(obj: IObjet3D): IObjet3D {
 
         const previousText: string = obj.texture;
         let newText: string;
@@ -108,7 +108,7 @@ export class Game3DModificatorService {
             size: obj.size,
             rotation: obj.rotation,
         };
-    }
+    }*/
     public isEnoughContrast(otherColor: number, objColor: number): boolean {
         // we want positive values, check for min and max
         let max: number;

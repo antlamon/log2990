@@ -10,10 +10,12 @@ import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "./file-validator.service";
 import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
-import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
+import { Scene3DComponent } from "../scene3D/geometric-scene/scene3-d.component";
 import { NO_MIN_OBJECTS, NO_MAX_OBJECTS } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
+import { ThematicSceneComponent } from "../scene3D/thematic-scene/thematic-scene.component";
 import { MatProgressSpinnerModule } from "@angular/material";
+
 describe("FileValidatorService", () => {
 
   const LARGER_WIDTH: number = 1000;
@@ -36,7 +38,8 @@ describe("FileValidatorService", () => {
         ListViewComponent,
         Game2DViewComponent,
         Scene3DComponent,
-        Game3DViewComponent
+        Game3DViewComponent,
+        ThematicSceneComponent,
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
       providers: [ModalService, FileValidatorService, Game2DViewComponent]
