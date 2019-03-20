@@ -4,11 +4,9 @@ import spies = require("chai-spies");
 import supertest = require("supertest");
 import { Application } from "../app";
 import { container } from "../inversify.config";
-import { ImageService } from "../services/image.service";
 import { TimeScoreService } from "../services/timescore.service";
 import { TYPES } from "../types";
 
-const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 
 describe("TimeScore Controller", () => {
@@ -18,8 +16,8 @@ describe("TimeScore Controller", () => {
     before(() => {
         container.snapshot();
         const timeScoreService: TimeScoreService = container.get(TYPES.TimeScoreService);
-        sandbox.on(timeScoreService, "changeHighScore", () => Promise.resolve(true));
-        sandbox.on(timeScoreService, "resetBestScore", () => Promise.resolve(true));
+        sandbox.on(timeScoreService, "changeHighScore", () => true);
+        sandbox.on(timeScoreService, "resetBestScore", () => true);
         container.rebind(TYPES.IdentificationServiceManager).toConstantValue(timeScoreService);
         app = container.get<Application>(TYPES.Application).app;
     });
@@ -31,44 +29,30 @@ describe("TimeScore Controller", () => {
 
     it("Should return true from put", (done: Mocha.Done) => {
         supertest(app)
-        .get("/api/identification")
+        .put("/api/timescore")
         .query({
-            gameRoomId: "test",
-            point: JSON.stringify({"x": 0, "y": 0}),
+            username: "user",
+            gameType: "solo",
+            gameMode: "solo",
+            id: "id",
+            nbMinutes: 0,
+            nbSeconds: 30,
         })
         .expect(200)
-        .end((error: Error, response: supertest.Response) => {
-            expect(response.body).to.deep.equal(mockedMessage);
+        .end((error: Error) => {
             done(error);
         });
     });
 
-    it("Should return mockedMessage from delete", (done: Mocha.Done) => {
+    it("Should return true from get to reset", (done: Mocha.Done) => {
         supertest(app)
-        .delete("/api/identification")
+        .get("/api/timescore/reset")
         .query({
-            gameRoomId: "test",
+            gameType: "test",
+            id: "id",
         })
         .expect(200)
-        .end((error: Error, response: supertest.Response) => {
-            expect(response.body).to.deep.equal(mockedMessage);
-            done(error);
-        });
-    });
-
-    it("Should return mockedMessage from post", (done: Mocha.Done) => {
-        supertest(app)
-        .post("/api/identification")
-        .send({
-            "gameRoomId": "test",
-            "originalImageURL": "url1",
-            "modifiedImageURL": "url2",
-            "differenceImageURL": "url3",
-        })
-        .expect("Content-Type", /json/)
-        .expect(200)
-        .end((error: Error, response: supertest.Response) => {
-            expect(response.body).to.deep.equal(mockedMessage);
+        .end((error: Error) => {
             done(error);
         });
     });
