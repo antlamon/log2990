@@ -29,7 +29,7 @@ describe("TimeScore Controller", () => {
         container.restore();
     });
 
-    it("Should return mockedMessage from get", (done: Mocha.Done) => {
+    it("Should return true from put", (done: Mocha.Done) => {
         supertest(app)
         .get("/api/identification")
         .query({

@@ -63,31 +63,34 @@ export class TimeScoreService {
         if (temp === null) {
             return new Promise<boolean>(() => false);
         }
-        if (this.compareScores(nbMinutes, nbSeconds, temp.second.score)) {
-            //todo
+        if (this.compareScores(nbMinutes, nbSeconds, temp.first.score)) {
+            await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, "first");
+
             return true;
         }
         if (this.compareScores(nbMinutes, nbSeconds, temp.second.score)) {
-            //todo
+            await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, "second");
+
             return true;
         }
         if (this.compareScores(nbMinutes, nbSeconds, temp.third.score)) {
-            //todo
+            await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, "third");
+
             return true;
         }
 
         return false;
     }
-    private setHighScore(gameType: string, gameMode: string,
-                         id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: string): void {
+    private async setHighScore(gameType: string, gameMode: string,
+                               id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: string): Promise<void> {
         let queryUpdate: string = gameMode + "." + pos;
         if (gameType === this.SIMPLE_COLLECTION) {
             queryUpdate = "card." + queryUpdate;
-            this.simpleCollection.findOneAndUpdate(
+            await this.simpleCollection.findOneAndUpdate(
                 {"card.id": id}, {queryUpdate: {name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds)}});
         }
         if (gameType === this.FREE_COLLECTION) {
-            this.freeCollection.findOneAndUpdate(
+            await this.freeCollection.findOneAndUpdate(
                 {"id": id}, {queryUpdate: {name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds)}});
         }
     }
