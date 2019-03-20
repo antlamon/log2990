@@ -19,6 +19,8 @@ const TYPES =  {
         IdentificationServiceManager: Symbol("IdentificationServiceManager"),
         GameRoomService: Symbol("GameRoomService"),
         FormValidatorService: Symbol("FormValidatorService"),
+        TimeScoreServiceManager: Symbol("TypescoreServiceManager"),
+        TimeScoreController: Symbol("TimescoreController"),
 };
 
 export  { TYPES };

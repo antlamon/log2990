@@ -4,6 +4,7 @@ import { ConnexionController } from "./controllers/connexion.controller";
 import { GameListController } from "./controllers/game-list.controller";
 import { IdentificationController } from "./controllers/identification.controller";
 import { ImageController } from "./controllers/image.controller";
+import { TimescoreController } from "./controllers/timescore.controller";
 import { Server } from "./server";
 import { ConnexionService } from "./services/connexion.service";
 import { ConvertImage } from "./services/convertImage.service";
@@ -16,6 +17,7 @@ import { GameRoomService } from "./services/gameRoom.service";
 import { IdentificationServiceManager } from "./services/identification.service.manager";
 import { ImageService } from "./services/image.service";
 import { ObjectGeneratorService } from "./services/objectGenerator.service";
+import { TimeScoreService } from "./services/timescore.service.manager";
 import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
@@ -48,5 +50,8 @@ container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManag
 
 container.bind(TYPES.GameRoomService).to(GameRoomService);
 container.bind(TYPES.FormValidatorService).to(FormValidatorService);
+
+container.bind(TYPES.TimeScoreController).to(TimescoreController);
+container.bind(TYPES.TimeScoreServiceManager).to(TimeScoreService);
 
 export { container };

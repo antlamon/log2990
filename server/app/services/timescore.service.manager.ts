@@ -1,5 +1,5 @@
 import { inject, injectable } from "inversify";
-import { Collection } from "mongodb";
+import { Collection, FindOneOptions } from "mongodb";
 import { ITop3 } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { DatabaseClient } from "./database.client";
@@ -18,10 +18,22 @@ export class TimeScoreService {
     public constructor(@inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) {
 }
 
-    public resetBestScore(typeGame: string, id: string): Promise<boolean> {
+    public resetBestScore(gameType: string, id: string): Promise<boolean> {
         // get le jeu
-        //reset solo et multi si existe
-        //else return false
+        if (gameType === this.SIMPLE_COLLECTION) {
+            return this.simpleCollection.findOneAndUpdate(
+                {"card.id": id}, {"card.solo": this.top3RandomOrder(), "card.multi": this.top3RandomOrder()}).then(() => {
+                    return true; //todo check if something updated
+                });
+        }
+        if (gameType === this.FREE_COLLECTION) {
+            return this.freeCollection.findOneAndUpdate(
+                {"id": id}, {"solo": this.top3RandomOrder(), "multi": this.top3RandomOrder()}).then(() => {
+                    return true; //todo check if something updated
+                });
+        }
+
+        return new Promise<boolean>(() => false);
     }
     private top3RandomOrder(): ITop3 {
         const scores: [number, number][] = [];
@@ -31,25 +43,25 @@ export class TimeScoreService {
         }
         scores.sort((x: [number, number]) => x[0] * TimeScoreService.MAX_NB_SECONDS + x[1]);
 
-        return { first: {name: "GoodComputer", score: scores[0][0].toString() +
-        (scores[0][1] < TimeScoreService.TEN) ? ":0" : ":" + scores[0][1].toString()},
-                 second: {name: "MediumComputer", score: scores[0][0].toString() +
-                 (scores[1][1] < TimeScoreService.TEN) ? ":0" : ":" + scores[1][1].toString()},
-                 third: {name: "BadComputer", score: scores[2][0].toString() +
-                 (scores[2][1] < TimeScoreService.TEN) ? ":0" : ":" + scores[2][1].toString()},
-                };
+        return { first: {name: "GoodComputer",  score: this.formatTimeScore(scores[0][0], scores[0][1])},
+                 second: {name: "MediumComputer", score: this.formatTimeScore(scores[1][0], scores[1][1])},
+                 third: {name: "BadComputer", score: this.formatTimeScore(scores[2][0], scores[2][1])}};
+    }
+    private formatTimeScore(nbMinutes: number, nbSeconds: number): string {
+        return this.formatTime(nbMinutes) + ":" + this.formatTime(nbSeconds);
+    }
+    private formatTime(time: number): string {
+        return (time < TimeScoreService.TEN) ? "0" : "" + time.toString();
     }
     private randomNumber(min: number, max: number): number {
 
         return Math.random() * (max - min + 1) + min;
     }
-    public setHighScore(userName: string, gameMode: string, nbMinutes: number, nbSeconds: number): boolean {
-        let temp: ITop3 = {first: {name: "a", score: "a"}, second: {name: "a", score: "a"}, third: {name: "a", score: "a"}};
-        if (gameMode === "multi") { //todo call database
-            temp = {first: {name: "a", score: "a"}, second: {name: "a", score: "a"}, third: {name: "a", score: "a"}};
-        }
-        else {
-            temp = {first: {name: "a", score: "a"}, second: {name: "a", score: "a"}, third: {name: "a", score: "a"}};
+    public async changeHighScore(userName: string, gameType: string,
+                                 gameMode: string, id: string, nbMinutes: number, nbSeconds: number):  Promise<boolean> {
+        const temp: ITop3 | null = await this.getHighScore(gameType, gameMode, id);
+        if (temp === null) {
+            return new Promise<boolean>(() => false);
         }
         if (this.compareScores(nbMinutes, nbSeconds, temp.second.score)) {
             //todo
@@ -59,12 +71,34 @@ export class TimeScoreService {
             //todo
             return true;
         }
-        if (this.compareScores(nbMinutes, nbSeconds, temp.second.score)) {
+        if (this.compareScores(nbMinutes, nbSeconds, temp.third.score)) {
             //todo
             return true;
         }
 
         return false;
+    }
+    private setHighScore(gameType: string, gameMode: string,
+                         id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: string): void {
+        let queryUpdate: string = gameMode + "." + pos;
+        if (gameType === this.SIMPLE_COLLECTION) {
+            queryUpdate = "card." + queryUpdate;
+            this.simpleCollection.findOneAndUpdate(
+                {"card.id": id}, {queryUpdate: {name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds)}});
+        }
+        if (gameType === this.FREE_COLLECTION) {
+            this.freeCollection.findOneAndUpdate(
+                {"id": id}, {queryUpdate: {name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds)}});
+        }
+    }
+    private async getHighScore(gameType: string, gameMode: string, id: string): Promise<ITop3 | null> {
+        if (gameType === this.SIMPLE_COLLECTION) {
+            return this.simpleCollection.findOne({"id": id}, {gameMode: 1} as FindOneOptions);
+        } else if (gameType === this.FREE_COLLECTION) {
+            return this.freeCollection.findOne({"id": id}, {gameMode: 1} as FindOneOptions);
+        } else {
+            return new Promise<ITop3 | null>(() => null);
+        }
     }
     private compareScores(nbMinutes: number, nbSeconds: number, score: string): boolean {
         const time: string[] = score.split(":");

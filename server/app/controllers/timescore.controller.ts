@@ -1,37 +1,33 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
-import { Point } from "../../../common/communication/message";
-import { IdentificationServiceManager } from "../services/identification.service.manager";
+import { TimeScoreService } from "../services/timescore.service.manager";
 import { TYPES } from "../types";
 
 @injectable()
 export class TimescoreController {
 
-    public static readonly URL: string = "/api/identification";
+    public static readonly URL: string = "/api/timescore";
 
-    public constructor(@inject(TYPES.IdentificationServiceManager) private identificationServiceManager: IdentificationServiceManager) { }
+    public constructor(@inject(TYPES.TimeScoreServiceManager) private timeScoreService: TimeScoreService) { }
 
     public get router(): Router {
         const router: Router = Router();
 
-        router.get("/", (req: Request, res: Response, next: NextFunction) => {
-            const gameRoomId: string = req.query.gameRoomId;
-            const point: Point = JSON.parse(req.query.point);
-            res.json(this.identificationServiceManager.getDifference(gameRoomId, point));
+        router.put("/", (req: Request, res: Response, next: NextFunction) => {
+            const username: string = req.query.username;
+            const gameType: string = req.query.gameType;
+            const gameMode: string = req.query.gameMode;
+            const id: string = req.query.id;
+            const nbMinutes: number = req.query.nbMinutes;
+            const nbSeconds: number = req.query.nbSeconds;
+            res.json(this.timeScoreService.changeHighScore(username, gameType, gameMode,
+                                                           id, nbMinutes, nbSeconds));
         });
 
-        router.post("/", (req: Request, res: Response, next: NextFunction) => {
-            const originalImageString: string = req.body.originalImage;
-            const modifiedImageString: string = req.body.modifiedImage;
-            const differenceImageString: string = req.body.differenceImage;
-            const gameRoomId: string = req.body.gameRoomId;
-            res.json(this.identificationServiceManager
-                .startNewService(gameRoomId, originalImageString, modifiedImageString, differenceImageString));
-        });
-
-        router.delete("/", (req: Request, res: Response, next: NextFunction) => {
-            const gameRoomId: string = req.query.gameRoomId;
-            res.json(this.identificationServiceManager.deleteService(gameRoomId));
+        router.get("/reset", (req: Request, res: Response, next: NextFunction) => {
+            const gameType: string = req.query.gameType;
+            const id: string = req.query.id;
+            res.json(this.timeScoreService.resetBestScore(gameType, id));
         });
 
         return router;
