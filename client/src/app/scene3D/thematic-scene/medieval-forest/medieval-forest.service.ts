@@ -54,6 +54,9 @@ export class MedievalForestService {
 
     return this.promisedObjects;
   }
+  public resetPromises(): void {
+    this.promisedObjects = [];
+  }
   private createSkyBox(): void {
     this.textureLoader = new THREE.TextureLoader();
     const faceNb: number = 6;

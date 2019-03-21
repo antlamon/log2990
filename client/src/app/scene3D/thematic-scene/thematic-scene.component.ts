@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
 import { MOCK_THEMED_GAME, IScene3D } from "../../../../../common/models/game3D";
+import { CLICK, KEYS } from "src/app/global/constants";
 
 @Component({
   selector: "app-thematic-scene",
@@ -23,6 +24,10 @@ export class ThematicSceneComponent implements AfterViewInit {
   private camera: THREE.PerspectiveCamera;
 
   private renderer: THREE.WebGLRenderer;
+
+  private readonly SENSITIVITY: number = 0.002;
+  private press: boolean;
+  private movementSpeed: number = 3;
 
   private scene: THREE.Scene;
 
@@ -67,6 +72,7 @@ export class ThematicSceneComponent implements AfterViewInit {
   }
   private initialize(): void {
     this.createScene();
+    this.forestService.resetPromises();
     Promise.all(this.forestService.createForest(this.scene, this.iScene)).then(
       (objects: THREE.Object3D[]) => {
         for (const obj of objects) {
@@ -109,11 +115,18 @@ export class ThematicSceneComponent implements AfterViewInit {
   }
 
   private startRenderingLoop(): void {
+
+    document.addEventListener( "keydown", this.onKeyDown, false );
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.BasicShadowMap;
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+    this.renderer.domElement.addEventListener( "mousemove", this.onMouseMove, false );
+    this.renderer.domElement.addEventListener( "contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false );
+    this.renderer.domElement.addEventListener("mousedown", this.onMouseDown, false);
+    this.renderer.domElement.addEventListener("mouseup", this.onMouseUp, false);
 
     this.containerO.appendChild(this.renderer.domElement);
     this.render();
@@ -121,7 +134,44 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   private render(): void {
     requestAnimationFrame(() => this.render());
+    this.renderer.domElement.style.width = "100%";
+    this.renderer.domElement.style.height = "100%";
     this.renderer.render(this.scene, this.camera);
+  }
+
+  private onKeyDown = (event: KeyboardEvent) => {
+    switch (event.keyCode ) {
+      case KEYS["S"]: // up
+      this.camera.translateZ(this.movementSpeed);
+      break;
+      case KEYS["W"]: // down
+      this.camera.translateZ(-this.movementSpeed);
+      break;
+      case KEYS["D"]: // up
+      this.camera.translateX(this.movementSpeed);
+      break;
+      case KEYS["A"]: // down
+      this.camera.translateX(-this.movementSpeed);
+      break;
+      default: break;
+    }
+  }
+  private onMouseMove = (event: MouseEvent) => {
+    if (!this.press) { return; }
+
+    // TODO: fix rotation after moving
+    this.camera.rotation.y -= event.movementX * this.SENSITIVITY;
+    this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
+  }
+  private onMouseUp = (event: MouseEvent) => {
+    if (event.button === CLICK.right) {
+      this.press = false;
+    }
+  }
+  private onMouseDown = (event: MouseEvent) => {
+    if (event.button === CLICK.right) {
+      this.press = true;
+    }
   }
 
 }
