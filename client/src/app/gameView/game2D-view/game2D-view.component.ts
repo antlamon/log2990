@@ -65,6 +65,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 const newGameMessage: NewGameMessage = {
                     username: this.index.username,
                     gameRoomId: this.simpleGame.card.id,
+                    is3D: false,
                     originalImage: this.simpleGame.card.originalImage,
                     modifiedImage: this.simpleGame.modifiedImage,
                     differenceImage: this.simpleGame.differenceImage

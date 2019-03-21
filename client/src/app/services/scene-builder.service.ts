@@ -195,8 +195,7 @@ export class SceneBuilderService {
 
       const obj: THREE.Object3D = intersects[0].object;
 
-      const objMessage: Obj3DClickMessage =
-        {
+      const objMessage: Obj3DClickMessage = {
           username: "TODO",
           gameRoomId: "TODO",
           name: obj.name,

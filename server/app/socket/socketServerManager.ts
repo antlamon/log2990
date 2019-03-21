@@ -1,7 +1,8 @@
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
-import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Obj3DClickMessage, Game3DRoomUpdate } from "../../../common/communication/message";
+import { Game3DRoomUpdate, GameRoomUpdate, ImageClickMessage,
+    INewGameMessage, Obj3DClickMessage } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/gameRoom.service";
 import { UsersManager } from "../services/users.service";
@@ -20,7 +21,7 @@ export class SocketServerManager {
         this.socketServer = SocketIO(server);
         this.socketServer.on("connect", (socket: Socket) => {
             this.userManager.addUser(socket.client.id);
-            socket.on(SocketsEvents.CREATE_GAME_ROOM, async (newGameMessage: NewGameMessage) => {
+            socket.on(SocketsEvents.CREATE_GAME_ROOM, async (newGameMessage: INewGameMessage) => {
                 await this.handleNewGameRoom(socket, newGameMessage);
             });
             socket.on(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -38,7 +39,7 @@ export class SocketServerManager {
         this.socketServer.emit(event, data);
     }
 
-    private async handleNewGameRoom(socket: Socket, newGameMessage: NewGameMessage): Promise<void> {
+    private async handleNewGameRoom(socket: Socket, newGameMessage: INewGameMessage): Promise<void> {
         try {
             const roomId: string = await this.gameRoomService.createNewGameRoom(newGameMessage);
             socket.join(roomId);

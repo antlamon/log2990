@@ -7,19 +7,19 @@ export interface Message {
 export const ERROR_ID: string = "error";
 export const BASE_ID:string = "base";
 
-export interface NewGameMessage {
+export interface INewGameMessage {
     gameRoomId: string;
     username: string;
+    is3D: boolean;
+}
+
+export interface NewGameMessage extends INewGameMessage{
     originalImage: string;
     modifiedImage: string;
     differenceImage: string;
 }
-export interface NewGame3DMessage {
-    gameRoomId: string;
-    username: string;
-    originalImage: string;
-    modifiedImage: string;
-    differenceImage: string;
+export interface NewGame3DMessage extends INewGameMessage{
+    game: IGame3D;
 }
 
 export interface Point {

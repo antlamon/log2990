@@ -1,6 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import { BASE_ID, Game3DRoomUpdate, GameRoomUpdate, NewGameMessage, Point } from "../../../common/communication/message";
+import { BASE_ID, Game3DRoomUpdate, GameRoomUpdate, INewGameMessage,
+    NewGame3DMessage, NewGameMessage, Point } from "../../../common/communication/message";
 import { IGame3D } from "../../../common/models/game3D";
 
 @injectable()
@@ -14,23 +15,10 @@ export class GameRoomService {
         this.gameRooms = {} as GameRooms;
     }
 
-    public async createNewGameRoom(newGameMessage: NewGameMessage): Promise<string> {
-        const response: AxiosResponse = await Axios.post(this.IDENTIFICATION_URL, newGameMessage);
-        if (response.data.title !== BASE_ID) {
-            return Promise.reject(Error(response.data.body));
-        }
-        const newGamer: Gamer = {
-            username: newGameMessage.username,
-            differencesFound: 0,
-        };
-        this.gameRooms[newGameMessage.gameRoomId] = [];
-        this.gameRooms[newGameMessage.gameRoomId].push(newGamer);
-
-        return response.data.body;
-    }
-
-    public async createNewGameRoom(newGameMessage: NewGameMessage): Promise<string> {
-        const response: AxiosResponse = await Axios.post(this.IDENTIFICATION_URL, newGameMessage);
+    public async createNewGameRoom(newGameMessage: INewGameMessage): Promise<string> {
+        const response: AxiosResponse = newGameMessage.is3D ?
+            await Axios.post(this.IDENTIFICATION_3D_URL, newGameMessage as NewGame3DMessage) :
+            await Axios.post(this.IDENTIFICATION_URL, newGameMessage as NewGameMessage);
         if (response.data.title !== BASE_ID) {
             return Promise.reject(Error(response.data.body));
         }
