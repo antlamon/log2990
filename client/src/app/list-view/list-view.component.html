@@ -85,7 +85,7 @@
                 <div class="game-card-img-container">
                   <app-scene3-d-component *ngIf="!game.isThemed" class="game-card-img" [game]="game" #scene [isCardMode]="true">
                   </app-scene3-d-component>
-                  <app-thematic-scene *ngIf="game.isThemed" class="game-card-img" [iScene]="game.originalScene" #scene [isCardMode]="true">
+                  <app-thematic-scene *ngIf = "game.isThemed" class="game-card-img" [iScene]="game.originalScene" #scene [isCardMode]="true">
                   </app-thematic-scene>
                 </div>
                 <div class="game-card-buttons" *ngIf="!isAdminMode">

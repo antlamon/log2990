@@ -16,6 +16,7 @@ export class ThematicSceneComponent implements AfterViewInit {
 
   @Input() public isCardMode: boolean;
   @Input() public iScene: IScene3D = MOCK_THEMED_GAME.originalScene;
+  @Input() public isLoaded: boolean;
   public imageBase64: string;
 
   @ViewChild("containerO")
@@ -51,7 +52,8 @@ export class ThematicSceneComponent implements AfterViewInit {
   private groundLight: number = 0x404040;
 
   public constructor(private forestService: MedievalForestService) {
-    this.isCardMode = true;
+    this.isCardMode = false;
+    this.isLoaded = false;
   }
   private get containerO(): HTMLDivElement {
     return this.containerORef.nativeElement;
@@ -81,6 +83,7 @@ export class ThematicSceneComponent implements AfterViewInit {
         this.createCamera();
         this.startRenderingLoop();
         this.imageBase64 = ((this.containerO).children[0] as HTMLCanvasElement).toDataURL();
+        this.isLoaded = true;
         });
   }
 

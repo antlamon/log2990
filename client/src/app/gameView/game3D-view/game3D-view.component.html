@@ -2,14 +2,16 @@
 <div class="chrono">Temps restant: 00:00</div>
 <div class="compteur">Différences trouvées: 0</div>
 <div *ngIf="game3D" class="divGames">
-  <ng-container class="gameImage">
+  <div class="gameImage">
     <p>Image originale:</p>
-    <app-thematic-scene class = "gameScene" #originalContainer [isCardMode] = "false" [iScene] = "game3D.originalScene" ></app-thematic-scene>
-  </ng-container>
-  <ng-container class="gameImage">
+    <div *ngIf = "!game3D.isThemed" #originalContainer class ="game-card-img"></div>
+    <app-thematic-scene *ngIf = "game3D.isThemed" class = "gameScene" [isCardMode] = "false" [iScene] = "game3D.originalScene" ></app-thematic-scene>
+  </div>
+  <div class="gameImage">
     <p>Image avec les différences:</p>
-    <app-thematic-scene class = "gameScene" #modifiedContainer [isCardMode] = "false" [iScene] = "game3D.modifiedScene" ></app-thematic-scene>
-  </ng-container>
+    <div *ngIf = "!game3D.isThemed" #modifiedContainer class ="game-card-img"></div>
+    <app-thematic-scene *ngIf = "game3D.isThemed" class = "gameScene" [isCardMode] = "false" [iScene] = "game3D.modifiedScene" ></app-thematic-scene>
+  </div>
 </div>
 <div class="messagesBox">
   <div class="messagesBoxTitle"> Messages </div>
