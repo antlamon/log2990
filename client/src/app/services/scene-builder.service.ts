@@ -3,6 +3,9 @@ import * as THREE from "three";
 import { IScene3D } from "../../../../common/models/game3D";
 import { CLICK, KEYS } from "src/app/global/constants";
 import { ISceneContainer } from "../scene3D/ISceneContainer";
+import { SocketService } from "./socket.service";
+import { SocketsEvents } from "../../../../common/communication/socketsEvents";
+import { GameRoomUpdate, Obj3DClickMessage } from "../../../../common/communication/message";
 
 @Injectable()
 export class SceneBuilderService {
@@ -23,24 +26,37 @@ export class SceneBuilderService {
   private cameraZ: number = -20;
   private cameraY: number = 5;
 
+  private mouse: THREE.Vector2 = new THREE.Vector2();
+  private raycaster: THREE.Raycaster;
+
   private fieldOfView: number = 75;
 
   private nearClippingPane: number = 1;
 
   private movementSpeed: number = 3;
   private farClippingPane: number = 3000;
+  public constructor(private socket: SocketService) {
+    this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
+    this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
+  }
 
   public initialize(caller: ISceneContainer): void {
 
     this.gameContainer = caller;
     const scene: THREE.Scene = this.createScene(caller.game.originalScene);
     this.sceneOriginal = scene;
-    this.sceneModif = scene;
+    this.sceneModif = scene.clone();
     //TODO: this.sceneModif.addModifications(); // a voir avec stephane
     this.createCamera();
     this.startRenderingLoop();
 
   }
+  private handleCreateGameRoom(rejection?: string): void {
+    if (rejection !== null) {
+        alert(rejection);
+    }
+  }
+  private handleCheckDifference(update: GameRoomUpdate): void {}
 
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();
@@ -73,7 +89,12 @@ export class SceneBuilderService {
     this.sceneOriginal.add(this.camera);
     this.sceneModif.add(this.camera);
   }
-
+  private get containerOriginal(): HTMLDivElement {
+    return this.gameContainer.containerO;
+  }
+  private get containerModif(): HTMLDivElement {
+    return this.gameContainer.containerM;
+  }
   private getAspectRatio(): number {
     return this.gameContainer.containerO.clientWidth / this.gameContainer.containerO.clientHeight;
   }
@@ -81,7 +102,7 @@ export class SceneBuilderService {
   private startRenderingLoop(): void {
 
     document.addEventListener( "keydown", this.onKeyDown, false );
-
+    this.raycaster = new THREE.Raycaster();
     this.rendererO = this.createRenderer(this.gameContainer.containerO);
     this.rendererM = this.createRenderer(this.gameContainer.containerM);
 
@@ -145,13 +166,47 @@ export class SceneBuilderService {
     this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
   }
   private onMouseUp = (event: MouseEvent) => {
-    if (event.button === CLICK.right) {
-      this.press = false;
+
+    switch (event.button) {
+      case (CLICK.right):
+        this.press = false;
+        break;
+      case (CLICK.left):
+        this.identifyDiff(event);
+        break;
+      default:
     }
   }
   private onMouseDown = (event: MouseEvent) => {
     if (event.button === CLICK.right) {
       this.press = true;
     }
+  }
+  private identifyDiff(event: MouseEvent): void {
+
+    //const URL: string = "api/identification3D";
+
+    if ( event.clientX < this.containerModif.offsetLeft) {
+      this.calculateMouse(event, this.containerOriginal);
+    } else {
+      this.calculateMouse(event, this.containerModif);
+    }
+    this.raycaster.setFromCamera( this.mouse, this.camera );
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children);
+    if (intersects.length > 0) {
+
+      const obj: THREE.Mesh = intersects[0].object as THREE.Mesh;
+      obj.material = new THREE.MeshPhongMaterial({map: new THREE.TextureLoader().load(("assets/marble1.jpg")) });
+
+      const objMessage: Obj3DClickMessage = {position: obj.position, name: obj.name};
+
+      this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
+    }
+  }
+
+  private calculateMouse(event: MouseEvent, container: HTMLDivElement): void {
+    const MULTI: number = 2;
+    this.mouse.x = (event.offsetX  / container.offsetWidth) * MULTI - 1;
+    this.mouse.y = -(event.offsetY / container.offsetHeight) * MULTI + 1;
   }
 }

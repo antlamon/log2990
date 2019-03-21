@@ -29,3 +29,7 @@ export interface ImageClickMessage {
     gameRoomId: string;
     point: Point;
 }
+export interface Obj3DClickMessage {
+    position: {x: number, y:number, z: number};
+    name: string;
+}
