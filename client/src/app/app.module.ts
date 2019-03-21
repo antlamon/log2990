@@ -25,7 +25,6 @@ import { SocketService } from "./services/socket.service";
 import { ThematicSceneComponent } from "./scene3D/thematic-scene/thematic-scene.component";
 import { MedievalForestService } from "./scene3D/thematic-scene/medieval-forest/medieval-forest.service";
 import { MedievalObjectService } from "./scene3D/thematic-scene/medieval-forest/medieval-objects/medieval-object.service";
-import { SceneBuilderService } from "./services/scene-builder.service";
 
 @NgModule({
   declarations: [
@@ -64,7 +63,6 @@ import { SceneBuilderService } from "./services/scene-builder.service";
     ShapeCreatorService,
     MedievalForestService,
     MedievalObjectService,
-    SceneBuilderService,
   ],
   bootstrap: [AppComponent]
 })
