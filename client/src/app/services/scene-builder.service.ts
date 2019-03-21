@@ -195,10 +195,14 @@ export class SceneBuilderService {
     const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children);
     if (intersects.length > 0) {
 
-      const obj: THREE.Mesh = intersects[0].object as THREE.Mesh;
-      obj.material = new THREE.MeshPhongMaterial({map: new THREE.TextureLoader().load(("assets/marble1.jpg")) });
+      const obj: THREE.Object3D = intersects[0].object;
 
-      const objMessage: Obj3DClickMessage = {position: obj.position, name: obj.name};
+      const objMessage: Obj3DClickMessage = {
+          username: "TODO",
+          gameRoomId: "TODO",
+          name: obj.name,
+          game: this.gameContainer.game,
+        };
 
       this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
     }

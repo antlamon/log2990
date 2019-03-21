@@ -1,20 +1,24 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { injectable } from "inversify";
-// import { Identification3DService } from "../services/identification3D.service";
-// import { TYPES } from "../types";
+import { inject, injectable } from "inversify";
+import { IGame3D } from "../../../common/models/game3D";
+import { Identification3DService } from "../services/identification3D.service";
+import { TYPES } from "../types";
 
 @injectable()
 export class Identification3DController {
 
     public static readonly URL: string = "/api/identification3D";
 
-//     public constructor(@inject(TYPES.Identification3DService) private identification3DService: Identification3DService) { }
+    public constructor(@inject(TYPES.Identification3DService) private identification3DService: Identification3DService) { }
 
     public get router(): Router {
         const router: Router = Router();
 
         router.get("/", (req: Request, res: Response, next: NextFunction) => {
-
+            const gameRoomId: string = req.query.gameRoomId;
+            const objName: string = req.query.objName;
+            const game: IGame3D = req.query.game;
+            res.json(this.identification3DService.getDifference(gameRoomId, objName, game));
             res.json();
         });
 

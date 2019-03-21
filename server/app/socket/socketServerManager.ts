@@ -1,7 +1,7 @@
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
-import { GameRoomUpdate, ImageClickMessage, NewGameMessage } from "../../../common/communication/message";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Obj3DClickMessage, Game3DRoomUpdate } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/gameRoom.service";
 import { UsersManager } from "../services/users.service";
@@ -24,6 +24,7 @@ export class SocketServerManager {
                 await this.handleNewGameRoom(socket, newGameMessage);
             });
             socket.on(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
+            socket.on(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference3D.bind(this));
             socket.on(SocketsEvents.DELETE_GAME_ROOM, async (gameRoomId: string) => {
                 await this.handleDeleteGameRoom(socket, gameRoomId);
             });
@@ -50,6 +51,12 @@ export class SocketServerManager {
     private async handleCheckDifference(event: ImageClickMessage): Promise<void> {
         const update: GameRoomUpdate = await this.gameRoomService.checkDifference(event.gameRoomId, event.username, event.point);
         this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, event.gameRoomId, update);
+    }
+
+    private async handleCheckDifference3D(event: Obj3DClickMessage): Promise<void> {
+        const update: Game3DRoomUpdate = await this.gameRoomService.checkDifference3D(event.gameRoomId,
+                                                                                      event.username, event.name, event.game);
+        this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE_3D, event.gameRoomId, update);
     }
 
     private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {

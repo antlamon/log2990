@@ -1,3 +1,5 @@
+import { IGame3D } from "../models/game3D";
+
 export interface Message {
     title: string;
     body: string;
@@ -24,12 +26,20 @@ export interface GameRoomUpdate {
     newImage: string;
 }
 
-export interface ImageClickMessage {
+export interface Game3DRoomUpdate {
+    username: string;
+    differencesFound: number;
+    objName: string;
+}
+
+export interface clickMessage {
     username: string;
     gameRoomId: string;
+}
+export interface ImageClickMessage extends clickMessage {
     point: Point;
 }
-export interface Obj3DClickMessage {
-    position: {x: number, y:number, z: number};
+export interface Obj3DClickMessage extends clickMessage {
     name: string;
+    game: IGame3D;
 }
