@@ -60,9 +60,11 @@ export class ListViewComponent implements OnInit {
   public deleteSimpleGames(game: IGame): void {
     // tslint:disable-next-line:no-suspicious-comment
     // TODO: warning delete box "are you sure? yes/no"
-    const index: number = this.simpleGames.findIndex((x: IGame) => x === game);
-    if (index !== -1) {
-      this.gameService.deleteSimpleGame(game).subscribe();
+    if (confirm("Voulez vous supprimer le jeu " + game.name + " ?")) {
+      const index: number = this.simpleGames.findIndex((x: IGame) => x === game);
+      if (index !== -1) {
+        this.gameService.deleteSimpleGame(game).subscribe();
+      }
     }
   }
 
@@ -74,9 +76,11 @@ export class ListViewComponent implements OnInit {
   public deleteFreeGames(game: IGame3D): void {
     // tslint:disable-next-line:no-suspicious-comment
     // TODO: warning delete box "are you sure? yes/no"
-    const index: number = this.freeGames.findIndex((x: IGame3D) => x === game);
-    if (index !== -1) {
-      this.gameService.deleteFreeGame(game).subscribe();
+    if (confirm("Voulez vous supprimer le jeu " + game.name + " ?")) {
+      const index: number = this.freeGames.findIndex((x: IGame3D) => x === game);
+      if (index !== -1) {
+        this.gameService.deleteFreeGame(game).subscribe();
+      }
     }
   }
 

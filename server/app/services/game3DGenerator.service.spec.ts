@@ -62,6 +62,7 @@ const mock3DGame: IGame3D = {
     solo: { } as ITop3,
     multi: { } as ITop3,
     isThemed: true,
+    differencesIndex: [],
 };
 
 const expect: Chai.ExpectStatic = chai.expect;

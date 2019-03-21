@@ -39,7 +39,7 @@ export class Game3DGeneratorService {
 
         let originalScene: IScene3D;
         let isThemed: boolean;
-
+        const tempDifferences: [string, number][] = [];
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             originalScene = this.generateObjGeometricScene(form.objectQty);
             isThemed = false;
@@ -54,10 +54,11 @@ export class Game3DGeneratorService {
             name: form.name,
             id: (new ObjectID()).toHexString(),
             originalScene: originalScene,
-            modifiedScene: this.game3DModificator.createModifScene(originalScene, form.objectType, form.modifications),
+            modifiedScene: this.game3DModificator.createModifScene(originalScene, form.objectType, form.modifications, tempDifferences),
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
             isThemed: isThemed,
+            differencesIndex: tempDifferences,
         };
     }
 

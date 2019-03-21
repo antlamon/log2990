@@ -9,6 +9,8 @@ import { IFullGame, IGame } from "../../../../../common/models/game";
 import { ITop3 } from "../../../../../common/models/top3";
 import { Game2DViewComponent } from "./game2D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
+import { ErrorPopupComponent } from "../error-popup/error-popup.component";
+
 const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
@@ -27,7 +29,10 @@ describe("Game2DViewComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [Game2DViewComponent],
+            declarations: [
+                Game2DViewComponent,
+                ErrorPopupComponent
+            ],
             imports: [RouterTestingModule, HttpClientModule, MatProgressSpinnerModule],
             providers: [IndexService, AppRoutingModule],
         })
@@ -67,6 +72,7 @@ describe("Game2DViewComponent", () => {
             newImage: "testImage",
             differencesFound: 3,
         };
+        component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
         expect(component["simpleGame"].modifiedImage).toEqual(update.newImage);
         expect(component.differencesFound).toEqual(update.differencesFound);
@@ -80,6 +86,19 @@ describe("Game2DViewComponent", () => {
             newImage: "testImage",
             differencesFound: -1,
         };
+        component["lastClick"] = new MouseEvent("click");
+        component["handleCheckDifference"](update);
+        expect(spy).toHaveBeenCalled();
+    });
+
+    it("handle check difference should play the victory sound", async () => {
+        const spy: jasmine.Spy = spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+        const update: GameRoomUpdate = {
+            username: "test",
+            newImage: "testImage",
+            differencesFound: 7,
+        };
+        component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
     });

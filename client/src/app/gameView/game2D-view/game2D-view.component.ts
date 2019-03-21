@@ -1,12 +1,13 @@
-import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
+import { TimerService } from "src/app/services/timer.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
-import { TimerService } from "src/app/services/timer.service";
+import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 
 @Component({
     selector: "app-game2d-view",
@@ -26,12 +27,17 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private errorSound: HTMLAudioElement;
     private victorySound: HTMLAudioElement;
 
+    @ViewChild(ErrorPopupComponent)
+    private errorPopup: ErrorPopupComponent;
+    private lastClick: MouseEvent;
+
     public constructor(
         private gameService: GameService,
         private socket: SocketService,
         private route: ActivatedRoute,
         private index: IndexService,
-        private timer: TimerService
+        private timer: TimerService,
+        private ref: ChangeDetectorRef
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -61,6 +67,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
             .subscribe((response: IFullGame) => {
+                this.ref.detach();
                 this.simpleGame = response;
                 const newGameMessage: NewGameMessage = {
                     username: this.index.username,
@@ -70,7 +77,6 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                     differenceImage: this.simpleGame.differenceImage
                 };
                 this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
-                this.timer.startTimer({minutes: 7, seconds: 0}, this.finishGame.bind(this));
             });
     }
 
@@ -78,15 +84,19 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         if (rejection !== null) {
             alert(rejection);
         }
+        this.ref.reattach();
+        this.timer.startTimer();
     }
 
     private handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
+            this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
             this.disableClick = "disable-click";
             this.blockedCursor = "cursor-not-allowed";
             setTimeout(
                 () => {
+                    this.errorPopup.hidePopup();
                     this.disableClick = "";
                     this.blockedCursor = "";
                 },
@@ -102,9 +112,12 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             }
         }
     }
+
     private finishGame(): void {
         this.timer.stopTimer();
+        this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
+        this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
     }
 
     public sendClick(event: MouseEvent): void {
@@ -119,6 +132,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             username: this.index.username,
         };
 
+        this.lastClick = event;
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE, imageClickMessage);
     }
 }

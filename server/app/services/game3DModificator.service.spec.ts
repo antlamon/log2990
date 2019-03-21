@@ -93,26 +93,53 @@ describe("Game3D Modificator service", () => {
 
     describe("Modifying the objects should work, whatever the type, if there is modifications", () => {
         it("Should return an array with 7 added objects", async () => {
-            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd).objects.length).
+            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd, []).objects.length).
                 to.eql(mockObjects.length + Game3DModificatorService.NB_DIFF);
         });
 
         it("Should return an array with only 1 object", async () => {
 
-            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete).objects.length).
+            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete, []).objects.length).
                 to.eql(mockObjects.length - Game3DModificatorService.NB_DIFF);
         });
 
         it("Should return an array with 7 geometric modified objects", async () => {
 
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
             let count: number = 0;
             for (let i: number = 0; i < mockObjects.length; i++) {
-                if (((newObj.objects[i]) as IShape3D).color !== mockObjects[i].color) {
+                if ((newObj.objects[i] as IShape3D).color !== mockObjects[i].color) {
                     count++;
                 }
             }
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
+        });
+        it("Should return an array with 7 geometric modified objects. The undmodified attributes should stay the same", async () => {
+
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
+            let count: number = 0;
+            for (let i: number = 0; i < mockObjects.length; i++) {
+                if ((newObj.objects[i] as IShape3D).color !== mockObjects[i].color) {
+                    if (newObj.objects[i].position === mockObjects[i].position &&
+                         newObj.objects[i].rotation === mockObjects[i].rotation &&
+                         newObj.objects[i].size === mockObjects[i].size) {
+                        count++;
+                    }
+                }
+            }
+            expect(count).to.eql(Game3DModificatorService.NB_DIFF);
+        });
+        it("If type of modification add or delete is choosed, the numbers of objects should not be the same", async () => {
+
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd, []);
+            expect(newObj.objects.length).to.not.eql(mockScene.objects.length);
+            const newObjDel: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete, []);
+            expect(newObjDel.objects.length).to.not.eql(mockScene.objects.length);
+        });
+        it("If type of modification add or delete isnt choosed, the numbers of objects should be the same", async () => {
+
+            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
+            expect(newObj.objects.length).to.eql(mockScene.objects.length);
         });
 
     });

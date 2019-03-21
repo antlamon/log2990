@@ -1,10 +1,10 @@
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
-import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
+import { IScene3D, IGame3D, ORIGINAL, MODIFIED } from "../../../../../common/models/game3D";
 import { IObjet3D, IShape3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
-
+import {} from "jasmine";
 describe("renderService", () => {
   const cone: IShape3D = {
     type: "cone",
@@ -33,6 +33,7 @@ describe("renderService", () => {
     backColor: 0xFF0F0F,
   };
 
+  const differencesIndex: [string, number][]  = [[ORIGINAL, 0], [ORIGINAL, 1], [ORIGINAL, mockObjects.length - 1], [MODIFIED, 0]];
   const mockGame: IGame3D = {
     name: "mock",
     id: "mockid",
@@ -44,6 +45,7 @@ describe("renderService", () => {
     solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
     multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
     isThemed: false,
+    differencesIndex: differencesIndex,
   };
 
   const container1: HTMLDivElement = document.createElement("div");

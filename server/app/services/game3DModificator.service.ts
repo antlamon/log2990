@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
-import { GEOMETRIC_TYPE_NAME, IScene3D } from "../../../common/models/game3D";
-import { IObjet3D, IShape3D , MAX_COLOR } from "../../../common/models/objet3D";
 import { MODELS_3D } from "../../../common/models/models3D";
+import { GEOMETRIC_TYPE_NAME, IScene3D,  MODIFIED, ORIGINAL } from "../../../common/models/game3D";
+import { IObjet3D, MAX_COLOR, IShape3D  } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -17,7 +17,8 @@ export class Game3DModificatorService {
     public constructor(@inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
     public createModifScene(originalScene: IScene3D, typeObj: string,
-                            typeModif:  {add: boolean, delete: boolean, color: boolean}): IScene3D {
+                            typeModif:  {add: boolean, delete: boolean, color: boolean},
+                            differencesIndex: [string, number][]): IScene3D {
 
         const modifiedObjects: IObjet3D[] = [];
         const indexModif: number[] = this.randomIndex(originalScene.objects.length);
@@ -28,7 +29,7 @@ export class Game3DModificatorService {
 
             for (const no of indexModif) {
                 if (no === i) {
-                    newObj = this.createDifference((newObj) as IObjet3D, modifiedObjects, typeObj, typeModif);
+                    newObj = this.createDifference((newObj) as IObjet3D, modifiedObjects, typeObj, typeModif, differencesIndex, i);
                 }
             }
             if (newObj !== null) {
@@ -43,18 +44,24 @@ export class Game3DModificatorService {
     }
 
     private createDifference(obj: IObjet3D, objects: IObjet3D[], typeObj: string,
-                             typeModif:  {add: boolean, delete: boolean, color: boolean}): IObjet3D | null {
+                             typeModif:  {add: boolean, delete: boolean, color: boolean},
+                             differencesIndex: [string, number][], index: number): IObjet3D | null {
 
         // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
+                differencesIndex.push([MODIFIED, objects.length]);
                 this.addObject(objects, typeObj);
                 break;
             }
             case(Game3DModificatorService.DELETE): {
+                differencesIndex.push([ORIGINAL, index]);
+
                 return null;
             }
             case(Game3DModificatorService.COLOR): {
+                differencesIndex.push([ORIGINAL, index]);
+                differencesIndex.push([MODIFIED, objects.length]);
                 if (typeObj === GEOMETRIC_TYPE_NAME) {
                     return this.changeColor(obj);
                 } else {
@@ -111,17 +118,7 @@ export class Game3DModificatorService {
     }*/
     public isEnoughContrast(otherColor: number, objColor: number): boolean {
         // we want positive values, check for min and max
-        let max: number;
-        let min: number;
-        if (otherColor > objColor) {
-            max = otherColor;
-            min = objColor;
-        } else {
-            max = objColor;
-            min = otherColor;
-        }
-
-        return (max - min) >= this.MINIMUM_CONTRAST;
+        return Math.abs(otherColor - objColor) >= this.MINIMUM_CONTRAST;
     }
 
     private randomIndex(size: number): number[] {

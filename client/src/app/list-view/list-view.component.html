@@ -21,8 +21,8 @@
                   <div class="game-card-button-container"><button>CRÉER</button></div>
                 </div>
                 <div class="game-card-buttons" *ngIf="isAdminMode">
-                  <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
                   <div class="game-card-button-container"><button (click)="deleteSimpleGames(game)">SUPPRIMER</button>
+                  <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
                   </div>
                 </div>
               </div>
@@ -56,14 +56,14 @@
                       <div class="score-position">3</div>
                     </div>
                     <div class="name-column">
-                      <div class="name">{{game.solo.first.name}}</div>
-                      <div class="name">{{game.solo.second.name}}</div>
-                      <div class="name">{{game.solo.third.name}}</div>
+                      <div class="name">{{game.multi.first.name}}</div>
+                      <div class="name">{{game.multi.second.name}}</div>
+                      <div class="name">{{game.multi.third.name}}</div>
                     </div>
                     <div class="score-column">
-                      <div class="scores">{{game.solo.first.score}}</div>
-                      <div class="scores">{{game.solo.second.score}}</div>
-                      <div class="scores">{{game.solo.third.score}}</div>
+                      <div class="scores">{{game.multi.first.score}}</div>
+                      <div class="scores">{{game.multi.second.score}}</div>
+                      <div class="scores">{{game.multi.third.score}}</div>
                     </div>
                   </div>
                 </div>
@@ -94,8 +94,8 @@
                   <div class="game-card-button-container"><button>CRÉER</button></div>
                 </div>
                 <div class="game-card-buttons" *ngIf="isAdminMode">
-                  <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
                   <div class="game-card-button-container"><button (click)="deleteFreeGames(game)">SUPPRIMER</button>
+                  <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
                   </div>
                 </div>
               </div>

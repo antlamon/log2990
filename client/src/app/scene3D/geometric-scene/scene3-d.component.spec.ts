@@ -29,6 +29,7 @@ describe("Scene3DComponent", () => {
     backColor: 0x00000,
     objects: [obj3D],
   },
+  differencesIndex: [],
   solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
   multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
   isThemed: false,

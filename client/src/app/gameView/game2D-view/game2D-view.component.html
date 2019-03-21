@@ -1,5 +1,5 @@
 <div class="gameTitle"> {{simpleGame?.card.name}}</div>
-<div class="chrono">Temps restant:{{timer.getTimeAsString()}}</div>
+<div class="chrono">Temps:{{timer.getTimeAsString()}}</div>
 <div class="compteur">Différences trouvées: {{differencesFound}}</div>
 <div class="divGames">
   <div class="gameImage">
@@ -19,3 +19,4 @@
   <div class="messagesBoxTitle"> Messages </div>
 </div>
 <ng-template #spinny><mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner></ng-template>
+<app-error-popup></app-error-popup>

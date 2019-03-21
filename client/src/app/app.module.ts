@@ -25,6 +25,7 @@ import { SocketService } from "./services/socket.service";
 import { ThematicSceneComponent } from "./scene3D/thematic-scene/thematic-scene.component";
 import { MedievalForestService } from "./scene3D/thematic-scene/medieval-forest/medieval-forest.service";
 import { MedievalObjectService } from "./scene3D/thematic-scene/medieval-forest/medieval-objects/medieval-object.service";
+import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { MedievalObjectService } from "./scene3D/thematic-scene/medieval-forest/
     Scene3DComponent,
     Game3DViewComponent,
     ThematicSceneComponent,
+    ErrorPopupComponent
   ],
   imports: [
     FormsModule,

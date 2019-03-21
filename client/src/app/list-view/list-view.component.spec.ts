@@ -15,6 +15,7 @@ import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.compone
 import { Scene3DComponent } from "../scene3D/geometric-scene/scene3-d.component";
 import { ThematicSceneComponent } from "../scene3D/thematic-scene/thematic-scene.component";
 import { MatProgressSpinnerModule } from "@angular/material";
+import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -30,6 +31,7 @@ const mockGame3D: IGame3D = {
   modifiedScene: { objects: [], backColor: -1, },
   solo: { } as ITop3,
   multi: { } as ITop3,
+  differencesIndex: [],
 };
 
 describe("ListViewComponent", () => {
@@ -55,6 +57,7 @@ describe("ListViewComponent", () => {
         Scene3DComponent,
         Game3DViewComponent,
         ThematicSceneComponent,
+        ErrorPopupComponent
       ]
     })
       .compileComponents().then(() => { }, (error: Error) => { });
@@ -86,6 +89,7 @@ describe("ListViewComponent", () => {
   describe("Delete functions", () => {
     it("Deleting an existing simple games should call the game service", () => {
       const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
+      spyOn(window, "confirm").and.returnValue(true);
       component.simpleGames = [];
       component.simpleGames.push(mockSimple);
       component.deleteSimpleGames(mockSimple);
@@ -100,6 +104,7 @@ describe("ListViewComponent", () => {
     });
     it("Deleting an existing free games should call the game service", () => {
       const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
+      spyOn(window, "confirm").and.returnValue(true);
       component.freeGames = [];
       component.freeGames.push(mockGame3D);
       component.deleteFreeGames(mockGame3D);
@@ -126,7 +131,7 @@ describe("ListViewComponent", () => {
     });
   });
   describe("Removing games", () => {
-    it("Dleting a simple games should change the simple games array", () => {
+    it("Deleting a simple games should change the simple games array", () => {
       component.simpleGames = [mockSimple];
       component.removeSimpleGame(mockSimple.id);
       expect(component.simpleGames.length).toEqual(0);

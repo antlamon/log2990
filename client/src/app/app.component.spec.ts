@@ -16,7 +16,7 @@ import { Scene3DComponent } from "./scene3D/geometric-scene/scene3-d.component";
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
 import { ThematicSceneComponent } from "./scene3D/thematic-scene/thematic-scene.component";
 import { MatProgressSpinnerModule } from "@angular/material";
-
+import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,6 +31,7 @@ describe("AppComponent", () => {
         Game3DViewComponent,
         Scene3DComponent,
         ThematicSceneComponent,
+        ErrorPopupComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule],
       providers: [IndexService]

@@ -13,17 +13,17 @@ describe("User service", () => {
     };
 
     beforeEach(() => {
-        service.users.push(mockedUser);
+        service["users"].push(mockedUser);
     });
 
     afterEach(() => {
-        service.users = [];
+        service["users"] = [];
     });
 
     it("Adding a user should add it to the array of user", () => {
-        const nbUsers: number = service.users.length;
+        const nbUsers: number = service["users"].length;
         service.addUser("123abc");
-        expect(nbUsers).to.be.lessThan(service.users.length);
+        expect(nbUsers).to.be.lessThan(service["users"].length);
     });
 
     describe("Set username", () => {
@@ -43,7 +43,7 @@ describe("User service", () => {
     describe("Remove usename", () => {
         it("Trying to remove a user that doesnt exist should change the users", () => {
             expect(service.removeUser("")).to.be.false;
-            expect(service.users).to.have.lengthOf(1);
+            expect(service["users"]).to.have.lengthOf(1);
         });
 
         it("Removing a user should remove it from users", () => {
@@ -51,9 +51,9 @@ describe("User service", () => {
                 username: "test",
                 socketId: "abc",
             };
-            service.users.push(user);
+            service["users"].push(user);
             expect(service.removeUser(user.socketId)).to.be.true;
-            expect(service.users).to.have.lengthOf(1);
+            expect(service["users"]).to.have.lengthOf(1);
         });
     });
 

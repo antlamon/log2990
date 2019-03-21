@@ -23,6 +23,7 @@ const mockGame3D: IGame3D = {
     solo: { } as ITop3,
     multi: { } as ITop3,
     isThemed: false,
+    differencesIndex: [],
   };
 
 const nbRenderCall: number = 1;
