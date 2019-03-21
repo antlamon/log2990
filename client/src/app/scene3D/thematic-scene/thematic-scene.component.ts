@@ -4,7 +4,7 @@ import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
-import { IGame3D } from "../../../../../common/models/game3D";
+import { IGame3D, MOCK_THEMED_GAME } from "../../../../../common/models/game3D";
 
 @Component({
   selector: "app-thematic-scene",
@@ -14,11 +14,13 @@ import { IGame3D } from "../../../../../common/models/game3D";
 export class ThematicSceneComponent implements AfterViewInit {
 
   @Input() public isCardMode: boolean;
-  @Input() public game: IGame3D;
+  @Input() public game: IGame3D = MOCK_THEMED_GAME;
   public imageBase64: string;
 
-  @ViewChild("container")
-  private containerRef: ElementRef;
+  @ViewChild("containerO")
+  private containerORef: ElementRef;
+  @ViewChild("containerM")
+  private containerMRef: ElementRef;
 
   private camera: THREE.PerspectiveCamera;
 
@@ -48,32 +50,38 @@ export class ThematicSceneComponent implements AfterViewInit {
   public constructor(private forestService: MedievalForestService) {
     this.isCardMode = false;
   }
-  private get container(): HTMLDivElement {
-    return this.containerRef.nativeElement;
+  private get containerO(): HTMLDivElement {
+    return this.containerORef.nativeElement;
+  }
+  private get containerM(): HTMLDivElement {
+    return this.containerMRef.nativeElement;
   }
 
   @HostListener("window:resize", ["$event"])
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
   public ngAfterViewInit(): void {
     if ( this.game !== undefined && this.game.isThemed) {
       this.initialize();
-      Promise.all(this.forestService.getPromises()).then(() => {
-        this.imageBase64 = ((this.container).children[0] as HTMLCanvasElement).toDataURL();
-      }
-      );
     }
-    this.container.style.display = this.isCardMode ? "none" : "block";
+    this.containerO.style.display = this.isCardMode ? "none" : "block";
+    this.containerM.style.display = this.isCardMode ? "none" : "block";
   }
   private initialize(): void {
-      this.createScene();
-      this.forestService.createForest(this.scene, this.game.originalScene);
-      this.createCamera();
-      this.startRenderingLoop();
+    this.createScene();
+    Promise.all(this.forestService.createForest(this.scene, this.game.originalScene)).then(
+      (objects: THREE.Object3D[]) => {
+        for (const obj of objects) {
+          this.scene.add(obj);
+        }
+        this.createCamera();
+        this.startRenderingLoop();
+        this.imageBase64 = ((this.containerO).children[0] as HTMLCanvasElement).toDataURL();
+        });
   }
 
   private createScene(): void {
@@ -103,7 +111,7 @@ export class ThematicSceneComponent implements AfterViewInit {
   }
 
   private getAspectRatio(): number {
-    return this.container.clientWidth / this.container.clientHeight;
+    return window.innerWidth / window.innerHeight;
   }
 
   private startRenderingLoop(): void {
@@ -111,9 +119,9 @@ export class ThematicSceneComponent implements AfterViewInit {
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.BasicShadowMap;
     this.renderer.setPixelRatio(devicePixelRatio);
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
 
-    this.container.appendChild(this.renderer.domElement);
+    this.containerO.appendChild(this.renderer.domElement);
     this.render();
   }
 

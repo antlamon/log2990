@@ -27,10 +27,10 @@ export class MedievalForestService {
 
   private textureLoader: THREE.TextureLoader;
 
-  private promises: Promise<void>[];
+  private promisedObjects: Promise<THREE.Object3D>[];
 
   public constructor(private medievalService: MedievalObjectService) {
-    this.promises = [];
+    this.promisedObjects = [];
     this.castleWorld = {
       type: "castleWorld",
       position: { x: 0, y: 0, z: 0 },
@@ -38,11 +38,11 @@ export class MedievalForestService {
       rotation: { x: 0, y: 0, z: 0 },
     };
   }
-  public getPromises(): Promise<void>[] {
-    return this.promises;
+  public getPromises(): Promise<THREE.Object3D>[] {
+    return this.promisedObjects;
   }
 
-  public createForest(scene: THREE.Scene, game: IScene3D): void {
+  public createForest(scene: THREE.Scene, game: IScene3D): Promise<THREE.Object3D>[] {
     this.sceneRef = scene;
     this.gameRef = game;
     this.createSkyBox();
@@ -51,6 +51,8 @@ export class MedievalForestService {
     if (this.gameRef) {
       this.addGameObjects();
     }
+
+    return this.promisedObjects;
   }
   private createSkyBox(): void {
     this.textureLoader = new THREE.TextureLoader();
@@ -58,13 +60,10 @@ export class MedievalForestService {
     const materialArray: THREE.MeshBasicMaterial[] = [];
 
     for (let i: number = 0; i < faceNb; i++) {
-      this.promises.push( new Promise( (resolve, reject) => {
           materialArray[i] = new THREE.MeshBasicMaterial({
-            map: this.skyBoxLoader.load(this.skyBoxURLs[i], () => resolve()),
+            map: this.skyBoxLoader.load(this.skyBoxURLs[i]),
             side: THREE.BackSide
           });
-        })
-      );
     }
 
     const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
@@ -78,27 +77,20 @@ export class MedievalForestService {
     // tslint:disable-next-line:no-magic-numbers
     geometry.rotateX(-Math.PI / 2);
     let material: THREE.MeshPhongMaterial;
-    this.promises.push( new Promise( (resolve, reject) => {
+    this.promisedObjects.push( new Promise( (resolve, reject) => {
       material = new THREE.MeshPhongMaterial({
-        map: this.textureLoader.load(("assets/" + "grass.jpg"), () => resolve())
+        map: this.textureLoader.load(("assets/" + "grass.jpg"), () => resolve(new THREE.Mesh(geometry, material)))
       });
     }));
-    const floor: THREE.Mesh = new THREE.Mesh(geometry, material);
-
-    this.sceneRef.add(floor);
   }
 
   private buildWorld(): void {
-    this.medievalService.createWorld(this.castleWorld).then((world: THREE.Object3D) => {
-      this.sceneRef.add(world);
-    });
+   this.promisedObjects.push(this.medievalService.createWorld(this.castleWorld));
   }
 
   private addGameObjects(): void {
     for (const game of this.gameRef.objects) {
-      this.promises.push(this.medievalService.createObject(game).then((obj: THREE.Object3D) => {
-        this.sceneRef.add(obj);
-      }));
+      this.promisedObjects.push(this.medievalService.createObject(game));
     }
   }
 
