@@ -29,6 +29,21 @@ export class GameRoomService {
         return response.data.body;
     }
 
+    public async createNewGameRoom(newGameMessage: NewGameMessage): Promise<string> {
+        const response: AxiosResponse = await Axios.post(this.IDENTIFICATION_URL, newGameMessage);
+        if (response.data.title !== BASE_ID) {
+            return Promise.reject(Error(response.data.body));
+        }
+        const newGamer: Gamer = {
+            username: newGameMessage.username,
+            differencesFound: 0,
+        };
+        this.gameRooms[newGameMessage.gameRoomId] = [];
+        this.gameRooms[newGameMessage.gameRoomId].push(newGamer);
+
+        return response.data.body;
+    }
+
     public async checkDifference(gameRoomId: string, username: string, point: Point): Promise<GameRoomUpdate> {
         const response: AxiosResponse = await Axios.get(this.IDENTIFICATION_URL,
                                                         { params: { gameRoomId: gameRoomId, point: point } });

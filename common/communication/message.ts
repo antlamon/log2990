@@ -14,6 +14,13 @@ export interface NewGameMessage {
     modifiedImage: string;
     differenceImage: string;
 }
+export interface NewGame3DMessage {
+    gameRoomId: string;
+    username: string;
+    originalImage: string;
+    modifiedImage: string;
+    differenceImage: string;
+}
 
 export interface Point {
     x: number;
