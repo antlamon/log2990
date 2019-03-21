@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: "simple-game/:id", component: Game2DViewComponent },
   { path: "free-game/:id", component: Game3DViewComponent },
   { path: "models", component: ThematicSceneComponent },
+  { path: "test", component: Game3DViewComponent },
 ];
 
 @NgModule({

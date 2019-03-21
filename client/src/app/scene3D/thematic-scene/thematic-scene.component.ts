@@ -4,7 +4,7 @@ import "node_modules/three/examples/js/controls/OrbitControls";
 import * as THREE from "three";
 import { MAX_COLOR } from "../../../../../common/models/objet3D";
 import { MedievalForestService } from "./medieval-forest/medieval-forest.service";
-import { IGame3D, MOCK_THEMED_GAME } from "../../../../../common/models/game3D";
+import { MOCK_THEMED_GAME, IScene3D } from "../../../../../common/models/game3D";
 
 @Component({
   selector: "app-thematic-scene",
@@ -14,13 +14,11 @@ import { IGame3D, MOCK_THEMED_GAME } from "../../../../../common/models/game3D";
 export class ThematicSceneComponent implements AfterViewInit {
 
   @Input() public isCardMode: boolean;
-  @Input() public game: IGame3D = MOCK_THEMED_GAME;
+  @Input() public iScene: IScene3D = MOCK_THEMED_GAME.originalScene;
   public imageBase64: string;
 
   @ViewChild("containerO")
   private containerORef: ElementRef;
-  @ViewChild("containerM")
-  private containerMRef: ElementRef;
 
   private camera: THREE.PerspectiveCamera;
 
@@ -48,13 +46,10 @@ export class ThematicSceneComponent implements AfterViewInit {
   private groundLight: number = 0x404040;
 
   public constructor(private forestService: MedievalForestService) {
-    this.isCardMode = false;
+    this.isCardMode = true;
   }
   private get containerO(): HTMLDivElement {
     return this.containerORef.nativeElement;
-  }
-  private get containerM(): HTMLDivElement {
-    return this.containerMRef.nativeElement;
   }
 
   @HostListener("window:resize", ["$event"])
@@ -65,15 +60,14 @@ export class ThematicSceneComponent implements AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
-    if ( this.game !== undefined && this.game.isThemed) {
+    if ( this.iScene !== undefined ) {
       this.initialize();
     }
     this.containerO.style.display = this.isCardMode ? "none" : "block";
-    this.containerM.style.display = this.isCardMode ? "none" : "block";
   }
   private initialize(): void {
     this.createScene();
-    Promise.all(this.forestService.createForest(this.scene, this.game.originalScene)).then(
+    Promise.all(this.forestService.createForest(this.scene, this.iScene)).then(
       (objects: THREE.Object3D[]) => {
         for (const obj of objects) {
           this.scene.add(obj);

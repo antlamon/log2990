@@ -2,13 +2,13 @@
 <div class="chrono">Temps restant: 00:00</div>
 <div class="compteur">Différences trouvées: 0</div>
 <div class="divGames">
-  <div class="gameImage">
+  <div *ngIf="game3D" class="gameImage">
     <p>Image originale:</p>
-    <div #originalContainer class="game-card-img"></div>
+    <app-thematic-scene #originalContainer [iScene] = "game3D.originalScene" class="game-card-img"></app-thematic-scene>
   </div>
   <div class="gameImage">
     <p>Image avec les différences:</p>
-    <div #modifiedContainer class="game-card-img"></div>
+    <app-thematic-scene #modifiedContainer [iScene] = "game3D.modifiedScene" class="game-card-img"></app-thematic-scene>
   </div>
 </div>
 <div class="messagesBox">
