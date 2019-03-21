@@ -31,6 +31,7 @@ describe("Scene3DComponent", () => {
   },
   solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
   multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
+  isThemed: false,
 };
 
   beforeEach(async(() => {
