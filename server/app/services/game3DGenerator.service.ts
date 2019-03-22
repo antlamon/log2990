@@ -18,10 +18,11 @@ export class Game3DGeneratorService {
 
     /* the following constants define composition of the medieval forest, expressed in % */
     private readonly MAX_KNIGHTS: number = 0.1;
-    private readonly MAX_GUARDS: number = 0.3;
+    private readonly MAX_BENCH: number = 0.2;
     private readonly MAX_DRAGONS: number = 0.1;
     private readonly MAX_BALISTAS: number = 0.1;
     private readonly MAX_ROCKS: number = 0.2;
+    private readonly MAX_HORSES: number = 0.2;
 
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService,
@@ -91,8 +92,8 @@ export class Game3DGeneratorService {
         const knigthsNb: number = this.objectGenerator.randomInt(0, this.MAX_KNIGHTS * quantity);
         this.objectGenerator.addRandomThematicObject("knight", knigthsNb, objects);
 
-        const guardsNb: number = this.objectGenerator.randomInt(0, this.MAX_GUARDS * quantity);
-        this.objectGenerator.addRandomThematicObject("guard", guardsNb, objects);
+        const benchsNb: number = this.objectGenerator.randomInt(0, this.MAX_BENCH * quantity);
+        this.objectGenerator.addRandomThematicObject("bench", benchsNb, objects);
 
         const dragonsNb: number = this.objectGenerator.randomInt(0, this.MAX_DRAGONS * quantity);
         this.objectGenerator.addRandomThematicObject("dragon", dragonsNb, objects);
@@ -102,6 +103,9 @@ export class Game3DGeneratorService {
 
         const rocksNb: number = this.objectGenerator.randomInt(0, this.MAX_ROCKS * quantity);
         this.objectGenerator.addRandomThematicObject("rock", rocksNb, objects);
+
+        const horsesNb: number = this.objectGenerator.randomInt(0, this.MAX_HORSES * quantity);
+        this.objectGenerator.addRandomThematicObject("horse", horsesNb, objects);
 
         const treeNb: number = quantity - objects.length; // remaining objects are trees.
         this.objectGenerator.addRandomThematicObject("tree1", treeNb, objects);
