@@ -5,6 +5,7 @@ import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 //import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { CLICK, KEYS, WHITE } from "src/app/global/constants";
+//import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 
 @Injectable()
 export class RenderService {
@@ -19,6 +20,7 @@ export class RenderService {
 
   private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
+  //private isThematic: boolean;
   private cheatModeActivated: boolean;
 
   private rendererO: THREE.WebGLRenderer;
@@ -45,7 +47,7 @@ export class RenderService {
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
-  public constructor(private shapeService: ShapeCreatorService) {}
+  public constructor(private shapeService: ShapeCreatorService/*, private modelsService: MedievalObjectsCreatorService*/) {}
 
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
     clearInterval(this.timeOutDiff);
@@ -211,6 +213,7 @@ export class RenderService {
         this.camera.translateX(-this.movementSpeed);
         break;
       case KEYS["T"]:
+        console.log(this.differences);
         this.cheatModeActivated = !this.cheatModeActivated;
         if (this.cheatModeActivated) {
           this.startCheatMode();

@@ -3,7 +3,6 @@ import { GameService } from "../services/game.service";
 import { IGame } from "../../../../common/models/game";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-import { Router} from "@angular/router";
 import { IGame3D } from "../../../../common/models/game3D";
 import { RenderService } from "../scene3D/scene3-d/render.service";
 
@@ -22,7 +21,6 @@ export class ListViewComponent implements OnInit {
 
   public constructor(private gameService: GameService,
                      private socket: SocketService,
-                     private router: Router,
                      private renderer: RenderService) {
     this.isAdminMode = false;
     this.socket.addEvent(SocketsEvents.UPDATE_SIMPLES_GAMES, this.getSimpleGames.bind(this));
@@ -67,18 +65,6 @@ export class ListViewComponent implements OnInit {
       this.freeGames.splice(index, 1);
     }
   }
-
-  public deleteSimpleGames(game: IGame): void {
-    // tslint:disable-next-line:no-suspicious-comment
-    // TODO: warning delete box "are you sure? yes/no"
-    if (confirm("Voulez vous supprimer le jeu " + game.name + " ?")) {
-      const index: number = this.simpleGames.findIndex((x: IGame) => x === game);
-      if (index !== -1) {
-        this.gameService.deleteSimpleGame(game).subscribe();
-      }
-    }
-  }
-
   public getFreeGames(): void {
     this.gameService.getFreeGames()
         .subscribe((response: IGame3D[]) => {
@@ -87,26 +73,6 @@ export class ListViewComponent implements OnInit {
             this.getImageURL(game);
           }
          });
-  }
-
-  public deleteFreeGames(game: IGame3D): void {
-    // tslint:disable-next-line:no-suspicious-comment
-    // TODO: warning delete box "are you sure? yes/no"
-    if (confirm("Voulez vous supprimer le jeu " + game.name + " ?")) {
-      const index: number = this.freeGames.findIndex((x: IGame3D) => x === game);
-      if (index !== -1) {
-        this.gameService.deleteFreeGame(game).subscribe();
-      }
-    }
-  }
-
-  public playSelectedSimpleGame(game: IGame): void {
-    this.router.navigate(["simple-game/" + game.id]).catch((error: Error) => console.error(error.message));
-
-  }
-
-  public playSelectedFreeGame(game: IGame3D): void {
-    this.router.navigate(["free-game/" + game.id]).catch((error: Error) => console.error(error.message));
   }
 
 }

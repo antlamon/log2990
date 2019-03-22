@@ -6,6 +6,7 @@ import { IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import {} from "jasmine";
 import { IScore } from "../../../../../common/models/top3";
+import { GamecardComponent } from "../../gamecard/gamecard.component";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
@@ -90,7 +91,7 @@ describe("renderService", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [ RenderService, ShapeCreatorService ]
+      providers: [ RenderService, ShapeCreatorService, GamecardComponent ]
     })
     .compileComponents().catch();
   }));

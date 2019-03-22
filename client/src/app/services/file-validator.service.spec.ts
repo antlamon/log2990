@@ -15,6 +15,7 @@ import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.compone
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
 import { RenderService } from "../scene3D/scene3-d/render.service";
+import { GamecardComponent } from "../gamecard/gamecard.component";
 describe("FileValidatorService", () => {
 
   const LARGER_WIDTH: number = 1000;
@@ -37,7 +38,8 @@ describe("FileValidatorService", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        GamecardComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
       providers: [ModalService, FileValidatorService, Game2DViewComponent, RenderService]

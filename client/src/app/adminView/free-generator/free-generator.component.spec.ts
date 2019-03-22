@@ -13,7 +13,7 @@ import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.co
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
-
+import { GamecardComponent } from "../../gamecard/gamecard.component";
 describe("FreeGeneratorComponent", () => {
   let component: FreeGeneratorComponent;
   let fixture: ComponentFixture<FreeGeneratorComponent>;
@@ -28,7 +28,8 @@ describe("FreeGeneratorComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        GamecardComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
       providers: [ModalService, RenderService]
