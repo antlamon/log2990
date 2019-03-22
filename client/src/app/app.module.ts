@@ -22,6 +22,7 @@ import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
+import { GamecardComponent } from './gamecard/gamecard.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
     SimpleGeneratorComponent,
     Game2DViewComponent,
     Game3DViewComponent,
-    ErrorPopupComponent
+    ErrorPopupComponent,
+    GamecardComponent
   ],
   imports: [
     FormsModule,
