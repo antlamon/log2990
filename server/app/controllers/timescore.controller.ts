@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
+import { BASE_ID, ERROR_ID } from "../../../common/communication/message";
 import { TimeScoreService } from "../microservices/timescore.service";
 import { TYPES } from "../types";
-import { BASE_ID, ERROR_ID } from "../../../common/communication/message";
 
 @injectable()
 export class TimescoreController {
 
     public static readonly URL: string = "/api/timescore";
-    private static readonly INVALID_PARAM: number = 401;
+    private static readonly INVALID_PARAM: number = 422;
 
     public constructor(@inject(TYPES.TimeScoreService) private timeScoreService: TimeScoreService) { }
 

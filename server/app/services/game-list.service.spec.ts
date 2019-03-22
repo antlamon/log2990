@@ -40,8 +40,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
-    multi: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
+    solo: [{ name: "one", score: "20:10" }, { name: "two", score: "20:11" }, { name: "three", score: "20:12" }],
+    multi: [{ name: "one", score: "20:10" }, { name: "two", score: "20:11" }, { name: "three", score: "20:12" }],
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -239,6 +239,40 @@ describe("GameList service", () => {
                     }).catch();
             });
 
+        });
+    });
+
+    describe("Reseting timeScore", () => {
+
+        afterEach(() => {
+            sandbox.restore(Axios, "get");
+        });
+
+        it("Reseting a valid game should complete", (done: Mocha.Done) => {
+            sandbox.on(Axios, "get", () => {
+                return {
+                    status: 200,
+                } as AxiosResponse;
+            });
+            service.resetTimeScore("test", "test").then(() => {
+                done();
+            }).catch(() => {
+                fail();
+            });
+        });
+
+        it("Reseting a invalid game should throw an error", (done: Mocha.Done) => {
+            sandbox.on(Axios, "get", () => {
+                return {
+                    data: mockedErrorMessage,
+                    status: 422,
+                } as AxiosResponse;
+            });
+            service.resetTimeScore("test", "test").catch(
+                (error: Error) => {
+                    expect(error.message).to.eql(mockedErrorMessage.body);
+                    done();
+                });
         });
     });
 });

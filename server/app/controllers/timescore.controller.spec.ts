@@ -2,11 +2,11 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import supertest = require("supertest");
+import { ERROR_ID } from "../../../common/communication/message";
 import { Application } from "../app";
 import { container } from "../inversify.config";
 import { TimeScoreService } from "../microservices/timescore.service";
 import { TYPES } from "../types";
-import { ERROR_ID } from "../../../common/communication/message";
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -76,7 +76,7 @@ describe("TimeScore Controller", () => {
             nbMinutes: 0,
             nbSeconds: 30,
         })
-        .expect(401)
+        .expect(422)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body.title).to.eql(ERROR_ID);
             done(error);
@@ -91,7 +91,7 @@ describe("TimeScore Controller", () => {
             gameType: "test",
             id: "id",
         })
-        .expect(401)
+        .expect(422)
         .end((error: Error) => {
             done(error);
         });
