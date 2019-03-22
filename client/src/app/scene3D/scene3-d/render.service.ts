@@ -80,6 +80,21 @@ export class RenderService {
     return scene;
   }
 
+  public getImageURL(game: IGame3D): string {
+      const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
+        this.fieldOfView, window.innerWidth / window.innerHeight, this.nearClippingPane, this.farClippingPane);
+      camera.position.z = this.cameraZ;
+      const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      document.body.appendChild(renderer.domElement);
+      this.sceneOriginal = this.createScene(game.originalScene, game.backColor);
+      renderer.render(this.sceneOriginal, camera);
+      renderer.domElement.hidden = true;
+
+      return renderer.domElement.toDataURL();
+  }
+
   private addModification(scene: THREE.Scene, diffObj: IDifference): void {
 
     switch (diffObj.type) {

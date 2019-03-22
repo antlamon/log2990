@@ -5,6 +5,7 @@ import { IObjet3D } from "../../../../../common/models/objet3D";
 import * as THREE from "three";
 
 const cube: IObjet3D = {
+  name: "",
   type: "cube",
   color: 0,
   texture: "",

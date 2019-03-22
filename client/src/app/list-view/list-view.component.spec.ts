@@ -8,12 +8,13 @@ import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.compone
 import { SimpleGeneratorComponent } from "../adminView/simple-generator/simple-generator.component";
 import { FreeGeneratorComponent } from "../adminView/free-generator/free-generator.component";
 import { FormsModule } from "@angular/forms";
-import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { IGame } from "../../../../common/models/game";
-import { IGame3D } from "../../../../common/models/game3D";
+import { IGame3D, IDifference } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
+import { IObjet3D } from "../../../../common/models/objet3D";
+import { IScore } from "../../../../common/models/top3";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -25,11 +26,12 @@ const mockSimple: IGame = {
 const mockGame3D: IGame3D = {
   name: "mock3DName",
   id: "",
-  originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
-  modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-  solo: [],
-  multi: [],
-  differencesIndex: [],
+  originalScene: [] as IObjet3D[],
+  solo: [] as IScore[],
+  multi: [] as IScore[],
+  differences: [] as IDifference[],
+  isThematic: false,
+  backColor: 0,
 };
 
 describe("ListViewComponent", () => {
@@ -52,7 +54,6 @@ describe("ListViewComponent", () => {
         Game3DViewComponent,
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
-        Scene3DComponent,
         Game3DViewComponent,
         ErrorPopupComponent
       ]

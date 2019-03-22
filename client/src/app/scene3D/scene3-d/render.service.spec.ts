@@ -106,12 +106,12 @@ describe("renderService", () => {
     });
     it("should give the background color given in parameters at creation", () => {
       component.initialize(container1, container2, mockGame);
-      expect(component["sceneOriginal"].background).toEqual(new THREE.Color(mockOkScene.backColor));
+      expect(component["sceneOriginal"].background).toEqual(new THREE.Color(mockGame.backColor));
     });
     it("should call createShape the right amount of times", () => {
       spyOn(component["shapeService"], "createShape");
       component.initialize(container1, null, mockGame);
-      expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockOkScene.numObj);
+      expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockGame.originalScene.length);
     });
   });
   describe("Test for the resize function", () => {

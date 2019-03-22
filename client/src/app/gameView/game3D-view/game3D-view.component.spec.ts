@@ -5,25 +5,21 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 import { ShapeCreatorService } from "src/app/scene3D/scene3-d/shape-creator.service";
 import { IObjet3D } from "../../../../../common/models/objet3D";
-import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
+import { IGame3D, IDifference } from "../../../../../common/models/game3D";
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { MatProgressSpinnerModule } from "@angular/material";
+import { IScore } from "../../../../../common/models/top3";
 const mockObjects: IObjet3D[] = [];
-const mockOkScene: IScene3D = {
-  modified: false,
-  numObj: mockObjects.length,
-  objects: mockObjects,
-  backColor: 0xFF0F0F,
-};
 
 const mockGame3D: IGame3D = {
     name: "mock3DName",
     id: "dskjahd",
-    originalScene: mockOkScene,
-    modifiedScene: mockOkScene,
-    solo: [],
-    multi: [],
-    differencesIndex: [],
+    originalScene: mockObjects,
+    solo: [] as IScore[],
+    multi: [] as IScore[],
+    differences: [] as IDifference[],
+    backColor: 0,
+    isThematic: false,
   };
 
 const nbRenderCall: number = 1;

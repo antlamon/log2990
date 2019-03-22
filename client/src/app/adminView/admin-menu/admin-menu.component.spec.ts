@@ -10,7 +10,6 @@ import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "../../services/modal.service";
 import { Game2DViewComponent } from "src/app/gameView/game2D-view/game2D-view.component";
-import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
@@ -29,7 +28,6 @@ describe("AdminMenuComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent,
         ErrorPopupComponent
       ],
       imports: [

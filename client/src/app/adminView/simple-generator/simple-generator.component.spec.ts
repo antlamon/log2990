@@ -12,7 +12,6 @@ import { FileValidatorService } from "src/app/services/file-validator.service";
 import { GameService } from "src/app/services/game.service";
 import { By } from "@angular/platform-browser";
 import { Game2DViewComponent } from "src/app/gameView/game2D-view/game2D-view.component";
-import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
@@ -32,7 +31,6 @@ describe("SimpleGeneratorComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent,
         ErrorPopupComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
