@@ -149,6 +149,7 @@ export class RenderService {
       this.nearClippingPane,
       this.farClippingPane
       );
+    this.camera.rotation.order = "YXZ";
     this.camera.position.z = this.cameraZ;
     this.sceneOriginal.add(this.camera);
     this.sceneModif.add(this.camera);
@@ -213,7 +214,6 @@ export class RenderService {
         this.camera.translateX(-this.movementSpeed);
         break;
       case KEYS["T"]:
-        console.log(this.differences);
         this.cheatModeActivated = !this.cheatModeActivated;
         if (this.cheatModeActivated) {
           this.startCheatMode();

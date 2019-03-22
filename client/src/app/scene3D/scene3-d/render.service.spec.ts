@@ -135,4 +135,6 @@ describe("renderService", () => {
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
     });
   });
+  describe("Tests for keyboard events", () => {
+  });
 });
