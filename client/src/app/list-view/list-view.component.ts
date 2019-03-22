@@ -5,6 +5,7 @@ import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { Router} from "@angular/router";
 import { IGame3D } from "../../../../common/models/game3D";
+import { RenderService } from "../scene3D/scene3-d/render.service";
 
 @Component({
   selector: "app-list-view",
@@ -18,7 +19,10 @@ export class ListViewComponent implements OnInit {
   public freeGames: IGame3D[];
   @Input() public isAdminMode: Boolean;
 
-  public constructor(private gameService: GameService, private socket: SocketService, private router: Router) {
+  public constructor(private gameService: GameService,
+                     private socket: SocketService,
+                     private router: Router,
+                     private renderer: RenderService) {
     this.isAdminMode = false;
     this.socket.addEvent(SocketsEvents.UPDATE_SIMPLES_GAMES, this.getSimpleGames.bind(this));
     this.socket.addEvent(SocketsEvents.UPDATE_FREE_GAMES, this.getFreeGames.bind(this));
@@ -32,6 +36,10 @@ export class ListViewComponent implements OnInit {
     this.getSimpleGames();
     this.getFreeGames();
     this.isAdminMode = false;
+  }
+
+  public getImageURL(game: IGame3D): string {
+    return this.renderer.getImageURL(game);
   }
 
   public getSimpleGames(): void {
