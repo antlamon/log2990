@@ -1,6 +1,4 @@
 
-export interface ITop3 {
-    first: {name: string; score: string;};
-    second: {name: string; score: string;};
-    third: {name: string; score: string;};
+export interface IScore {
+    name: string; score: string;
 }

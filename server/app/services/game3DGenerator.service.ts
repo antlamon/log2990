@@ -4,7 +4,7 @@ import { TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
-import { ITop3 } from "../../../common/models/top3";
+import { IScore } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { FormValidatorService } from "./formValidator.service";
 import { GameListService } from "./game-list.service";
@@ -52,7 +52,7 @@ export class Game3DGeneratorService {
 
         const randomObjects: IObjet3D[] = [];
         let backGroundColor: number = 0;
-        let tempDifferences: [string, number][] = [];
+        const tempDifferences: [string, number][] = [];
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             backGroundColor = this.generateObjGeometricBackground(randomObjects, form.objectQty);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
@@ -78,17 +78,19 @@ export class Game3DGeneratorService {
         };
     }
 
-    public top3RandomOrder(): ITop3 {
+    public top3RandomOrder(): IScore[] {
         const scores: number[] = [];
         for (let i: number = 0; i < 3; i++) {
             scores.push(this.objectGenerator.randomInt(GameListService.MIN_TIME_TOP_3, GameListService.MAX_TIME_TOP_3));
         }
         scores.sort();
+        const tempTop3: IScore[] = [];
 
-        return { first: {name: "GoodComputer", score: scores[0].toString() + ":00"},
-                 second: {name: "MediumComputer", score: scores[1].toString() + ":00"},
-                 third: {name: "BadComputer", score: scores[2].toString() + ":00"},
-                };
+        tempTop3.push({name: "GoodComputer", score: scores[0].toString() + ":00"});
+        tempTop3.push({name: "MediumComputer", score: scores[1].toString() + ":00"});
+        tempTop3.push({name: "BadComputer", score: scores[2].toString() + ":00"});
+
+        return tempTop3;
     }
 
 }

@@ -1,5 +1,5 @@
 import { IObjet3D } from "./objet3D";
-import { ITop3 } from "./top3";
+import { IScore } from "./top3";
 
 export interface IGame3D {
 
@@ -7,8 +7,8 @@ export interface IGame3D {
     id: string;
     originalScene: IScene3D;
     modifiedScene: IScene3D;
-    solo: ITop3;
-    multi: ITop3;
+    solo: IScore[];
+    multi: IScore[];
     differencesIndex: [string,number][];
 
 }

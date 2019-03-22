@@ -6,7 +6,6 @@ import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongod
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
-import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
@@ -41,8 +40,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: {first: {name: "allo", score: "asd"}, second: {name: "allo", score: "asd"}, third: {name: "allo", score: "asd"}} as ITop3,
-    multi: {} as ITop3,
+    solo: [{name: "one", score: "20:10"},{name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
+    multi: [{name: "one", score: "20:10"},{name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -80,8 +79,8 @@ const mockGame3D: IGame3D = {
     id: "123",
     originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
     modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-    solo: {} as ITop3,
-    multi: {} as ITop3,
+    solo: [],
+    multi: [],
     differencesIndex: [],
 };
 const expect: Chai.ExpectStatic = chai.expect;

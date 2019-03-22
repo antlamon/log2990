@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
-import { Collection, FindAndModifyWriteOpResultObject } from "mongodb";
+import { Collection, WriteOpResult } from "mongodb";
 import { IFullGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
-import { ITop3 } from "../../../common/models/top3";
+import { IScore } from "../../../common/models/top3";
 import { TYPES } from "../types";
 import { DatabaseClient } from "./database.client";
 
@@ -24,10 +24,10 @@ export class TimeScoreService {
         // get le jeu
         if (gameType === this.SIMPLE_COLLECTION) {
            return this.getSimpleGame(id).then( async (game: IFullGame) => {
-                return this.simpleCollection.findOneAndUpdate(
+                return this.simpleCollection.update(
                     {card: {id}}, {$set: {...game, card: {...game.card, id: id, solo: this.top3RandomOrder(),
                                                           multi: this.top3RandomOrder()}}}).then(
-                        (res: FindAndModifyWriteOpResultObject) => {
+                        () => {
 
                         return true; //todo check if something updated
                     }).catch(); //todo check if something updated
@@ -35,10 +35,10 @@ export class TimeScoreService {
         }
         if (gameType === this.FREE_COLLECTION) {
             return this.getFreeGame(id).then( async (game: IGame3D) => {
-                return this.freeCollection.findOneAndUpdate(
+                return this.freeCollection.update(
                      {id}, {$set: {...game,
                                    solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}}).then(
-                         (res: FindAndModifyWriteOpResultObject) => {
+                         () => {
 
                          return true; //todo check if something updated
                      }).catch(); //catch
@@ -47,7 +47,7 @@ export class TimeScoreService {
 
         return Promise.resolve(false);
     }
-    private top3RandomOrder(): ITop3 {
+    private top3RandomOrder(): IScore[] {
         const scores: [number, number][] = [];
         for (let i: number = 0; i < 3; i++) {
             scores.push([this.randomNumber(TimeScoreService.MIN_TIME_TOP_3, TimeScoreService.MAX_TIME_TOP_3),
@@ -55,10 +55,12 @@ export class TimeScoreService {
         }
         scores.sort((x: [number, number], y: [number, number]) => (x[0] * TimeScoreService.MAX_NB_SECONDS + x[1]) -
         (y[0] * TimeScoreService.MAX_NB_SECONDS + y[1]));
+        const tempTop3: IScore[] = [];
+        tempTop3.push({name: "GoodComputer",  score: this.formatTimeScore(scores[0][0], scores[0][1])});
+        tempTop3.push({name: "MediumComputer", score: this.formatTimeScore(scores[1][0], scores[1][1])});
+        tempTop3.push({name: "BadComputer", score: this.formatTimeScore(scores[2][0], scores[2][1])});
 
-        return { first: {name: "GoodComputer",  score: this.formatTimeScore(scores[0][0], scores[0][1])},
-                 second: {name: "MediumComputer", score: this.formatTimeScore(scores[1][0], scores[1][1])},
-                 third: {name: "BadComputer", score: this.formatTimeScore(scores[2][0], scores[2][1])}};
+        return tempTop3;
     }
     private formatTimeScore(nbMinutes: number, nbSeconds: number): string {
         return this.formatTime(nbMinutes) + ":" + this.formatTime(nbSeconds);
@@ -71,66 +73,67 @@ export class TimeScoreService {
     }
     public async changeHighScore(userName: string, gameType: string,
                                  gameMode: string, id: string, nbMinutes: number, nbSeconds: number):  Promise<boolean> {
-        return this.getHighScore(gameType, gameMode, id).then(async (temp: ITop3 | null) => {
-            if (!temp || !(temp.first)) {
-                return false;
-            }
-            const times: ITop3 = temp as ITop3;
-            if (this.compareScores(nbMinutes, nbSeconds, times.first.score)) {
-                return this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, 1).then(() => {
-                    return true;
-                });
-            }
-            if (this.compareScores(nbMinutes, nbSeconds, times.second.score)) {
-                return this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, 2).then(() => {
-                    return true;
-                });
-            }
-            if (this.compareScores(nbMinutes, nbSeconds, times.third.score)) {
-                return this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, 3).then(() => {
-                    return true;
-                });
-
+        return this.getHighScore(gameType, gameMode, id).then(async (temp: IScore[] | null) => {
+            if (temp) {
+                const tempTop3: IScore[] = temp as IScore[];
+                for (let i: number = 0; i < tempTop3.length; ++i) {
+                    if (this.compareScores(nbMinutes, nbSeconds, tempTop3[i].score)) {
+                        return this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, i).then(() => {
+                            return true;
+                        });
+                    }
+                }
             }
 
             return false;
         });
-
-        return false;
     }
     private async setHighScore(gameType: string, gameMode: string,
                                id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: number): Promise<void> {
         if (gameType === this.SIMPLE_COLLECTION) {
-             this.getSimpleGame(id).then( async (game: IFullGame) => {
-                 this.simpleCollection.findOneAndUpdate(
-                    {card: {id}}, {$set: {...game, card: {...game.card, id: id, solo: this.top3RandomOrder(),
-                                                          multi: this.top3RandomOrder()}}}).then(
-                        // tslint:disable-next-line:no-empty
-                        (res: FindAndModifyWriteOpResultObject) => {
-                    }).catch(); //todo check if something updated
-            }).catch(); //todo check if something updated
+             return this.getSimpleGame(id).then( async (game: IFullGame) => {
+                 game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
+
+                 return this.simpleCollection.update({card: {id}}, {$set: {...game}}).then((w: WriteOpResult) => {
+                     return;
+                 });
+             });
         }
         if (gameType === this.FREE_COLLECTION) {
-            this.getFreeGame(id).then(async (value: IGame3D) => {
-                await this.simpleCollection.findOneAndUpdate(
-                    {"id": id}, {$set: {...value, "": {name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds)}}});
+            return this.getFreeGame(id).then( async (game: IGame3D) => {
+                game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
+
+                return this.freeCollection.update({id}, {$set: {...game}}).then((w: WriteOpResult) => {
+                    return;
+                });
             });
+       }
+    }
+    private updateSimpleGameScore(game: IFullGame, gameMode: string, userName: string,
+                                  nbMinutes: number, nbSeconds: number, pos: number): IFullGame {
+        const newScore: IScore = {name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds)};
+        if ( gameMode === "solo") {
+            game.card.solo[pos] = newScore;
         }
+        if ( gameMode === "multi") {
+            game.card.multi[pos] = newScore;
+        }
+
+        return game;
     }
-    private changeCorrespondingScore(oldScore: ITop3 , userName: string, nbMinutes: number, nbSeconds: number, pos: number): ITop3 {
+    private updateFreeGameScore(game: IGame3D, gameMode: string, userName: string,
+                                nbMinutes: number, nbSeconds: number, pos: number): IGame3D {
+        const newScore: IScore = {name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds)};
+        if ( gameMode === "solo") {
+            game.solo[pos] = newScore;
+        }
+        if ( gameMode === "multi") {
+            game.multi[pos] = newScore;
+        }
+
+        return game;
     }
-    private async setSimpleHighScore(gameMode: string, id: string, userName: string,
-                                     nbMinutes: number, nbSeconds: number, pos: string): Promise<void> {
-        this.getSimpleGame(id).then( async (game: IFullGame) => {
-            this.simpleCollection.findOneAndUpdate(
-                {card: {id}}, {$set: {...game, card: {...game.card, id: id, solo: this.top3RandomOrder(),
-                                                        multi: this.top3RandomOrder()}}}).then(
-                    // tslint:disable-next-line:no-empty
-                    (res: FindAndModifyWriteOpResultObject) => {
-                }).catch(); //todo check if something updated
-        }).catch(); //todo check if something updated
-    }
-    private async getHighScore(gameType: string, gameMode: string, id: string): Promise<ITop3 | null> {
+    private async getHighScore(gameType: string, gameMode: string, id: string): Promise<IScore[] | null> {
         switch (gameType) {
             case this.SIMPLE_COLLECTION:
                 return this.getSimpleGame(id).then((v: IFullGame) => {

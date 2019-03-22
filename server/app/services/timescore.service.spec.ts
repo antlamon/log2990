@@ -3,7 +3,6 @@ import spies = require("chai-spies");
 import { Collection, Db, WriteOpResult } from "mongodb";
 import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
-import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TimeScoreService } from "../services/timescore.service";
 import { TYPES } from "../types";
@@ -22,8 +21,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: {first: {name: "one", score: "20:10"}, second: {name: "two", score: "20:11"}, third: {name: "three", score: "20:12"}} as ITop3,
-    multi: {first: {name: "one", score: "20:10"}, second: {name: "two", score: "20:11"}, third: {name: "three", score: "20:12"}} as ITop3,
+    solo: [{name: "one1", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
+    multi: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -35,8 +34,8 @@ const mockGame3D: IGame3D = {
     id: "123",
     originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
     modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-    solo: {first: {name: "one", score: "20:10"}, second: {name: "two", score: "20:11"}, third: {name: "three", score: "20:12"}} as ITop3,
-    multi: {first: {name: "one", score: "20:10"}, second: {name: "two", score: "20:11"}, third: {name: "three", score: "20:12"}} as ITop3,
+    solo: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
+    multi: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
     differencesIndex: [],
 };
 describe("Test for TimeScoreService", () => {
@@ -78,24 +77,29 @@ describe("Test for TimeScoreService", () => {
                 mockUsername, service["FREE_COLLECTION"], "solo", mockGame3D.id, tooMuchMin, 0)).to.equal(false);
         });
         it("Sending a time equal to the third best time should return false", async () => {
-            const thirdTimeAS: string[] = mockedFullGame.card.multi.third.score.split(":");
+            const thirdTimeAS: string[] = mockedFullGame.card.multi[2].score.split(":");
             expect(await service.changeHighScore(
                 mockUsername, service["SIMPLE_COLLECTION"], "multi", mockedFullGame.card.id,
                 +thirdTimeAS[0], +thirdTimeAS[1])).to.equal(false);
         });
         it("Sending a time equal to the second best time should return true and modify the third best time", async () => {
-            const secondTimeAS: string[] = mockedFullGame.card.multi.second.score.split(":");
-            await await service.changeHighScore(
-                mockUsername, service["SIMPLE_COLLECTION"], "solo", mockedFullGame.card.id,
-                +secondTimeAS[0], +secondTimeAS[1]);
+            const secondTimeAS: string[] = mockedFullGame.card.solo[1].score.split(":");
             expect(await service.changeHighScore(
                 mockUsername, service["SIMPLE_COLLECTION"], "solo", mockedFullGame.card.id,
                 +secondTimeAS[0], +secondTimeAS[1])).to.equal(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
-                console.log(game.card.solo);
-                expect(game.card.solo.second.name).to.equal(mockUsername);
-                expect(game.card.solo.second.score).to.equal(game.card.solo.third.score);
-            });
+                        expect(game.card.solo[2].name).to.equal(mockUsername);
+                        expect(game.card.solo[2].score).to.equal(game.card.solo[1].score);
+                    });
+        });
+        it("Sending a 00:00 should update the first score", async () => {
+            expect(await service.changeHighScore(
+                mockUsername, service["FREE_COLLECTION"], "multi", mockGame3D.id,
+                0, 0)).to.equal(true);
+            await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
+                        expect(game.multi[0].name).to.equal(mockUsername);
+                        expect(game.multi[0].score).to.equal("00:00");
+                    });
         });
     });
 
@@ -103,35 +107,35 @@ describe("Test for TimeScoreService", () => {
         it("Check if game score for solo and multi have changed name for a simple game reset and function returned true", async () => {
             expect(await service.resetBestScore(service["SIMPLE_COLLECTION"], "mockedID")).to.equal(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
-                expect(game.card.solo.first.name).to.equal("GoodComputer");
-                expect(game.card.solo.second.name).to.equal("MediumComputer");
-                expect(game.card.solo.third.name).to.equal("BadComputer");
-                expect(game.card.multi.first.name).to.equal("GoodComputer");
-                expect(game.card.multi.second.name).to.equal("MediumComputer");
-                expect(game.card.multi.third.name).to.equal("BadComputer");
+                expect(game.card.solo[0].name).to.equal("GoodComputer");
+                expect(game.card.solo[1].name).to.equal("MediumComputer");
+                expect(game.card.solo[2].name).to.equal("BadComputer");
+                expect(game.card.multi[0].name).to.equal("GoodComputer");
+                expect(game.card.multi[1].name).to.equal("MediumComputer");
+                expect(game.card.multi[2].name).to.equal("BadComputer");
             });
         });
         it("Check if game score for solo and multi have changed name for a free game reset and function returned true", async () => {
             expect(await service.resetBestScore(service["FREE_COLLECTION"], mockGame3D.id)).to.equal(true);
             await mockFreeCollection.findOne({id: mockGame3D.id}).then((game: IGame3D) => {
-                expect(game.solo.first.name).to.equal("GoodComputer");
-                expect(game.solo.second.name).to.equal("MediumComputer");
-                expect(game.solo.third.name).to.equal("BadComputer");
-                expect(game.multi.first.name).to.equal("GoodComputer");
-                expect(game.multi.second.name).to.equal("MediumComputer");
-                expect(game.multi.third.name).to.equal("BadComputer");
+                expect(game.solo[0].name).to.equal("GoodComputer");
+                expect(game.solo[1].name).to.equal("MediumComputer");
+                expect(game.solo[2].name).to.equal("BadComputer");
+                expect(game.multi[0].name).to.equal("GoodComputer");
+                expect(game.multi[1].name).to.equal("MediumComputer");
+                expect(game.multi[2].name).to.equal("BadComputer");
             });
         });
         it("Check if game score are in order and follow the format 00:00", async () => {
             service.resetBestScore(service["FREE_COLLECTION"], mockGame3D.id);
             await mockFreeCollection.findOne({id: mockGame3D.id}).then((game: IGame3D) => {
-                expect(game.solo.first.score.split(":").length).to.equal(2);
-                expect(game.solo.second.score.length).to.equal(FORMAT_SCORE_LENGHT);
-                expect(+game.solo.third.score.split(":")[0]).to.not.equal(NaN);
-                expect(+game.solo.third.score.split(":")[1]).to.not.equal(NaN);
-                const firstScore: string[] = game.solo.first.score.split(":");
-                const secondScore: string[] = game.solo.second.score.split(":");
-                const thirdScore: string[] = game.solo.third.score.split(":");
+                expect(game.solo[0].score.split(":").length).to.equal(2);
+                expect(game.solo[1].score.length).to.equal(FORMAT_SCORE_LENGHT);
+                expect(+game.solo[2].score.split(":")[0]).to.not.equal(NaN);
+                expect(+game.solo[2].score.split(":")[1]).to.not.equal(NaN);
+                const firstScore: string[] = game.solo[0].score.split(":");
+                const secondScore: string[] = game.solo[1].score.split(":");
+                const thirdScore: string[] = game.solo[2].score.split(":");
                 expect((TimeScoreService.MAX_NB_SECONDS * (+firstScore[0] - +secondScore[0]) +
                 +firstScore[1] - +secondScore[1]) <= 0).to.be.equal(true);
                 expect((TimeScoreService.MAX_NB_SECONDS * (+secondScore[0] - +thirdScore[0]) +

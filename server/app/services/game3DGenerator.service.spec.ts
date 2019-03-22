@@ -4,7 +4,6 @@ import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D } from "../../../common/models/objet3D";
-import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
@@ -62,8 +61,8 @@ const mock3DGame: IGame3D = {
     id: "",
     originalScene: mockScene,
     modifiedScene: mockScene,
-    solo: { } as ITop3,
-    multi: { } as ITop3,
+    solo: [],
+    multi: [],
     differencesIndex: [],
 };
 
