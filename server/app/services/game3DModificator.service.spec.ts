@@ -175,11 +175,11 @@ describe("Game3D Modificator service", () => {
         it("Should return an array with 7 thematic modified objects with type MODIF", async () => {
             // to modify with texture next sprint
 
-            const newObj: IDifference[] = service.createModifScene(mockObjects, THEMATIC_TYPE_NAME, mockTypeModifColor);
+            const newObjs: IDifference[] = service.createModifScene(mockObjects, THEMATIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
-            for (let i: number = 0; i < newObj.length; i++) {
-                if (newObj[i].type === MODIFICATION_TYPE) {
-                    if ((newObj[i].object as IObjet3D).texture !== mockObjects.find((obj: IObjet3D) => obj.name === newObj[i].name)) {
+            for (const newObj of newObjs) {
+                if (newObj.type === MODIFICATION_TYPE) {
+                    if ((newObj.object as IObjet3D).texture !== mockObjects.find((obj: IObjet3D) => obj.name === newObj.name)) {
                         count++;
                     }
                 }
