@@ -4,6 +4,7 @@ import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "
 import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import { CLICK, KEYS } from "src/app/global/constants";
+//import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 
 @Injectable()
 export class RenderService {
@@ -14,6 +15,8 @@ export class RenderService {
   private containerModif: HTMLDivElement;
 
   private camera: THREE.PerspectiveCamera;
+  private mouse: THREE.Vector2 = new THREE.Vector2();
+  private raycaster: THREE.Raycaster;
 
   private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
@@ -165,7 +168,7 @@ export class RenderService {
   private startRenderingLoop(): void {
 
     document.addEventListener( "keydown", this.onKeyDown, false );
-
+    this.raycaster = new THREE.Raycaster();
     this.rendererO = this.createRenderer(this.containerOriginal);
     if (this.isGame) {
       this.rendererM = this.createRenderer(this.containerModif);
@@ -237,14 +240,59 @@ export class RenderService {
     this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
   }
   private onMouseUp = (event: MouseEvent) => {
-    if (event.button === CLICK.right) {
-      this.press = false;
+
+    switch (event.button) {
+      case (CLICK.right):
+        this.press = false;
+        break;
+      case (CLICK.left):
+        this.identifyDiff(event);
+        break;
+      default:
     }
   }
   private onMouseDown = (event: MouseEvent) => {
     if (event.button === CLICK.right) {
       this.press = true;
     }
+  }
+  private identifyDiff(event: MouseEvent): void {
+
+    if ( event.clientX < this.containerModif.offsetLeft) {
+      this.calculateMouse(event, this.containerOriginal);
+    } else {
+      this.calculateMouse(event, this.containerModif);
+    }
+    this.raycaster.setFromCamera( this.mouse, this.camera );
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children);
+    if (intersects.length > 0) {
+      const selectedObj: THREE.Object3D = intersects[0].object;
+      // Code de l'api
+      //let diff: boolean = false;
+      for (const obj of this.differences) {
+        if  (obj.name === selectedObj.name) {
+          //diff = true;
+          switch (obj.type) {
+            case ADD_TYPE: this.sceneModif.getObjectByName(selectedObj.name).visible = false;
+                           break;
+            case MODIFICATION_TYPE: (this.sceneModif.getObjectByName(selectedObj.name) as THREE.Mesh).material
+              = (this.sceneOriginal.getObjectByName(selectedObj.name) as THREE.Mesh).material;
+                                    break;
+            case DELETE_TYPE: this.sceneModif.getObjectByName(obj.name).visible = true;
+                              break;
+            default: break;
+          }
+        }
+      }
+
+      //this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
+    }
+  }
+
+  private calculateMouse(event: MouseEvent, container: HTMLDivElement): void {
+    const MULTI: number = 2;
+    this.mouse.x = (event.offsetX  / container.offsetWidth) * MULTI - 1;
+    this.mouse.y = -(event.offsetY / container.offsetHeight) * MULTI + 1;
   }
   private startCheatMode(): void {
     this.timeOutDiff = setInterval(this.flashObjects.bind(this), this.FLASH_TIME);
