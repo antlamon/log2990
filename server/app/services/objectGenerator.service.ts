@@ -17,6 +17,7 @@ export class ObjectGeneratorService {
         return {
             type: this.randomShape(),
             color: 0,
+            name: "",
             texture: "",
             position: this.generatePosition(objects),
             size: this.random1Interval(this.MIN_SCALE, this.MAX_SCALE), // scale between 50% and 150% of a reference size

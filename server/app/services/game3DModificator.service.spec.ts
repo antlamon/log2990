@@ -1,6 +1,6 @@
 import chai = require("chai");
 import spies = require("chai-spies");
-import { GEOMETRIC_TYPE_NAME, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+import { GEOMETRIC_TYPE_NAME, IDifference, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D } from "../../../common/models/objet3D";
 import { TEXTURES } from "../../../common/models/textures";
 import { container } from "../inversify.config";
@@ -14,6 +14,7 @@ const obj3D1: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "0",
 };
 const obj3D2: IObjet3D = {
     type: "string",
@@ -22,6 +23,7 @@ const obj3D2: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "1",
 };
 const obj3D3: IObjet3D = {
     type: "string",
@@ -30,6 +32,7 @@ const obj3D3: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "2",
 };
 const obj3D4: IObjet3D = {
     type: "string",
@@ -38,6 +41,7 @@ const obj3D4: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "3",
 };
 const obj3D5: IObjet3D = {
     type: "string",
@@ -46,6 +50,7 @@ const obj3D5: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "4",
 };
 const obj3D6: IObjet3D = {
     type: "string",
@@ -54,6 +59,7 @@ const obj3D6: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "5",
 };
 const obj3D7: IObjet3D = {
     type: "string",
@@ -62,6 +68,7 @@ const obj3D7: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "6",
 };
 const obj3D8: IObjet3D = {
     type: "string",
@@ -70,20 +77,14 @@ const obj3D8: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "7",
 };
 
 const mockTypeModifAdd: {add: boolean, delete: boolean, color: boolean} = {add: true, delete: false, color: false};
-const mockTypeModifDelete: {add: boolean, delete: boolean, color: boolean} = {add: false, delete: true, color: false};
+// const mockTypeModifDelete: {add: boolean, delete: boolean, color: boolean} = {add: false, delete: true, color: false};
 const mockTypeModifColor: {add: boolean, delete: boolean, color: boolean} = {add: false, delete: false, color: true};
 
 const mockObjects: IObjet3D[] = [obj3D1, obj3D2, obj3D3, obj3D4, obj3D5, obj3D6, obj3D7, obj3D8];
-
-const mockScene: IScene3D = {
-    numObj: mockObjects.length,
-    backColor: 0x0000,
-    objects: mockObjects,
-    modified: true,
-};
 
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
@@ -103,24 +104,39 @@ describe("Game3D Modificator service", () => {
     });
 
     describe("Modifying the objects should work, whatever the type, if there is modifications", () => {
-        it("Should return an array with 7 added objects", async () => {
-            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd, []).objects.length).
-                to.eql(mockObjects.length + Game3DModificatorService.NB_DIFF);
-        });
-
-        it("Should return an array with only 1 object", async () => {
-
-            expect(service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete, []).objects.length).
-                to.eql(mockObjects.length - Game3DModificatorService.NB_DIFF);
+        it("Should return an array with 7 added differences objects", async () => {
+            const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifAdd);
+            let isAllADD: boolean = true;
+            newObj.forEach((diff: IDifference) => {
+                if (diff.type !== "ADD") {
+                    isAllADD = false;
+                }
+            });
+            expect(isAllADD).to.equal(true);
         });
 
         it("Should return an array with 7 geometric modified objects", async () => {
 
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
+            const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
-            for (let i: number = 0; i < mockObjects.length; i++) {
-                if (newObj.objects[i].color !== mockObjects[i].color) {
-                    count++;
+            for (let i: number = 0; i < newObj.length; i++) {
+                if (newObj[i].object !== undefined) {
+                    if ((newObj[i].object as IObjet3D).color !== mockObjects[i].color) {
+                        count++;
+                    }
+                }
+            }
+            expect(count).to.eql(Game3DModificatorService.NB_DIFF);
+        });
+        it("Should return an array with 7 geometric modified objects", async () => {
+
+            const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
+            let count: number = 0;
+            for (let i: number = 0; i < newObj.length; i++) {
+                if (newObj[i].object !== undefined) {
+                    if ((newObj[i].object as IObjet3D).color !== mockObjects[i].color) {
+                        count++;
+                    }
                 }
             }
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
@@ -128,10 +144,10 @@ describe("Game3D Modificator service", () => {
         it("Should return an array with 7 thematic modified objects", async () => {
             // to modify with texture next sprint
 
-            const newObj: IScene3D = service.createModifScene(mockScene, THEMATIC_TYPE_NAME, mockTypeModifColor, []);
+            const newObj: IDifference[] = service.createModifScene(mockObjects, THEMATIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
-            for (let i: number = 0; i < mockObjects.length; i++) {
-                if (newObj.objects[i].texture !== mockObjects[i].texture) {
+            for (let i: number = 0; i < newObj.length; i++) {
+                if ((newObj[i].object as IObjet3D).texture !== mockObjects[i].texture) {
                     count++;
                 }
             }
@@ -139,30 +155,20 @@ describe("Game3D Modificator service", () => {
         });
         it("Should return an array with 7 geometric modified objects. The undmodified attributes should stay the same", async () => {
 
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
+            const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
-            for (let i: number = 0; i < mockObjects.length; i++) {
-                if (newObj.objects[i].color !== mockObjects[i].color) {
-                    if (newObj.objects[i].position === mockObjects[i].position &&
-                         newObj.objects[i].rotation === mockObjects[i].rotation &&
-                         newObj.objects[i].size === mockObjects[i].size) {
+            for (let i: number = 0; i < newObj.length; i++) {
+                const objOrig: IObjet3D | undefined = mockObjects.find((obj: IObjet3D) => obj.name === newObj[i].name);
+                const objMod: IObjet3D = (newObj[i].object as IObjet3D);
+                if ((objOrig as IObjet3D).color !== objMod.color) {
+                    if ((objOrig as IObjet3D).position === objMod.position &&
+                        (objOrig as IObjet3D).rotation === objMod.rotation &&
+                        (objOrig as IObjet3D).size === objMod.size) {
                         count++;
                     }
                 }
             }
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
-        });
-        it("If type of modification add or delete is choosed, the numbers of objects should not be the same", async () => {
-
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifAdd, []);
-            expect(newObj.numObj).to.not.eql(mockScene.numObj);
-            const newObjDel: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifDelete, []);
-            expect(newObjDel.numObj).to.not.eql(mockScene.numObj);
-        });
-        it("If type of modification add or delete isnt choosed, the numbers of objects should be the same", async () => {
-
-            const newObj: IScene3D = service.createModifScene(mockScene, GEOMETRIC_TYPE_NAME, mockTypeModifColor, []);
-            expect(newObj.numObj).to.eql(mockScene.numObj);
         });
 
     });

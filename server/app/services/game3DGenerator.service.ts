@@ -2,7 +2,7 @@ import { ObjectID } from "bson";
 import { inject, injectable } from "inversify";
 import { TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { IScore } from "../../../common/models/top3";
 import { TYPES } from "../types";
@@ -32,10 +32,11 @@ export class Game3DGeneratorService {
         let backGroundColor: number = 0;
         for (let i: number = 0; i < quantity; i++) {
             const obj: IObjet3D = this.objectGenerator.generateRandomGeometricObject(objects);
+            obj.name = i.toString();
             objects.push(obj);
             do  {
                 backGroundColor = this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR); // we go for pale colors
-            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color));
+            } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color as number));
         }
 
         return backGroundColor;
@@ -44,6 +45,7 @@ export class Game3DGeneratorService {
 
         for (let i: number = 0; i < quantity; i++) {
             const obj: IObjet3D = this.objectGenerator.generateRandomThematicObject(objects);
+            obj.name = i.toString();
             objects.push(obj);
         }
 
@@ -54,7 +56,6 @@ export class Game3DGeneratorService {
 
         const randomObjects: IObjet3D[] = [];
         let backGroundColor: number = 0;
-        const tempDifferences: [string, number][] = [];
         if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
             backGroundColor = this.generateObjGeometricBackground(randomObjects, form.objectQty);
         } else if ( form.objectType === THEMATIC_TYPE_NAME) {
@@ -63,20 +64,15 @@ export class Game3DGeneratorService {
             throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
         }
 
-        const scene: IScene3D = { modified: false,
-                                  objects: randomObjects,
-                                  numObj: form.objectQty,
-                                  backColor: backGroundColor,
-                                };
-
         return {
             name: form.name,
             id: (new ObjectID()).toHexString(),
-            originalScene: scene,
-            modifiedScene: this.game3DModificator.createModifScene(scene, form.objectType, form.modifications, tempDifferences),
+            originalScene: randomObjects,
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
-            differencesIndex: tempDifferences,
+            differences: this.game3DModificator.createModifScene(randomObjects, form.objectType, form.modifications),
+            isThematic: form.objectType === THEMATIC_TYPE_NAME,
+            backColor: backGroundColor,
         };
     }
 

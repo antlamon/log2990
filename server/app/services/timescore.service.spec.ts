@@ -32,11 +32,12 @@ const mockedFullGame: IFullGame = {
 const mockGame3D: IGame3D = {
     name: "mock3DName",
     id: "123",
-    originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
-    modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
+    originalScene: [],
     solo: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
     multi: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
-    differencesIndex: [],
+    differences: [],
+    isThematic: false,
+    backColor: 0,
 };
 describe("Test for TimeScoreService", () => {
     let service: TimeScoreService;

@@ -2,7 +2,7 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D } from "../../../common/models/objet3D";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
@@ -47,23 +47,18 @@ const obj3D: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
-};
-
-const mockScene: IScene3D = {
-    modified: false,
-    backColor: 0x00000,
-    objects: [obj3D],
-    numObj: 1,
+    name: "1",
 };
 
 const mock3DGame: IGame3D = {
     name: "string",
     id: "",
-    originalScene: mockScene,
-    modifiedScene: mockScene,
+    originalScene: [obj3D],
     solo: [],
     multi: [],
-    differencesIndex: [],
+    differences: [],
+    isThematic: false,
+    backColor: 0,
 };
 
 const expect: Chai.ExpectStatic = chai.expect;

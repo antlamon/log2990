@@ -77,11 +77,12 @@ const deleteWriteOPMock: DeleteWriteOpResultObject = {
 const mockGame3D: IGame3D = {
     name: "mock3DName",
     id: "123",
-    originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
-    modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
+    originalScene: [],
     solo: [],
     multi: [],
-    differencesIndex: [],
+    differences: [],
+    isThematic: false,
+    backColor: 0,
 };
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
