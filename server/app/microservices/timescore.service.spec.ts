@@ -84,6 +84,22 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Sending a invalid gameMode should throw for simple games", (done: Mocha.Done) => {
+            service.changeHighScore(mockUsername, service["SIMPLE_COLLECTION"], "solo", "oups", FORMAT_SCORE_LENGHT, 0)
+            .catch((error: Error) => {
+                expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
+                done();
+            });
+        });
+
+        it("Sending a invalid gameID should throw for free games", (done: Mocha.Done) => {
+            service.changeHighScore(mockUsername, service["FREE_COLLECTION"], "multi", "oups", FORMAT_SCORE_LENGHT, 0)
+            .catch((error: Error) => {
+                expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
+                done();
+            });
+        });
+
+        it("Sending a invalid gameID should throw for simple games", (done: Mocha.Done) => {
             service.changeHighScore(mockUsername, service["SIMPLE_COLLECTION"], "Invalidsolo", "mockedID", FORMAT_SCORE_LENGHT, 0)
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
@@ -115,13 +131,43 @@ describe("Test for TimeScoreService", () => {
                     });
         });
 
-        it("Sending a 00:00 should update the first score", async () => {
+        it("Sending a 00:00 should update the first multi score of free games", async () => {
             expect(await service.changeHighScore(
                 mockUsername, service["FREE_COLLECTION"], "multi", mockGame3D.id,
                 0, 0)).to.eql(true);
             await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
                         expect(game.multi[0].name).to.equal(mockUsername);
                         expect(game.multi[0].score).to.equal("00:00");
+                    });
+        });
+
+        it("Sending a 00:00 should update the first multi score of simple games", async () => {
+            expect(await service.changeHighScore(
+                mockUsername, service["SIMPLE_COLLECTION"], "multi", mockedFullGame.card.id,
+                0, 0)).to.eql(true);
+            await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
+                        expect(game.card.multi[0].name).to.equal(mockUsername);
+                        expect(game.card.multi[0].score).to.equal("00:00");
+                    });
+        });
+
+        it("Sending a 00:00 should update the first solo score of free games", async () => {
+            expect(await service.changeHighScore(
+                mockUsername, service["FREE_COLLECTION"], "solo", mockGame3D.id,
+                0, 0)).to.eql(true);
+            await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
+                        expect(game.multi[0].name).to.equal(mockUsername);
+                        expect(game.multi[0].score).to.equal("00:00");
+                    });
+        });
+
+        it("Sending a 00:00 should update the first solo score of simple games", async () => {
+            expect(await service.changeHighScore(
+                mockUsername, service["SIMPLE_COLLECTION"], "solo", mockedFullGame.card.id,
+                0, 0)).to.eql(true);
+            await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
+                        expect(game.card.multi[0].name).to.equal(mockUsername);
+                        expect(game.card.multi[0].score).to.equal("00:00");
                     });
         });
     });
@@ -168,10 +214,26 @@ describe("Test for TimeScoreService", () => {
             });
         });
 
-        it("Sending a invalid gameType should return false", (done: Mocha.Done) => {
+        it("Sending a invalid gameType should throw", (done: Mocha.Done) => {
             service.resetBestScore("invalid", "mockID")
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
+                done();
+            });
+        });
+
+        it("Sending a invalid gameID for simple games should throw", (done: Mocha.Done) => {
+            service.resetBestScore(service["FREE_COLLECTION"], "oopsi")
+            .catch((error: Error) => {
+                expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
+                done();
+            });
+        });
+
+        it("Sending a invalid gameID for free games should throw", (done: Mocha.Done) => {
+            service.resetBestScore(service["SIMPLE_COLLECTION"], "doupsi")
+            .catch((error: Error) => {
+                expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
                 done();
             });
         });
