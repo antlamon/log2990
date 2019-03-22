@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import { IScene3D, IGame3D, MODIFIED,ORIGINAL } from "../../../../../common/models/game3D";
-import { MAX_COLOR } from "../../../../../common/models/objet3D";
+import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../../common/models/game3D";
+import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import { CLICK, KEYS } from "src/app/global/constants";
 
 @Injectable()
 export class RenderService {
-  private readonly FLASH_TIME: number = 125;
+  private readonly FLASH_TIME: number = 200;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -39,7 +39,7 @@ export class RenderService {
   private skyLight: number = 0x606060;
   private groundLight: number = 0x404040;
 
-  private differencesIndex: [string, number][] = [];
+  private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
@@ -48,14 +48,14 @@ export class RenderService {
   public initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): void {
 
     this.containerOriginal = containerO;
-    this.differencesIndex = game.differencesIndex;
+    this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = this.createScene(game.originalScene);
+    this.sceneOriginal = this.createScene(game.originalScene, game.backColor);
     this.cheatModeActivated = false;
     if (containerM !== null) {
       this.isGame = true;
       this.containerModif = containerM;
-      this.sceneModif = this.createScene(game.modifiedScene);
+      this.sceneModif = this.modifyScene(this.sceneOriginal.clone(), game.differences);
     } else {
       this.isGame = false;
     }
@@ -70,24 +70,55 @@ export class RenderService {
     this.camera.updateProjectionMatrix();
     this.rendererO.setSize(this.containerOriginal.clientWidth, this.containerOriginal.clientHeight);
   }
+  private modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): THREE.Scene {
 
-  private createScene(iScene: IScene3D): THREE.Scene {
+    for (const diff of diffObjs) {
+      this.addModification(scene, diff);
+    }
+
+    return scene;
+  }
+
+  private addModification(scene: THREE.Scene, diffObj: IDifference): void {
+
+    switch(diffObj.type) {
+      case ADD_TYPE: this.addObject(scene, diffObj.object);
+                    break;
+      case MODIFICATION_TYPE: this.modifyObject(scene, diffObj);
+        break;
+      case DELETE_TYPE: this.deleteObject(scene, diffObj.name);
+        break;
+      default: break;
+    }
+  }
+  private addObject(scene: THREE.Scene, diffObj: IObjet3D): void {
+    const object: THREE.Mesh = this.shapeService.createShape(diffObj);
+    object.name = diffObj.name;
+    scene.add(object);
+  }
+
+  private modifyObject(scene: THREE.Scene, diffObj: IDifference): void {
+    (scene.getObjectByName(diffObj.name) as THREE.Mesh).material = this.shapeService.createShape(diffObj.object).material;
+  }
+
+  private deleteObject(scene: THREE.Scene, name: string): void {
+    scene.getObjectByName(name).visible = false;
+  }
+
+  private createScene(objects: IObjet3D[], color: number): THREE.Scene {
     /* Scene */
     const scene: THREE.Scene = new THREE.Scene();
-    scene.background = new THREE.Color(iScene.backColor);
+    scene.background = new THREE.Color(color);
 
     scene.add( new THREE.HemisphereLight( this.skyLight, this.groundLight ) );
     this.light = new THREE.DirectionalLight( MAX_COLOR );
     this.light.position.set( 0, 0, 1 );
     scene.add(this.light);
 
-    let index: number = 0;
-    for (const obj of iScene.objects) {
+    for (const obj of objects) {
       const object: THREE.Mesh = this.shapeService.createShape(obj);
-      object.name = index.toString();
-      // object.addEventListener("mouseDown", (event: MouseEvent) => {scene.background = new THREE.Color(0xFFFFFF); });
+      object.name = obj.name;
       scene.add(object);
-      index++;
     }
 
     return scene;
@@ -209,12 +240,14 @@ export class RenderService {
   }
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
 
-    for (const diff of this.differencesIndex) {
-      if (diff[0] === ORIGINAL) {
-        this.sceneOriginal.getObjectByName(diff[1].toString()).visible = visible;
+    for (const diff of this.differences) {
+      if (diff.type !== ADD_TYPE) {
+        ((this.sceneOriginal.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
+           = new THREE.Color(visible ? 0: 0xffffff);
       }
-      if (diff[0] === MODIFIED) {
-        this.sceneModif.getObjectByName(diff[1].toString()).visible = visible;
+      if (diff.type !== DELETE_TYPE) {
+        ((this.sceneModif.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
+           = new THREE.Color(visible ? 0: 0xffffff);
       }
     }
   }
