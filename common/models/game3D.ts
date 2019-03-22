@@ -17,6 +17,9 @@ export interface IDifference{
     object?: IObjet3D;
     name: string;
 }
+export const ADD_TYPE: string = "ADD";
+export const DELETE_TYPE: string = "DELETE";
+export const MODIFICATION_TYPE: string = "MODIF";
 export const GEOMETRIC_TYPE_NAME: string = "geometric";
 export const THEMATIC_TYPE_NAME: string = "thematic";
 export const NO_MIN_OBJECTS: number = 10;

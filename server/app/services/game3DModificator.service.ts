@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import { GEOMETRIC_TYPE_NAME, IDifference } from "../../../common/models/game3D";
-import { IObjet3D, MAX_COLOR  } from "../../../common/models/objet3D";
+import { ADD_TYPE, DELETE_TYPE, GEOMETRIC_TYPE_NAME, IDifference, MODIFICATION_TYPE } from "../../../common/models/game3D";
+import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -47,15 +47,15 @@ export class Game3DModificatorService {
         // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
-                return {name: "", type: "ADD", object: this.objectGenerator.generateRandomGeometricObject(objects)};
+                return {name: "", type: ADD_TYPE, object: this.objectGenerator.generateRandomGeometricObject(objects)};
             }
             case(Game3DModificatorService.DELETE): {
-                return {name: obj.name, type: "DELETE", object: this.createObject(objects, typeObj)};
+                return {name: obj.name, type: DELETE_TYPE, object: this.createObject(objects, typeObj)};
             }
             case(Game3DModificatorService.COLOR): {
                 const temp: IObjet3D = (typeObj === GEOMETRIC_TYPE_NAME) ? this.changeColor(obj) : this.changeTexture(obj);
 
-                return {object: temp, name: obj.name, type: "MODIF"};
+                return {object: temp, name: obj.name, type: MODIFICATION_TYPE};
             }
 
         }
