@@ -1,11 +1,14 @@
 import { Component, HostListener, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
-import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point, ERROR_ID } from "../../../../../common/communication/message";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
+import { MessageService } from "src/app/services/message.service";
+import { IMessageForm } from "../../../../../common/models/simpleGameMessage";
+import { Message } from "../../../../../common/communication/message";
 
 @Component({
     selector: "app-game2d-view",
@@ -29,7 +32,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private gameService: GameService,
         private socket: SocketService,
         private route: ActivatedRoute,
-        private index: IndexService
+        private index: IndexService,
+        private gameMessageService: MessageService
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -82,6 +86,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.disableClick = "disable-click";
             this.blockedCursor = "cursor-not-allowed";
+            this.identificationMessage("identificationError");
             setTimeout(
                 () => {
                     this.disableClick = "";
@@ -96,8 +101,11 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 this.victorySound.play().catch((error: Error) => console.error(error.message));
             } else {
                 this.correctSound.play().catch((error: Error) => console.error(error.message));
+                this.identificationMessage("differenceFound");
+                }
+
             }
-        }
+
     }
 
     public sendClick(event: MouseEvent): void {
@@ -113,5 +121,13 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         };
 
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE, imageClickMessage);
+    }
+
+    public identificationMessage(gameEvent: string) {
+        const newMessage: IMessageForm = { eventType: gameEvent,
+                                           username: this.index.username };
+        console.log(newMessage);
+        this.gameMessageService.sendMessage(newMessage).subscribe();
+        this.socket.emitEvent(SocketsEvents.NEW_GAME_MESSAGE, newMessage);
     }
 }
