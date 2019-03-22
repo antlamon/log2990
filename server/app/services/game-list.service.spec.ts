@@ -7,10 +7,10 @@ import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/messag
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { container } from "../inversify.config";
+import { ImageService } from "../microservices/image.service";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
 import { GameListService, MulterFile } from "./game-list.service";
-import { ImageService } from "./image.service";
 
 // tslint:disable-next-line:typedef
 const mongoMock = require("mongo-mock");

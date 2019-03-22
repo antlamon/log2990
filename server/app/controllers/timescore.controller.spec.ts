@@ -4,7 +4,7 @@ import spies = require("chai-spies");
 import supertest = require("supertest");
 import { Application } from "../app";
 import { container } from "../inversify.config";
-import { TimeScoreService } from "../services/timescore.service";
+import { TimeScoreService } from "../microservices/timescore.service";
 import { TYPES } from "../types";
 
 chai.use(spies);

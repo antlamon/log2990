@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
-import { TimeScoreService } from "../services/timescore.service";
+import { TimeScoreService } from "../microservices/timescore.service";
 import { TYPES } from "../types";
 
 @injectable()

@@ -4,7 +4,7 @@ import * as SocketClientIO from "socket.io-client";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { container } from "../inversify.config";
 import { Server } from "../server";
-import { GameRoomService } from "../services/gameRoom.service";
+import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { TYPES } from "../types";
 import { SocketServerManager } from "./socketServerManager";
 const expect: Chai.ExpectStatic = chai.expect;

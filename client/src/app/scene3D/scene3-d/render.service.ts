@@ -8,6 +8,7 @@ import { CLICK, KEYS } from "src/app/global/constants";
 @Injectable()
 export class RenderService {
   private readonly FLASH_TIME: number = 200;
+  private readonly FLASH_COLOR: number = 0xFFFFFF;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -243,11 +244,11 @@ export class RenderService {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
         ((this.sceneOriginal.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
-           = new THREE.Color(visible ? 0: 0xffffff);
+           = new THREE.Color(visible ? 0 : this.FLASH_COLOR);
       }
       if (diff.type !== DELETE_TYPE) {
         ((this.sceneModif.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
-           = new THREE.Color(visible ? 0: 0xffffff);
+           = new THREE.Color(visible ? 0 : this.FLASH_COLOR);
       }
     }
   }

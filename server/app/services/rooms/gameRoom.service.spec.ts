@@ -1,9 +1,9 @@
 import Axios from "axios";
 import * as chai from "chai";
 import * as spies from "chai-spies";
-import { BASE_ID, ERROR_ID, GameRoomUpdate, NewGameMessage } from "../../../common/communication/message";
-import { container } from "../inversify.config";
-import { TYPES } from "../types";
+import { BASE_ID, ERROR_ID, GameRoomUpdate, NewGameMessage } from "../../../../common/communication/message";
+import { container } from "../../inversify.config";
+import { TYPES } from "../../types";
 import { GameRoomService } from "./gameRoom.service";
 
 chai.use(spies);

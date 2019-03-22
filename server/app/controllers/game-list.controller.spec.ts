@@ -5,9 +5,9 @@ import { BASE_ID, Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
 import { Application } from "../app";
 import { container } from "../inversify.config";
+import { ImageService } from "../microservices/image.service";
 import { FREEGAMES } from "../mock-games";
 import { GameListService } from "../services/game-list.service";
-import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 
 const expect: Chai.ExpectStatic = chai.expect;
