@@ -16,7 +16,7 @@ export class RenderService {
 
   private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
-  private isGame: boolean;
+
   private cheatModeActivated: boolean;
 
   private rendererO: THREE.WebGLRenderer;
@@ -52,13 +52,8 @@ export class RenderService {
     this.diffAreVisible = true;
     this.sceneOriginal = this.createScene(game.originalScene);
     this.cheatModeActivated = false;
-    if (containerM !== null) {
-      this.isGame = true;
-      this.containerModif = containerM;
-      this.sceneModif = this.createScene(game.modifiedScene);
-    } else {
-      this.isGame = false;
-    }
+    this.containerModif = containerM;
+    this.sceneModif = this.createScene(game.modifiedScene);
 
     this.createCamera();
 
@@ -85,7 +80,6 @@ export class RenderService {
     for (const obj of iScene.objects) {
       const object: THREE.Mesh = this.shapeService.createShape(obj as IShape3D);
       object.name = index.toString();
-      // object.addEventListener("mouseDown", (event: MouseEvent) => {scene.background = new THREE.Color(0xFFFFFF); });
       scene.add(object);
       index++;
     }
@@ -117,9 +111,7 @@ export class RenderService {
     document.addEventListener( "keydown", this.onKeyDown, false );
 
     this.rendererO = this.createRenderer(this.containerOriginal);
-    if (this.isGame) {
-      this.rendererM = this.createRenderer(this.containerModif);
-    }
+    this.rendererM = this.createRenderer(this.containerModif);
     this.render();
   }
 
@@ -150,10 +142,9 @@ export class RenderService {
     requestAnimationFrame(() => this.render());
 
     this.rendererO.render(this.sceneOriginal, this.camera);
-    if (this.isGame) {
-      this.rendererM.render(this.sceneModif, this.camera);
-    }
+    this.rendererM.render(this.sceneModif, this.camera);
   }
+
   private onKeyDown = (event: KeyboardEvent) => {
     switch (event.keyCode ) {
       case KEYS["S"]: // up
@@ -211,10 +202,10 @@ export class RenderService {
 
     for (const diff of this.differencesIndex) {
       if (diff[0] === ORIGINAL) {
-        this.sceneOriginal.getObjectByName(diff[1].toString()).visible = visible;
+       // this.sceneOriginal.getObjectByName(diff[1].toString()).visible = visible;
       }
       if (diff[0] === MODIFIED) {
-        this.sceneModif.getObjectByName(diff[1].toString()).visible = visible;
+       // this.sceneModif.getObjectByName(diff[1].toString()).visible = visible;
       }
     }
   }

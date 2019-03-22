@@ -6,7 +6,6 @@ import { Collection, Db, DeleteWriteOpResultObject, WriteOpResult } from "mongod
 import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
-import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
@@ -41,8 +40,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: {first: {name: "allo", score: "asd"}, second: {name: "allo", score: "asd"}, third: {name: "allo", score: "asd"}} as ITop3,
-    multi: {} as ITop3,
+    solo: [{name: "one", score: "20:10"},{name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
+    multi: [{name: "one", score: "20:10"},{name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
@@ -74,17 +73,15 @@ const deleteWriteOPMock: DeleteWriteOpResultObject = {
     // The number of documents deleted.
     deletedCount: 1,
 };
-const upperBound: number = 10;
-const lowerBound: number = 5;
 
 const mockGame3D: IGame3D = {
     name: "mock3DName",
     id: "123",
     originalScene: {  objects: [], backColor: -1, },
     modifiedScene: {  objects: [], backColor: -1, },
-    solo: {} as ITop3,
-    multi: {} as ITop3,
     isThemed: false,
+    solo: [],
+    multi: [],
     differencesIndex: [],
 };
 const expect: Chai.ExpectStatic = chai.expect;
@@ -242,14 +239,6 @@ describe("GameList service", () => {
                     }).catch();
             });
 
-        });
-        describe("Random generator", () => {
-            it("The returned number should be below or equal the upper bound", () => {
-                expect(service.randomNumberGenerator(0, upperBound) <= upperBound).to.be.equal(true);
-            });
-            it("The returned number should be above or euqalthe lower bound", () => {
-                expect(service.randomNumberGenerator(lowerBound, lowerBound * 2) >= lowerBound).to.be.equal(true);
-            });
         });
     });
 });

@@ -42,9 +42,9 @@ describe("renderService", () => {
       backColor: 0x00000,
       objects: [cylinder],
     },
-    solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
-    multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
     isThemed: false,
+    solo: [],
+    multi: [],
     differencesIndex: differencesIndex,
   };
 

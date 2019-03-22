@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { IModel3D, INITIAL_OBJECT_SIZE, IObjet3D, IShape3D, INITIAL_MODELS_SIZE } from "../../../common/models/objet3D";
+import { IModel3D, INITIAL_MODELS_SIZE, INITIAL_OBJECT_SIZE, IObjet3D, IShape3D } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
 
 @injectable()
@@ -67,7 +67,8 @@ export class ObjectGeneratorService {
             };
             valid = true;
             if (isThemed) {
-                if (this.isColisionWithCastle(position.x, position.z) || this.isColisionWithModels) {
+                if (this.isColisionWithCastle(position.x, position.z)
+                    || this.isColisionWithModels(position.x, position.y, position.z, objects)) {
                     valid = false;
                 }
             } else {
@@ -81,13 +82,10 @@ export class ObjectGeneratorService {
     }
 
     private isColisionWithCastle(positionX: number, positionZ: number): boolean {
-        if (positionX < this.CASTLE_POSITION_X && positionX > -this.CASTLE_POSITION_X &&
-            positionZ < this.CASTLE_POSITION_Z && positionZ > -this.CASTLE_POSITION_Z ) {
-            return true;
-        }
-
-        return false;
+        return positionX < this.CASTLE_POSITION_X && positionX > -this.CASTLE_POSITION_X &&
+            positionZ < this.CASTLE_POSITION_Z && positionZ > -this.CASTLE_POSITION_Z;
     }
+
     private isColisionWithModels(positionX: number, positionY: number, positionZ: number, objects: IObjet3D[]): boolean {
         for (const obj of objects) {
             if (Math.pow(obj.position.x - positionX, 2) + Math.pow(positionZ - obj.position.z, 2)

@@ -69,7 +69,7 @@ export class GameService {
   }
 
   public createFreeGame(game: IGame3DForm): Observable<Message> {
-
+    
     return this.http.post<Message>(this.FREE_URL, game, {
       headers: new HttpHeaders({
         "Content-Type": "application/json"

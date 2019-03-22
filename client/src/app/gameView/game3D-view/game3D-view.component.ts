@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
+import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
@@ -9,7 +9,7 @@ import { RenderService } from "src/app/scene3D/geometric-scene/render.service";
     templateUrl: "./game3D-view.component.html",
     styleUrls: ["./game3D-view.component.css"]
 })
-export class Game3DViewComponent implements AfterViewInit {
+export class Game3DViewComponent implements OnInit {
 
     @ViewChild("originalContainer")
     private originalContainerRef: ElementRef;
@@ -25,7 +25,7 @@ export class Game3DViewComponent implements AfterViewInit {
         private render: RenderService,
     ) { }
 
-    public ngAfterViewInit(): void {
+    public ngOnInit(): void {
         this.get3DGame();
     }
 
