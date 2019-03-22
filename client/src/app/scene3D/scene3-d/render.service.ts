@@ -5,7 +5,6 @@ import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 //import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { CLICK, KEYS, WHITE } from "src/app/global/constants";
-import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 
 @Injectable()
 export class RenderService {
@@ -20,7 +19,6 @@ export class RenderService {
 
   private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
-  private isThematic: boolean;
   private cheatModeActivated: boolean;
 
   private rendererO: THREE.WebGLRenderer;
@@ -47,7 +45,7 @@ export class RenderService {
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
-  public constructor(private shapeService: ShapeCreatorService, private modelsService: MedievalObjectsCreatorService) {}
+  public constructor(private shapeService: ShapeCreatorService) {}
 
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
     clearInterval(this.timeOutDiff);
@@ -107,6 +105,7 @@ export class RenderService {
   }
   private async addObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
     const object: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
+    object.name = diffObj.name;
     scene.add(object);
   }
 
@@ -253,27 +252,29 @@ export class RenderService {
       this.calculateMouse(event, this.containerModif);
     }
     this.raycaster.setFromCamera( this.mouse, this.camera );
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children);
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
     if (intersects.length > 0) {
       const selectedObj: THREE.Object3D = intersects[0].object;
       // Code de l'api
       //let diff: boolean = false;
-      for (const obj of this.differences) {
-        if  (obj.name === selectedObj.name) {
+      for (let i: number = 0; i < this.differences.length; i++) {
+        if  (this.differences[i].name === selectedObj.name) {
           //diff = true;
-          switch (obj.type) {
+          switch (this.differences[i].type) {
             case ADD_TYPE: this.sceneModif.getObjectByName(selectedObj.name).visible = false;
                            break;
-            case MODIFICATION_TYPE: (this.sceneModif.getObjectByName(selectedObj.name) as THREE.Mesh).material
+            case MODIFICATION_TYPE: this.stopCheatObject(selectedObj.name);
+                                    (this.sceneModif.getObjectByName(selectedObj.name) as THREE.Mesh).material
               = (this.sceneOriginal.getObjectByName(selectedObj.name) as THREE.Mesh).material;
                                     break;
-            case DELETE_TYPE: this.sceneModif.getObjectByName(obj.name).visible = true;
+            case DELETE_TYPE: this.stopCheatObject(selectedObj.name);
+                              this.sceneModif.getObjectByName(selectedObj.name).visible = true;
                               break;
             default: break;
           }
+          this.differences.splice(i, 1);
         }
       }
-
       //this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
     }
   }
@@ -306,5 +307,8 @@ export class RenderService {
            = new THREE.Color(visible ? 0 : WHITE);
       }
     }
+  }
+  private stopCheatObject(name: string): void {
+    ((this.sceneOriginal.getObjectByName(name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive = new THREE.Color(0);
   }
 }
