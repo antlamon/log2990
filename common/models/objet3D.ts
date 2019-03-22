@@ -12,4 +12,5 @@ export interface IModel3D extends IObjet3D {
 }
 
 export const INITIAL_OBJECT_SIZE: number = 20;
+export const INITIAL_MODELS_SIZE: number = 2;
 export const MAX_COLOR: number = 0xFFFFFF;
