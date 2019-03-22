@@ -80,7 +80,7 @@ export class Game3DGeneratorService {
         };
     }
 
-    private top3RandomOrder(): IScore[] {
+    public top3RandomOrder(): IScore[] {
         const scores: [number, number][] = [];
         for (let i: number = 0; i < 3; i++) {
             scores.push([this.randomNumber(GameListService.MIN_TIME_TOP_3, GameListService.MAX_TIME_TOP_3),
