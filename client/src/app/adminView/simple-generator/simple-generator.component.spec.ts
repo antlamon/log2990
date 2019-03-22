@@ -15,6 +15,7 @@ import { Game2DViewComponent } from "src/app/gameView/game2D-view/game2D-view.co
 import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
+import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 
 describe("SimpleGeneratorComponent", () => {
   const LOADING_FILE_DELAY: number = 50;
@@ -34,7 +35,7 @@ describe("SimpleGeneratorComponent", () => {
         ErrorPopupComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
-      providers: [ModalService, FileValidatorService, GameService]
+      providers: [ModalService, FileValidatorService, GameService, RenderService]
     })
       .compileComponents().then(() => { }, (error: Error) => {
         console.error(error);

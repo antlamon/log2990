@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
 import { IObjet3D } from "../../../../common/models/objet3D";
 import { IScore } from "../../../../common/models/top3";
+import { RenderService } from "../scene3D/scene3-d/render.service";
 
 const mockSimple: IGame = {
   id: "idSimple",
@@ -56,7 +57,8 @@ describe("ListViewComponent", () => {
         FreeGeneratorComponent,
         Game3DViewComponent,
         ErrorPopupComponent
-      ]
+      ],
+      providers: [RenderService],
     })
       .compileComponents().then(() => { }, (error: Error) => { });
   }));
