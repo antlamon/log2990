@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ListViewComponent } from "./list-view.component";
 import { HttpClientModule } from "@angular/common/http";
-import { AppRoutingModule } from "../app-routing.module";
 import { AdminMenuComponent } from "../adminView/admin-menu/admin-menu.component";
 import { InitialComponent } from "../initial/initial.component";
 import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
@@ -43,7 +42,6 @@ describe("ListViewComponent", () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
-        AppRoutingModule,
         FormsModule,
         MatProgressSpinnerModule
       ],
@@ -72,52 +70,6 @@ describe("ListViewComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  it("should route to game Play with the proper iD", () => {
-    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    const game: IGame = {
-      id: "",
-      name: "string",
-      originalImage: "string",
-      solo: [],
-      multi: [],
-    };
-    component.playSelectedSimpleGame(game);
-    expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + game.id]);
-  });
-
-  describe("Delete functions", () => {
-    it("Deleting an existing simple games should call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
-      spyOn(window, "confirm").and.returnValue(true);
-      component.simpleGames = [];
-      component.simpleGames.push(mockSimple);
-      component.deleteSimpleGames(mockSimple);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("Deleting a non existing simple games should not call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
-      component.simpleGames = [];
-      component.deleteSimpleGames(mockSimple);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(0);
-    });
-    it("Deleting an existing free games should call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
-      spyOn(window, "confirm").and.returnValue(true);
-      component.freeGames = [];
-      component.freeGames.push(mockGame3D);
-      component.deleteFreeGames(mockGame3D);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("Deleting a non existing free games should not call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
-      component.freeGames = [];
-      component.deleteFreeGames(mockGame3D);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(0);
-    });
   });
   describe("Adding games", () => {
     it("Adding a simple games should change the simple games array", () => {
