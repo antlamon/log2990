@@ -1,6 +1,7 @@
 import chai = require("chai");
 import spies = require("chai-spies");
-import { GEOMETRIC_TYPE_NAME, IDifference, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+// tslint:disable-next-line:max-line-length
+import { ADD_TYPE, DELETE_TYPE, GEOMETRIC_TYPE_NAME, IDifference, MODIFICATION_TYPE, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D } from "../../../common/models/objet3D";
 import { TEXTURES } from "../../../common/models/textures";
 import { container } from "../inversify.config";
@@ -81,7 +82,7 @@ const obj3D8: IObjet3D = {
 };
 
 const mockTypeModifAdd: {add: boolean, delete: boolean, color: boolean} = {add: true, delete: false, color: false};
-// const mockTypeModifDelete: {add: boolean, delete: boolean, color: boolean} = {add: false, delete: true, color: false};
+const mockTypeModifDelete: {add: boolean, delete: boolean, color: boolean} = {add: false, delete: true, color: false};
 const mockTypeModifColor: {add: boolean, delete: boolean, color: boolean} = {add: false, delete: false, color: true};
 
 const mockObjects: IObjet3D[] = [obj3D1, obj3D2, obj3D3, obj3D4, obj3D5, obj3D6, obj3D7, obj3D8];
@@ -108,12 +109,42 @@ describe("Game3D Modificator service", () => {
             const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifAdd);
             let isAllADD: boolean = true;
             newObj.forEach((diff: IDifference) => {
-                if (diff.type !== "ADD") {
+                if (diff.type !== ADD_TYPE) {
                     isAllADD = false;
                 }
             });
             expect(isAllADD).to.equal(true);
         });
+        it("Should return an array with 7 deleted differences objects", async () => {
+            const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifDelete);
+            let isAllDEL: boolean = true;
+            newObj.forEach((diff: IDifference) => {
+                if (diff.type !== DELETE_TYPE) {
+                    isAllDEL = false;
+                }
+            });
+            expect(isAllDEL).to.equal(true);
+        });
+        it("Should return an array with 7 added differences objects that are not in the original scene position wise", async () => {
+            const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifAdd);
+            let areNotInScene: boolean = true;
+            newObj.forEach((diff: IDifference) => {
+                if ((mockObjects.findIndex((obj: IObjet3D) => obj.position === (diff.object as IObjet3D).position)) !== -1) {
+                    areNotInScene = false;
+                }
+            });
+            expect(areNotInScene).to.equal(true);
+        });
+        it("Should return an array with 7 deleted differences objects that are in the original scene", async () => {
+            const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifDelete);
+            let areInScene: boolean = true;
+            newObj.forEach((diff: IDifference) => {
+                if ((mockObjects.findIndex((obj: IObjet3D) => obj.name === diff.name)) === -1) {
+                    areInScene = false;
+                }
+            });
+            expect(areInScene).to.equal(true);
+        });
 
         it("Should return an array with 7 geometric modified objects", async () => {
 
@@ -128,7 +159,7 @@ describe("Game3D Modificator service", () => {
             }
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
-        it("Should return an array with 7 geometric modified objects", async () => {
+        it("Should return an array with 7 geometric modified objects with type MODIF", async () => {
 
             const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
@@ -141,14 +172,16 @@ describe("Game3D Modificator service", () => {
             }
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
-        it("Should return an array with 7 thematic modified objects", async () => {
+        it("Should return an array with 7 thematic modified objects with type MODIF", async () => {
             // to modify with texture next sprint
 
             const newObj: IDifference[] = service.createModifScene(mockObjects, THEMATIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
             for (let i: number = 0; i < newObj.length; i++) {
-                if ((newObj[i].object as IObjet3D).texture !== mockObjects[i].texture) {
-                    count++;
+                if (newObj[i].type === MODIFICATION_TYPE) {
+                    if ((newObj[i].object as IObjet3D).texture !== mockObjects.find((obj: IObjet3D) => obj.name === newObj[i].name)) {
+                        count++;
+                    }
                 }
             }
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
