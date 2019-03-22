@@ -4,7 +4,7 @@ import supertest = require("supertest");
 import { ERROR_ID, Message } from "../../../common/communication/message";
 import { Application } from "../app";
 import { container } from "../inversify.config";
-import { ImageService } from "../services/image.service";
+import { ImageService } from "../microservices/image.service";
 import { TYPES } from "../types";
 import { ImageController } from "./image.controller";
 

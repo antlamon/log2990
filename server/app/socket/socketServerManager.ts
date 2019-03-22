@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
-import { GameRoomService } from "../services/gameRoom.service";
+import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { UsersManager } from "../services/users.service";
 import { TYPES } from "../types";
 

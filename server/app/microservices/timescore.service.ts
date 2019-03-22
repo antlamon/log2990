@@ -3,8 +3,8 @@ import { Collection, WriteOpResult } from "mongodb";
 import { IFullGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { IScore } from "../../../common/models/top3";
+import { DatabaseClient } from "../database.client";
 import { TYPES } from "../types";
-import { DatabaseClient } from "./database.client";
 
 @injectable()
 export class TimeScoreService {

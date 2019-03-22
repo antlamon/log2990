@@ -2,7 +2,7 @@ import { NextFunction, Request, RequestHandler, Response, Router } from "express
 import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { ERROR_ID, Message } from "../../../common/communication/message";
-import { ImageService } from "../services/image.service";
+import { ImageService } from "../microservices/image.service";
 import { TYPES } from "../types";
 
 const HTTP_BADREQUEST: number = 400;
