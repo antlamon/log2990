@@ -11,8 +11,10 @@ export class ShapeCreatorService {
   private map: Map<string, THREE.Mesh>;
   private textureLoader: THREE.TextureLoader;
   public readonly NB_SEGMENTS: number = 50; // to have circular originalObjects
+  public promisedObjects: Promise<THREE.Mesh>[];
 
   public constructor() {
+    this.promisedObjects = [];
     this.generateMap();
     this.textureLoader = new THREE.TextureLoader();
   }
@@ -24,8 +26,18 @@ export class ShapeCreatorService {
     this.createCylindre();
     this.createTetrahedron();
   }
+  public resetPromises(): void {
+    this.promisedObjects = [];
+  }
+  public generateGeometricScene(objects: IObjet3D[]): Promise<THREE.Mesh>[] {
+    for (const obj of objects) {
+       this.promisedObjects.push(this.createShape(obj));
+    }
 
-  public createShape(obj: IObjet3D): THREE.Mesh {
+    return this.promisedObjects;
+  }
+
+  public createShape(obj: IObjet3D): Promise<THREE.Mesh> {
 
     const shape: THREE.Mesh = this.map.get(obj.type).clone();
 
@@ -39,8 +51,9 @@ export class ShapeCreatorService {
     shape.material = obj.color !== 0 ?
       new THREE.MeshPhongMaterial({color: obj.color }) :
       new THREE.MeshPhongMaterial({map: this.textureLoader.load(("assets/" + obj.texture + ".jpg")) });
+    shape.name = obj.name;
 
-    return shape;
+    return Promise.resolve(shape);
   }
 
   private createCube(): void {

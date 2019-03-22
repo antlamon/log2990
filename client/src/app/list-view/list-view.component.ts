@@ -17,6 +17,7 @@ export class ListViewComponent implements OnInit {
 
   public simpleGames: IGame[];
   public freeGames: IGame3D[];
+  public imageURLs: Map<IGame3D, string>;
   @Input() public isAdminMode: Boolean;
 
   public constructor(private gameService: GameService,
@@ -30,6 +31,7 @@ export class ListViewComponent implements OnInit {
     this.socket.addEvent(SocketsEvents.FREE_GAME_ADDED, this.addFreeGame.bind(this));
     this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.removeSimpleGame.bind(this));
     this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.removeFreeGame.bind(this));
+    this.imageURLs = new Map();
   }
 
   public ngOnInit(): void {
@@ -38,8 +40,9 @@ export class ListViewComponent implements OnInit {
     this.isAdminMode = false;
   }
 
-  public getImageURL(game: IGame3D): string {
-    return this.renderer.getImageURL(game);
+  private async getImageURL(game: IGame3D): Promise<void> {
+    const imageURL: string = await this.renderer.getImageURL(game);
+    this.imageURLs.set(game, imageURL);
   }
 
   public getSimpleGames(): void {
@@ -78,7 +81,12 @@ export class ListViewComponent implements OnInit {
 
   public getFreeGames(): void {
     this.gameService.getFreeGames()
-        .subscribe((response: IGame3D[]) => {this.freeGames = response; });
+        .subscribe((response: IGame3D[]) => {
+          this.freeGames = response;
+          for (const game of response ) {
+            this.getImageURL(game);
+          }
+         });
   }
 
   public deleteFreeGames(game: IGame3D): void {
