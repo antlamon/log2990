@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import { IScene3D, IGame3D, MODIFIED, ORIGINAL } from "../../../../../common/models/game3D";
+import { IScene3D, MODIFIED, ORIGINAL } from "../../../../../common/models/game3D";
 import { MAX_COLOR, IShape3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import { CLICK, KEYS } from "src/app/global/constants";
@@ -10,7 +10,6 @@ export class RenderService {
   private readonly FLASH_TIME: number = 125;
 
   private containerOriginal: HTMLDivElement;
-  private containerModif: HTMLDivElement;
 
   private camera: THREE.PerspectiveCamera;
 
@@ -20,10 +19,8 @@ export class RenderService {
   private cheatModeActivated: boolean;
 
   private rendererO: THREE.WebGLRenderer;
-  private rendererM: THREE.WebGLRenderer;
 
   private sceneOriginal: THREE.Scene;
-  private sceneModif: THREE.Scene;
 
   private cameraZ: number = 500;
 
@@ -45,15 +42,13 @@ export class RenderService {
 
   public constructor(private shapeService: ShapeCreatorService) {}
 
-  public initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): void {
+  public initialize(containerO: HTMLDivElement, iScene: IScene3D): void {
 
     this.containerOriginal = containerO;
-    this.differencesIndex = game.differencesIndex;
+    // this.differencesIndex = iScene.differencesIndex;
     this.diffAreVisible = true;
-    this.sceneOriginal = this.createScene(game.originalScene);
+    this.sceneOriginal = this.createScene(iScene);
     this.cheatModeActivated = false;
-    this.containerModif = containerM;
-    this.sceneModif = this.createScene(game.modifiedScene);
 
     this.createCamera();
 
@@ -97,13 +92,10 @@ export class RenderService {
       );
     this.camera.position.z = this.cameraZ;
     this.sceneOriginal.add(this.camera);
-    if (this.sceneModif !== undefined) {
-      this.sceneModif.add(this.camera);
-    }
   }
 
   private getAspectRatio(): number {
-    return this.containerOriginal.clientWidth / this.containerOriginal.clientHeight;
+    return window.innerWidth / window.innerHeight;
   }
 
   private startRenderingLoop(): void {
@@ -111,14 +103,13 @@ export class RenderService {
     document.addEventListener( "keydown", this.onKeyDown, false );
 
     this.rendererO = this.createRenderer(this.containerOriginal);
-    this.rendererM = this.createRenderer(this.containerModif);
+    this.containerOriginal.appendChild(this.rendererO.domElement);
     this.render();
   }
 
   private createRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
 
     const renderer: THREE.WebGLRenderer = this.initializeRenderer(container);
-    container.appendChild(renderer.domElement);
 
     renderer.domElement.addEventListener( "mousemove", this.onMouseMove, false );
     renderer.domElement.addEventListener( "contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false );
@@ -133,16 +124,16 @@ export class RenderService {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setPixelRatio(devicePixelRatio);
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
     return renderer;
   }
 
   private render(): void {
     requestAnimationFrame(() => this.render());
-
+    this.rendererO.domElement.style.width = "100%";
+    this.rendererO.domElement.style.height = "100%";
     this.rendererO.render(this.sceneOriginal, this.camera);
-    this.rendererM.render(this.sceneModif, this.camera);
   }
 
   private onKeyDown = (event: KeyboardEvent) => {
