@@ -49,8 +49,8 @@ describe("renderService", () => {
       objects: [cylinder],
       numObj: 1
     },
-    solo: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
-    multi: {first: {name: "fre", score: "300"}, second: {name: "fre", score: "300"}, third: {name: "fre", score: "300"}},
+    solo: [],
+    multi: [],
     differencesIndex: differencesIndex,
   };
 

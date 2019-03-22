@@ -1,11 +1,11 @@
-import { ITop3 } from "./top3";
+import { IScore } from "./top3";
 
 export interface IGame {
     id: string;
     name: string;
     originalImage: string;
-    solo: ITop3;
-    multi: ITop3;
+    solo: IScore[];
+    multi: IScore[];
 }
 
 export interface ISimpleForm {

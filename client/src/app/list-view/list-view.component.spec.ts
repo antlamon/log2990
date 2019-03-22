@@ -10,7 +10,6 @@ import { FreeGeneratorComponent } from "../adminView/free-generator/free-generat
 import { FormsModule } from "@angular/forms";
 import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { IGame } from "../../../../common/models/game";
-import { ITop3 } from "../../../../common/models/top3";
 import { IGame3D } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
@@ -20,16 +19,16 @@ const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
   originalImage: "",
-  solo: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
-  multi: {first: {name: " ", score: ""}, second: {name: " ", score: ""}, third: {name: " ", score: ""}},
+  solo: [],
+  multi: [],
 };
 const mockGame3D: IGame3D = {
   name: "mock3DName",
   id: "",
   originalScene: { modified: false, numObj: -1, objects: [], backColor: -1, },
   modifiedScene: { modified: true, numObj: -1, objects: [], backColor: -1, },
-  solo: { } as ITop3,
-  multi: { } as ITop3,
+  solo: [],
+  multi: [],
   differencesIndex: [],
 };
 
@@ -77,8 +76,8 @@ describe("ListViewComponent", () => {
       id: "",
       name: "string",
       originalImage: "string",
-      solo: {} as ITop3,
-      multi:  {} as ITop3
+      solo: [],
+      multi: [],
     };
     component.playSelectedSimpleGame(game);
     expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + game.id]);
