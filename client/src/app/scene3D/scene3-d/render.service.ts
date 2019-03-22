@@ -46,7 +46,7 @@ export class RenderService {
   public constructor(private shapeService: ShapeCreatorService) {}
 
   public initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): void {
-
+    clearInterval(this.timeOutDiff);
     this.containerOriginal = containerO;
     this.differences = game.differences;
     this.diffAreVisible = true;
@@ -81,18 +81,21 @@ export class RenderService {
 
   private addModification(scene: THREE.Scene, diffObj: IDifference): void {
 
-    switch(diffObj.type) {
-      case ADD_TYPE: this.addObject(scene, diffObj.object);
-                    break;
-      case MODIFICATION_TYPE: this.modifyObject(scene, diffObj);
+    switch (diffObj.type) {
+      case ADD_TYPE:
+        this.addObject(scene, diffObj);
         break;
-      case DELETE_TYPE: this.deleteObject(scene, diffObj.name);
+      case MODIFICATION_TYPE:
+        this.modifyObject(scene, diffObj);
+        break;
+      case DELETE_TYPE:
+        this.deleteObject(scene, diffObj.name);
         break;
       default: break;
     }
   }
-  private addObject(scene: THREE.Scene, diffObj: IObjet3D): void {
-    const object: THREE.Mesh = this.shapeService.createShape(diffObj);
+  private addObject(scene: THREE.Scene, diffObj: IDifference): void {
+    const object: THREE.Mesh = this.shapeService.createShape(diffObj.object);
     object.name = diffObj.name;
     scene.add(object);
   }
@@ -243,7 +246,7 @@ export class RenderService {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
         ((this.sceneOriginal.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
-           = new THREE.Color(visible ? 0: 0xffffff);
+           = new THREE.Color(visible ? 0 : 0xffffff);
       }
       if (diff.type !== DELETE_TYPE) {
         ((this.sceneModif.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
