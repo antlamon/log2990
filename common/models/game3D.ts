@@ -5,19 +5,17 @@ export interface IGame3D {
 
     name: string;
     id: string;
-    originalScene: IScene3D;
-    modifiedScene: IScene3D;
+    originalScene: IObjet3D[];
     solo: IScore[];
     multi: IScore[];
-    differencesIndex: [string,number][];
-
-}
-
-export interface IScene3D {
-    modified: boolean;
-    numObj: number;
-    objects: IObjet3D[];
+    differences: IDifference[];
+    isThematic: boolean;
     backColor: number;
+}
+export interface IDifference{
+    type: string;
+    object?: IObjet3D;
+    name: string;
 }
 export const GEOMETRIC_TYPE_NAME: string = "geometric";
 export const THEMATIC_TYPE_NAME: string = "thematic";
