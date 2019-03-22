@@ -20,14 +20,22 @@ export class TimescoreController {
             const id: string = req.query.id;
             const nbMinutes: number = req.query.nbMinutes;
             const nbSeconds: number = req.query.nbSeconds;
-            res.json(this.timeScoreService.changeHighScore(username, gameType, gameMode,
-                                                           id, nbMinutes, nbSeconds));
+            try {
+                res.json(this.timeScoreService.changeHighScore(username, gameType, gameMode,
+                                                               id, nbMinutes, nbSeconds));
+            } catch (e) {
+                res.json(e);
+            }
         });
 
         router.get("/reset", (req: Request, res: Response, next: NextFunction) => {
             const gameType: string = req.query.gameType;
             const id: string = req.query.id;
-            res.json(this.timeScoreService.resetBestScore(gameType, id));
+            try {
+                res.json(this.timeScoreService.resetBestScore(gameType, id));
+            } catch (e) {
+                res.json(e);
+            }
         });
 
         return router;
