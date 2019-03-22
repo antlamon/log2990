@@ -1,0 +1,222 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 14844,
+            "max" : [
+                3528
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 3529,
+            "max" : [
+                2.845829486846924,
+                5.791064739227295,
+                1.0163809061050415
+            ],
+            "min" : [
+                -4.317924499511719,
+                -0.008340835571289062,
+                -1.0163809061050415
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 3529,
+            "max" : [
+                0.999603271484375,
+                1.0,
+                1.0
+            ],
+            "min" : [
+                -0.99981689453125,
+                -0.999969482421875,
+                -0.99969482421875
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 3529,
+            "max" : [
+                0.9996895790100098,
+                0.9996811747550964,
+                0.9999639391899109,
+                1.0
+            ],
+            "min" : [
+                -0.9997245073318481,
+                -0.9997602105140686,
+                -0.9999638795852661,
+                -1.0
+            ],
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 3529,
+            "max" : [
+                0.988292932510376,
+                1.0093805491924286
+            ],
+            "min" : [
+                0.0002477914094924927,
+                0.0
+            ],
+            "type" : "VEC2"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 29688,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 42348,
+            "byteOffset" : 29688,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 42348,
+            "byteOffset" : 72036,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 56464,
+            "byteOffset" : 114384,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 28232,
+            "byteOffset" : 170848,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 199080,
+            "uri" : "horse.bin"
+        }
+    ],
+    "images" : [
+        {
+            "name" : "Horse_Normal",
+            "uri" : "Horse_Normal.png"
+        },
+        {
+            "name" : "Horse_Diffuse7_Specular",
+            "uri" : "Horse_Diffuse7_Specular.png"
+        },
+        {
+            "name" : "Horse_Diffuse7",
+            "uri" : "Horse_Diffuse7.png"
+        }
+    ],
+    "materials" : [
+        {
+            "alphaMode" : "BLEND",
+            "name" : "Material.001",
+            "normalTexture" : {
+                "index" : 1
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.6400000190734865,
+                    0.6400000190734865,
+                    0.6400000190734865,
+                    0.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 2
+                },
+                "metallicFactor" : 0.0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Cylinder.002",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2,
+                        "POSITION" : 1,
+                        "TANGENT" : 3,
+                        "TEXCOORD_0" : 4
+                    },
+                    "indices" : 0,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Cylinder.001",
+            "rotation" : [
+                -8.146034247147327e-08,
+                0.0,
+                -0.0,
+                1.0
+            ],
+            "scale" : [
+                0.566916286945343,
+                0.566916286945343,
+                0.566916286945343
+            ],
+            "translation" : [
+                -0.06651437282562256,
+                -0.05321323871612549,
+                -0.0
+            ]
+        }
+    ],
+    "samplers" : [
+        {}
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        }
+    ]
+}
