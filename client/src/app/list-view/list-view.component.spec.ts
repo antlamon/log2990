@@ -16,7 +16,7 @@ import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.compone
 import { IObjet3D } from "../../../../common/models/objet3D";
 import { IScore } from "../../../../common/models/top3";
 import { RenderService } from "../scene3D/scene3-d/render.service";
-
+import { GamecardComponent } from "../gamecard/gamecard.component";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -56,7 +56,8 @@ describe("ListViewComponent", () => {
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
         Game3DViewComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        GamecardComponent
       ],
       providers: [RenderService],
     })
