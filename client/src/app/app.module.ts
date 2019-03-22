@@ -22,6 +22,7 @@ import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
+import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
     ModalService,
     FileValidatorService,
     RenderService,
-    ShapeCreatorService
+    ShapeCreatorService,
+    MedievalObjectsCreatorService,
   ],
   bootstrap: [AppComponent]
 })

@@ -82,7 +82,7 @@
             <div class="bottom-card">
               <div class="game-card-left-content">
                 <div class="game-card-img-container">
-                  <img class="game-card-img" [src]="getImageURL(game)">
+                  <img class="game-card-img" [src]="imageURLs.get(game)">
                 </div>
                 <div class="game-card-buttons" *ngIf="!isAdminMode">
                   <div class="game-card-button-container"><button (click)="playSelectedFreeGame(game)">JOUER</button>
