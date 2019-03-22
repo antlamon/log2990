@@ -2,7 +2,7 @@ import { async, TestBed, ComponentFixture } from "@angular/core/testing";
 import { Scene3DComponent } from "./scene3-d.component";
 import { RenderService } from "./render.service";
 import { ShapeCreatorService } from "./shape-creator.service";
-import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
+import { IGame3D } from "../../../../../common/models/game3D";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 
 describe("Scene3DComponent", () => {
@@ -15,28 +15,18 @@ describe("Scene3DComponent", () => {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
-};
-
-  const mockScene: IScene3D = {
-    modified: false,
-    backColor: 0x00000,
-    objects: [obj3D],
-    numObj: 1
+    name: ""
 };
 
   const mockGame: IGame3D = {
   name: "mock",
   id: "mockid",
-  originalScene: mockScene,
-  modifiedScene: {
-    modified: true,
-    backColor: 0x00000,
-    objects: [obj3D],
-    numObj: 1
-  },
+  originalScene: [obj3D],
   solo: [],
   multi: [],
-  differencesIndex: [],
+  differences: [],
+  backColor: 0,
+  isThematic: false,
 };
 
   beforeEach(async(() => {

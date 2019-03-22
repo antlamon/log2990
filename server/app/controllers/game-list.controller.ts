@@ -117,6 +117,11 @@ export class GameListController {
                     res.json(error);
                 });
         });
+        router.get("/reset", (req: Request, res: Response, next: NextFunction) => {
+            const gameType: string = req.query.gameType;
+            const id: string = req.query.id;
+            
+        });
 
         return router;
     }
