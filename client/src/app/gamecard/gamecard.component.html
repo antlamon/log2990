@@ -6,8 +6,7 @@
         <img class="game-card-img" src={{game.originalImage}} alt="">
       </div>
       <div class="game-card-img-container" *ngIf = "!isSimpleGame">
-      </div>
-      <div class="game-card-img-container" *ngIf = "!isSimpleGame">
+          <img class="game-card-img" src={{imgURL}} alt="">
         </div>
       <div class="game-card-buttons" *ngIf="!isAdminMode">
         <div class="game-card-button-container"><button (click)="playSelectedGame(game)">JOUER</button>

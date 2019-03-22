@@ -22,7 +22,8 @@ import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
-import { GamecardComponent } from './gamecard/gamecard.component';
+import { GamecardComponent } from "./gamecard/gamecard.component";
+import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { GamecardComponent } from './gamecard/gamecard.component';
     ModalService,
     FileValidatorService,
     RenderService,
-    ShapeCreatorService
+    ShapeCreatorService,
+    MedievalObjectsCreatorService,
   ],
   bootstrap: [AppComponent]
 })

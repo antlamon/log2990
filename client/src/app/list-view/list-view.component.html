@@ -9,7 +9,7 @@
       <h2>2D</h2>
       <div *ngIf="simpleGames; else spinny">
         <div *ngFor="let game of simpleGames">
-          <app-gamecard [game] = game [isAdminMode] = isAdminMode></app-gamecard>
+          <app-gamecard [game] = game [isAdminMode] = isAdminMode [imgURL] = ""></app-gamecard>
         </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
       <h2>3D</h2>
       <div *ngIf="freeGames; else spinny">
         <div *ngFor="let game of freeGames">
-          <app-gamecard [game] = game [isAdminMode] = isAdminMode></app-gamecard>
+          <app-gamecard [game] = game [isAdminMode] = isAdminMode [imgURL] = "imageURLs.get(game)"></app-gamecard>
         </div>
       </div>
     </div>
@@ -26,6 +26,6 @@
 </div>
 <ng-template #spinny>
   <div class="game-card">
-    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+    <mat-spinner class="spinny" md-mode="indeterminate" ></mat-spinner>
   </div>
 </ng-template>

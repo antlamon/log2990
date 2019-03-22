@@ -14,8 +14,8 @@ export class GamecardComponent {
   public game: IGame | IGame3D;
   @Input()
   public isAdminMode: boolean;
-  //@Input()
-  //public imgURL: string;
+  @Input()
+  public imgURL: string;
   public constructor(private gameService: GameService, private router: Router) {
     this.isAdminMode = false;
     this.game = {solo: [], multi: [], name: "", id: "", originalImage: ""};
