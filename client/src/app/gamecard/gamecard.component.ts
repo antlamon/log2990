@@ -43,7 +43,7 @@ export class GamecardComponent {
   public reinitGame(): void {
     if (this.game) {
       if (confirm("Voulez vous reinitialiser le score du jeu " + this.game.name + " ?")) {
-          this.gameService.resetScore(this.game.id, this.isSimpleGame ? SIMPLE_GAME_TYPE : FREE_GAME_TYPE);
+          this.gameService.resetScore(this.game.id, this.isSimpleGame ? SIMPLE_GAME_TYPE : FREE_GAME_TYPE).subscribe();
       }
     }
   }

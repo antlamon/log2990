@@ -17,8 +17,7 @@ export class GameService {
   private readonly SIMPLEONE_URL: string = this.GAMES_URL + "/onesimple";
   private readonly FREE_URL: string = this.GAMES_URL + "/free";
   private readonly FREEONE_URL: string = this.GAMES_URL + "/onefree";
-  //private readonly RESET_URL: string = this.GAMES_URL + "/onefree";
-  //private readonly SEND_SCORE_URL: string = this.GAMES_URL + "/onefree";
+  private readonly RESET_URL: string = this.GAMES_URL + "/reset";
 
   public constructor(private http: HttpClient) {
   }
@@ -101,10 +100,11 @@ export class GameService {
       })
     });
   }
-  public sendScore(username: string, id: string, gameType: string, gameMode: string, nbMinues: number, nbSeconds: number): void {
-
-  }
-  public resetScore(id: string, gameType: string): void {
-
+  public resetScore(id: string, gameType: string): Observable<Message> {
+    const url: string = this.RESET_URL + "?id=" + id + "&gameType=" + gameType;
+    console.log(url);
+    return this.http.get<Message>(url).pipe(
+      catchError(this.handleError<Message>("resetGame"))
+    );
   }
 }

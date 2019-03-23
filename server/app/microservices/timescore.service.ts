@@ -186,7 +186,7 @@ export class TimeScoreService {
     }
 
     private get simpleCollection(): Collection {
-        if (this._simpleCollection === null) {
+        if (!this._simpleCollection) {
             this._simpleCollection = this.databaseClient.db.collection(this.SIMPLE_COLLECTION);
         }
 
@@ -194,7 +194,7 @@ export class TimeScoreService {
     }
 
     private get freeCollection(): Collection {
-        if (this._freeCollection === null) {
+        if (!this._freeCollection) {
             this._freeCollection = this.databaseClient.db.collection(this.FREE_COLLECTION);
         }
 

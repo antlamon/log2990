@@ -20,15 +20,15 @@ const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
   originalImage: "",
-  solo: [],
-  multi: [],
+  solo: [{name: "mock", score: ""}],
+  multi: [{name: "mock", score: ""}],
 };
 const mockGame3D: IGame3D = {
   name: "mock3DName",
   id: "",
   originalScene: [] as IObjet3D[],
-  solo: [] as IScore[],
-  multi: [] as IScore[],
+  solo: [{name: "mock", score: ""}] as IScore[],
+  multi: [{name: "mock", score: ""}] as IScore[],
   differences: [] as IDifference[],
   isThematic: false,
   backColor: 0,
@@ -93,6 +93,20 @@ describe("ListViewComponent", () => {
       component.freeGames = [mockGame3D];
       component.removeFreeGame(mockGame3D.id);
       expect(component.freeGames.length).toEqual(0);
+    });
+  });
+  describe("Updating score", () => {
+    it("Updating a simple game score should modify the simple games array", () => {
+      component.simpleGames = [mockSimple];
+      component.updateScore({id: mockSimple.id, gameType: "simple", solo: [], multi: []});
+      expect(component.simpleGames[0].solo).toEqual([]);
+      expect(component.simpleGames[0].multi).toEqual([]);
+    });
+    it("Updating a free game score should modify the free games array", () => {
+      component.simpleGames = [mockSimple];
+      component.updateScore({id: mockSimple.id, gameType: "free", solo: [], multi: []});
+      expect(component.freeGames[0].solo).toEqual([]);
+      expect(component.freeGames[0].multi).toEqual([]);
     });
   });
 

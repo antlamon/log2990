@@ -3,7 +3,7 @@ import FormData = require("form-data");
 import { inject, injectable } from "inversify";
 import { Collection, DeleteWriteOpResultObject, ObjectID } from "mongodb";
 import "reflect-metadata";
-import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
+import { BASE_ID, ERROR_ID, Message, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
@@ -123,14 +123,26 @@ export class GameListService {
     }
 
     public async resetTimeScore(gameType: string, id: string): Promise<void> {
-        const response: AxiosResponse = await Axios.get("http://localhost:3000//api/timescore/reset", {
+        const response: AxiosResponse = await Axios.get("http://localhost:3000/api/timescore/reset", {
             params: {
                 gameType,
                 id,
             },
         });
         if (response.status === GameListService.HTTP_OK) {
-            // update les timescores
+            if ( gameType === SIMPLE_GAME_TYPE ) {
+                const tempGame: IFullGame | null = await this.simpleCollection.findOne({"game.id": id});
+                if (tempGame) {
+                    this.socketController.emitEvent(
+                        SocketsEvents.SCORES_UPDATED, {gameType: gameType, id: id, solo: tempGame.card.solo, multi: tempGame.card.multi});
+                }
+            } else {
+                const tempGame: IGame3D | null = await this.freeCollection.findOne({id});
+                if (tempGame) {
+                    this.socketController.emitEvent(
+                        SocketsEvents.SCORES_UPDATED, {gameType: gameType, id: id, solo: tempGame.solo, multi: tempGame.multi});
+                }
+            }
         } else {
             throw new Error(response.data.body);
         }

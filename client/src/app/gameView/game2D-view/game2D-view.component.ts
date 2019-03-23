@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChil
 import { ActivatedRoute, Router } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { TimerService } from "src/app/services/timer.service";
-import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point, SIMPLE_GAME_TYPE } from "../../../../../common/communication/message";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
@@ -119,7 +119,6 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
         this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
-        this.gameService.sendScore(this.index.username, this.getId(), SIMPLE_GAME_TYPE, "solo", this.timer.nbMinutes, this.timer.nbSeconds);
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 

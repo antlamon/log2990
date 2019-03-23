@@ -8,6 +8,5 @@ export class SocketsEvents {
     public static readonly FREE_GAME_ADDED = "add-free";
     public static readonly SIMPLE_GAME_DELETED = "delete-simple";
     public static readonly FREE_GAME_DELETED = "delete-free";
-    public static readonly FREE_SCORE_UPDATED = "free-update";
-    public static readonly SIMPLE_SCORE_UPDATED = "simple-update";
+    public static readonly SCORES_UPDATED = "scores-update";
 }

@@ -118,11 +118,6 @@ export class GameListController {
                     res.json(error);
                 });
         });
-        router.get("/reset", (req: Request, res: Response, next: NextFunction) => {
-            const gameType: string = req.query.gameType;
-            const id: string = req.query.id;
-            
-        });
 
         router.get("/reset", async (req: Request, res: Response, next: NextFunction) => {
             const gameType: string = req.query.gameType;
@@ -133,7 +128,7 @@ export class GameListController {
                 res.status(GameListController.INVALID_PARAM);
                 res.json({
                     title: ERROR_ID,
-                    body: e,
+                    body: e.message,
                 });
             }
         });
