@@ -16,15 +16,16 @@ import { Game3DGeneratorService } from "./game3DGenerator.service";
 export class GameListService {
     public static readonly MIN_TIME_TOP_3: number = 15;
     public static readonly MAX_TIME_TOP_3: number = 30;
+    private static readonly HTTP_OK: number = 200;
     private static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
     private readonly SIMPLE_COLLECTION: string = "simple-games";
     private readonly FREE_COLLECTION: string = "free-games";
     private _simpleCollection: Collection;
     private _freeCollection: Collection;
 
-    public constructor( @inject(TYPES.SocketServerManager) private socketController: SocketServerManager,
-                        @inject(TYPES.Game3DGeneratorService) private game3DGenerator: Game3DGeneratorService,
-                        @inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) {
+    public constructor(@inject(TYPES.SocketServerManager) private socketController: SocketServerManager,
+                       @inject(TYPES.Game3DGeneratorService) private game3DGenerator: Game3DGeneratorService,
+                       @inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
@@ -41,7 +42,7 @@ export class GameListService {
     }
 
     public async getFreeGame(id: string): Promise<IGame3D> {
-        return await this.freeCollection.findOne({id}) as IGame3D;
+        return await this.freeCollection.findOne({ id }) as IGame3D;
     }
 
     public async deleteSimpleGame(id: string): Promise<Message> {
@@ -83,20 +84,20 @@ export class GameListService {
             const imagesArray: string[] = message.body.split(GameListService.BMP_S64_HEADER);
             const newFullGame: IFullGame = {
                 card: {
-                id: (new ObjectID()).toHexString(),
-                name: newGame.name,
-                originalImage: GameListService.BMP_S64_HEADER + imagesArray[1],
-                solo: this.game3DGenerator.top3RandomOrder(),
-                multi: this.game3DGenerator.top3RandomOrder(),
-            },
-                modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[2] ,
+                    id: (new ObjectID()).toHexString(),
+                    name: newGame.name,
+                    originalImage: GameListService.BMP_S64_HEADER + imagesArray[1],
+                    solo: this.game3DGenerator.top3RandomOrder(),
+                    multi: this.game3DGenerator.top3RandomOrder(),
+                },
+                modifiedImage: GameListService.BMP_S64_HEADER + imagesArray[2],
                 differenceImage: GameListService.BMP_S64_HEADER + imagesArray[3],
             };
             this.simpleCollection.insertOne(newFullGame).then(() => {
-                 this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES, newFullGame.card);
-                }).catch((error: Error) => {
-                    return {title: ERROR_ID, body: error.message };
-                });
+                this.socketController.emitEvent(SocketsEvents.UPDATE_SIMPLES_GAMES, newFullGame.card);
+            }).catch((error: Error) => {
+                return { title: ERROR_ID, body: error.message };
+            });
         }
 
         return (message);
@@ -105,21 +106,36 @@ export class GameListService {
     public async addFreeGame(newGame: IGame3DForm): Promise<Message> {
         let gameAdded: IGame3D;
         try {
-             gameAdded = this.game3DGenerator.createRandom3DGame(newGame);
+            gameAdded = this.game3DGenerator.createRandom3DGame(newGame);
         } catch (e) {
-            return {title: ERROR_ID, body: e.message};
+            return { title: ERROR_ID, body: e.message };
         }
 
         return this.freeCollection.insertOne(gameAdded).then(() => {
             this.socketController.emitEvent(SocketsEvents.FREE_GAME_ADDED, gameAdded);
 
-            return {title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. "};
+            return { title: " The 3D form sent was correct. ", body: "The 3D game will be created shortly. " };
 
         }).catch((error: Error) => {
-            return {title: ERROR_ID, body: error.message};
+            return { title: ERROR_ID, body: error.message };
         });
 
     }
+
+    public async resetTimeScore(gameType: string, id: string): Promise<void> {
+        const response: AxiosResponse = await Axios.get("http://localhost:3000//api/timescore/reset", {
+            params: {
+                gameType,
+                id,
+            },
+        });
+        if (response.status === GameListService.HTTP_OK) {
+            // update les timescores
+        } else {
+            throw new Error(response.data.body);
+        }
+    }
+
     private get simpleCollection(): Collection {
         if (this._simpleCollection == null) {
             this._simpleCollection = this.databaseClient.db.collection(this.SIMPLE_COLLECTION);

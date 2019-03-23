@@ -1,7 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import * as multer from "multer";
-import { Message } from "../../../common/communication/message";
+import { ERROR_ID, Message } from "../../../common/communication/message";
 import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { GameListService, MulterFile } from "../services/game-list.service";
@@ -10,8 +10,9 @@ import { TYPES } from "../types";
 @injectable()
 export class GameListController {
 
-    private upload: RequestHandler;
+    private static readonly INVALID_PARAM: number = 422;
     public readonly URL: string = "/api/gameList";
+    private upload: RequestHandler;
 
     public constructor(@inject(TYPES.GameListService) private gameListService: GameListService) {
         this.upload = multer().fields([
@@ -121,6 +122,20 @@ export class GameListController {
             const gameType: string = req.query.gameType;
             const id: string = req.query.id;
             
+        });
+
+        router.get("/reset", async (req: Request, res: Response, next: NextFunction) => {
+            const gameType: string = req.query.gameType;
+            const id: string = req.query.id;
+            try {
+                res.json(await this.gameListService.resetTimeScore(gameType, id));
+            } catch (e) {
+                res.status(GameListController.INVALID_PARAM);
+                res.json({
+                    title: ERROR_ID,
+                    body: e,
+                });
+            }
         });
 
         return router;

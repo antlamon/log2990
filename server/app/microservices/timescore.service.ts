@@ -41,6 +41,7 @@ export class TimeScoreService {
             if (this.compareScores(nbMinutes, nbSeconds, score[i].score)) {
                 await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, i);
                 highScoreChanged = true;
+                break;
             }
         }
 
@@ -111,16 +112,16 @@ export class TimeScoreService {
                                id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: number): Promise<void> {
         if (gameType === SIMPLE_GAME_TYPE) {
             let game: IFullGame | null = await this.getSimpleGame(id);
-            if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
-            game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-            await this.simpleCollection.update({ card: { id } }, { $set: { ...game } });
-        } else if (gameType === FREE_GAME_TYPE) {
+            if (game) {
+                game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
+                await this.simpleCollection.update({ card: { id } }, { $set: { ...game } });
+            }
+        } else if (gameType === this.FREE_COLLECTION) {
             let game: IGame3D | null = await this.getFreeGame(id);
-            if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
-            game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-            await this.freeCollection.update({ id }, { $set: { ...game } });
-        } else {
-            throw new Error(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
+            if (game) {
+                game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
+                await this.freeCollection.update({ id }, { $set: { ...game } });
+            }
         }
     }
 
@@ -129,8 +130,7 @@ export class TimeScoreService {
         const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
         if (gameMode === "solo") {
             game.card.solo[pos] = newScore;
-        }
-        if (gameMode === "multi") {
+        } else if (gameMode === "multi") {
             game.card.multi[pos] = newScore;
         }
 
@@ -142,8 +142,7 @@ export class TimeScoreService {
         const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
         if (gameMode === "solo") {
             game.solo[pos] = newScore;
-        }
-        if (gameMode === "multi") {
+        } else if (gameMode === "multi") {
             game.multi[pos] = newScore;
         }
 
