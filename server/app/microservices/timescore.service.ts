@@ -116,7 +116,7 @@ export class TimeScoreService {
                 game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
                 await this.simpleCollection.update({ card: { id } }, { $set: { ...game } });
             }
-        } else if (gameType === this.FREE_COLLECTION) {
+        } else if (gameType === FREE_GAME_TYPE) {
             let game: IGame3D | null = await this.getFreeGame(id);
             if (game) {
                 game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);

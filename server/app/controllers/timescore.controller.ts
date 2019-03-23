@@ -46,7 +46,7 @@ export class TimescoreController {
                 res.status(TimescoreController.INVALID_PARAM);
                 res.json({
                     title: ERROR_ID,
-                    body: e.message,
+                    body: e,
                 });
             }
         });

@@ -3,6 +3,7 @@ import spies = require("chai-spies");
 import { Collection, Db, WriteOpResult } from "mongodb";
 import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
+import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { TimeScoreService } from "./timescore.service";
@@ -76,7 +77,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Sending a invalid gameMode should throw for free games", (done: Mocha.Done) => {
-            service.changeHighScore(mockUsername, service["FREE_COLLECTION"], "Invalidsolo", "123", FORMAT_SCORE_LENGHT, 0)
+            service.changeHighScore(mockUsername, FREE_GAME_TYPE, "Invalidsolo", "123", FORMAT_SCORE_LENGHT, 0)
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
                 done();
@@ -84,7 +85,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Sending a invalid gameMode should throw for simple games", (done: Mocha.Done) => {
-            service.changeHighScore(mockUsername, service["SIMPLE_COLLECTION"], "solo", "oups", FORMAT_SCORE_LENGHT, 0)
+            service.changeHighScore(mockUsername, SIMPLE_GAME_TYPE, "solo", "oups", FORMAT_SCORE_LENGHT, 0)
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
                 done();
@@ -92,7 +93,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Sending a invalid gameID should throw for free games", (done: Mocha.Done) => {
-            service.changeHighScore(mockUsername, service["FREE_COLLECTION"], "multi", "oups", FORMAT_SCORE_LENGHT, 0)
+            service.changeHighScore(mockUsername, FREE_GAME_TYPE, "multi", "oups", FORMAT_SCORE_LENGHT, 0)
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
                 done();
@@ -100,7 +101,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Sending a invalid gameID should throw for simple games", (done: Mocha.Done) => {
-            service.changeHighScore(mockUsername, service["SIMPLE_COLLECTION"], "Invalidsolo", "mockedID", FORMAT_SCORE_LENGHT, 0)
+            service.changeHighScore(mockUsername, SIMPLE_GAME_TYPE, "Invalidsolo", "mockedID", FORMAT_SCORE_LENGHT, 0)
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
                 done();
@@ -110,20 +111,20 @@ describe("Test for TimeScoreService", () => {
         it("Sending a time greater than the ones in the database should return false", async () => {
             const tooMuchMin: number = 100;
             expect(await service.changeHighScore(
-                mockUsername, service["FREE_COLLECTION"], "solo", mockGame3D.id, tooMuchMin, 0)).to.equal(false);
+                mockUsername, FREE_GAME_TYPE, "solo", mockGame3D.id, tooMuchMin, 0)).to.equal(false);
         });
 
         it("Sending a time equal to the third best time should return false", async () => {
             const thirdTimeAS: string[] = mockedFullGame.card.multi[2].score.split(":");
             expect(await service.changeHighScore(
-                mockUsername, service["SIMPLE_COLLECTION"], "multi", mockedFullGame.card.id,
+                mockUsername, SIMPLE_GAME_TYPE, "multi", mockedFullGame.card.id,
                 +thirdTimeAS[0], +thirdTimeAS[1])).to.equal(false);
         });
 
         it("Sending a time equal to the second best time should modify the third best time", async () => {
             const secondTimeAS: string[] = mockedFullGame.card.solo[1].score.split(":");
             expect(await service.changeHighScore(
-                mockUsername, service["SIMPLE_COLLECTION"], "solo", mockedFullGame.card.id,
+                mockUsername, SIMPLE_GAME_TYPE, "solo", mockedFullGame.card.id,
                 +secondTimeAS[0], +secondTimeAS[1])).to.equal(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                         expect(game.card.solo[2].name).to.equal(mockUsername);
@@ -133,7 +134,7 @@ describe("Test for TimeScoreService", () => {
 
         it("Sending a 00:00 should update the first multi score of free games", async () => {
             expect(await service.changeHighScore(
-                mockUsername, service["FREE_COLLECTION"], "multi", mockGame3D.id,
+                mockUsername, FREE_GAME_TYPE, "multi", mockGame3D.id,
                 0, 0)).to.eql(true);
             await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
                         expect(game.multi[0].name).to.equal(mockUsername);
@@ -143,7 +144,7 @@ describe("Test for TimeScoreService", () => {
 
         it("Sending a 00:00 should update the first multi score of simple games", async () => {
             expect(await service.changeHighScore(
-                mockUsername, service["SIMPLE_COLLECTION"], "multi", mockedFullGame.card.id,
+                mockUsername, SIMPLE_GAME_TYPE, "multi", mockedFullGame.card.id,
                 0, 0)).to.eql(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                         expect(game.card.multi[0].name).to.equal(mockUsername);
@@ -153,28 +154,28 @@ describe("Test for TimeScoreService", () => {
 
         it("Sending a 00:00 should update the first solo score of free games", async () => {
             expect(await service.changeHighScore(
-                mockUsername, service["FREE_COLLECTION"], "solo", mockGame3D.id,
+                mockUsername, FREE_GAME_TYPE, "solo", mockGame3D.id,
                 0, 0)).to.eql(true);
             await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
-                        expect(game.multi[0].name).to.equal(mockUsername);
-                        expect(game.multi[0].score).to.equal("00:00");
+                        expect(game.solo[0].name).to.equal(mockUsername);
+                        expect(game.solo[0].score).to.equal("00:00");
                     });
         });
 
         it("Sending a 00:00 should update the first solo score of simple games", async () => {
             expect(await service.changeHighScore(
-                mockUsername, service["SIMPLE_COLLECTION"], "solo", mockedFullGame.card.id,
+                mockUsername, SIMPLE_GAME_TYPE, "solo", mockedFullGame.card.id,
                 0, 0)).to.eql(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
-                        expect(game.card.multi[0].name).to.equal(mockUsername);
-                        expect(game.card.multi[0].score).to.equal("00:00");
+                        expect(game.card.solo[0].name).to.equal(mockUsername);
+                        expect(game.card.solo[0].score).to.equal("00:00");
                     });
         });
     });
 
     describe("Test for the function resetBestScore", () => {
         it("Check if game score for solo and multi have changed name for a simple game reset", async () => {
-            await service.resetBestScore(service["SIMPLE_COLLECTION"], "mockedID");
+            await service.resetBestScore(SIMPLE_GAME_TYPE, "mockedID");
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                 expect(game.card.solo[0].name).to.equal("GoodComputer");
                 expect(game.card.solo[1].name).to.equal("MediumComputer");
@@ -186,7 +187,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Check if game score for solo and multi have changed name for a free game reset", async () => {
-            await service.resetBestScore(service["FREE_COLLECTION"], mockGame3D.id);
+            await service.resetBestScore(FREE_GAME_TYPE, mockGame3D.id);
             await mockFreeCollection.findOne({id: mockGame3D.id}).then((game: IGame3D) => {
                 expect(game.solo[0].name).to.equal("GoodComputer");
                 expect(game.solo[1].name).to.equal("MediumComputer");
@@ -198,7 +199,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Check if game score are in order and follow the format 00:00", async () => {
-            await service.resetBestScore(service["FREE_COLLECTION"], mockGame3D.id);
+            await service.resetBestScore(FREE_GAME_TYPE, mockGame3D.id);
             await mockFreeCollection.findOne({id: mockGame3D.id}).then((game: IGame3D) => {
                 expect(game.solo[0].score.split(":").length).to.equal(2);
                 expect(game.solo[1].score.length).to.equal(FORMAT_SCORE_LENGHT);
@@ -223,7 +224,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Sending a invalid gameID for simple games should throw", (done: Mocha.Done) => {
-            service.resetBestScore(service["FREE_COLLECTION"], "oopsi")
+            service.resetBestScore(FREE_GAME_TYPE, "oopsi")
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
                 done();
@@ -231,7 +232,7 @@ describe("Test for TimeScoreService", () => {
         });
 
         it("Sending a invalid gameID for free games should throw", (done: Mocha.Done) => {
-            service.resetBestScore(service["SIMPLE_COLLECTION"], "doupsi")
+            service.resetBestScore(SIMPLE_GAME_TYPE, "doupsi")
             .catch((error: Error) => {
                 expect(error.message).to.eql(TimeScoreService.INVALID_ID_EXCEPTION);
                 done();

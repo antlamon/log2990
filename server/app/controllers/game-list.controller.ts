@@ -128,7 +128,7 @@ export class GameListController {
                 res.status(GameListController.INVALID_PARAM);
                 res.json({
                     title: ERROR_ID,
-                    body: e.message,
+                    body: e,
                 });
             }
         });
