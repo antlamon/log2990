@@ -103,7 +103,7 @@ describe("ListViewComponent", () => {
       expect(component.simpleGames[0].multi).toEqual([]);
     });
     it("Updating a free game score should modify the free games array", () => {
-      component.simpleGames = [mockSimple];
+      component.freeGames = [mockSimple];
       component.updateScore({id: mockSimple.id, gameType: "free", solo: [], multi: []});
       expect(component.freeGames[0].solo).toEqual([]);
       expect(component.freeGames[0].multi).toEqual([]);
