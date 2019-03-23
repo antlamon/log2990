@@ -10,11 +10,12 @@ import { HttpClientModule } from "@angular/common/http";
 import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "./file-validator.service";
 import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
-import { Scene3DComponent } from "../scene3D/scene3-d/scene3-d.component";
 import { NO_MIN_OBJECTS, NO_MAX_OBJECTS } from "../../../../common/models/game3D";
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
+import { RenderService } from "../scene3D/scene3-d/render.service";
+import { GamecardComponent } from "../gamecard/gamecard.component";
 describe("FileValidatorService", () => {
 
   const LARGER_WIDTH: number = 1000;
@@ -36,12 +37,12 @@ describe("FileValidatorService", () => {
         InitialComponent,
         ListViewComponent,
         Game2DViewComponent,
-        Scene3DComponent,
         Game3DViewComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        GamecardComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
-      providers: [ModalService, FileValidatorService, Game2DViewComponent]
+      providers: [ModalService, FileValidatorService, Game2DViewComponent, RenderService]
     })
       .compileComponents().then(() => { }, (error: Error) => {
         console.error(error);

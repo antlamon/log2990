@@ -16,13 +16,14 @@ import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.componen
 import { InitialComponent } from "./initial/initial.component";
 import { ListViewComponent } from "./list-view/list-view.component";
 import { RenderService } from "./scene3D/scene3-d/render.service";
-import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
 import { FileValidatorService } from "./services/file-validator.service";
 import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
+import { GamecardComponent } from "./gamecard/gamecard.component";
+import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
 
 @NgModule({
   declarations: [
@@ -33,9 +34,9 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
     ListViewComponent,
     SimpleGeneratorComponent,
     Game2DViewComponent,
-    Scene3DComponent,
     Game3DViewComponent,
-    ErrorPopupComponent
+    ErrorPopupComponent,
+    GamecardComponent
   ],
   imports: [
     FormsModule,
@@ -58,7 +59,8 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
     ModalService,
     FileValidatorService,
     RenderService,
-    ShapeCreatorService
+    ShapeCreatorService,
+    MedievalObjectsCreatorService,
   ],
   bootstrap: [AppComponent]
 })

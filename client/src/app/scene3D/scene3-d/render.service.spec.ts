@@ -1,10 +1,12 @@
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
-import { IScene3D, IGame3D, ORIGINAL, MODIFIED } from "../../../../../common/models/game3D";
+import { IGame3D, IDifference, ADD_TYPE } from "../../../../../common/models/game3D";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import {} from "jasmine";
+import { IScore } from "../../../../../common/models/top3";
+import { GamecardComponent } from "../../gamecard/gamecard.component";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
@@ -13,6 +15,7 @@ describe("renderService", () => {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "",
   };
   const cube: IObjet3D = {
     type: "cube",
@@ -21,6 +24,7 @@ describe("renderService", () => {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "",
   };
   const cylinder: IObjet3D = {
     type: "cylinder",
@@ -29,29 +33,56 @@ describe("renderService", () => {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
+    name: "",
   };
   const mockObjects: IObjet3D[] = [cone, cube, cylinder];
-  const mockOkScene: IScene3D = {
-    modified: false,
-    numObj: mockObjects.length,
-    objects: mockObjects,
-    backColor: 0xFF0F0F,
-  };
 
-  const differencesIndex: [string, number][]  = [[ORIGINAL, 0], [ORIGINAL, 1], [ORIGINAL, mockObjects.length - 1], [MODIFIED, 0]];
+  const differences: IDifference[] = [
+    {
+    type: ADD_TYPE,
+    object: cone,
+    name: "",
+   },
+    {
+    type: ADD_TYPE,
+    object: cone,
+    name: "",
+   },
+    {
+    type: ADD_TYPE,
+    object: cone,
+    name: "",
+   },
+    {
+    type: ADD_TYPE,
+    object: cone,
+    name: "",
+   },
+    {
+    type: ADD_TYPE,
+    object: cone,
+    name: "",
+   },
+    {
+    type: ADD_TYPE,
+    object: cone,
+    name: "",
+   },
+    {
+    type: ADD_TYPE,
+    object: cone,
+    name: "",
+   },
+  ];
   const mockGame: IGame3D = {
     name: "mock",
     id: "mockid",
-    originalScene: mockOkScene,
-    modifiedScene: {
-      modified: true,
-      backColor: 0x00000,
-      objects: [cylinder],
-      numObj: 1
-    },
-    solo: [],
-    multi: [],
-    differencesIndex: differencesIndex,
+    originalScene: mockObjects,
+    solo: [] as IScore[],
+    multi: [] as IScore[],
+    differences: differences,
+    isThematic: false,
+    backColor: 0xFFFFFF,
   };
 
   const container1: HTMLDivElement = document.createElement("div");
@@ -60,7 +91,7 @@ describe("renderService", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [ RenderService, ShapeCreatorService ]
+      providers: [ RenderService, ShapeCreatorService, GamecardComponent ]
     })
     .compileComponents().catch();
   }));
@@ -76,12 +107,12 @@ describe("renderService", () => {
     });
     it("should give the background color given in parameters at creation", () => {
       component.initialize(container1, container2, mockGame);
-      expect(component["sceneOriginal"].background).toEqual(new THREE.Color(mockOkScene.backColor));
+      expect(component["sceneOriginal"].background).toEqual(new THREE.Color(mockGame.backColor));
     });
     it("should call createShape the right amount of times", () => {
       spyOn(component["shapeService"], "createShape");
       component.initialize(container1, null, mockGame);
-      expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockOkScene.numObj);
+      expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockGame.originalScene.length);
     });
   });
   describe("Test for the resize function", () => {
@@ -103,5 +134,7 @@ describe("renderService", () => {
       const height: number = component["containerOriginal"].clientHeight;
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
     });
+  });
+  describe("Tests for keyboard events", () => {
   });
 });

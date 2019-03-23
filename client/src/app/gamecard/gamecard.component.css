@@ -1,0 +1,212 @@
+
+h2{
+    background-color:rgb(52, 62, 109);
+    border-radius:10px;
+    border: solid black 5px;
+    text-align :center; 
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    color: #0D0E0F;
+    text-shadow: 3px 2px 3px rgba(255, 255, 255, 0.2);
+    font-size: 100px;
+    font-family:Trebuchet MS;
+}
+.whole-page{
+    background-color:rgba(232, 233, 238);
+}
+
+.gameList{
+    display: flex;
+    justify-content: space-around;
+}
+button{
+    min-width: 150px;
+    height:50px;
+    background-color: rgba(232, 233, 238);
+    font-size: 20px;
+    transition: all .2s ease-in-out;
+    border-radius: 10px;
+    font-weight: bold;
+    color:black;
+    
+}
+button:hover{
+    cursor: pointer;
+    background-color:rgb(100, 142, 219);
+}
+.page-title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+h1{
+    background-color:rgb(52, 62, 109);
+    border-radius:10px;
+    border: solid black 5px;
+    text-align :center; 
+    height: 100px;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    box-shadow:0px 0px 20px 10px #525060 ;
+    flex-direction: column;
+    margin-top: 20px;
+    align-self: center;
+    color: #0D0E0F;
+    text-shadow: 3px 2px 3px rgba(255,255,255,.2);
+    font-size: 100px;
+    font-family:Trebuchet MS;
+}
+
+.game-card-list{
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    border: 10px;
+    margin-top: 20px;
+}
+.game-card{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 750px;
+    max-width: 750px;
+    max-height: 600px;
+    height: 600px;
+    background-color:rgb(52, 62, 109);
+    margin: 30px;
+    transition: all .2s ease-in-out;
+    font-weight: bold;
+    border: 5px solid black;
+    border-radius: 10px;
+}
+
+.spinny {
+    align-self: center;
+}
+
+.bottom-card{
+    display: flex;
+    flex-direction: row;
+    height: 90%;
+}
+.game-card-left-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 60%;
+}
+.game-card-title{
+    text-align :center; 
+    height: 15%;
+    font-family:Trebuchet MS;
+    font-size: 70px;
+    margin: 10px;
+    background-color: rgba(232, 233, 238);
+    border-radius: 5px;
+    border: solid black;
+}
+.game-card-img-container{
+    max-width:100%;
+    height: 80%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.game-card-img{
+    margin: 2%;
+    max-width:80%;
+    height: 80%;
+    outline: 5px solid black;
+    transition: all .3s ease-in-out;
+}
+.game-card-img:hover{
+  transform: scale(1.1);
+  box-shadow:    0 5px #999999;
+}
+.game-card-buttons{
+    height: 20%;
+    display: flex;
+    justify-content: space-around;
+    vertical-align: middle;
+    justify-items: center;
+    text-align: center;
+}
+.game-card-button-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+.game-card-right-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-content: center;
+    margin: 5px;
+    width: 40%;
+}
+.top-container{
+    margin-top:0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; 
+    text-align: center;
+    width: 100%;
+}
+.top-title{
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: #1b1b1d;
+    text-shadow: -1px -1px 1px #000, 1px 1px 1px #ccc;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 10px solid black;
+    border-top: 10px solid black;
+}
+.top-score{
+    margin-top: 10px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    height:10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.number-column, .score-column, .name-column  {
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
+    justify-content: space-around; 
+}
+.score-position, .scores, .name {
+  font-size: 1.5em;
+  text-align: center;
+  font-weight: 700;
+  padding-top: 0;
+  top: -0.65em;
+  height: 1.35em;
+  margin: 3px;
+}
+.name, .scores {
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.score-position {
+  background-color: rgb(20, 20, 22);
+  width: 1.2em;
+  color: rgb(255, 255, 255);
+  font-style: italic;
+  text-shadow: 1px 1px rgba(21, 5, 59, 0.5);
+  border-radius: 0.675em 0.675em 0.675em 0.675em;
+
+}
+h2{
+    font-size: 70px;
+}
