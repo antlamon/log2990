@@ -3,6 +3,7 @@ import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
 import { GameService } from "../services/game.service";
 import { Router } from "@angular/router";
+import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../../common/communication/message"
 
 @Component({
   selector: "app-gamecard",
@@ -29,13 +30,20 @@ export class GamecardComponent {
     }
   }
   public deleteGame(): void {
-    // tslint:disable-next-line:no-suspicious-comment
-    // TODO: warning delete box "are you sure? yes/no"
-    if (confirm("Voulez vous supprimer le jeu " + this.game.name + " ?")) {
-      if (this.isSimpleGame) {
-        this.gameService.deleteSimpleGame(this.game as IGame).subscribe();
-      } else {
-        this.gameService.deleteFreeGame(this.game as IGame3D).subscribe();
+    if (this.game) {
+      if (confirm("Voulez vous supprimer le jeu " + this.game.name + " ?")) {
+        if (this.isSimpleGame) {
+          this.gameService.deleteSimpleGame(this.game as IGame).subscribe();
+        } else {
+          this.gameService.deleteFreeGame(this.game as IGame3D).subscribe();
+        }
+      }
+    }
+  }
+  public reinitGame(): void {
+    if (this.game) {
+      if (confirm("Voulez vous reinitialiser le score du jeu " + this.game.name + " ?")) {
+          this.gameService.resetScore(this.game.id, this.isSimpleGame ? SIMPLE_GAME_TYPE : FREE_GAME_TYPE);
       }
     }
   }

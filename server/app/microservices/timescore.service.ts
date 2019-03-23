@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { Collection } from "mongodb";
+import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../common/communication/message";
 import { IFullGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { IScore } from "../../../common/models/top3";
@@ -23,9 +24,9 @@ export class TimeScoreService {
     public constructor(@inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) { }
 
     public async resetBestScore(gameType: string, id: string): Promise<void> {
-        if (gameType === this.SIMPLE_COLLECTION) {
+        if (gameType === SIMPLE_GAME_TYPE) {
             return this.resetSimpleGameScore(id);
-        } else if (gameType === this.FREE_COLLECTION) {
+        } else if (gameType === FREE_GAME_TYPE) {
             return this.resetFreeGameScore(id);
         } else {
             throw new Error(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
@@ -108,12 +109,12 @@ export class TimeScoreService {
 
     private async setHighScore(gameType: string, gameMode: string,
                                id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: number): Promise<void> {
-        if (gameType === this.SIMPLE_COLLECTION) {
+        if (gameType === SIMPLE_GAME_TYPE) {
             let game: IFullGame | null = await this.getSimpleGame(id);
             if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
             game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
             await this.simpleCollection.update({ card: { id } }, { $set: { ...game } });
-        } else if (gameType === this.FREE_COLLECTION) {
+        } else if (gameType === FREE_GAME_TYPE) {
             let game: IGame3D | null = await this.getFreeGame(id);
             if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
             game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
@@ -152,7 +153,7 @@ export class TimeScoreService {
     private async getHighScore(gameType: string, gameMode: string, id: string): Promise<IScore[]> {
         let game: IFullGame | IGame3D | null;
         switch (gameType) {
-            case this.SIMPLE_COLLECTION:
+            case SIMPLE_GAME_TYPE:
                 game = await this.getSimpleGame(id);
                 if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
                 switch (gameMode) {
@@ -163,7 +164,7 @@ export class TimeScoreService {
                     default:
                         throw new Error(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
                 }
-            case this.FREE_COLLECTION:
+            case FREE_GAME_TYPE:
                 game = await this.getFreeGame(id);
                 if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
                 switch (gameMode) {

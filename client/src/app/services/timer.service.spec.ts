@@ -23,8 +23,8 @@ describe("TimerService", () => {
     });
     it("Time should be formatted correctly", () => {
       const service: TimerService = TestBed.get(TimerService);
-      service["nbMinutes"] = service.FORMAT_ZERO_MAX + 1;
-      service["nbSeconds"] = service.FORMAT_ZERO_MAX - 1;
+      service["_nbMinutes"] = service.FORMAT_ZERO_MAX + 1;
+      service["_nbSeconds"] = service.FORMAT_ZERO_MAX - 1;
       expect(service.getTimeAsString()).toEqual("10:08");
     });
   });
