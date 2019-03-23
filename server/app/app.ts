@@ -8,6 +8,7 @@ import { ConnexionController } from "./controllers/connexion.controller";
 import { GameListController } from "./controllers/game-list.controller";
 import { IdentificationController } from "./controllers/identification.controller";
 import { ImageController } from "./controllers/image.controller";
+import { TimescoreController } from "./controllers/timescore.controller";
 import { TYPES } from "./types";
 
 @injectable()
@@ -20,7 +21,8 @@ export class Application {
             @inject(TYPES.ConnexionController) private connexionController: ConnexionController,
             @inject(TYPES.ImageController) private imageController: ImageController,
             @inject(TYPES.GameListController) private gameListController: GameListController,
-            @inject(TYPES.IdentificationController) private identificationController: IdentificationController) {
+            @inject(TYPES.IdentificationController) private identificationController: IdentificationController,
+            @inject(TYPES.TimeScoreController) private timeScoreController: TimescoreController) {
         this.app = express();
         this.config();
         this.bindRoutes();
@@ -41,6 +43,7 @@ export class Application {
         this.app.use(ImageController.URL, this.imageController.router);
         this.app.use(this.gameListController.URL, this.gameListController.router);
         this.app.use(IdentificationController.URL, this.identificationController.router);
+        this.app.use(TimescoreController.URL, this.timeScoreController.router);
         this.errorHandeling();
     }
 

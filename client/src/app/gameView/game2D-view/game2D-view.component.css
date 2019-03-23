@@ -1,5 +1,3 @@
-
-
 .chrono {
     position: absolute;
     top: 800px;
@@ -73,4 +71,9 @@
 
 .cursor-not-allowed {
     cursor: not-allowed;
+}
+
+.spinny {
+    top: 35%;
+    left: 40%;
 }

@@ -14,7 +14,8 @@ import { ListViewComponent } from "./list-view/list-view.component";
 import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.component";
 import { Scene3DComponent } from "./scene3D/scene3-d/scene3-d.component";
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
-
+import { MatProgressSpinnerModule } from "@angular/material";
+import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -27,9 +28,10 @@ describe("AppComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent
+        Scene3DComponent,
+        ErrorPopupComponent
       ],
-      imports: [HttpClientModule, FormsModule, AppRoutingModule],
+      imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule],
       providers: [IndexService]
     }).compileComponents();
   }));

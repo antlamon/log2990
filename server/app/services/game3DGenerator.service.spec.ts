@@ -2,9 +2,8 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { GEOMETRIC_TYPE_NAME, IGame3D, IScene3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+import { GEOMETRIC_TYPE_NAME, IGame3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D } from "../../../common/models/objet3D";
-import { ITop3 } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
@@ -48,22 +47,18 @@ const obj3D: IObjet3D = {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
-};
-
-const mockScene: IScene3D = {
-    modified: false,
-    backColor: 0x00000,
-    objects: [obj3D],
-    numObj: 1,
+    name: "1",
 };
 
 const mock3DGame: IGame3D = {
     name: "string",
     id: "",
-    originalScene: mockScene,
-    modifiedScene: mockScene,
-    solo: { } as ITop3,
-    multi: { } as ITop3,
+    originalScene: [obj3D],
+    solo: [],
+    multi: [],
+    differences: [],
+    isThematic: false,
+    backColor: 0,
 };
 
 const expect: Chai.ExpectStatic = chai.expect;

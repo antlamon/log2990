@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import { Point } from "../../../common/communication/message";
-import { IdentificationServiceManager } from "../services/identification.service.manager";
+import { IdentificationServiceManager } from "../microservices/identification.service.manager";
 import { TYPES } from "../types";
 
 @injectable()

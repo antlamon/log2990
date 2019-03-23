@@ -1,6 +1,6 @@
 import Axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
-import { BASE_ID, GameRoomUpdate, NewGameMessage, Point } from "../../../common/communication/message";
+import { BASE_ID, GameRoomUpdate, NewGameMessage, Point } from "../../../../common/communication/message";
 
 @injectable()
 export class GameRoomService {

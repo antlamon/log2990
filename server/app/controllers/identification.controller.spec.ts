@@ -5,8 +5,8 @@ import supertest = require("supertest");
 import { Message } from "../../../common/communication/message";
 import { Application } from "../app";
 import { container } from "../inversify.config";
-import { IdentificationServiceManager } from "../services/identification.service.manager";
-import { ImageService } from "../services/image.service";
+import { IdentificationServiceManager } from "../microservices/identification.service.manager";
+import { ImageService } from "../microservices/image.service";
 import { TYPES } from "../types";
 
 const expect: Chai.ExpectStatic = chai.expect;

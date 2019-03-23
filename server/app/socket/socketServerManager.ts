@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
-import { GameRoomService } from "../services/gameRoom.service";
+import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { UsersManager } from "../services/users.service";
 import { TYPES } from "../types";
 import { IMessageForm } from "../../../common/models/simpleGameMessage";
@@ -41,8 +41,8 @@ export class SocketServerManager {
         });
     }
 
-    public emitEvent(event: string): void {
-        this.socketServer.emit(event);
+    public emitEvent<T>(event: string, data?: T): void {
+        this.socketServer.emit(event, data);
     }
 
     private async handleNewGameRoom(socket: Socket, newGameMessage: NewGameMessage): Promise<void> {

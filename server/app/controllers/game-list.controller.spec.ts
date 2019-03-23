@@ -3,12 +3,11 @@ import spies = require("chai-spies");
 import supertest = require("supertest");
 import { BASE_ID, Message } from "../../../common/communication/message";
 import { IGame } from "../../../common/models/game";
-import { ITop3 } from "../../../common/models/top3";
 import { Application } from "../app";
 import { container } from "../inversify.config";
+import { ImageService } from "../microservices/image.service";
 import { FREEGAMES } from "../mock-games";
 import { GameListService } from "../services/game-list.service";
-import { ImageService } from "../services/image.service";
 import { TYPES } from "../types";
 
 const expect: Chai.ExpectStatic = chai.expect;
@@ -24,8 +23,8 @@ const mockedGame: IGame = {
     id: "idmockgenerate",
     name: "testGame",
     originalImage: "",
-    solo: { } as ITop3,
-    multi: { } as ITop3,
+    solo: [],
+    multi: [],
 };
 
 describe("Game list controller", () => {

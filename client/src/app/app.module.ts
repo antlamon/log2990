@@ -1,7 +1,7 @@
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { MatDialogModule } from "@angular/material";
+import { MatDialogModule, MatProgressSpinnerModule } from "@angular/material";
 import { MatCardModule } from "@angular/material/card";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -23,6 +23,7 @@ import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { GameMessagesComponent } from './gameView/game-messages/game-messages.component';
+import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 
 @NgModule({
   declarations: [
@@ -36,6 +37,8 @@ import { GameMessagesComponent } from './gameView/game-messages/game-messages.co
     Scene3DComponent,
     Game3DViewComponent,
     GameMessagesComponent
+    Game3DViewComponent,
+    ErrorPopupComponent
   ],
   imports: [
     FormsModule,
@@ -44,6 +47,7 @@ import { GameMessagesComponent } from './gameView/game-messages/game-messages.co
     AppRoutingModule,
     MatCardModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     BrowserAnimationsModule,
     RouterModule.forRoot([])
   ],

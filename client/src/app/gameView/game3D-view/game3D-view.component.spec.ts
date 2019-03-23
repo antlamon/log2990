@@ -6,8 +6,8 @@ import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 import { ShapeCreatorService } from "src/app/scene3D/scene3-d/shape-creator.service";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 import { IScene3D, IGame3D } from "../../../../../common/models/game3D";
-import { ITop3 } from "../../../../../common/models/top3";
 import { AppRoutingModule } from "src/app/app-routing.module";
+import { MatProgressSpinnerModule } from "@angular/material";
 const mockObjects: IObjet3D[] = [];
 const mockOkScene: IScene3D = {
   modified: false,
@@ -21,11 +21,12 @@ const mockGame3D: IGame3D = {
     id: "dskjahd",
     originalScene: mockOkScene,
     modifiedScene: mockOkScene,
-    solo: { } as ITop3,
-    multi: { } as ITop3,
+    solo: [],
+    multi: [],
+    differencesIndex: [],
   };
 
-const nbRenderCall: number = 2;
+const nbRenderCall: number = 1;
 const delay: number = 10;
 describe("Game3DViewComponent", () => {
     let component: Game3DViewComponent;
@@ -34,7 +35,7 @@ describe("Game3DViewComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [Game3DViewComponent],
-            imports: [HttpClientModule, RouterTestingModule],
+            imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
             providers: [RenderService, ShapeCreatorService, AppRoutingModule]
         })
             .compileComponents().then(() => { }, (error: Error) => {

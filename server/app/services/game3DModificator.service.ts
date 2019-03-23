@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
-import { GEOMETRIC_TYPE_NAME, IScene3D } from "../../../common/models/game3D";
-import { IObjet3D, MAX_COLOR  } from "../../../common/models/objet3D";
+import { ADD_TYPE, DELETE_TYPE, GEOMETRIC_TYPE_NAME, IDifference, MODIFICATION_TYPE } from "../../../common/models/game3D";
+import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
 
@@ -15,51 +15,47 @@ export class Game3DModificatorService {
 
     public constructor(@inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
-    public createModifScene(originalScene: IScene3D, typeObj: string,
-                            typeModif:  {add: boolean, delete: boolean, color: boolean}): IScene3D {
+    public createModifScene(originalScene: IObjet3D[], typeObj: string,
+                            typeModif:  {add: boolean, delete: boolean, color: boolean}): IDifference[] {
 
         const modifiedObjects: IObjet3D[] = [];
-        const indexModif: number[] = this.randomIndex(originalScene.objects.length);
-
-        for (let i: number = 0; i < originalScene.objects.length; i++) {
-
-            let newObj: IObjet3D | null = originalScene.objects[i];
+        const indexModif: number[] = this.randomIndex(originalScene.length);
+        const differences: IDifference[] = [];
+        for (let i: number = 0; i < originalScene.length; i++) {
 
             for (const no of indexModif) {
                 if (no === i) {
-                    newObj = this.createDifference((newObj) as IObjet3D, modifiedObjects, typeObj, typeModif);
+                    differences.push(this.createDifference(originalScene[i], modifiedObjects, typeObj, typeModif));
                 }
             }
-            if (newObj !== null) {
-                modifiedObjects.push(newObj);
+        }
+        let nbAdded: number = 0;
+        for (let i: number = 0; i < differences.length; i++) {
+            if (differences[i].name === "") {
+                differences[i].name = (originalScene.length + nbAdded).toString();
+                nbAdded++;
             }
         }
 
-        return {modified: true,
-                numObj: modifiedObjects.length,
-                objects: modifiedObjects,
-                backColor: originalScene.backColor };
+        return differences;
 
     }
 
     private createDifference(obj: IObjet3D, objects: IObjet3D[], typeObj: string,
-                             typeModif:  {add: boolean, delete: boolean, color: boolean}): IObjet3D | null {
+                             typeModif:  {add: boolean, delete: boolean, color: boolean}): IDifference {
 
         // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
-                this.addObject(objects, typeObj);
-                break;
+                return {name: "", type: ADD_TYPE, object: this.objectGenerator.generateRandomGeometricObject(objects)};
             }
             case(Game3DModificatorService.DELETE): {
-                return null;
+                return {name: obj.name, type: DELETE_TYPE, object: this.createObject(objects, typeObj)};
             }
             case(Game3DModificatorService.COLOR): {
-                if (typeObj === GEOMETRIC_TYPE_NAME) {
-                    return this.changeColor(obj);
-                } else {
-                    return this.changeTexture(obj);
-                }
+                const temp: IObjet3D = (typeObj === GEOMETRIC_TYPE_NAME) ? this.changeColor(obj) : this.changeTexture(obj);
+
+                return {object: temp, name: obj.name, type: MODIFICATION_TYPE};
             }
 
         }
@@ -68,11 +64,11 @@ export class Game3DModificatorService {
 
     }
 
-    private addObject(objects: IObjet3D[], typeObj: string): void {
+    private createObject(objects: IObjet3D[], typeObj: string): IObjet3D {
         if (typeObj === GEOMETRIC_TYPE_NAME) {
-            objects.push(this.objectGenerator.generateRandomGeometricObject(objects));
+            return this.objectGenerator.generateRandomGeometricObject(objects);
         } else {
-            objects.push(this.objectGenerator.generateRandomThematicObject(objects));
+            return this.objectGenerator.generateRandomThematicObject(objects);
         }
     }
 
@@ -80,10 +76,11 @@ export class Game3DModificatorService {
         let newColor: number;
         do {
             newColor = this.objectGenerator.randomInt(0x000000, MAX_COLOR);
-        } while (!this.isEnoughContrast(obj.color, newColor));
+        } while (!this.isEnoughContrast(obj.color as number, newColor));
 
         return {
             type: obj.type,
+            name: obj.name,
             color: newColor,
             texture: "",
             position: obj.position,
@@ -94,7 +91,7 @@ export class Game3DModificatorService {
 
     private changeTexture(obj: IObjet3D): IObjet3D {
 
-        const previousText: string = obj.texture;
+        const previousText: string = obj.texture as string;
         let newText: string;
         do {
             newText = this.objectGenerator.randomTexture();
@@ -102,6 +99,7 @@ export class Game3DModificatorService {
 
         return {
             type: obj.type,
+            name: obj.name,
             color: 0,
             texture: newText,
             position: obj.position,
@@ -111,17 +109,7 @@ export class Game3DModificatorService {
     }
     public isEnoughContrast(otherColor: number, objColor: number): boolean {
         // we want positive values, check for min and max
-        let max: number;
-        let min: number;
-        if (otherColor > objColor) {
-            max = otherColor;
-            min = objColor;
-        } else {
-            max = objColor;
-            min = otherColor;
-        }
-
-        return (max - min) >= this.MINIMUM_CONTRAST;
+        return Math.abs(otherColor - objColor) >= this.MINIMUM_CONTRAST;
     }
 
     private randomIndex(size: number): number[] {

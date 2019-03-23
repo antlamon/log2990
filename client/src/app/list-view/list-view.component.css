@@ -83,6 +83,11 @@ h1{
     border: 5px solid black;
     border-radius: 10px;
 }
+
+.spinny {
+    align-self: center;
+}
+
 .bottom-card{
     display: flex;
     flex-direction: row;

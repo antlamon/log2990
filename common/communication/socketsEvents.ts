@@ -7,4 +7,8 @@ export class SocketsEvents {
     public static readonly NEW_GAME_MESSAGE = "new-game-message";
     public static readonly USER_CONNECTION = "user-connection";
     public static readonly USER_DECONNECTION = "user-deconnection";
+    public static readonly SIMPLE_GAME_ADDED = "add-simple";
+    public static readonly FREE_GAME_ADDED = "add-free";
+    public static readonly SIMPLE_GAME_DELETED = "delete-simple";
+    public static readonly FREE_GAME_DELETED = "delete-free";
 }
