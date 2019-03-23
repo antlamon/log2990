@@ -17,6 +17,8 @@ export class GameService {
   private readonly SIMPLEONE_URL: string = this.GAMES_URL + "/onesimple";
   private readonly FREE_URL: string = this.GAMES_URL + "/free";
   private readonly FREEONE_URL: string = this.GAMES_URL + "/onefree";
+  private readonly RESET_URL: string = this.GAMES_URL + "/onefree";
+  private readonly SEND_SCORE_URL: string = this.GAMES_URL + "/onefree";
 
   public constructor(private http: HttpClient) {
   }
@@ -98,5 +100,8 @@ export class GameService {
         "Content-Type": "application/json"
       })
     });
+  }
+  public sendScore(username: string, gameType: string, gameMode: string, nbMinues: number, nbSeconds: number): void {
+
   }
 }
