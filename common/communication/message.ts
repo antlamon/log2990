@@ -12,6 +12,8 @@ export interface Message3D {
 
 export const ERROR_ID: string = "error";
 export const BASE_ID:string = "base";
+export const SIMPLE_GAME_TYPE: string = "simple";
+export const FREE_GAME_TYPE:string = "free";
 
 export interface INewGameMessage {
     gameRoomId: string;

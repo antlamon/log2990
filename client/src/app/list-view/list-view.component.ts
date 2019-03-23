@@ -5,7 +5,8 @@ import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { IGame3D } from "../../../../common/models/game3D";
 import { RenderService } from "../scene3D/scene3-d/render.service";
-
+import { IScore } from "../../../../common/models/top3";
+import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
 @Component({
   selector: "app-list-view",
   templateUrl: "./list-view.component.html",
@@ -29,6 +30,7 @@ export class ListViewComponent implements OnInit {
     this.socket.addEvent(SocketsEvents.FREE_GAME_ADDED, this.addFreeGame.bind(this));
     this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.removeSimpleGame.bind(this));
     this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.removeFreeGame.bind(this));
+    this.socket.addEvent(SocketsEvents.SCORES_UPDATED, this.updateScore.bind(this));
     this.imageURLs = new Map();
   }
 
@@ -41,6 +43,22 @@ export class ListViewComponent implements OnInit {
   private async getImageURL(game: IGame3D): Promise<void> {
     const imageURL: string = await this.renderer.getImageURL(game);
     this.imageURLs.set(game, imageURL);
+  }
+  public updateScore(upd: IScoreUpdate): void {
+    if (upd.gameType === SIMPLE_GAME_TYPE) {
+      const index: number = this.simpleGames.findIndex((x: IGame) => x.id === upd.id);
+      if (index !== -1) {
+        this.simpleGames[index].solo = upd.solo;
+        this.simpleGames[index].multi = upd.multi;
+      }
+    }
+    if (upd.gameType === FREE_GAME_TYPE) {
+      const index: number = this.freeGames.findIndex((x: IGame3D) => x.id === upd.id);
+      if (index !== -1) {
+        this.freeGames[index].solo = upd.solo;
+        this.freeGames[index].multi = upd.multi;
+      }
+    }
   }
 
   public getSimpleGames(): void {
@@ -75,4 +93,10 @@ export class ListViewComponent implements OnInit {
          });
   }
 
+}
+export interface IScoreUpdate  {
+  id: string;
+  gameType: string;
+  solo: IScore[];
+  multi: IScore[];
 }

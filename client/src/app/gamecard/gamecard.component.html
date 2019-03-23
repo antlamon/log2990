@@ -14,9 +14,8 @@
         <div class="game-card-button-container"><button>CRÉER</button></div>
       </div>
       <div class="game-card-buttons" *ngIf="isAdminMode">
-        <div class="game-card-button-container"><button (click)="deleteGame()">SUPPRIMER</button>
-        <div class="game-card-button-container"><button>RÉINITIALISER</button></div>
-        </div>
+        <div class="game-card-button-container"><button (click)="deleteGame()">SUPPRIMER</button></div>
+        <div class="game-card-button-container"><button (click) = "reinitGame()">RÉINITIALISER</button></div>
       </div>
     </div>
     <div class="game-card-right-content">

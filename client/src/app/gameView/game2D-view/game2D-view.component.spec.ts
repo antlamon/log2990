@@ -101,5 +101,29 @@ describe("Game2DViewComponent", () => {
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
     });
+    it("A event should be sent to the socket once 7 differences are found", () => {
+        const spy: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.callFake(() => {});
+        spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+        const update: GameRoomUpdate = {
+            username: "test",
+            newImage: "testImage",
+            differencesFound: 7,
+        };
+        component["lastClick"] = new MouseEvent("click");
+        component["handleCheckDifference"](update);
+        expect(spy).toHaveBeenCalled();
+    });
+    it("The router should be called 7 differences are found", () => {
+        spyOn(component["socket"], "emitEvent").and.callFake(() => {});
+        const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+        const update: GameRoomUpdate = {
+            username: "test",
+            newImage: "testImage",
+            differencesFound: 7,
+        };
+        component["lastClick"] = new MouseEvent("click");
+        component["handleCheckDifference"](update);
+        expect(spy).toHaveBeenCalledWith(["games"]);
+    });
 
 });
