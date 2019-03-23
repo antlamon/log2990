@@ -29,9 +29,9 @@ export class TimeScoreService {
                                                           multi: this.top3RandomOrder()}}}).then(
                         () => {
 
-                        return true; //todo check if something updated
-                    }).catch(); //todo check if something updated
-            }).catch(); //todo check if something updated
+                        return true; // todo check if something updated
+                    }).catch(); // todo check if something updated
+            }).catch(); // todo check if something updated
         }
         if (gameType === this.FREE_COLLECTION) {
             return this.getFreeGame(id).then( async (game: IGame3D) => {
@@ -40,9 +40,9 @@ export class TimeScoreService {
                                    solo: this.top3RandomOrder(), multi: this.top3RandomOrder()}}).then(
                          () => {
 
-                         return true; //todo check if something updated
-                     }).catch(); //catch
-             }).catch(); //catch to fix
+                         return true; // todo check if something updated
+                     }).catch(); // catch
+             }).catch(); // catch to fix
          }
 
         return Promise.resolve(false);

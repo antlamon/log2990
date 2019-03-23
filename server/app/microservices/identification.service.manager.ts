@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { BASE_ID, ERROR_ID, Message, Point } from "../../../common/communication/message";
-import { ConvertImage, ImageBMP } from "./convertImage.service";
 import { TYPES } from "../types";
+import { ConvertImage, ImageBMP } from "./convertImage.service";
 import { IdentificationService } from "./identification.service";
 
 interface IDictionary {

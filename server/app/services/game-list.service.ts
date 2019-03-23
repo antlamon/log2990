@@ -7,9 +7,9 @@ import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/messag
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
+import { DatabaseClient } from "../database.client";
 import { SocketServerManager } from "../socket/socketServerManager";
 import { TYPES } from "../types";
-import { DatabaseClient } from "../database.client";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
 
 @injectable()

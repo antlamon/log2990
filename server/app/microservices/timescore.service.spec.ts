@@ -4,8 +4,8 @@ import { Collection, Db, WriteOpResult } from "mongodb";
 import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { container } from "../inversify.config";
-import { TimeScoreService } from "./timescore.service";
 import { TYPES } from "../types";
+import { TimeScoreService } from "./timescore.service";
 // tslint:disable-next-line:typedef
 const mongoMock = require("mongo-mock");
 mongoMock.max_delay = 0;

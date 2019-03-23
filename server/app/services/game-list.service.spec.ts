@@ -40,8 +40,8 @@ const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
     originalImage: "",
-    solo: [{name: "one", score: "20:10"},{name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
-    multi: [{name: "one", score: "20:10"},{name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
+    solo: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
+    multi: [{name: "one", score: "20:10"}, {name: "two", score: "20:11"}, {name: "three", score: "20:12"}],
 };
 const mockedFullGame: IFullGame = {
     card: mockedGame,
