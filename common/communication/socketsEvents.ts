@@ -5,4 +5,6 @@ export class SocketsEvents {
     public static readonly CREATE_GAME_ROOM = "create-game-room";
     public static readonly DELETE_GAME_ROOM = "delete-game-room";
     public static readonly NEW_GAME_MESSAGE = "new-game-message";
+    public static readonly USER_CONNECTION = "user-connection";
+    public static readonly USER_DECONNECTION = "user-deconnection";
 }

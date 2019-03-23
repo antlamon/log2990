@@ -6,6 +6,8 @@ import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/gameRoom.service";
 import { UsersManager } from "../services/users.service";
 import { TYPES } from "../types";
+import { IMessageForm } from "../../../common/models/simpleGameMessage";
+import { GameMessageService } from "../services/game-message.service";
 
 type Socket = SocketIO.Socket;
 
@@ -14,12 +16,14 @@ export class SocketServerManager {
     private socketServer: SocketIO.Server;
 
     public constructor( @inject(TYPES.UserManager) private userManager: UsersManager,
-                        @inject(TYPES.GameRoomService) private gameRoomService: GameRoomService) { }
+                        @inject(TYPES.GameRoomService) private gameRoomService: GameRoomService,
+                        @inject(TYPES.GameMessageService) private gameMessageService: GameMessageService) { }
 
     public initializeSocket(server: Server): void {
         this.socketServer = SocketIO(server);
         this.socketServer.on("connect", (socket: Socket) => {
             this.userManager.addUser(socket.client.id);
+            this.emitEvent(SocketsEvents.USER_CONNECTION);
             socket.on(SocketsEvents.CREATE_GAME_ROOM, async (newGameMessage: NewGameMessage) => {
                 await this.handleNewGameRoom(socket, newGameMessage);
             });
@@ -29,6 +33,10 @@ export class SocketServerManager {
             });
             socket.on("disconnect", () => {
                 this.userManager.removeUser(socket.client.id);
+                this.emitEvent(SocketsEvents.USER_DECONNECTION);
+            });
+            socket.on(SocketsEvents.NEW_GAME_MESSAGE, async (newMessage: IMessageForm) => {
+                await this.identificationMessage(socket, newMessage);
             });
         });
     }
@@ -50,6 +58,7 @@ export class SocketServerManager {
     private async handleCheckDifference(event: ImageClickMessage): Promise<void> {
         const update: GameRoomUpdate = await this.gameRoomService.checkDifference(event.gameRoomId, event.username, event.point);
         this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE, event.gameRoomId, update);
+        this.emitRoomEvent(SocketsEvents.NEW_GAME_MESSAGE, event.gameRoomId, update);
     }
 
     private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {
@@ -59,5 +68,10 @@ export class SocketServerManager {
 
     private emitRoomEvent<T>(event: string, room: string, data?: T): void {
         this.socketServer.in(room).emit(event, data);
+    }
+
+    private async identificationMessage(socket: Socket, newMessage: IMessageForm): Promise<void> {
+        await this.gameMessageService.sendMessage(newMessage);
+
     }
 }
