@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/message";
+import { BASE_ID, ERROR_ID, Message, Message3D } from "../../../common/communication/message";
 import { IDifference } from "../../../common/models/game3D";
 import { Identification3DService } from "./identification3D.service";
 
@@ -20,15 +20,15 @@ export class Identification3DServiceManager {
         this.identification3DServices = {} as IDictionary;
     }
 
-    public getDifference(gameRoomId: string, objName: string): Message {
+    public getDifference(gameRoomId: string, objName: string): Message3D | Message {
         if (this.identification3DServices[gameRoomId] === undefined) {
             return {
                 title: ERROR_ID,
                 body: `${Identification3DServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, Game room: ${gameRoomId}`,
             };
         }
-        const object: string = this.identification3DServices[gameRoomId].getDifference(objName);
-        if (object === undefined) {
+        const object: {name: string, type: string} = this.identification3DServices[gameRoomId].getDifference(objName);
+        if (object.name === "") {
             return {
                 title: ERROR_ID,
                 body: Identification3DServiceManager.NO_DIFFERENCE_FOUND,

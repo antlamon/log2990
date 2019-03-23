@@ -7,6 +7,7 @@ import * as logger from "morgan";
 import { ConnexionController } from "./controllers/connexion.controller";
 import { GameListController } from "./controllers/game-list.controller";
 import { IdentificationController } from "./controllers/identification.controller";
+import { Identification3DController } from "./controllers/identification3D.controller";
 import { ImageController } from "./controllers/image.controller";
 import { TimescoreController } from "./controllers/timescore.controller";
 import { TYPES } from "./types";
@@ -22,6 +23,7 @@ export class Application {
             @inject(TYPES.ImageController) private imageController: ImageController,
             @inject(TYPES.GameListController) private gameListController: GameListController,
             @inject(TYPES.IdentificationController) private identificationController: IdentificationController,
+            @inject(TYPES.Identification3DController) private identification3DController: Identification3DController,
             @inject(TYPES.TimeScoreController) private timeScoreController: TimescoreController) {
         this.app = express();
         this.config();
@@ -43,6 +45,7 @@ export class Application {
         this.app.use(ImageController.URL, this.imageController.router);
         this.app.use(this.gameListController.URL, this.gameListController.router);
         this.app.use(IdentificationController.URL, this.identificationController.router);
+        this.app.use(Identification3DController.URL, this.identification3DController.router);
         this.app.use(TimescoreController.URL, this.timeScoreController.router);
         this.errorHandeling();
     }

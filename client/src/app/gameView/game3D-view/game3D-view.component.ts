@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
@@ -9,7 +9,7 @@ import { RenderService } from "src/app/scene3D/scene3-d/render.service";
     templateUrl: "./game3D-view.component.html",
     styleUrls: ["./game3D-view.component.css"]
 })
-export class Game3DViewComponent implements OnInit {
+export class Game3DViewComponent implements OnInit, OnDestroy {
 
     @ViewChild("originalContainer")
     private originalContainerRef: ElementRef;
@@ -27,6 +27,13 @@ export class Game3DViewComponent implements OnInit {
 
     public ngOnInit(): void {
         this.get3DGame();
+    }
+
+    @HostListener("window:beforeunload")
+    public ngOnDestroy(): void {
+        if (this.game3D) {
+            this.render.onDestroy();
+        }
     }
 
     private getId(): string {

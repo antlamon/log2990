@@ -4,6 +4,12 @@ export interface Message {
     title: string;
     body: string;
 }
+
+export interface Message3D {
+    title: string;
+    body: {name: string; type: string; };
+}
+
 export const ERROR_ID: string = "error";
 export const BASE_ID:string = "base";
 
@@ -37,6 +43,7 @@ export interface Game3DRoomUpdate {
     username: string;
     differencesFound: number;
     objName: string;
+    diffType: string;
 }
 
 export interface clickMessage {

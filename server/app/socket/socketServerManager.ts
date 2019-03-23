@@ -29,6 +29,9 @@ export class SocketServerManager {
             socket.on(SocketsEvents.DELETE_GAME_ROOM, async (gameRoomId: string) => {
                 await this.handleDeleteGameRoom(socket, gameRoomId);
             });
+            socket.on(SocketsEvents.DELETE_GAME_3D_ROOM, async (gameRoomId: string) => {
+                await this.handleDeleteGame3DRoom(socket, gameRoomId);
+            });
             socket.on("disconnect", () => {
                 this.userManager.removeUser(socket.client.id);
             });
@@ -40,6 +43,7 @@ export class SocketServerManager {
     }
 
     private async handleNewGameRoom(socket: Socket, newGameMessage: INewGameMessage): Promise<void> {
+
         try {
             const roomId: string = await this.gameRoomService.createNewGameRoom(newGameMessage);
             socket.join(roomId);
@@ -60,6 +64,10 @@ export class SocketServerManager {
     private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {
         socket.leave(gameRoomId);
         await this.gameRoomService.deleteGameRoom(gameRoomId);
+    }
+    private async handleDeleteGame3DRoom(socket: Socket, gameRoomId: string): Promise<void> {
+        socket.leave(gameRoomId);
+        await this.gameRoomService.deleteGame3DRoom(gameRoomId);
     }
 
     private emitRoomEvent<T>(event: string, room: string, data?: T): void {

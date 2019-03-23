@@ -5,16 +5,18 @@ export class Identification3DService {
     public constructor(private differences: IDifference[]) {
     }
 
-    public getDifference(objName: string): string {
+    public getDifference(objName: string): {name: string, type: string} {
 
         for (let i: number = 0; i < this.differences.length; i++) {
             if  (this.differences[i].name === objName) {
+
+              const type: string =  this.differences[i].type;
               this.differences.splice(i, 1);
 
-              return objName;
+              return {name: objName, type: type};
             }
         }
 
-        return "TODO";
+        return {name: "", type: ""};
     }
 }

@@ -18,6 +18,7 @@ export class GameRoomService {
             this.IDENTIFICATION_3D_URL : this.IDENTIFICATION_URL,
                                                          newGameMessage);
         if (response.data.title !== BASE_ID) {
+
             return Promise.reject(Error(response.data.body));
         }
         const newGamer: Gamer = {
@@ -63,6 +64,7 @@ export class GameRoomService {
                 username: username,
                 differencesFound: -1,
                 objName: "none",
+                diffType: "none",
             };
         }
         let gamer: Gamer | undefined = this.gameRooms[gameRoomId].find((user: Gamer) => user.username === username);
@@ -77,12 +79,16 @@ export class GameRoomService {
         return {
             username: username,
             differencesFound: ++gamer.differencesFound,
-            objName: response.data.body,
+            objName: response.data.body.name,
+            diffType: response.data.body.type,
         };
     }
 
     public async deleteGameRoom(gameRoomId: string): Promise<void> {
         await Axios.delete(this.IDENTIFICATION_URL, { params: { gameRoomId: gameRoomId } });
+    }
+    public async deleteGame3DRoom(gameRoomId: string): Promise<void> {
+        await Axios.delete(this.IDENTIFICATION_3D_URL, { params: { gameRoomId: gameRoomId } });
     }
 }
 

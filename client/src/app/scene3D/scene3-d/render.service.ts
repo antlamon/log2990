@@ -6,7 +6,8 @@ import { ShapeCreatorService } from "./shape-creator.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { CLICK, KEYS, WHITE } from "src/app/global/constants";
 import { SocketService } from "src/app/services/socket.service";
-import { GameRoomUpdate, Obj3DClickMessage } from "../../../../../common/communication/message";
+import { Obj3DClickMessage, Game3DRoomUpdate, NewGame3DMessage } from "../../../../../common/communication/message";
+import { IndexService } from "src/app/services/index.service";
 //import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 
 @Injectable()
@@ -24,7 +25,7 @@ export class RenderService {
   private press: boolean;
   //private isThematic: boolean;
   private cheatModeActivated: boolean;
-
+  private roomId: string;
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
 
@@ -49,21 +50,30 @@ export class RenderService {
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
-  public constructor(private shapeService: ShapeCreatorService, private socket: SocketService
+  public constructor(private shapeService: ShapeCreatorService, private socket: SocketService, private index: IndexService,
     /*, private modelsService: MedievalObjectsCreatorService*/) {
     this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
     }
 
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
+
     clearInterval(this.timeOutDiff);
+    this.roomId = game.id;
     this.containerOriginal = containerO;
+    this.containerModif = containerM;
     this.differences = game.differences;
     this.diffAreVisible = true;
     this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
-    this.cheatModeActivated = false;
-    this.containerModif = containerM;
     this.sceneModif = this.modifyScene(this.sceneOriginal.clone(), game.differences);
+    this.cheatModeActivated = false;
+    const newGameMessage: NewGame3DMessage = {
+      username: this.index.username,
+      gameRoomId: this.roomId,
+      is3D: true,
+      differences: this.differences
+    };
+    this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
 
     this.createCamera();
     this.startRenderingLoop();
@@ -73,7 +83,14 @@ export class RenderService {
         alert(rejection);
     }
   }
-  private handleCheckDifference(update: GameRoomUpdate): void {}
+  private handleCheckDifference(update: Game3DRoomUpdate): void {
+    if (update.differencesFound !== -1) {
+      this.removeDiff(update.objName, update.diffType);
+    }
+  }
+  public onDestroy(): void {
+    this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomId);
+  }
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();
     this.camera.updateProjectionMatrix();
@@ -237,7 +254,6 @@ export class RenderService {
   }
   private onMouseMove = (event: MouseEvent) => {
     if (!this.press) { return; }
-    // TODO: fix rotation after moving
     this.camera.rotation.y -= event.movementX * this.SENSITIVITY;
     this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
   }
@@ -267,34 +283,37 @@ export class RenderService {
     this.raycaster.setFromCamera( this.mouse, this.camera );
     const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
     if (intersects.length > 0) {
-      this.apiCode(intersects[0].object);
       const objMessage: Obj3DClickMessage = {
-        gameRoomId: "TODO",
-        username: "TODO",
+        gameRoomId: this.roomId,
+        username: this.index.username,
         name: intersects[0].object.name,
       };
       this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
     }
   }
 
-  private apiCode(selectedObj: THREE.Object3D): void {
-    //let diff: boolean = false;
-    for (let i: number = 0; i < this.differences.length; i++) {
-      if  (this.differences[i].name === selectedObj.name) {
-        //diff = true;
-        switch (this.differences[i].type) {
-          case ADD_TYPE: this.sceneModif.getObjectByName(selectedObj.name).visible = false;
-                         break;
-          case MODIFICATION_TYPE: this.stopCheatObject(selectedObj.name);
-                                  (this.sceneModif.getObjectByName(selectedObj.name) as THREE.Mesh).material
-            = (this.sceneOriginal.getObjectByName(selectedObj.name) as THREE.Mesh).material;
-                                  break;
-          case DELETE_TYPE: this.stopCheatObject(selectedObj.name);
-                            this.sceneModif.getObjectByName(selectedObj.name).visible = true;
-                            break;
-          default: break;
-        }
+  private removeDiff(objName: string, type: string): void {
+
+    switch (type) {
+      case ADD_TYPE: this.sceneModif.getObjectByName(objName).visible = false;
+                     break;
+      case MODIFICATION_TYPE: this.stopFlashObject(objName);
+                              (this.sceneModif.getObjectByName(objName) as THREE.Mesh).material
+        = (this.sceneOriginal.getObjectByName(objName) as THREE.Mesh).material;
+                              break;
+      case DELETE_TYPE: this.stopFlashObject(objName);
+                        this.sceneModif.getObjectByName(objName).visible = true;
+                        break;
+      default: break;
+    }
+    this.soustractDiff(objName);
+  }
+  private soustractDiff(objName: string): void {
+    for (let i: number = 0; this.differences.length; i++ ) {
+      if (this.differences[i].name === objName) {
         this.differences.splice(i, 1);
+
+        return;
       }
     }
   }
@@ -327,7 +346,7 @@ export class RenderService {
       }
     }
   }
-  private stopCheatObject(name: string): void {
+  private stopFlashObject(name: string): void {
     ((this.sceneOriginal.getObjectByName(name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive = new THREE.Color(0);
   }
 }

@@ -21,9 +21,14 @@ export class Identification3DController {
         });
 
         router.post("/", (req: Request, res: Response, next: NextFunction) => {
-            const gameRoomId: string = req.query.gameRoomId;
-            const differences: IDifference[] = req.query.differences;
+            const gameRoomId: string = req.body.gameRoomId;
+            const differences: IDifference[] = req.body.differences;
+
             res.json(this.identification3DManager.startNewService(gameRoomId, differences));
+        });
+        router.delete("/", (req: Request, res: Response, next: NextFunction) => {
+            const gameRoomId: string = req.query.gameRoomId;
+            res.json(this.identification3DManager.deleteService(gameRoomId));
         });
 
         return router;
