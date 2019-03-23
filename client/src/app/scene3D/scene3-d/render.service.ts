@@ -49,12 +49,14 @@ export class RenderService {
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
     clearInterval(this.timeOutDiff);
     this.containerOriginal = containerO;
+    this.isThematic = game.isThematic;
     this.differences = game.differences;
     this.diffAreVisible = true;
     this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
     this.cheatModeActivated = false;
     this.containerModif = containerM;
-    this.sceneModif = this.modifyScene(this.sceneOriginal.clone(), game.differences);
+    this.sceneModif = await this.createScene(game.originalScene, game.backColor);
+    //await this.modifyScene(this.sceneOriginal.clone(), game.differences);
 
     this.createCamera();
     this.startRenderingLoop();
@@ -80,7 +82,7 @@ export class RenderService {
 
     return renderer.domElement.toDataURL();
     }
-  private modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): THREE.Scene {
+  private async modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): Promise<THREE.Scene> {
       for (const diff of diffObjs) {
         this.addModification(scene, diff);
       }
@@ -91,13 +93,13 @@ export class RenderService {
 
     switch (diffObj.type) {
       case ADD_TYPE:
-        this.addObject(scene, diffObj);
+        //this.addObject(scene, diffObj);
         break;
       case MODIFICATION_TYPE:
-        this.modifyObject(scene, diffObj);
+        //this.modifyObject(scene, diffObj);
         break;
       case DELETE_TYPE:
-        this.deleteObject(scene, diffObj.name);
+        //this.deleteObject(scene, diffObj.name);
         break;
       default: break;
     }
@@ -108,9 +110,13 @@ export class RenderService {
   }
 
   private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
-    const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
-    const newMesh: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
-    originalMesh.material = newMesh.material;
+    if (this.isThematic) {
+        //TODO: modify with texture 
+    } else {
+      const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
+      const newMesh: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
+      originalMesh.material = newMesh.material;
+    }
   }
 
   private deleteObject(scene: THREE.Scene, name: string): void {
@@ -122,18 +128,26 @@ export class RenderService {
     scene.background = new THREE.Color(color);
 
     scene.add( new THREE.HemisphereLight( this.skyLight, this.groundLight ) );
-    this.light = new THREE.DirectionalLight( MAX_COLOR );
-    this.light.position.set( 0, 0, 1 );
-    scene.add(this.light);
+    const light: THREE.DirectionalLight = new THREE.DirectionalLight( MAX_COLOR );
+    light.position.set( 0, 0, 1 );
+    scene.add(light);
     this.shapeService.resetPromises();
-
-    return Promise.all(this.shapeService.generateGeometricScene(objects)).then((objectsRes: THREE.Mesh[]) => {
+    if (this.isThematic) {
+      const objectsRes: THREE.Mesh[] = await this.modelsService.createMedievalScene(objects);
       for (const obj of objectsRes) {
-        scene.add(obj);
-      }
+          scene.add(obj);
+        }
 
       return scene;
-    });
+    } else {
+      return Promise.all(this.shapeService.generateGeometricScene(objects)).then((objectsRes: THREE.Mesh[]) => {
+        for (const obj of objectsRes) {
+          scene.add(obj);
+        }
+
+        return scene;
+      });
+    }
 
   }
   private createCamera(): void {
@@ -179,8 +193,6 @@ export class RenderService {
 
   private initializeRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(container.clientWidth, container.clientHeight);
 
@@ -188,11 +200,11 @@ export class RenderService {
   }
 
   private render(): void {
-    requestAnimationFrame(() => this.render());
-
+    requestAnimationFrame(() => {
+      this.render();
+    });
     this.rendererO.render(this.sceneOriginal, this.camera);
     this.rendererM.render(this.sceneModif, this.camera);
-
   }
   private onKeyDown = (event: KeyboardEvent) => {
     switch (event.keyCode ) {
@@ -226,12 +238,12 @@ export class RenderService {
     this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
   }
   private onMouseUp = (event: MouseEvent) => {
-    if (event.button === CLICK.right) {
+    if (event.button === CLICK.left) { //TODO: switch to righ
       this.press = false;
     }
   }
   private onMouseDown = (event: MouseEvent) => {
-    if (event.button === CLICK.right) {
+    if (event.button === CLICK.left) { //TODO: switch to righ
       this.press = true;
     }
   }
