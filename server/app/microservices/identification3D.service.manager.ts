@@ -10,7 +10,7 @@ interface IDictionary {
 @injectable()
 export class Identification3DServiceManager {
 
-    public static readonly IDENTIFICATION_SERVICE_NOT_FOUND: string = "Le service d'identification pour ce jeu n'est pas instancié";
+    public static readonly IDENTIFICATION_3D_SERVICE_NOT_FOUND: string = "Le service d'identification 3D pour ce jeu n'est pas instancié";
     public static readonly NO_DIFFERENCE_FOUND: string = "Aucune différence trouvée";
     public static readonly GAMEROOMID_ALREADY_EXISTS: string = "Le service pour ce game room existe deja";
 
@@ -24,7 +24,7 @@ export class Identification3DServiceManager {
         if (this.identification3DServices[gameRoomId] === undefined) {
             return {
                 title: ERROR_ID,
-                body: `${Identification3DServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, Game room: ${gameRoomId}`,
+                body: `${Identification3DServiceManager.IDENTIFICATION_3D_SERVICE_NOT_FOUND}, Game room: ${gameRoomId}`,
             };
         }
         const object: {name: string, type: string} = this.identification3DServices[gameRoomId].getDifference(objName);
@@ -61,7 +61,7 @@ export class Identification3DServiceManager {
         if (this.identification3DServices[gameRoomId] === undefined) {
             return {
                 title: ERROR_ID,
-                body: `${Identification3DServiceManager.IDENTIFICATION_SERVICE_NOT_FOUND}, Game room: ${gameRoomId}`,
+                body: `${Identification3DServiceManager.IDENTIFICATION_3D_SERVICE_NOT_FOUND}, Game room: ${gameRoomId}`,
             };
         }
         delete this.identification3DServices[gameRoomId];

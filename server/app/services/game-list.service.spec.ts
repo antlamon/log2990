@@ -35,7 +35,12 @@ const mock3DGameForm: IGame3DForm = {
     objectQty: 11,
     modifications: { add: true, delete: false, color: false },
 };
-
+const mockError3DGameForm: IGame3DForm = {
+    name: "3dgame",
+    objectType: "geometric",
+    objectQty: 5,
+    modifications: { add: true, delete: false, color: false },
+};
 const mockedGame: IGame = {
     id: "mockedID",
     name: "testGame",
@@ -152,13 +157,23 @@ describe("GameList service", () => {
     });
 
     describe("Adding games", () => {
-        it("Adding a free game should return the game", async () => {
-            service.addFreeGame(mock3DGameForm).then(
-                (message: Message) => {
-                    expect(message.title).to.eql(" The 3D form sent was correct. ");
-                },
-                () => fail(),
-            );
+        describe("Adding simple games", () => {
+            it("Adding a free game should return the game", async () => {
+                service.addFreeGame(mock3DGameForm).then(
+                    (message: Message) => {
+                        expect(message.title).to.eql(" The 3D form sent was correct. ");
+                    },
+                    () => fail(),
+                );
+            });
+            it("Falling to add a free game should return an error message", async () => {
+                service.addFreeGame(mockError3DGameForm).then(
+                    (message: Message) => {
+                        expect(message).to.eql(mockedErrorMessage);
+                    },
+                    () => fail(),
+                );
+            });
         });
 
         describe("Adding simple games", () => {
