@@ -19,7 +19,6 @@ import { ObjectGeneratorService } from "./services/objectGenerator.service";
 import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
-import { GameMessageController } from "./controllers/game-message.controller";
 import { GameMessageService } from "./services/game-message.service";
 
 const container: Container = new Container();
@@ -51,7 +50,6 @@ container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManag
 container.bind(TYPES.GameRoomService).to(GameRoomService);
 container.bind(TYPES.FormValidatorService).to(FormValidatorService);
 
-container.bind(TYPES.GameMessageController).to(GameMessageController);
 container.bind(TYPES.GameMessageService).to(GameMessageService);
 
 export { container };

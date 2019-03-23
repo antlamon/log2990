@@ -9,7 +9,6 @@ import { GameListController } from "./controllers/game-list.controller";
 import { IdentificationController } from "./controllers/identification.controller";
 import { ImageController } from "./controllers/image.controller";
 import { TYPES } from "./types";
-import { GameMessageController } from "./controllers/game-message.controller";
 
 @injectable()
 export class Application {
@@ -21,8 +20,7 @@ export class Application {
             @inject(TYPES.ConnexionController) private connexionController: ConnexionController,
             @inject(TYPES.ImageController) private imageController: ImageController,
             @inject(TYPES.GameListController) private gameListController: GameListController,
-            @inject(TYPES.IdentificationController) private identificationController: IdentificationController,
-            @inject(TYPES.GameMessageController) private gameMessageController: GameMessageController) {
+            @inject(TYPES.IdentificationController) private identificationController: IdentificationController) {
         this.app = express();
         this.config();
         this.bindRoutes();
@@ -43,7 +41,6 @@ export class Application {
         this.app.use(ImageController.URL, this.imageController.router);
         this.app.use(this.gameListController.URL, this.gameListController.router);
         this.app.use(IdentificationController.URL, this.identificationController.router);
-        this.app.use(this.gameMessageController.URL, this.gameMessageController.router);
         this.errorHandeling();
     }
 

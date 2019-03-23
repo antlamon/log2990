@@ -20,7 +20,7 @@ const TYPES =  {
         GameRoomService: Symbol("GameRoomService"),
         FormValidatorService: Symbol("FormValidatorService"),
         GameMessageService: Symbol.for("GameMessageService"),
-        GameMessageController: Symbol("GameMessageController"),
+        // GameMessageController: Symbol("GameMessageController"),
 };
 
 export  { TYPES };
