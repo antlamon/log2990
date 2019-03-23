@@ -7,6 +7,7 @@ import { ShapeCreatorService } from "./shape-creator.service";
 import {} from "jasmine";
 import { IScore } from "../../../../../common/models/top3";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
+import { KEYS } from "src/app/global/constants";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
@@ -136,5 +137,62 @@ describe("renderService", () => {
     });
   });
   describe("Tests for keyboard events", () => {
+    it("The key w should call the function this.camera.translateZ with: -this.movementSpeed has parameters", () => {
+      const spy: jasmine.Spy = spyOn(component["camera"], "translateZ").and.callFake(() => {});
+      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
+      Object.defineProperty(keyEvent, "keyCode", {
+        get : (): number => {
+          return KEYS["W"];
+        }
+      });
+      component["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(-component["movementSpeed"]);
+    });
+    it("The key s should call the function this.camera.translateZ with: this.movementSpeed has parameters", () => {
+      const spy: jasmine.Spy = spyOn(component["camera"], "translateZ").and.callFake(() => {});
+      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyS" });
+      Object.defineProperty(keyEvent, "keyCode", {
+        get : (): number => {
+          return KEYS["S"];
+        }
+      });
+      component["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(component["movementSpeed"]);
+    });
+    it("The key a should call the function this.camera.translateX with: -this.movementSpeed has parameters", () => {
+      const spy: jasmine.Spy = spyOn(component["camera"], "translateX").and.callFake(() => {});
+      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
+      Object.defineProperty(keyEvent, "keyCode", {
+        get : (): number => {
+          return KEYS["A"];
+        }
+      });
+      component["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(-component["movementSpeed"]);
+    });
+    it("The key d should call the function this.camera.translateX with: this.movementSpeed has parameters", () => {
+      const spy: jasmine.Spy = spyOn(component["camera"], "translateX").and.callFake(() => {});
+      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
+      Object.defineProperty(keyEvent, "keyCode", {
+        get : (): number => {
+          return KEYS["D"];
+        }
+      });
+      component["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(component["movementSpeed"]);
+    });
+    describe("Test for the cheat functions", () => {
+      it("The key T should call startCheatMode and", async () => {
+        await component.initialize(container1, container2, mockGame);
+        const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyT" });
+        Object.defineProperty(keyEvent, "keyCode", {
+        get : (): number => {
+          return KEYS["T"];
+        }
+      });
+      //  component["onKeyDown"](keyEvent);
+        expect(component["timeOutDiff"]).toBeTruthy();
+      });
+    });
   });
 });

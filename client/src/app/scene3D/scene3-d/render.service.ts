@@ -200,6 +200,7 @@ export class RenderService {
 
   }
   private onKeyDown = (event: KeyboardEvent) => {
+    console.log("keydown");
     switch (event.keyCode ) {
       case KEYS["S"]: // up
         this.camera.translateZ(this.movementSpeed);
