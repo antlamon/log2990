@@ -16,7 +16,7 @@ describe("renderService", () => {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
-    name: "",
+    name: "0",
   };
   const cube: IObjet3D = {
     type: "cube",
@@ -25,7 +25,7 @@ describe("renderService", () => {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
-    name: "",
+    name: "1",
   };
   const cylinder: IObjet3D = {
     type: "cylinder",
@@ -34,7 +34,7 @@ describe("renderService", () => {
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
-    name: "",
+    name: "2",
   };
   const mockObjects: IObjet3D[] = [cone, cube, cylinder];
 
@@ -42,38 +42,13 @@ describe("renderService", () => {
     {
     type: ADD_TYPE,
     object: cone,
-    name: "",
+    name: "3",
    },
     {
     type: ADD_TYPE,
-    object: cone,
-    name: "",
-   },
-    {
-    type: ADD_TYPE,
-    object: cone,
-    name: "",
-   },
-    {
-    type: ADD_TYPE,
-    object: cone,
-    name: "",
-   },
-    {
-    type: ADD_TYPE,
-    object: cone,
-    name: "",
-   },
-    {
-    type: ADD_TYPE,
-    object: cone,
-    name: "",
-   },
-    {
-    type: ADD_TYPE,
-    object: cone,
-    name: "",
-   },
+    object: cube,
+    name: "4",
+   }
   ];
   const mockGame: IGame3D = {
     name: "mock",
@@ -85,10 +60,10 @@ describe("renderService", () => {
     isThematic: false,
     backColor: 0xFFFFFF,
   };
-
+  const mockMesh: THREE.Mesh = new THREE.Mesh();
   const container1: HTMLDivElement = document.createElement("div");
   const container2: HTMLDivElement = document.createElement("div");
-  const component: RenderService = new RenderService(new ShapeCreatorService());
+  const service: RenderService = new RenderService(new ShapeCreatorService());
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -97,101 +72,115 @@ describe("renderService", () => {
     .compileComponents().catch();
   }));
 
-  it("should be created", inject([RenderService], (service: RenderService) => {
-    expect(service).toBeTruthy();
+  it("should be created", inject([RenderService], (serv: RenderService) => {
+    expect(serv).toBeTruthy();
   }));
 
-  describe("Test for calls within the initialize function", () => {
-    it("container property should be properly affected", () => {
-      component.initialize(container1, container2, mockGame);
-      expect(component["containerOriginal"]).toEqual(container1);
+  describe("Test for calls within the initialize function", async () => {
+    it("container property should be properly affected", async () => {
+      spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
+      await service.initialize(container1, container2, mockGame);
+      expect(service["containerOriginal"]).toEqual(container1);
     });
-    it("should give the background color given in parameters at creation", () => {
-      component.initialize(container1, container2, mockGame);
-      expect(component["sceneOriginal"].background).toEqual(new THREE.Color(mockGame.backColor));
+    it("should give the background color given in parameters at creation", async () => {
+      spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
+      await service.initialize(container1, container2, mockGame);
+      expect(service["sceneOriginal"].background).toEqual(new THREE.Color(mockGame.backColor));
     });
-    it("should call createShape the right amount of times", () => {
-      spyOn(component["shapeService"], "createShape");
-      component.initialize(container1, null, mockGame);
-      expect(component["shapeService"].createShape).toHaveBeenCalledTimes(mockGame.originalScene.length);
+    it("should call createShape the right amount of times", async () => {
+      const spyShape: jasmine.Spy = spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
+      let nbAdded: number = 0;
+      mockGame.differences.forEach((diff: IDifference) => {
+        if (diff.type === ADD_TYPE) {
+          nbAdded++;
+        }
+      });
+      await service.initialize(container1, container2, mockGame);
+      expect(spyShape).toHaveBeenCalledTimes(mockGame.originalScene.length + nbAdded);
     });
   });
   describe("Test for the resize function", () => {
     it("should change the camera aspect ratio for the new one", () => {
-      component.onResize();
-      const width: number = component["containerOriginal"].clientWidth;
-      const height: number = component["containerOriginal"].clientHeight;
-      expect(component["camera"].aspect).toEqual(width / height);
+      service.onResize();
+      const width: number = service["containerOriginal"].clientWidth;
+      const height: number = service["containerOriginal"].clientHeight;
+      expect(service["camera"].aspect).toEqual(width / height);
     });
     it("should update the projection matrix", () => {
-      const spyProjectionMatrix: jasmine.Spy = spyOn(component["camera"], "updateProjectionMatrix");
-      component.onResize();
+      const spyProjectionMatrix: jasmine.Spy = spyOn(service["camera"], "updateProjectionMatrix");
+      service.onResize();
       expect(spyProjectionMatrix).toHaveBeenCalled();
     });
-    it("should set the new size when resized", () => {
-      const spyRenderer: jasmine.Spy = spyOn(component["rendererO"], "setSize");
-      component.onResize();
-      const width: number = component["containerOriginal"].clientWidth;
-      const height: number = component["containerOriginal"].clientHeight;
+    it("should set the new size when resized", async () => {
+      spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
+      await service.initialize(container1, container2, mockGame);
+      const spyRenderer: jasmine.Spy = spyOn(service["rendererO"], "setSize");
+      service.onResize();
+      const width: number = service["containerOriginal"].clientWidth;
+      const height: number = service["containerOriginal"].clientHeight;
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
     });
   });
-  describe("Tests for keyboard events", () => {
+  describe("Tests for keyboard events", async () => {
     it("The key w should call the function this.camera.translateZ with: -this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(component["camera"], "translateZ").and.callFake(() => {});
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
       const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
       Object.defineProperty(keyEvent, "keyCode", {
         get : (): number => {
           return KEYS["W"];
         }
       });
-      component["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(-component["movementSpeed"]);
+      service["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(-service["movementSpeed"]);
     });
     it("The key s should call the function this.camera.translateZ with: this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(component["camera"], "translateZ").and.callFake(() => {});
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
       const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyS" });
       Object.defineProperty(keyEvent, "keyCode", {
         get : (): number => {
           return KEYS["S"];
         }
       });
-      component["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(component["movementSpeed"]);
+      service["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(service["movementSpeed"]);
     });
     it("The key a should call the function this.camera.translateX with: -this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(component["camera"], "translateX").and.callFake(() => {});
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
       const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
       Object.defineProperty(keyEvent, "keyCode", {
         get : (): number => {
           return KEYS["A"];
         }
       });
-      component["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(-component["movementSpeed"]);
+      service["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(-service["movementSpeed"]);
     });
     it("The key d should call the function this.camera.translateX with: this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(component["camera"], "translateX").and.callFake(() => {});
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
       const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
       Object.defineProperty(keyEvent, "keyCode", {
         get : (): number => {
           return KEYS["D"];
         }
       });
-      component["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(component["movementSpeed"]);
+      service["onKeyDown"](keyEvent);
+      expect(spy).toHaveBeenCalledWith(service["movementSpeed"]);
     });
     describe("Test for the cheat functions", () => {
-      it("The key T should call startCheatMode and", async () => {
-        await component.initialize(container1, container2, mockGame);
+      it("The key T should call startCheatMode and pressing a second time should stop it", async () => {
+        spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
+        await service.initialize(container1, container2, mockGame);
         const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyT" });
         Object.defineProperty(keyEvent, "keyCode", {
         get : (): number => {
           return KEYS["T"];
         }
       });
-      //  component["onKeyDown"](keyEvent);
-        expect(component["timeOutDiff"]).toBeTruthy();
+        service["differences"] = [];
+        service["onKeyDown"](keyEvent);
+        expect(service["cheatModeActivated"]).toEqual(true);
+        service["onKeyDown"](keyEvent);
+        expect(service["cheatModeActivated"]).toEqual(false);
       });
     });
   });
