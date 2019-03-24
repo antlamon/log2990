@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { SocketService } from "src/app/services/socket.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IGameMessage } from "../../../../../common/models/simpleGameMessage";
@@ -9,7 +9,7 @@ import { GameRoomUpdate } from "../../../../../common/communication/message";
   templateUrl: "./game-messages.component.html",
   styleUrls: ["./game-messages.component.css"]
 })
-export class GameMessagesComponent {
+export class GameMessagesComponent implements OnDestroy{
 
   private readonly PADDED_ZERO: number = -2;
 
@@ -22,7 +22,11 @@ export class GameMessagesComponent {
     this.socket.addEvent(SocketsEvents.NEW_BEST_TIME, this.handleNewBestTime.bind(this));
   }
 
-  private handleNewIdentification(update: GameRoomUpdate): void {
+  public ngOnDestroy(): void {
+    this.gameMessages = [];
+  }
+
+  public handleNewIdentification(update: GameRoomUpdate): void {
     if (update.differencesFound === -1) {
       const msg: IGameMessage = {
         eventType: "identificationError",
@@ -31,7 +35,6 @@ export class GameMessagesComponent {
         data: "Erreur",
       };
       this.gameMessages.push(msg);
-      // console.log("[" + msg.time + "] " + msg.username + " a fait une erreur d'identification");
     } else {
       const msg: IGameMessage = {
         eventType: "differenceFound",
@@ -40,11 +43,10 @@ export class GameMessagesComponent {
         data: "Différence trouvée !",
       };
       this.gameMessages.push(msg);
-      // console.log("[" + msg.time + "] " + msg.username + " a trouvé une erreur !");
     }
   }
 
-  private handleNewConnection(username: string): void {
+  public handleNewConnection(username: string): void {
     const msg: IGameMessage = {
       eventType: "userConnected",
       username: username,
@@ -54,7 +56,7 @@ export class GameMessagesComponent {
     this.gameMessages.push(msg);
   }
 
-  private handleDeconnection(username: string): void {
+  public handleDeconnection(username: string): void {
     const msg: IGameMessage = {
       eventType: "userDisconnected",
       username: username,
@@ -64,7 +66,7 @@ export class GameMessagesComponent {
     this.gameMessages.push(msg);
   }
 
-  private handleNewBestTime(username: string, position: string, bestTime: string) {
+  public handleNewBestTime(username: string, position: string, bestTime: string) {
     const newBestMsg: string = "obtient la" + position + "place dans les meilleurs temps du jeu NOM_JEU en NB_JOUEURS";
 
     const msg: IGameMessage = {
@@ -76,7 +78,7 @@ export class GameMessagesComponent {
     this.gameMessages.push(msg);
   }
 
-  private getTime(): string{
+  private getTime(): string {
     const today: Date = new Date();
 
     return ("0" + today.getHours()).slice(this.PADDED_ZERO) + ":" +

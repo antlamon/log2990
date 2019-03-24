@@ -6,8 +6,6 @@ import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { UsersManager } from "../services/users.service";
 import { TYPES } from "../types";
-// import { IMessageForm } from "../../../common/models/simpleGameMessage";
-// import { GameMessageService } from "../services/game-message.service";
 
 type Socket = SocketIO.Socket;
 
@@ -33,9 +31,7 @@ export class SocketServerManager {
                 this.emitEvent(SocketsEvents.USER_DECONNECTION, this.userManager.getUsername(socket.client.id));
                 this.userManager.removeUser(socket.client.id);
             });
-            // socket.on(SocketsEvents.NEW_GAME_MESSAGE, async (newMessage: IMessageForm) => {
-            //     await this.identificationMessage(socket, newMessage);
-            // });
+
         });
     }
 
@@ -61,7 +57,6 @@ export class SocketServerManager {
 
     private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {
         socket.leave(gameRoomId);
-        this.emitRoomEvent(SocketsEvents.USER_LEAVE_GAME, gameRoomId);
         await this.gameRoomService.deleteGameRoom(gameRoomId);
     }
 
@@ -69,8 +64,4 @@ export class SocketServerManager {
         this.socketServer.in(room).emit(event, data);
     }
 
-    // private async identificationMessage(socket: Socket, newMessage: IMessageForm): Promise<void> {
-    //     await this.gameMessageService.sendMessage(newMessage);
-
-    // }
 }
