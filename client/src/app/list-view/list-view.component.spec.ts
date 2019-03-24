@@ -17,6 +17,7 @@ import { IScore } from "../../../../common/models/top3";
 import { RenderService } from "../scene3D/scene3-d/render.service";
 import { GamecardComponent } from "../gamecard/gamecard.component";
 import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
+import { IndexService } from "../services/index.service";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -58,7 +59,7 @@ describe("ListViewComponent", () => {
         ErrorPopupComponent,
         GamecardComponent
       ],
-      providers: [RenderService],
+      providers: [RenderService, IndexService],
     })
       .compileComponents().then(() => { }, (error: Error) => { });
   }));

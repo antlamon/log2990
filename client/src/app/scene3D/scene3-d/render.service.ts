@@ -16,11 +16,9 @@ export class RenderService {
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
-
   private camera: THREE.PerspectiveCamera;
   private mouse: THREE.Vector2 = new THREE.Vector2();
   private raycaster: THREE.Raycaster;
-
   private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
   //private isThematic: boolean;
@@ -28,24 +26,16 @@ export class RenderService {
   private roomId: string;
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
-
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
-
   private cameraZ: number = 500;
-
   private light: THREE.Light;
-
   private fieldOfView: number = 75;
-
   private nearClippingPane: number = 1;
-
   private movementSpeed: number = 3;
   private farClippingPane: number = 3000;
-
   private skyLight: number = 0x606060;
   private groundLight: number = 0x404040;
-
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
@@ -181,7 +171,6 @@ export class RenderService {
     this.camera.position.z = this.cameraZ;
     this.sceneOriginal.add(this.camera);
     this.sceneModif.add(this.camera);
-
   }
 
   private getAspectRatio(): number {
@@ -189,7 +178,6 @@ export class RenderService {
   }
 
   private startRenderingLoop(): void {
-
     document.addEventListener( "keydown", this.onKeyDown, false );
     this.raycaster = new THREE.Raycaster();
     this.rendererO = this.createRenderer(this.containerOriginal);
@@ -198,7 +186,6 @@ export class RenderService {
   }
 
   private createRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
-
     const renderer: THREE.WebGLRenderer = this.initializeRenderer(container);
     container.appendChild(renderer.domElement);
 
@@ -222,10 +209,8 @@ export class RenderService {
 
   private render(): void {
     requestAnimationFrame(() => this.render());
-
     this.rendererO.render(this.sceneOriginal, this.camera);
     this.rendererM.render(this.sceneModif, this.camera);
-
   }
   private onKeyDown = (event: KeyboardEvent) => {
     switch (event.keyCode ) {

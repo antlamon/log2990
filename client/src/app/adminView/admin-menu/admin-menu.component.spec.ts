@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
+import { IndexService } from "src/app/services/index.service";
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
@@ -39,7 +40,7 @@ describe("AdminMenuComponent", () => {
         HttpClientModule,
         MatProgressSpinnerModule
       ],
-      providers: [ModalService, RenderService]
+      providers: [ModalService, RenderService, IndexService]
     })
     .compileComponents().then(() => { }, (error: Error) => {});
   }));
