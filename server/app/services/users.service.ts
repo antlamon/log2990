@@ -55,6 +55,12 @@ export class UsersManager {
         return this.users[index];
     }
 
+    public getUsername(socketId: string): string {
+        const index: number = this.users.findIndex((x: User) => x.socketId === socketId);
+
+        return this.users[index].username;
+    }
+
     public userExist(username: string): boolean {
         const index: number = this.users.findIndex((x: User) => x.username === username);
 
