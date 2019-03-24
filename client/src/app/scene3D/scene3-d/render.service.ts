@@ -26,7 +26,8 @@ export class RenderService {
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
 
-  private cameraZ: number = 500;
+  private cameraZ: number = 0;
+  private cameraY: number = 5;
 
   private light: THREE.Light;
 
@@ -37,8 +38,8 @@ export class RenderService {
   private movementSpeed: number = 3;
   private farClippingPane: number = 3000;
 
-  private skyLight: number = 0x606060;
-  private groundLight: number = 0x404040;
+  private skyLight: number = WHITE;
+  private groundLight: number = WHITE;
 
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
@@ -160,6 +161,7 @@ export class RenderService {
       this.farClippingPane
       );
     this.camera.position.z = this.cameraZ;
+    this.camera.position.y = this.cameraY;
     this.sceneOriginal.add(this.camera);
     this.sceneModif.add(this.camera);
 

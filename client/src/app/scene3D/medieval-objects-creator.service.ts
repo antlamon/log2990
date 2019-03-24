@@ -12,7 +12,6 @@ export class MedievalObjectsCreatorService {
   private loadedObjects: Map<string, THREE.Object3D> = new Map();
 
   private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
-  private forestSize: number = 60;
   private skyBoxSize: number = 300;
   private skyBoxURLs: string[] = [
     "assets/clouds/right.png",
@@ -22,8 +21,6 @@ export class MedievalObjectsCreatorService {
     "assets/clouds/back.png",
     "assets/clouds/front.png",
   ];
-
-  private textureLoader: THREE.TextureLoader = new THREE.TextureLoader();
 
   public constructor() {
     this.castleWorld = {
@@ -36,65 +33,45 @@ export class MedievalObjectsCreatorService {
   }
 
   public async createMedievalScene(objects: IObjet3D[]): Promise<THREE.Mesh[]> {
-      const objectsTHREE: THREE.Mesh[] = [];
-      //objectsTHREE.push(await this.createSkyBox());
-      objectsTHREE.push(await this.createFloor());
-      //objectsTHREE.push(await this.createObject(this.castleWorld));
-      for (const obj of objects) {
-        objectsTHREE.push( await this.createObject(obj));
-      }
+    const objectsTHREE: THREE.Mesh[] = [];
+    objectsTHREE.push(await this.createSkyBox());
+    objectsTHREE.push(await this.createObject(this.castleWorld));
+    for (const obj of objects) {
+      objectsTHREE.push( await this.createObject(obj));
+    }
 
-      return objectsTHREE;
+    return objectsTHREE;
   }
   private createSkyBox(): Promise<THREE.Mesh> {
     return new Promise<THREE.Mesh>((resolve, reject) => {
-      this.textureLoader = new THREE.TextureLoader();
+      this.skyBoxLoader = new THREE.TextureLoader();
       const faceNb: number = 6;
       const materialArray: THREE.MeshBasicMaterial[] = [];
       for (let i: number = 0; i < faceNb; i++) {
-            materialArray[i] = new THREE.MeshBasicMaterial({
-              map: this.skyBoxLoader.load(this.skyBoxURLs[i], () => {
-                if (i === faceNb - 1) {
-                  const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
-                  const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
-                  resolve(skyBox);
-                }
-              }),
-              side: THREE.BackSide
-            });
+        materialArray[i] = new THREE.MeshBasicMaterial({
+          map: this.skyBoxLoader.load(this.skyBoxURLs[i], () => {
+            if (i === faceNb - 1) {
+              const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
+              const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
+              resolve(skyBox);
+            }
+          }),
+          side: THREE.BackSide
+        });
       }
     });
   }
-
-  private async createFloor(): Promise<THREE.Mesh> {
-    const geometry: THREE.PlaneGeometry = new THREE.PlaneGeometry(this.forestSize, this.forestSize);
-    // tslint:disable-next-line:no-magic-numbers
-    geometry.rotateX(-Math.PI / 2);
-    let material: THREE.MeshPhongMaterial;
-
-    return new Promise((resolve, reject) => {
-        material = new THREE.MeshPhongMaterial({ color: 0xFF00FF
-        //map: this.textureLoader.load(("assets/grass.jpg"), () => resolve(new THREE.Mesh(geometry, material)))
-      });
-        resolve(new THREE.Mesh(geometry, material));
-    });
-  }
-
   private createObject(object: IObjet3D): Promise<THREE.Mesh> {
     return new Promise((resolve, reject) => {
-      if (true/*!this.loadedObjects.get(object.type)*/) {
-        this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
-                               (gltf) => {
-            this.loadedObjects.set(object.type, gltf.scene);
-            resolve(this.setPositionParameters(gltf.scene, object));
-          },
-                               (loading) => {
-            // TODO: send loading message to user
-          }
-        );
-      } else {
-        resolve(this.setPositionParameters(this.loadedObjects.get(object.type).clone(), object));
-      }
+      this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
+                             (gltf) => {
+          this.loadedObjects.set(object.type, gltf.scene);
+          resolve(this.setPositionParameters(gltf.scene, object));
+        },
+                             (loading) => {
+          // TODO: send loading message to user
+        }
+      );
     });
   }
 
@@ -110,7 +87,7 @@ export class MedievalObjectsCreatorService {
     object.rotateY(parameters.rotation.y);
     object.rotateZ(parameters.rotation.z);
 
-    return object as Mesh;
+    return object as THREE.Mesh;
 
   }
 
