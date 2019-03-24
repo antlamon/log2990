@@ -157,7 +157,7 @@ describe("GameList service", () => {
     });
 
     describe("Adding games", () => {
-        describe("Adding simple games", () => {
+        describe("Adding free games", () => {
             it("Adding a free game should return the game", async () => {
                 service.addFreeGame(mock3DGameForm).then(
                     (message: Message) => {
@@ -169,7 +169,7 @@ describe("GameList service", () => {
             it("Falling to add a free game should return an error message", async () => {
                 service.addFreeGame(mockError3DGameForm).then(
                     (message: Message) => {
-                        expect(message).to.eql(mockedErrorMessage);
+                        expect(message.title).to.eql(mockedErrorMessage.title);
                     },
                     () => fail(),
                 );
@@ -204,7 +204,8 @@ describe("GameList service", () => {
                 });
                 service.addSimpleGame(mockedErrorGame, mockedMulterFile, mockedMulterFile).then(
                     (message: Message) => {
-                        expect(message).to.eql(mockedErrorMessage);
+                        expect(message.title).to.eql(mockedErrorMessage.title);
+                        expect(message.body).to.eql(mockedErrorMessage.body);
                     },
                     () => fail(),
                 );
