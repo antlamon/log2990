@@ -9,7 +9,6 @@ export class MedievalObjectsCreatorService {
   private castleWorld: IObjet3D;
 
   private modelsLoader: GLTFLoader = new GLTFLoader();
-  private loadedObjects: Map<string, THREE.Object3D> = new Map();
 
   private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
   private skyBoxSize: number = 300;
@@ -32,12 +31,12 @@ export class MedievalObjectsCreatorService {
     };
   }
 
-  public async createMedievalScene(objects: IObjet3D[]): Promise<THREE.Mesh[]> {
+  public async createMedievalScene(objects: IObjet3D[], isModifiedScene: boolean): Promise<THREE.Mesh[]> {
     const objectsTHREE: THREE.Mesh[] = [];
     objectsTHREE.push(await this.createSkyBox());
-    objectsTHREE.push(await this.createObject(this.castleWorld));
+    objectsTHREE.push(await this.createObject(this.castleWorld, isModifiedScene));
     for (const obj of objects) {
-      objectsTHREE.push( await this.createObject(obj));
+      objectsTHREE.push(await this.createObject(obj, isModifiedScene));
     }
 
     return objectsTHREE;
@@ -50,7 +49,7 @@ export class MedievalObjectsCreatorService {
       for (let i: number = 0; i < faceNb; i++) {
         materialArray[i] = new THREE.MeshBasicMaterial({
           map: this.skyBoxLoader.load(this.skyBoxURLs[i], () => {
-            if (i === faceNb - 1) {
+            if (i === faceNb - 1) { // loading is now done for the whole box
               const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
               const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
               resolve(skyBox);
@@ -61,15 +60,12 @@ export class MedievalObjectsCreatorService {
       }
     });
   }
-  private createObject(object: IObjet3D): Promise<THREE.Mesh> {
+  private createObject(object: IObjet3D, isModifiedScene: boolean): Promise<THREE.Mesh> {
+
     return new Promise((resolve, reject) => {
       this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
                              (gltf) => {
-          this.loadedObjects.set(object.type, gltf.scene);
           resolve(this.setPositionParameters(gltf.scene, object));
-        },
-                             (loading) => {
-          // TODO: send loading message to user
         }
       );
     });
