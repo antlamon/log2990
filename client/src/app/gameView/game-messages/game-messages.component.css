@@ -20,6 +20,14 @@
 .messages-container {
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
-    justify-content: flex-end;
+    overflow-y: auto;
+    /* justify-content: flex-end; */
+    flex-flow: column nowrap;
+    font-size: 20px;
+    height: 170px;
 }
+
+.messages-container > :first-child {
+    margin-top: auto !important;
+}
+
