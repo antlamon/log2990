@@ -19,11 +19,7 @@
 
 .messages-container {
     display: flex;
-    flex-direction: column-reverse;
-    
-}
-
-.mock-message {
-
-
+    flex-direction: column;
+    overflow-y: scroll;
+    justify-content: flex-end;
 }
