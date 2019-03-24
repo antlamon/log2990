@@ -1,8 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { GameMessagesComponent } from './game-messages.component';
+import { GameMessagesComponent } from "./game-messages.component";
+import { GameRoomUpdate } from "../../../../../common/communication/message";
 
-describe('GameMessagesComponent', () => {
+const mockUsername: string = "test";
+
+describe("GameMessagesComponent", () => {
   let component: GameMessagesComponent;
   let fixture: ComponentFixture<GameMessagesComponent>;
 
@@ -10,7 +13,7 @@ describe('GameMessagesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ GameMessagesComponent ]
     })
-    .compileComponents();
+    .compileComponents().then(() => { }, (error: Error) => { });
   }));
 
   beforeEach(() => {
@@ -19,7 +22,39 @@ describe('GameMessagesComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  describe("Pushing game messages", () => {
+    it("handle new identification should push a new message in the array", () => {
+      component.gameMessages = [];
+      const update: GameRoomUpdate = {
+        username: "test",
+        newImage: "testImage",
+        differencesFound: -1,
+      };
+      component.handleNewIdentification(update);
+      expect(component.gameMessages.length).toEqual(1);
+    });
+
+    it("handle new connection should push a new message in the array", () => {
+      component.gameMessages = [];
+      component.handleNewConnection(mockUsername);
+      expect(component.gameMessages.length).toEqual(1);
+    });
+
+    it("handle new deconnection should push a new message in the array", () => {
+      component.gameMessages = [];
+      component.handleNewConnection(mockUsername);
+      expect(component.gameMessages.length).toEqual(1);
+    });
+
+    it("handle new best time should push a new message in the array", () => {
+      component.gameMessages = [];
+      component.handleNewBestTime(mockUsername, "1", "0");
+      expect(component.gameMessages.length).toEqual(1);
+    });
+  });
+
 });
