@@ -14,7 +14,11 @@ export class InitialComponent {
   public readonly MESSAGE_BOX_ID: string = "message_box";
   private errors: string[];
 
-  public constructor(private indexService: IndexService, private router: Router, private fileValidator: FileValidatorService) {
+  public constructor(
+    private indexService: IndexService,
+    private router: Router,
+    private fileValidator: FileValidatorService,
+  ) {
     this.username = "";
     this.errors = [];
   }
@@ -22,6 +26,7 @@ export class InitialComponent {
   public connect(username: string): void {
     this.errors = [];
     if (this.fileValidator.isValidName(username)) {
+      // this.socket.emitEvent(SocketsEvents.USER_CONNECTION, username);
       this.indexService.connect(this.username).subscribe((message: Message) => {
         if (message.title === ERROR_ID ) {
           this.errors.push(message.body);

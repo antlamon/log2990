@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SocketService } from 'src/app/services/socket.service';
 import { SocketsEvents } from '../../../../../common/communication/socketsEvents';
-import { IGameMessage, IMessageForm } from "../../../../../common/models/simpleGameMessage";
+import { IGameMessage } from "../../../../../common/models/simpleGameMessage";
 import { GameRoomUpdate } from '../../../../../common/communication/message';
-import { GameMessageService } from "../../../../../server/app/services/game-message.service"
 
 @Component({
   selector: 'app-game-messages',
@@ -12,41 +11,69 @@ import { GameMessageService } from "../../../../../server/app/services/game-mess
 })
 export class GameMessagesComponent implements OnInit {
 
-  public gameMessages: IGameMessage[];
+  private readonly PADDED_ZERO: number = -2;
 
-  public constructor(private socket: SocketService, private gameMessageService: GameMessageService) {
+  public gameMessages: IGameMessage[] = [];
+
+  public constructor(private socket: SocketService) {
     this.socket.addEvent(SocketsEvents.NEW_GAME_MESSAGE, this.handleNewIdentification.bind(this));
     this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleNewConnection.bind(this));
     this.socket.addEvent(SocketsEvents.USER_DECONNECTION, this.handleDeconnection.bind(this));
+    this.socket.addEvent(SocketsEvents.USER_LEAVE_GAME, this.handleLeaveGame.bind(this));
   }
 
-  public ngOnInit(): void {
-    // this.getMessages();
-  }
-
-  public handleNewIdentification(update: GameRoomUpdate): void {
+  private handleNewIdentification(update: GameRoomUpdate): void {
     if (update.differencesFound === -1) {
-      const msg: IMessageForm = {
-        eventType: "differenceFound",
-        username: update.username,
-      };
-      this.gameMessageService.sendMessage(msg).catch();
-      console.log("Erreur d'identification");
-    } else {
-      const msg: IMessageForm = {
+      const msg: IGameMessage = {
         eventType: "identificationError",
-        username: update.username,
+        username: "",
+        time: this.getTime(),
+        data: "Erreur",
       };
-      this.gameMessageService.sendMessage(msg);
-      console.log("Erreur trouvée !");
+      this.gameMessages.push(msg);
+      // console.log("[" + msg.time + "] " + msg.username + " a fait une erreur d'identification");
+    } else {
+      const msg: IGameMessage = {
+        eventType: "differenceFound",
+        username: "",
+        time: this.getTime(),
+        data: "Différence trouvée !",
+      };
+      this.gameMessages.push(msg);
+      // console.log("[" + msg.time + "] " + msg.username + " a trouvé une erreur !");
     }
   }
 
-  public handleNewConnection(): void {
-    console.log("Un utilisateur s'est connecté");
+  private handleNewConnection(username: string): void {
+    const msg: IGameMessage = {
+      eventType: "userConnected",
+      username: username,
+      time: this.getTime(),
+      data: " s'est connecté(e)",
+    };
+    console.log("[" + msg.time + "] " + msg.username + " s'est connecté(e)");
   }
 
-  public handleDeconnection(): void {
-    console.log("Un utilisateur s'est déconnecté");
+  private handleDeconnection(username: string): void {
+    const msg: IGameMessage = {
+      eventType: "userDisconnected",
+      username: username,
+      time: this.getTime(),
+      data: " s'est déconnecté(e)",
+    };
+    this.gameMessages.push(msg);
+    // console.log("[" + msg.time + "] " + msg.username + " s'est déconnecté(e)");
+  }
+
+  private handleLeaveGame(): void {
+    this.gameMessages = [];
+  }
+
+  private getTime(): string{
+    const today: Date = new Date();
+
+    return ("0" + today.getHours()).slice(this.PADDED_ZERO) + ":" +
+           ("0" + today.getMinutes()).slice(this.PADDED_ZERO) + ":" +
+           ("0" + today.getSeconds()).slice(this.PADDED_ZERO);
   }
 }

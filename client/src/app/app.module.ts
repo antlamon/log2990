@@ -24,6 +24,7 @@ import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { GameMessagesComponent } from './gameView/game-messages/game-messages.component';
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
+import { GameMessageService } from "../../../server/app/services/game-message.service";
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
     Game2DViewComponent,
     Scene3DComponent,
     Game3DViewComponent,
-    GameMessagesComponent
+    GameMessagesComponent,
     Game3DViewComponent,
     ErrorPopupComponent
   ],
@@ -61,7 +62,8 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
     ModalService,
     FileValidatorService,
     RenderService,
-    ShapeCreatorService
+    ShapeCreatorService,
+    GameMessageService
   ],
   bootstrap: [AppComponent]
 })

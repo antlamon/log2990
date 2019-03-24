@@ -31,6 +31,7 @@ export class GameMessageService {
           username: newMsg.username,
           eventType: newMsg.eventType,
           time: msgTime,
+          data: "",
         };
 
         this.gameMessages.push(newMessage);
