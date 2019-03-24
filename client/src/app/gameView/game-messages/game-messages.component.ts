@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { SocketService } from 'src/app/services/socket.service';
-import { SocketsEvents } from '../../../../../common/communication/socketsEvents';
+import { Component } from "@angular/core";
+import { SocketService } from "src/app/services/socket.service";
+import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IGameMessage } from "../../../../../common/models/simpleGameMessage";
-import { GameRoomUpdate } from '../../../../../common/communication/message';
+import { GameRoomUpdate } from "../../../../../common/communication/message";
 
 @Component({
-  selector: 'app-game-messages',
-  templateUrl: './game-messages.component.html',
-  styleUrls: ['./game-messages.component.css']
+  selector: "app-game-messages",
+  templateUrl: "./game-messages.component.html",
+  styleUrls: ["./game-messages.component.css"]
 })
-export class GameMessagesComponent implements OnInit {
+export class GameMessagesComponent {
 
   private readonly PADDED_ZERO: number = -2;
 
@@ -19,7 +19,7 @@ export class GameMessagesComponent implements OnInit {
     this.socket.addEvent(SocketsEvents.NEW_GAME_MESSAGE, this.handleNewIdentification.bind(this));
     this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleNewConnection.bind(this));
     this.socket.addEvent(SocketsEvents.USER_DECONNECTION, this.handleDeconnection.bind(this));
-    this.socket.addEvent(SocketsEvents.USER_LEAVE_GAME, this.handleLeaveGame.bind(this));
+    this.socket.addEvent(SocketsEvents.NEW_BEST_TIME, this.handleNewBestTime.bind(this));
   }
 
   private handleNewIdentification(update: GameRoomUpdate): void {
@@ -51,7 +51,7 @@ export class GameMessagesComponent implements OnInit {
       time: this.getTime(),
       data: " s'est connecté(e)",
     };
-    console.log("[" + msg.time + "] " + msg.username + " s'est connecté(e)");
+    this.gameMessages.push(msg);
   }
 
   private handleDeconnection(username: string): void {
@@ -62,11 +62,18 @@ export class GameMessagesComponent implements OnInit {
       data: " s'est déconnecté(e)",
     };
     this.gameMessages.push(msg);
-    // console.log("[" + msg.time + "] " + msg.username + " s'est déconnecté(e)");
   }
 
-  private handleLeaveGame(): void {
-    this.gameMessages = [];
+  private handleNewBestTime(username: string, position: string, bestTime: string) {
+    const newBestMsg: string = "obtient la" + position + "place dans les meilleurs temps du jeu NOM_JEU en NB_JOUEURS";
+
+    const msg: IGameMessage = {
+      eventType: "newBestTime",
+      username: username,
+      time: this.getTime(),
+      data: newBestMsg,
+    };
+    this.gameMessages.push(msg);
   }
 
   private getTime(): string{
@@ -76,4 +83,5 @@ export class GameMessagesComponent implements OnInit {
            ("0" + today.getMinutes()).slice(this.PADDED_ZERO) + ":" +
            ("0" + today.getSeconds()).slice(this.PADDED_ZERO);
   }
+
 }
