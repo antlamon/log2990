@@ -14,6 +14,7 @@ import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
+import { GameMessagesComponent } from "src/app/gameView/game-messages/game-messages.component";
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
@@ -30,7 +31,8 @@ describe("AdminMenuComponent", () => {
         Game2DViewComponent,
         Game3DViewComponent,
         Scene3DComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        GameMessagesComponent,
       ],
       imports: [
         AppRoutingModule,

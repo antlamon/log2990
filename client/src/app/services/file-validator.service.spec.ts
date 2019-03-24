@@ -15,6 +15,7 @@ import { NO_MIN_OBJECTS, NO_MAX_OBJECTS } from "../../../../common/models/game3D
 import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
+import { GameMessagesComponent } from "../gameView/game-messages/game-messages.component";
 describe("FileValidatorService", () => {
 
   const LARGER_WIDTH: number = 1000;
@@ -38,7 +39,8 @@ describe("FileValidatorService", () => {
         Game2DViewComponent,
         Scene3DComponent,
         Game3DViewComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        GameMessagesComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
       providers: [ModalService, FileValidatorService, Game2DViewComponent]

@@ -9,6 +9,7 @@ import { IFullGame, IGame } from "../../../../../common/models/game";
 import { Game2DViewComponent } from "./game2D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
+import { GameMessagesComponent } from "../game-messages/game-messages.component";
 
 const mockedGame: IGame = {
     id: "mockedID",
@@ -30,7 +31,8 @@ describe("Game2DViewComponent", () => {
         TestBed.configureTestingModule({
             declarations: [
                 Game2DViewComponent,
-                ErrorPopupComponent
+                ErrorPopupComponent,
+                GameMessagesComponent,
             ],
             imports: [RouterTestingModule, HttpClientModule, MatProgressSpinnerModule],
             providers: [IndexService, AppRoutingModule],
