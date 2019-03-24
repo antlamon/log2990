@@ -51,7 +51,7 @@ export class TimeScoreService {
     private async resetSimpleGameScore(id: string): Promise<void> {
         const game: IFullGame | null = await this.getSimpleGame(id);
         if (game) {
-            await this.simpleCollection.update(
+            await this.simpleCollection.updateOne(
                 { card: { id } }, {
                     $set: {
                         ...game, card: {
@@ -68,7 +68,7 @@ export class TimeScoreService {
     private async resetFreeGameScore(id: string): Promise<void> {
         const game: IGame3D | null = await this.getFreeGame(id);
         if (game) {
-            await this.freeCollection.update(
+            await this.freeCollection.updateOne(
                 { id }, {
                     $set: {
                         ...game,
@@ -114,13 +114,13 @@ export class TimeScoreService {
             let game: IFullGame | null = await this.getSimpleGame(id);
             if (game) {
                 game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-                await this.simpleCollection.update({ card: { id } }, { $set: { ...game } });
+                await this.simpleCollection.updateOne({ card: { id } }, { $set: { ...game } });
             }
         } else if (gameType === FREE_GAME_TYPE) {
             let game: IGame3D | null = await this.getFreeGame(id);
             if (game) {
                 game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-                await this.freeCollection.update({ id }, { $set: { ...game } });
+                await this.freeCollection.updateOne({ id }, { $set: { ...game } });
             }
         }
     }

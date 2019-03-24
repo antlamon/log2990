@@ -1,9 +1,9 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import { Collection, Db, WriteOpResult } from "mongodb";
+import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
-import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { TimeScoreService } from "./timescore.service";
