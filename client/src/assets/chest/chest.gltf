@@ -95,50 +95,6 @@
             "uri" : "chest.bin"
         }
     ],
-    "images" : [
-        {
-            "name" : "SundukMat_normal",
-            "uri" : "SundukMat_normal.jpg"
-        },
-        {
-            "name" : "SundukMat_metallic",
-            "uri" : "SundukMat_metallic.jpg"
-        },
-        {
-            "name" : "SundukMat_roughness",
-            "uri" : "SundukMat_roughness.jpg"
-        },
-        {
-            "name" : "SundukMat_AO",
-            "uri" : "SundukMat_AO.jpg"
-        },
-        {
-            "name" : "SundukMat_albedo",
-            "uri" : "SundukMat_albedo.jpg"
-        }
-    ],
-    "materials" : [
-        {
-            "emissiveFactor" : [
-                0.5882353186607361,
-                0.5882353186607361,
-                0.5882353186607361
-            ],
-            "name" : "Chest",
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.5882353186607361,
-                    0.5882353186607361,
-                    0.5882353186607361,
-                    1.0
-                ],
-                "baseColorTexture" : {
-                    "index" : 4
-                },
-                "metallicFactor" : 0.0
-            }
-        }
-    ],
     "meshes" : [
         {
             "name" : "Untitled",
@@ -149,8 +105,7 @@
                         "POSITION" : 1,
                         "TEXCOORD_0" : 3
                     },
-                    "indices" : 0,
-                    "material" : 0
+                    "indices" : 0
                 }
             ]
         }
@@ -185,9 +140,6 @@
             ]
         }
     ],
-    "samplers" : [
-        {}
-    ],
     "scene" : 0,
     "scenes" : [
         {
@@ -196,28 +148,6 @@
                 1,
                 0
             ]
-        }
-    ],
-    "textures" : [
-        {
-            "sampler" : 0,
-            "source" : 0
-        },
-        {
-            "sampler" : 0,
-            "source" : 1
-        },
-        {
-            "sampler" : 0,
-            "source" : 2
-        },
-        {
-            "sampler" : 0,
-            "source" : 3
-        },
-        {
-            "sampler" : 0,
-            "source" : 4
         }
     ]
 }

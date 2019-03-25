@@ -10,7 +10,7 @@ export class ObjectGeneratorService {
     private readonly MAX_SCALE: number = 1.5;
     private readonly WHITE: number = 0x000000;
     private readonly BLACK: number = 0xFFFFFF;
-    private readonly B0X_LENGHT: number = 58;
+    private readonly B0X_LENGHT: number = 55;
     private readonly MAX_ROTATION: number = 360;
 
     private readonly TRAIL_NEG_COORD: number = -15;
@@ -20,16 +20,16 @@ export class ObjectGeneratorService {
     private readonly MAX_DRAGONS: number = 0.1;
     private readonly MAX_ROCKS: number = 0.2;
     private readonly MAX_FOUNTAINS: number = 0.05;
-    private readonly MAX_HORSES: number = 0.1;
+    private readonly MAX_CARTS: number = 0.7;
     private readonly MAX_BARRELS: number = 0.1;
-    private readonly MAX_CHEST: number = 0.05;
-    private readonly MAX_BIRDS: number = 0.1;
+    private readonly MAX_KNIGHTS: number = 0.05;
+    private readonly MAX_CHESTS: number = 0.1;
     private readonly MAX_CANONS: number = 0.08;
     private readonly MAX_BALLISTAS: number = 0.08;
     private SCENE_COMPOSITION: Map<string, number> = new Map([
         ["dragon", this.MAX_DRAGONS], ["rock", this.MAX_ROCKS], ["fountain", this.MAX_FOUNTAINS],
-        ["horse", this.MAX_HORSES], ["barrel", this.MAX_BARRELS], ["chest", this.MAX_CHEST],
-        ["bird", this.MAX_BIRDS], ["canon", this.MAX_CANONS], ["ballista", this.MAX_BALLISTAS],
+        ["cart", this.MAX_CARTS], ["barrel", this.MAX_BARRELS], ["knight", this.MAX_KNIGHTS],
+        ["chest", this.MAX_CHESTS], ["canon", this.MAX_CANONS], ["ballista", this.MAX_BALLISTAS],
     ]);
 
     public generateRandomGeometricObject(objects: IObjet3D[]): IObjet3D {
