@@ -36,6 +36,7 @@ export class Game3DModificatorService {
         for (const diff of differences) {
             if (diff.type === ADD_TYPE) {
                 diff.name = (originalScene.length + nbAdded).toString();
+                (diff.object as IObjet3D).name = diff.name;
                 nbAdded++;
             }
         }
