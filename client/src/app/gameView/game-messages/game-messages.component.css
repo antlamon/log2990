@@ -1,9 +1,9 @@
 .messagesBox{
     display: grid;
     position: absolute;
-    width: 800px;
+    width: 700px;
     top: 770px;
-    right: 560px;
+    right: 610px;
     background-color: white;
     outline: 5px solid black;
 }
