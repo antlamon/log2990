@@ -17,14 +17,14 @@ export class ObjectGeneratorService {
     private readonly TRAIL_POS_COORD: number = 5;
 
     /* the following constants define composition of the medieval forest, expressed in % */
-    private readonly MAX_KNIGHTS: number = 0.1;
-    private readonly MAX_BENCH: number = 0.2;
     private readonly MAX_DRAGONS: number = 0.1;
     private readonly MAX_ROCKS: number = 0.2;
+    private readonly MAX_FOUNTAINS: number = 0.1;
     private readonly MAX_HORSES: number = 0.2;
+    private readonly MAX_BARREL: number = 0.2;
     private SCENE_COMPOSITION: Map<string, number> = new Map([
-        ["knight", this.MAX_KNIGHTS], ["bench", this.MAX_BENCH], ["dragon", this.MAX_DRAGONS],
-        ["rock", this.MAX_ROCKS], ["horse", this.MAX_HORSES],
+        ["dragon", this.MAX_DRAGONS], ["rock", this.MAX_ROCKS], ["fountain", this.MAX_FOUNTAINS],
+        ["horse", this.MAX_HORSES], ["barrel", this.MAX_BARREL],
     ]);
 
     public generateRandomGeometricObject(objects: IObjet3D[]): IObjet3D {

@@ -27,7 +27,7 @@ export class RenderService {
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
 
-  private cameraZ: number = 0;
+  private cameraZ: number = 20;
   private cameraY: number = 5;
 
   private fieldOfView: number = 75;

@@ -8,6 +8,6 @@ export interface IObjet3D {
     name: string;
 }
 
-export const INITIAL_OBJECT_SIZE: number = 10;
+export const INITIAL_OBJECT_SIZE: number = 5;
 export const INITIAL_MODEL_SIZE: number = 5;
 export const MAX_COLOR: number = 0xFFFFFF;
