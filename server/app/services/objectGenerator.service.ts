@@ -19,20 +19,24 @@ export class ObjectGeneratorService {
     /* the following constants define composition of the medieval forest, expressed in % */
     private readonly MAX_DRAGONS: number = 0.1;
     private readonly MAX_ROCKS: number = 0.2;
-    private readonly MAX_FOUNTAINS: number = 0.1;
-    private readonly MAX_HORSES: number = 0.2;
-    private readonly MAX_BARREL: number = 0.1;
-    private readonly MAX_CHEST: number = 0.1;
+    private readonly MAX_FOUNTAINS: number = 0.05;
+    private readonly MAX_HORSES: number = 0.1;
+    private readonly MAX_BARRELS: number = 0.1;
+    private readonly MAX_CHEST: number = 0.05;
+    private readonly MAX_BIRDS: number = 0.1;
+    private readonly MAX_CANONS: number = 0.08;
+    private readonly MAX_BALLISTAS: number = 0.08;
     private SCENE_COMPOSITION: Map<string, number> = new Map([
         ["dragon", this.MAX_DRAGONS], ["rock", this.MAX_ROCKS], ["fountain", this.MAX_FOUNTAINS],
-        ["horse", this.MAX_HORSES], ["barrel", this.MAX_BARREL], ["chest", this.MAX_CHEST],
+        ["horse", this.MAX_HORSES], ["barrel", this.MAX_BARRELS], ["chest", this.MAX_CHEST],
+        ["bird", this.MAX_BIRDS], ["canon", this.MAX_CANONS], ["ballista", this.MAX_BALLISTAS],
     ]);
 
     public generateRandomGeometricObject(objects: IObjet3D[]): IObjet3D {
         return {
             type: this.randomShape(),
             color: this.randomInt(this.WHITE, this.BLACK),
-            name: "", // will be choosen by the game generator
+            name: objects.length.toString(),
             position: this.generatePosition(objects, false),
             size: this.random1Interval(this.MIN_SCALE, this.MAX_SCALE), // scale between 50% and 150% of a reference size
             rotation: {

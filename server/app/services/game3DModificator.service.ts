@@ -50,7 +50,7 @@ export class Game3DModificatorService {
         // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
-                return {name: "", type: ADD_TYPE, object: this.createObject(objects, typeObj)};
+                return {name: objects.length.toString(), type: ADD_TYPE, object: this.createObject(objects, typeObj)};
             }
             case(Game3DModificatorService.DELETE): {
                 return {name: obj.name, type: DELETE_TYPE};

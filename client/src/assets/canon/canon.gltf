@@ -3,9 +3,9 @@
         {
             "bufferView" : 0,
             "componentType" : 5123,
-            "count" : 1824,
+            "count" : 2724,
             "max" : [
-                853
+                949
             ],
             "min" : [
                 0
@@ -15,23 +15,23 @@
         {
             "bufferView" : 1,
             "componentType" : 5126,
-            "count" : 854,
+            "count" : 950,
             "max" : [
-                599.9998779296875,
-                821.7262573242188,
-                317.8048095703125
+                4.258450508117676,
+                3.47663950920105,
+                1.4455842971801758
             ],
             "min" : [
-                -600.0,
-                2.300380583619699e-05,
-                -317.804931640625
+                0.1264514923095703,
+                -2.6127939224243164,
+                -1.6714649200439453
             ],
             "type" : "VEC3"
         },
         {
             "bufferView" : 2,
             "componentType" : 5126,
-            "count" : 854,
+            "count" : 950,
             "max" : [
                 1.0,
                 1.0,
@@ -47,14 +47,32 @@
         {
             "bufferView" : 3,
             "componentType" : 5126,
-            "count" : 854,
+            "count" : 950,
             "max" : [
-                0.9903603792190552,
-                0.9866656810045242
+                0.9955828189849854,
+                1.0,
+                1.0,
+                1.0
             ],
             "min" : [
-                0.009276957251131535,
-                0.07552313804626465
+                -0.9954254031181335,
+                -0.9308936595916748,
+                -1.0,
+                -1.0
+            ],
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 950,
+            "max" : [
+                0.9898293018341064,
+                0.9749362394213676
+            ],
+            "min" : [
+                0.015569668263196945,
+                0.01723843812942505
             ],
             "type" : "VEC2"
         }
@@ -66,74 +84,59 @@
     "bufferViews" : [
         {
             "buffer" : 0,
-            "byteLength" : 3648,
+            "byteLength" : 5448,
             "byteOffset" : 0,
             "target" : 34963
         },
         {
             "buffer" : 0,
-            "byteLength" : 10248,
-            "byteOffset" : 3648,
+            "byteLength" : 11400,
+            "byteOffset" : 5448,
             "target" : 34962
         },
         {
             "buffer" : 0,
-            "byteLength" : 10248,
-            "byteOffset" : 13896,
+            "byteLength" : 11400,
+            "byteOffset" : 16848,
             "target" : 34962
         },
         {
             "buffer" : 0,
-            "byteLength" : 6832,
-            "byteOffset" : 24144,
+            "byteLength" : 15200,
+            "byteOffset" : 28248,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 7600,
+            "byteOffset" : 43448,
             "target" : 34962
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 30976,
-            "uri" : "chest.bin"
+            "byteLength" : 51048,
+            "uri" : "canon.bin"
         }
     ],
     "images" : [
         {
-            "name" : "SundukMat_normal",
-            "uri" : "SundukMat_normal.jpg"
-        },
-        {
-            "name" : "SundukMat_metallic",
-            "uri" : "SundukMat_metallic.jpg"
-        },
-        {
-            "name" : "SundukMat_roughness",
-            "uri" : "SundukMat_roughness.jpg"
-        },
-        {
-            "name" : "SundukMat_AO",
-            "uri" : "SundukMat_AO.jpg"
-        },
-        {
-            "name" : "SundukMat_albedo",
-            "uri" : "SundukMat_albedo.jpg"
+            "name" : "Map14",
+            "uri" : "Map14.png"
         }
     ],
     "materials" : [
         {
-            "emissiveFactor" : [
-                0.5882353186607361,
-                0.5882353186607361,
-                0.5882353186607361
-            ],
-            "name" : "Chest",
+            "name" : "Material39",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    0.5882353186607361,
-                    0.5882353186607361,
-                    0.5882353186607361,
+                    0.5879999995231628,
+                    0.5879999995231628,
+                    0.5879999995231628,
                     1.0
                 ],
                 "baseColorTexture" : {
-                    "index" : 4
+                    "index" : 0
                 },
                 "metallicFactor" : 0.0
             }
@@ -147,7 +150,8 @@
                     "attributes" : {
                         "NORMAL" : 2,
                         "POSITION" : 1,
-                        "TEXCOORD_0" : 3
+                        "TANGENT" : 3,
+                        "TEXCOORD_0" : 4
                     },
                     "indices" : 0,
                     "material" : 0
@@ -158,30 +162,22 @@
     "nodes" : [
         {
             "mesh" : 0,
-            "name" : "Chest",
+            "name" : "Cylinder048",
             "rotation" : [
-                -6.556707887739321e-08,
-                1.1920928955078125e-07,
-                -2.857997584253258e-15,
-                1.0
+                0.5004565715789795,
+                0.5004565715789795,
+                0.49954307079315186,
+                0.49954313039779663
             ],
             "scale" : [
-                0.0011518235551193357,
-                0.0011518235551193357,
-                0.0011518235551193357
+                0.3376144766807556,
+                0.3376144766807556,
+                0.3376144766807556
             ],
             "translation" : [
-                6.1035152043587e-08,
-                -3.051758312722086e-08,
-                6.1035152043587e-08
-            ]
-        },
-        {
-            "name" : "Hemi",
-            "translation" : [
-                0.5785207748413086,
-                3.321237087249756,
-                -5.4034743309021
+                0.005257606506347656,
+                -0.07884550094604492,
+                0.12461292743682861
             ]
         }
     ],
@@ -193,7 +189,6 @@
         {
             "name" : "Scene",
             "nodes" : [
-                1,
                 0
             ]
         }
@@ -202,22 +197,6 @@
         {
             "sampler" : 0,
             "source" : 0
-        },
-        {
-            "sampler" : 0,
-            "source" : 1
-        },
-        {
-            "sampler" : 0,
-            "source" : 2
-        },
-        {
-            "sampler" : 0,
-            "source" : 3
-        },
-        {
-            "sampler" : 0,
-            "source" : 4
         }
     ]
 }
