@@ -121,6 +121,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.victorySound.play().catch((error: Error) => console.error(error.message));
         this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.timer.setToZero();
     }
 
     public sendClick(event: MouseEvent): void {

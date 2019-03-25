@@ -27,5 +27,13 @@ describe("TimerService", () => {
       service["_nbSeconds"] = service.FORMAT_ZERO_MAX - 1;
       expect(service.getTimeAsString()).toEqual("10:08");
     });
+    it("Set to zero should set the nbSecond and nb minutes to 0", () => {
+      const service: TimerService = TestBed.get(TimerService);
+      service["_nbMinutes"] = 1;
+      service["_nbSeconds"] = 1;
+      service.setToZero();
+      expect(service.nbMinutes).toEqual(0);
+      expect(service.nbSeconds).toEqual(0);
+    });
   });
 });

@@ -159,7 +159,6 @@ export class RenderService {
 
   }
   private createCamera(): void {
-    /* Camera */
     const aspectRatio: number = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
       this.fieldOfView,
