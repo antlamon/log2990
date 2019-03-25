@@ -51,12 +51,14 @@ export class RenderService {
     this.isThematic = game.isThematic;
     this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor, false);
+    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
     this.cheatModeActivated = false;
     this.containerModif = containerM;
-    this.sceneModif = await this.createScene(game.originalScene, game.backColor, true);
-    //await this.modifyScene(this.sceneOriginal.clone(), game.differences);
-
+    this.sceneModif = this.isThematic ? await this.createScene(game.originalScene, game.backColor) : // reloading models.
+     await this.modifyScene(this.sceneOriginal.clone(true), game.differences);
+    if (this.isThematic ) {
+      this.sceneModif = await this.modifyScene(this.sceneModif, game.differences);
+    }
     this.createCamera();
     this.startRenderingLoop();
   }
@@ -78,7 +80,7 @@ export class RenderService {
     document.body.appendChild(renderer.domElement);
     this.isThematic = game.isThematic;
     renderer.domElement.hidden = true;
-    const scene: THREE.Scene = await this.createScene(game.originalScene, game.backColor, false);
+    const scene: THREE.Scene = await this.createScene(game.originalScene, game.backColor);
     renderer.render(scene, camera);
 
     return renderer.domElement.toDataURL();
@@ -94,37 +96,38 @@ export class RenderService {
 
     switch (diffObj.type) {
       case ADD_TYPE:
-        //this.addObject(scene, diffObj);
+        this.addObject(scene, diffObj);
         break;
       case MODIFICATION_TYPE:
-        //this.modifyObject(scene, diffObj);
+        this.modifyObject(scene, diffObj);
         break;
       case DELETE_TYPE:
-        //this.deleteObject(scene, diffObj.name);
+        this.deleteObject(scene, diffObj.name);
         break;
       default: break;
     }
   }
   private async addObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
-    const object: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
+    const object: THREE.Mesh = this.isThematic ?
+      await this.modelsService.createObject(diffObj.object) :
+      await this.shapeService.createShape(diffObj.object);
     scene.add(object);
   }
 
   private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
-    if (this.isThematic) {
-        //TODO: modify with texture 
-    } else {
-      const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
-      const newMesh: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
-      originalMesh.material = newMesh.material;
-    }
+    const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
+    const newMesh: THREE.Mesh = this.isThematic ?
+      await this.modelsService.createObject(diffObj.object) :
+      await this.shapeService.createShape(diffObj.object);
+
+    originalMesh.material = newMesh.material;
   }
 
   private deleteObject(scene: THREE.Scene, name: string): void {
     scene.getObjectByName(name).visible = false;
   }
 
-  private async createScene(objects: IObjet3D[], color: number, isModified: boolean): Promise<THREE.Scene> {
+  private async createScene(objects: IObjet3D[], color: number): Promise<THREE.Scene> {
     const scene: THREE.Scene = new THREE.Scene();
     scene.background = new THREE.Color(color);
 
@@ -134,7 +137,7 @@ export class RenderService {
     scene.add(light);
     this.shapeService.resetPromises();
     if (this.isThematic) {
-      const objectsRes: THREE.Mesh[] = await this.modelsService.createMedievalScene(objects, isModified);
+      const objectsRes: THREE.Mesh[] = await this.modelsService.createMedievalScene(objects);
       for (const obj of objectsRes) {
           scene.add(obj);
         }
@@ -240,12 +243,12 @@ export class RenderService {
     this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
   }
   private onMouseUp = (event: MouseEvent) => {
-    if (event.button === CLICK.left) { //TODO: switch to righ
+    if (event.button === CLICK.right) {
       this.press = false;
     }
   }
   private onMouseDown = (event: MouseEvent) => {
-    if (event.button === CLICK.left) { //TODO: switch to righ
+    if (event.button === CLICK.right) {
       this.press = true;
     }
   }

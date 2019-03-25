@@ -31,15 +31,26 @@ export class MedievalObjectsCreatorService {
     };
   }
 
-  public async createMedievalScene(objects: IObjet3D[], isModifiedScene: boolean): Promise<THREE.Mesh[]> {
+  public async createMedievalScene(objects: IObjet3D[]): Promise<THREE.Mesh[]> {
     const objectsTHREE: THREE.Mesh[] = [];
     objectsTHREE.push(await this.createSkyBox());
-    objectsTHREE.push(await this.createObject(this.castleWorld, isModifiedScene));
+    objectsTHREE.push(await this.createObject(this.castleWorld));
     for (const obj of objects) {
-      objectsTHREE.push(await this.createObject(obj, isModifiedScene));
+      objectsTHREE.push(await this.createObject(obj));
     }
 
     return objectsTHREE;
+  }
+
+  public createObject(object: IObjet3D): Promise<THREE.Mesh> {
+
+    return new Promise((resolve, reject) => {
+      this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
+                             (gltf) => {
+          resolve(this.setPositionParameters(gltf.scene, object));
+        }
+      );
+    });
   }
   private createSkyBox(): Promise<THREE.Mesh> {
     return new Promise<THREE.Mesh>((resolve, reject) => {
@@ -60,16 +71,6 @@ export class MedievalObjectsCreatorService {
       }
     });
   }
-  private createObject(object: IObjet3D, isModifiedScene: boolean): Promise<THREE.Mesh> {
-
-    return new Promise((resolve, reject) => {
-      this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
-                             (gltf) => {
-          resolve(this.setPositionParameters(gltf.scene, object));
-        }
-      );
-    });
-  }
 
   private setPositionParameters(object: THREE.Object3D, parameters: IObjet3D): THREE.Mesh {
 
@@ -82,6 +83,8 @@ export class MedievalObjectsCreatorService {
     object.rotateX(parameters.rotation.x);
     object.rotateY(parameters.rotation.y);
     object.rotateZ(parameters.rotation.z);
+
+    object.name = parameters.name;
 
     return object as THREE.Mesh;
 

@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
+import { TYPE_ERROR } from "../../../common/models/errors";
 import { ADD_TYPE, DELETE_TYPE, GEOMETRIC_TYPE_NAME, IDifference, MODIFICATION_TYPE } from "../../../common/models/game3D";
 import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
-import { TYPE_ERROR } from "../../../common/models/errors";
 
 @injectable()
 export class Game3DModificatorService {
@@ -99,7 +99,6 @@ export class Game3DModificatorService {
     }
 
     private changeTexture(obj: IObjet3D): IObjet3D {
-        console.log("tryying to change text")
         return {
             type: obj.type,
             name: obj.name,
