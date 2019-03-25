@@ -4,6 +4,7 @@ import { GameMessagesComponent } from "./game-messages.component";
 import { GameRoomUpdate } from "../../../../../common/communication/message";
 
 const mockUsername: string = "test";
+const mockEventType: string = "userConnected";
 
 describe("GameMessagesComponent", () => {
   let component: GameMessagesComponent;
@@ -38,15 +39,9 @@ describe("GameMessagesComponent", () => {
       expect(component.gameMessages.length).toEqual(1);
     });
 
-    it("handle new connection should push a new message in the array", () => {
+    it("handle connection should push a new message in the array", () => {
       component.gameMessages = [];
-      component.handleNewConnection(mockUsername);
-      expect(component.gameMessages.length).toEqual(1);
-    });
-
-    it("handle new deconnection should push a new message in the array", () => {
-      component.gameMessages = [];
-      component.handleNewConnection(mockUsername);
+      component.handleConnection(mockUsername, mockEventType);
       expect(component.gameMessages.length).toEqual(1);
     });
 

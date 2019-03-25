@@ -9,7 +9,7 @@ import { GameRoomUpdate } from "../../../../../common/communication/message";
   templateUrl: "./game-messages.component.html",
   styleUrls: ["./game-messages.component.css"]
 })
-export class GameMessagesComponent implements OnDestroy{
+export class GameMessagesComponent implements OnDestroy {
 
   private readonly PADDED_ZERO: number = -2;
 
@@ -17,8 +17,7 @@ export class GameMessagesComponent implements OnDestroy{
 
   public constructor(private socket: SocketService) {
     this.socket.addEvent(SocketsEvents.NEW_GAME_MESSAGE, this.handleNewIdentification.bind(this));
-    this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleNewConnection.bind(this));
-    this.socket.addEvent(SocketsEvents.USER_DECONNECTION, this.handleDeconnection.bind(this));
+    this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleConnection.bind(this));
     this.socket.addEvent(SocketsEvents.NEW_BEST_TIME, this.handleNewBestTime.bind(this));
   }
 
@@ -46,27 +45,28 @@ export class GameMessagesComponent implements OnDestroy{
     }
   }
 
-  public handleNewConnection(username: string): void {
-    const msg: IGameMessage = {
-      eventType: "userConnected",
-      username: username,
-      time: this.getTime(),
-      data: " s'est connecté(e)",
-    };
-    this.gameMessages.push(msg);
-  }
+  public handleConnection(username: string, eventType: string): void {
+    if (eventType === "userConnected") {
+      const msg: IGameMessage = {
+        eventType: eventType,
+        username: username,
+        time: this.getTime(),
+        data: " s'est connecté(e)",
+      };
+      this.gameMessages.push(msg);
 
-  public handleDeconnection(username: string): void {
+    } else {
     const msg: IGameMessage = {
-      eventType: "userDisconnected",
+      eventType: eventType,
       username: username,
       time: this.getTime(),
       data: " s'est déconnecté(e)",
     };
     this.gameMessages.push(msg);
+    }
   }
 
-  public handleNewBestTime(username: string, position: string, bestTime: string) {
+  public handleNewBestTime(username: string, position: string, bestTime: string): void {
     const newBestMsg: string = "obtient la" + position + "place dans les meilleurs temps du jeu NOM_JEU en NB_JOUEURS";
 
     const msg: IGameMessage = {
