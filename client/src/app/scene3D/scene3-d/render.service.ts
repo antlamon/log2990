@@ -149,7 +149,7 @@ export class RenderService {
       default: break;
     }
   }
-  public identifyDiff(event: MouseEvent): THREE.Intersection[] {
+  public identifyDiff(event: MouseEvent): THREE.Object3D {
     if ( event.clientX < this.containerModif.offsetLeft) {
       this.calculateMouse(event, this.containerOriginal);
     } else {
@@ -157,7 +157,9 @@ export class RenderService {
     }
     this.raycaster.setFromCamera( this.mouse, this.camera );
 
-    return this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
+
+    return intersects.length > 0 ? intersects[0].object : null;
   }
 
   public removeDiff(objName: string, type: string): void {
