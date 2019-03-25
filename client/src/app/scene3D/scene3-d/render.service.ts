@@ -10,7 +10,7 @@ import { SceneGeneratorService } from "../scene-generator.service";
 
 @Injectable()
 export class RenderService {
-  private readonly FLASH_TIME: number = 200;
+  private readonly FLASH_TIME: number = 50;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -211,15 +211,24 @@ export class RenderService {
       this.calculateMouse(event, this.containerModif);
     }
     this.raycaster.setFromCamera( this.mouse, this.camera );
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children),
+                                                                              true);
     if (intersects.length > 0) {
+      let objet: THREE.Object3D = intersects[0].object;
+      while (!this.isObjet(objet.name)) {
+        objet = objet.parent;
+      }
+
       const objMessage: Obj3DClickMessage = {
         gameRoomId: this.roomId,
         username: this.index.username,
-        name: intersects[0].object.name,
+        name: objet.name,
       };
       this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
     }
+  }
+  private isObjet(name: string): boolean {
+    return +name >= 0;
   }
 
   private removeDiff(objName: string, type: string): void {

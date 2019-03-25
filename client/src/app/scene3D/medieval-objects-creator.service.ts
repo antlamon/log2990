@@ -33,11 +33,11 @@ export class MedievalObjectsCreatorService {
 
   public async createMedievalScene(objects: IObjet3D[]): Promise<THREE.Mesh[]> {
     const objectsTHREE: THREE.Mesh[] = [];
-    objectsTHREE.push(await this.createSkyBox());
-    objectsTHREE.push(await this.createObject(this.castleWorld));
     for (const obj of objects) {
       objectsTHREE.push(await this.createObject(obj));
     }
+    objectsTHREE.push(await this.createSkyBox());
+    objectsTHREE.push(await this.createObject(this.castleWorld));
 
     return objectsTHREE;
   }
