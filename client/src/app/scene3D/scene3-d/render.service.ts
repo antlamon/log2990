@@ -1,11 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../../common/models/game3D";
-import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { CLICK, KEYS, WHITE } from "src/app/global/constants";
-import { SocketService } from "src/app/services/socket.service";
-import { Obj3DClickMessage, Game3DRoomUpdate, NewGame3DMessage } from "../../../../../common/communication/message";
-import { IndexService } from "src/app/services/index.service";
+import { WHITE } from "src/app/global/constants";
 import { SceneGeneratorService } from "../scene-generator.service";
 
 @Injectable()
@@ -18,10 +14,7 @@ export class RenderService {
   private mouse: THREE.Vector2 = new THREE.Vector2();
   private raycaster: THREE.Raycaster;
   private readonly SENSITIVITY: number = 0.002;
-  private press: boolean;
   private isThematic: boolean;
-  private cheatModeActivated: boolean;
-  private roomId: string;
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
   private sceneOriginal: THREE.Scene;
@@ -32,58 +25,36 @@ export class RenderService {
 
   private fieldOfView: number = 75;
   private nearClippingPane: number = 1;
-  private movementSpeed: number = 3;
   private farClippingPane: number = 3000;
 
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
-  public constructor(private sceneGenerator: SceneGeneratorService, private socket: SocketService, private index: IndexService) {
-    this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
-    this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
+  public constructor(private sceneGenerator: SceneGeneratorService) {
     }
 
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
 
     clearInterval(this.timeOutDiff);
-    this.roomId = game.id;
+
     this.containerOriginal = containerO;
     this.isThematic = game.isThematic;
     this.differences = game.differences;
     this.diffAreVisible = true;
     this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic);
-    this.cheatModeActivated = false;
     this.containerModif = containerM;
     this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic) :
      await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
       this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
-    const newGameMessage: NewGame3DMessage = {
-      username: this.index.username,
-      gameRoomId: this.roomId,
-      is3D: true,
-      differences: this.differences
-    };
-    this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
 
     this.createCamera();
-    this.startRenderingLoop();
+    this.rendererO = this.createRenderer(this.containerOriginal);
+    this.rendererM = this.createRenderer(this.containerModif);
   }
-  private handleCreateGameRoom(rejection?: string): void {
-    if (rejection !== null) {
-        alert(rejection);
-    }
-  }
-  private handleCheckDifference(update: Game3DRoomUpdate): void {
-    if (update.differencesFound !== -1) {
-      this.removeDiff(update.objName, update.diffType);
-    }
-  }
-  public onDestroy(): void {
-    this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomId);
-  }
+
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();
     this.camera.updateProjectionMatrix();
@@ -124,11 +95,9 @@ export class RenderService {
     return this.containerOriginal.clientWidth / this.containerOriginal.clientHeight;
   }
 
-  private startRenderingLoop(): void {
-    document.addEventListener( "keydown", this.onKeyDown, false );
+  public startRenderingLoop(): void {
     this.raycaster = new THREE.Raycaster();
-    this.rendererO = this.createRenderer(this.containerOriginal);
-    this.rendererM = this.createRenderer(this.containerModif);
+
     this.render();
   }
 
@@ -136,10 +105,15 @@ export class RenderService {
     const renderer: THREE.WebGLRenderer = this.initializeRenderer(container);
     container.appendChild(renderer.domElement);
 
-    renderer.domElement.addEventListener( "mousemove", this.onMouseMove, false );
-    renderer.domElement.addEventListener( "contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false );
-    renderer.domElement.addEventListener("mousedown", this.onMouseDown, false);
-    renderer.domElement.addEventListener("mouseup", this.onMouseUp, false);
+    return renderer;
+  }
+  public addListener(command: string, func: EventListenerOrEventListenerObject): void {
+    this.rendererO = this.addListenToRender(this.rendererO, command, func);
+    this.rendererM = this.addListenToRender(this.rendererM, command, func);
+  }
+
+  private addListenToRender(renderer: THREE.WebGLRenderer, command: string, func: EventListenerOrEventListenerObject): THREE.WebGLRenderer {
+    renderer.domElement.addEventListener(command, func, false);
 
     return renderer;
   }
@@ -157,72 +131,36 @@ export class RenderService {
     this.rendererO.render(this.sceneOriginal, this.camera);
     this.rendererM.render(this.sceneModif, this.camera);
   }
-  private onKeyDown = (event: KeyboardEvent) => {
-    switch (event.keyCode ) {
-      case KEYS["S"]: // up
-        this.camera.translateZ(this.movementSpeed);
-        break;
-      case KEYS["W"]: // down
-        this.camera.translateZ(-this.movementSpeed);
-        break;
-      case KEYS["D"]: // up
-        this.camera.translateX(this.movementSpeed);
-        break;
-      case KEYS["A"]: // down
-        this.camera.translateX(-this.movementSpeed);
-        break;
-      case KEYS["T"]:
-        this.cheatModeActivated = !this.cheatModeActivated;
-        if (this.cheatModeActivated) {
-          this.startCheatMode();
-        } else {
-          this.stopCheatMode();
-        }
-        break;
+  public rotateCam(angle: string, mouvement: number): void {
+    switch (angle) {
+      case "X": this.camera.rotation.x -= mouvement * this.SENSITIVITY;
+                break;
+      case "Y": this.camera.rotation.y -= mouvement * this.SENSITIVITY;
+                break;
       default: break;
     }
   }
-  private onMouseMove = (event: MouseEvent) => {
-    if (!this.press) { return; }
-    this.camera.rotation.y -= event.movementX * this.SENSITIVITY;
-    this.camera.rotation.x -= event.movementY * this.SENSITIVITY;
-  }
-  private onMouseUp = (event: MouseEvent) => {
-
-    switch (event.button) {
-      case (CLICK.right):
-        this.press = false;
-        break;
-      case (CLICK.left):
-        this.identifyDiff(event);
-        break;
-      default:
+  public moveCam(axis: string, mouvement: number): void {
+    switch (axis) {
+      case "X": this.camera.translateX(mouvement);
+                break;
+      case "Z": this.camera.translateZ(mouvement);
+                break;
+      default: break;
     }
   }
-  private onMouseDown = (event: MouseEvent) => {
-    if (event.button === CLICK.right) {
-      this.press = true;
-    }
-  }
-  private identifyDiff(event: MouseEvent): void {
+  public identifyDiff(event: MouseEvent): THREE.Intersection[] {
     if ( event.clientX < this.containerModif.offsetLeft) {
       this.calculateMouse(event, this.containerOriginal);
     } else {
       this.calculateMouse(event, this.containerModif);
     }
     this.raycaster.setFromCamera( this.mouse, this.camera );
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
-    if (intersects.length > 0) {
-      const objMessage: Obj3DClickMessage = {
-        gameRoomId: this.roomId,
-        username: this.index.username,
-        name: intersects[0].object.name,
-      };
-      this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
-    }
+
+    return this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
   }
 
-  private removeDiff(objName: string, type: string): void {
+  public removeDiff(objName: string, type: string): void {
 
     switch (type) {
       case ADD_TYPE: this.sceneModif.remove(this.sceneModif.getObjectByName(objName));
@@ -252,10 +190,10 @@ export class RenderService {
     this.mouse.x = (event.offsetX  / container.offsetWidth) * MULTI - 1;
     this.mouse.y = -(event.offsetY / container.offsetHeight) * MULTI + 1;
   }
-  private startCheatMode(): void {
+  public startCheatMode(): void {
     this.timeOutDiff = setInterval(this.flashObjects.bind(this), this.FLASH_TIME);
   }
-  private stopCheatMode(): void {
+  public stopCheatMode(): void {
     clearInterval(this.timeOutDiff);
     this.changeVisibilityOfDifferencesObjects(true);
   }
