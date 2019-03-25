@@ -70,7 +70,7 @@ describe("renderService", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [ RenderService, ShapeCreatorService, GamecardComponent, IndexService ],
+      providers: [ RenderService, ShapeCreatorService, GamecardComponent, IndexService, MedievalObjectsCreatorService ],
       imports: [HttpClientModule]
     })
     .compileComponents().catch();

@@ -13,6 +13,9 @@ import { IndexService } from "src/app/services/index.service";
 //import { KEYS } from "src/app/global/constants";
 import { SocketService } from "src/app/services/socket.service";
 import { KEYS } from "src/app/global/constants";
+import { ErrorPopupComponent } from "../error-popup/error-popup.component";
+import { MedievalObjectsCreatorService } from "src/app/scene3D/medieval-objects-creator.service";
+import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 const mockObjects: IObjet3D[] = [];
 
 const mockGame3D: IGame3D = {
@@ -37,9 +40,10 @@ describe("Game3DViewComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [Game3DViewComponent],
+            declarations: [Game3DViewComponent, ErrorPopupComponent],
             imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
-            providers: [RenderService, ShapeCreatorService, AppRoutingModule, IndexService]
+            providers: [RenderService, ShapeCreatorService, AppRoutingModule,
+                        IndexService, MedievalObjectsCreatorService, SceneGeneratorService]
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);
@@ -65,13 +69,13 @@ describe("Game3DViewComponent", () => {
     });
     describe("Tests for keyboard events", async () => {
         it("The key w should call the function this.render.moveCam with the parameters z and -this.movementSpeed", () => {
-            spyOn(component["render"], "moveCam").and.callFake(() => {});
+            const spy: jasmine.Spy = spyOn(component["render"], "moveCam").and.callFake(() => {});
             const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
             Object.defineProperty(keyEvent, "keyCode", {
             get : (): number =>  KEYS["W"]
             });
             component["onKeyDown"](keyEvent);
-            expect(spyOn).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalled();
         });
     });
     // describe("Tests for keyboard events", async () => {

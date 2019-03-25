@@ -37,7 +37,6 @@ export class RenderService {
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
 
     clearInterval(this.timeOutDiff);
-    console.log(game);
     this.containerOriginal = containerO;
     this.isThematic = game.isThematic;
     this.differences = game.differences;
@@ -49,14 +48,9 @@ export class RenderService {
     if (this.isThematic ) {
       this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
-    console.log(this.sceneOriginal.children);
-    console.log(this.sceneModif.children);
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
     this.rendererM = this.createRenderer(this.containerModif);
-    for (const diff of this.differences) {
-        console.log(((this.sceneOriginal.getObjectByName(diff.name) as THREE.Mesh).children[0] as THREE.Mesh).material);
-    }
   }
 
   public onResize(): void {
