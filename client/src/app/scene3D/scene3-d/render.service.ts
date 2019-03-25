@@ -37,7 +37,6 @@ export class RenderService {
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
 
     clearInterval(this.timeOutDiff);
-
     this.containerOriginal = containerO;
     this.isThematic = game.isThematic;
     this.differences = game.differences;
@@ -49,7 +48,6 @@ export class RenderService {
     if (this.isThematic ) {
       this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
-
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
     this.rendererM = this.createRenderer(this.containerModif);
