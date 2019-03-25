@@ -13,6 +13,7 @@ import { KEYS } from "src/app/global/constants";
 import { IndexService } from "src/app/services/index.service";
 import { HttpClientModule } from "@angular/common/http";
 import { SceneGeneratorService } from "../scene-generator.service";
+import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
@@ -70,8 +71,7 @@ describe("renderService", () => {
   const mockSocketService: SocketService = new SocketService();
   mockSocketService["socket"] = jasmine.createSpyObj("socket", ["on", "emit"]);
   const service: RenderService = new RenderService(
-    new SceneGeneratorService(new ShapeCreatorService()),
-    mockSocketService, jasmine.createSpyObj({username: ""}));
+    new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService()));
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -116,68 +116,6 @@ describe("renderService", () => {
       const width: number = service["containerOriginal"].clientWidth;
       const height: number = service["containerOriginal"].clientHeight;
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
-    });
-  });
-  describe("Tests for keyboard events", async () => {
-    it("The key w should call the function this.camera.translateZ with: -this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["W"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(-service["movementSpeed"]);
-    });
-    it("The key s should call the function this.camera.translateZ with: this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyS" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["S"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(service["movementSpeed"]);
-    });
-    it("The key a should call the function this.camera.translateX with: -this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["A"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(-service["movementSpeed"]);
-    });
-    it("The key d should call the function this.camera.translateX with: this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["D"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(service["movementSpeed"]);
-    });
-    describe("Test for the cheat functions", () => {
-      it("The key T should call startCheatMode and pressing a second time should stop it", async () => {
-        await service.initialize(container1, container2, mockGame);
-        const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyT" });
-        Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["T"];
-        }
-      });
-        service["differences"] = [];
-        service["onKeyDown"](keyEvent);
-        expect(service["cheatModeActivated"]).toEqual(true);
-        service["onKeyDown"](keyEvent);
-        expect(service["cheatModeActivated"]).toEqual(false);
-      });
     });
   });
 });
