@@ -51,6 +51,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.timer.setToZero();
         this.getSimpleGame();
     }
 
@@ -120,8 +121,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
         this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
         this.timer.setToZero();
+        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 
     public sendClick(event: MouseEvent): void {
