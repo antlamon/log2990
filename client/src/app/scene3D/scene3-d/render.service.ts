@@ -10,7 +10,7 @@ import { SceneGeneratorService } from "../scene-generator.service";
 
 @Injectable()
 export class RenderService {
-  private readonly FLASH_TIME: number = 50;
+  private readonly FLASH_TIME: number = 150;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -275,10 +275,20 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        this.sceneOriginal.getObjectByName(diff.name).visible = visible;
+        this.sceneOriginal.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
+          if ((obj as THREE.Mesh).material) {
+            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+            new THREE.Color(visible ? 0 : 0xFFFFFF);
+          }
+        });
       }
       if (diff.type !== DELETE_TYPE) {
-        this.sceneModif.getObjectByName(diff.name).visible = visible;
+        this.sceneModif.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
+          if ((obj as THREE.Mesh).material) {
+            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+            new THREE.Color(visible ? 0 : 0xFFFFFF);
+          }
+        });
       }
     }
   }
