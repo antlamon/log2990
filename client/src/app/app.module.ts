@@ -23,7 +23,6 @@ import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
 import { GameMessagesComponent } from "./gameView/game-messages/game-messages.component";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
-import { GameMessageService } from "../../../server/app/services/game-message.service";
 import { GamecardComponent } from "./gamecard/gamecard.component";
 import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
 
@@ -64,7 +63,6 @@ import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creato
     FileValidatorService,
     RenderService,
     ShapeCreatorService,
-    GameMessageService,
     MedievalObjectsCreatorService,
   ],
   bootstrap: [AppComponent]
