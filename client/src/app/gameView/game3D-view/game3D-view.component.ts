@@ -24,11 +24,10 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private gameService: GameService,
         private route: ActivatedRoute,
         private render: RenderService,
-    ) {
-        this.gameIsReady = false;
-     }
+    ) {}
 
     public ngOnInit(): void {
+        this.gameIsReady = false;
         this.get3DGame();
     }
 
