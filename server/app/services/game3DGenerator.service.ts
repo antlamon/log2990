@@ -17,6 +17,9 @@ export class Game3DGeneratorService {
     public static readonly NB_SECONDS_IN_MIN: number = 60;
     public static readonly FORMAT_DOUBLE_DIGIT_MAX: number = 10;
     private readonly PALE_COLOR: number = 0x0F0F0F;
+    private readonly VARIABLE_MODELS: string[] = [ // models except for trees, that are in all scenes
+        "knight", "bench", "dragon", "rock", "horse",
+    ];
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService,
                        @inject(TYPES.FormValidatorService) private formValidator: FormValidatorService) {}
@@ -25,11 +28,22 @@ export class Game3DGeneratorService {
 
         this.formValidator.validate3DForm(form);
 
-        return this.generateGame(form);
+        let game: IGame3D;
+        if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
+            game = this.generateObjGeometricScene(form.objectQty, form.name, form.modifications);
+        } else if ( form.objectType === THEMATIC_TYPE_NAME) {
+            game = this.generateObjThematicScene(form.objectQty, form.name, form.modifications);
+        } else {
+            throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
+        }
 
+        return game;
     }
-    private generateObjGeometricBackground(objects: IObjet3D[], quantity: number): number {
+    private generateObjGeometricScene(quantity: number, name: string,
+                                      modifType: {add: boolean, delete: boolean, color: boolean} ): IGame3D {
+        const objects: IObjet3D[] = [];
         let backGroundColor: number = 0;
+
         for (let i: number = 0; i < quantity; i++) {
             const obj: IObjet3D = this.objectGenerator.generateRandomGeometricObject(objects);
             obj.name = i.toString();
@@ -39,41 +53,38 @@ export class Game3DGeneratorService {
             } while (!this.game3DModificator.isEnoughContrast(backGroundColor, objects[i].color as number));
         }
 
-        return backGroundColor;
-    }
-    private generateObjThematicBackground(objects: IObjet3D[], quantity: number): number {
-
-        for (let i: number = 0; i < quantity; i++) {
-            const obj: IObjet3D = this.objectGenerator.generateRandomThematicObject(objects);
-            obj.name = i.toString();
-            objects.push(obj);
-        }
-
-        return this.objectGenerator.randomInt(this.PALE_COLOR, MAX_COLOR);
-    }
-
-    private generateGame(form: IGame3DForm): IGame3D {
-
-        const randomObjects: IObjet3D[] = [];
-        let backGroundColor: number = 0;
-        if ( form.objectType === GEOMETRIC_TYPE_NAME ) {
-            backGroundColor = this.generateObjGeometricBackground(randomObjects, form.objectQty);
-        } else if ( form.objectType === THEMATIC_TYPE_NAME) {
-            backGroundColor = this.generateObjThematicBackground(randomObjects, form.objectQty);
-        } else {
-            throw new TYPE_ERROR("The type chosen for the new 3D game is not valid.");
-        }
-
         return {
-            name: form.name,
+            name: name,
             id: (new ObjectID()).toHexString(),
-            originalScene: randomObjects,
+            originalScene: objects,
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
-            differences: this.game3DModificator.createModifScene(randomObjects, form.objectType, form.modifications),
-            isThematic: form.objectType === THEMATIC_TYPE_NAME,
+            isThematic: false,
+            differences: this.game3DModificator.createModifScene(objects, GEOMETRIC_TYPE_NAME, modifType),
             backColor: backGroundColor,
         };
+    }
+
+    private generateObjThematicScene(quantity: number, name: string,
+                                     modifType: {add: boolean, delete: boolean, color: boolean} ): IGame3D {
+        const backGroundColor: number = 0xFFFFFF; // no specific background color needed, using a skybox
+        const objects: IObjet3D[] = [];
+        for (const models of this.VARIABLE_MODELS) {
+            this.objectGenerator.addThematicObjects(models, quantity, objects);
+        }
+        this.objectGenerator.addThematicObjects("tree1", quantity, objects); // remaining objects are trees.
+
+        return {
+            name: name,
+            id: (new ObjectID()).toHexString(),
+            originalScene: objects,
+            solo: this.top3RandomOrder(),
+            multi: this.top3RandomOrder(),
+            isThematic: true,
+            differences: this.game3DModificator.createModifScene(objects, GEOMETRIC_TYPE_NAME, modifType),
+            backColor: backGroundColor,
+        };
+
     }
 
     public top3RandomOrder(): IScore[] {

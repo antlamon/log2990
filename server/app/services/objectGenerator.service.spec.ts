@@ -50,16 +50,5 @@ describe("object generator service", () => {
             }
             expect(goodtype).to.eql(true);
         });
-        it("Should return a valid thematic object", async () => {
-            let goodtype: boolean = true;
-            mockObjects.splice(0, mockObjects.length);
-            for (let i: number = 0; i < NO_MAX_OBJECTS; i++) {
-                mockObjects.push(service.generateRandomThematicObject(mockObjects));
-                if (mockObjects[i].texture === "") {
-                    goodtype = false;
-                }
-            }
-            expect(goodtype).to.eql(true);
-        });
     });
 });
