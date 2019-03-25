@@ -211,12 +211,12 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         }
     }
     private identifyDiff(event: MouseEvent): void {
-        const intersects: THREE.Intersection[] = this.render.identifyDiff(event);
+        const object: THREE.Object3D | null = this.render.identifyDiff(event);
         this.lastClick = event;
         const objMessage: Obj3DClickMessage = {
             gameRoomId: this.roomID,
             username: this.index.username,
-            name: intersects[0] ? intersects[0].object.name : null,
+            name: object ? object.name : null,
         };
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
 

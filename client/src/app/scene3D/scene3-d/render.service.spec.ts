@@ -7,9 +7,6 @@ import { ShapeCreatorService } from "./shape-creator.service";
 import {} from "jasmine";
 import { IScore } from "../../../../../common/models/top3";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
-import { SocketService } from "src/app/services/socket.service";
-
-import { KEYS } from "src/app/global/constants";
 import { IndexService } from "src/app/services/index.service";
 import { HttpClientModule } from "@angular/common/http";
 import { SceneGeneratorService } from "../scene-generator.service";
@@ -68,8 +65,6 @@ describe("renderService", () => {
   };
   const container1: HTMLDivElement = document.createElement("div");
   const container2: HTMLDivElement = document.createElement("div");
-  const mockSocketService: SocketService = new SocketService();
-  mockSocketService["socket"] = jasmine.createSpyObj("socket", ["on", "emit"]);
   const service: RenderService = new RenderService(
     new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService()));
 
@@ -116,6 +111,32 @@ describe("renderService", () => {
       const width: number = service["containerOriginal"].clientWidth;
       const height: number = service["containerOriginal"].clientHeight;
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
+    });
+  });
+  describe("Test the camera movement", () => {
+    it("Should translate on x axis", () => {
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
+      const move: number = 5;
+      service.moveCam("X", move);
+      expect(spy).toHaveBeenCalledWith(move);
+    });
+    it("Should translate on z axis", () => {
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
+      const move: number = 5;
+      service.moveCam("Z", move);
+      expect(spy).toHaveBeenCalledWith(move);
+    });
+    it("Should rotate on x axis", () => {
+      const spy: jasmine.Spy = spyOn(service["camera"], "rotation").and.callFake(() => {});
+      const move: number = 5;
+      service.rotateCam("X", move);
+      expect(spy).toHaveBeenCalledWith();
+    });
+    it("Should rotate on y axis", () => {
+      const spy: jasmine.Spy = spyOn(service["camera"], "rotation").and.callFake(() => {});
+      const move: number = 5;
+      service.rotateCam("Y", move);
+      expect(spy).toHaveBeenCalledWith();
     });
   });
 });
