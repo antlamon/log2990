@@ -1,14 +1,12 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../../common/models/game3D";
-import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
-import { ShapeCreatorService } from "./shape-creator.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { CLICK, KEYS, WHITE } from "src/app/global/constants";
 import { SocketService } from "src/app/services/socket.service";
 import { Obj3DClickMessage, Game3DRoomUpdate, NewGame3DMessage } from "../../../../../common/communication/message";
 import { IndexService } from "src/app/services/index.service";
-//import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
+import { SceneGeneratorService } from "../scene-generator.service";
 
 @Injectable()
 export class RenderService {
@@ -29,19 +27,15 @@ export class RenderService {
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
   private cameraZ: number = 500;
-  private light: THREE.Light;
   private fieldOfView: number = 75;
   private nearClippingPane: number = 1;
   private movementSpeed: number = 3;
   private farClippingPane: number = 3000;
-  private skyLight: number = 0x606060;
-  private groundLight: number = 0x404040;
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
-  public constructor(private shapeService: ShapeCreatorService, private socket: SocketService, private index: IndexService,
-    /*, private modelsService: MedievalObjectsCreatorService*/) {
+  public constructor(private sceneGenerator: SceneGeneratorService, private socket: SocketService, private index: IndexService) {
     this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
     }
@@ -54,8 +48,8 @@ export class RenderService {
     this.containerModif = containerM;
     this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
-    this.sceneModif = this.modifyScene(this.sceneOriginal.clone(), game.differences);
+    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor);
+    this.sceneModif = this.sceneGenerator.modifyScene(this.sceneOriginal.clone(), game.differences);
     this.cheatModeActivated = false;
     const newGameMessage: NewGame3DMessage = {
       username: this.index.username,
@@ -95,68 +89,11 @@ export class RenderService {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
-    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
+    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor);
     renderer.render(this.sceneOriginal, camera);
     renderer.domElement.hidden = true;
 
     return renderer.domElement.toDataURL();
-    }
-  private modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): THREE.Scene {
-      for (const diff of diffObjs) {
-        this.addModification(scene, diff);
-      }
-
-      return scene;
-  }
-  private addModification(scene: THREE.Scene, diffObj: IDifference): void {
-
-    switch (diffObj.type) {
-      case ADD_TYPE:
-        this.addObject(scene, diffObj);
-        break;
-      case MODIFICATION_TYPE:
-        this.modifyObject(scene, diffObj);
-        break;
-      case DELETE_TYPE:
-        this.deleteObject(scene, diffObj.name);
-        break;
-      default: break;
-    }
-  }
-  private async addObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
-    const object: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
-    object.name = diffObj.name;
-    scene.add(object);
-  }
-
-  private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
-    const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
-    const newMesh: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
-    originalMesh.material = newMesh.material;
-  }
-
-  private deleteObject(scene: THREE.Scene, name: string): void {
-    scene.getObjectByName(name).visible = false;
-  }
-
-  private async createScene(objects: IObjet3D[], color: number): Promise<THREE.Scene> {
-    const scene: THREE.Scene = new THREE.Scene();
-    scene.background = new THREE.Color(color);
-
-    scene.add( new THREE.HemisphereLight( this.skyLight, this.groundLight ) );
-    this.light = new THREE.DirectionalLight( MAX_COLOR );
-    this.light.position.set( 0, 0, 1 );
-    scene.add(this.light);
-    this.shapeService.resetPromises();
-
-    return Promise.all(this.shapeService.generateGeometricScene(objects)).then((objectsRes: THREE.Mesh[]) => {
-      for (const obj of objectsRes) {
-        scene.add(obj);
-      }
-
-      return scene;
-    });
-
   }
   private createCamera(): void {
     const aspectRatio: number = this.getAspectRatio();
