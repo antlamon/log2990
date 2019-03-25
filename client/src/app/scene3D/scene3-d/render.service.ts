@@ -71,6 +71,7 @@ export class RenderService {
     const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
       this.fieldOfView, window.innerWidth / window.innerHeight, this.nearClippingPane, this.farClippingPane);
     camera.position.z = this.cameraZ;
+    camera.position.y = this.cameraY;
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
