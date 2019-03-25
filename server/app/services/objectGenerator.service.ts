@@ -71,9 +71,6 @@ export class ObjectGeneratorService {
         return objects;
     }
 
-    public randomTexture(): string {
-        return TEXTURES[this.randomInt(0, TEXTURES.length - 1)];
-    }
     public randomModels(): string {
         return MODELS[this.randomInt(0, MODELS.length - 1)];
     }

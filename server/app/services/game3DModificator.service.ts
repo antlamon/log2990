@@ -104,7 +104,7 @@ export class Game3DModificatorService {
             type: obj.type,
             name: obj.name,
             color: 0,
-            texture: this.objectGenerator.randomTexture(),
+            texture: obj.type + "Modif.png",
             position: obj.position,
             size: obj.size,
             rotation: obj.rotation,
