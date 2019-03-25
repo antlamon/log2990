@@ -29,8 +29,6 @@ export class RenderService {
   private cameraZ: number = 0;
   private cameraY: number = 5;
 
-  private light: THREE.Light;
-
   private fieldOfView: number = 75;
 
   private nearClippingPane: number = 1;
@@ -53,10 +51,10 @@ export class RenderService {
     this.isThematic = game.isThematic;
     this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
+    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor, false);
     this.cheatModeActivated = false;
     this.containerModif = containerM;
-    this.sceneModif = await this.createScene(game.originalScene, game.backColor);
+    this.sceneModif = await this.createScene(game.originalScene, game.backColor, true);
     //await this.modifyScene(this.sceneOriginal.clone(), game.differences);
 
     this.createCamera();
@@ -77,9 +75,10 @@ export class RenderService {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
-    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
-    renderer.render(this.sceneOriginal, camera);
+    this.isThematic = game.isThematic;
     renderer.domElement.hidden = true;
+    const scene: THREE.Scene = await this.createScene(game.originalScene, game.backColor, false);
+    renderer.render(scene, camera);
 
     return renderer.domElement.toDataURL();
     }
@@ -124,7 +123,7 @@ export class RenderService {
     scene.getObjectByName(name).visible = false;
   }
 
-  private async createScene(objects: IObjet3D[], color: number): Promise<THREE.Scene> {
+  private async createScene(objects: IObjet3D[], color: number, isModified: boolean): Promise<THREE.Scene> {
     const scene: THREE.Scene = new THREE.Scene();
     scene.background = new THREE.Color(color);
 
@@ -134,7 +133,7 @@ export class RenderService {
     scene.add(light);
     this.shapeService.resetPromises();
     if (this.isThematic) {
-      const objectsRes: THREE.Mesh[] = await this.modelsService.createMedievalScene(objects);
+      const objectsRes: THREE.Mesh[] = await this.modelsService.createMedievalScene(objects, isModified);
       for (const obj of objectsRes) {
           scene.add(obj);
         }

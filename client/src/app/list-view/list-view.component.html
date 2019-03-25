@@ -82,7 +82,7 @@
             <div class="bottom-card">
               <div class="game-card-left-content">
                 <div class="game-card-img-container">
-                  <img class="game-card-img" [src]="imageURLs.get(game)">
+                  <img *ngIf="imageURLs.get(game); else spinnyImage" class="game-card-img" [src]="imageURLs.get(game)">
                 </div>
                 <div class="game-card-buttons" *ngIf="!isAdminMode">
                   <div class="game-card-button-container"><button (click)="playSelectedFreeGame(game)">JOUER</button>
@@ -146,6 +146,11 @@
 </div>
 <ng-template #spinny>
   <div class="game-card">
+    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+  </div>
+</ng-template>
+<ng-template #spinnyImage>
+  <div class="game-card-img">
     <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
   </div>
 </ng-template>

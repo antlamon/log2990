@@ -54,6 +54,7 @@ export class ListViewComponent implements OnInit {
   }
   public addFreeGame(game: IGame3D): void {
     this.freeGames.push(game);
+    this.getFreeGames();
   }
   public removeSimpleGame(id: string): void {
     const index: number = this.simpleGames.findIndex((x: IGame) => x.id === id);
