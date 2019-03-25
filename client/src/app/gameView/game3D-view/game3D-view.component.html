@@ -4,7 +4,7 @@
 <div class="divGames">
   <div class="gameImage">
     <p>Image originale:</p>
-    <div #originalContainer class="game-card-img"></div>
+    <div  #originalContainer class="game-card-img"></div>
   </div>
   <div class="gameImage">
     <p>Image avec les différences:</p>
@@ -14,3 +14,8 @@
 <div class="messagesBox">
   <div class="messagesBoxTitle"> Messages </div>
 </div>
+<ng-template #spinny>
+  <div class="gameImage">
+    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+  </div>
+</ng-template>

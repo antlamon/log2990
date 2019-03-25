@@ -7,6 +7,9 @@
     font-size: 25px;
     font-weight: bold;
 }
+.spinny {
+    align-self: center;
+}
 
 .compteur {
     position: absolute;
