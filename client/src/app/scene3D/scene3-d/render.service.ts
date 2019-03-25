@@ -279,7 +279,7 @@ export class RenderService {
   private removeDiff(objName: string, type: string): void {
 
     switch (type) {
-      case ADD_TYPE: this.sceneModif.getObjectByName(objName).visible = false;
+      case ADD_TYPE: this.sceneModif.remove(this.sceneModif.getObjectByName(objName));
                      break;
       case MODIFICATION_TYPE: this.stopFlashObject(objName);
                               (this.sceneModif.getObjectByName(objName) as THREE.Mesh).material
