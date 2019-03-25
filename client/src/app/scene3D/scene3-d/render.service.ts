@@ -82,7 +82,7 @@ export class RenderService {
     }
   }
   public onDestroy(): void {
-    this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.roomId);
+    this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomId);
   }
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();

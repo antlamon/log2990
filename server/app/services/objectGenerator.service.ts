@@ -11,6 +11,7 @@ export class ObjectGeneratorService {
     private readonly WHITE: number = 0x000000;
     private readonly BLACK: number = 0xFFFFFF;
     private readonly B0X_LENGHT: number = 58;
+    private readonly GEOMETRIC_GAME_SIZE: number = 300;
     private readonly MAX_ROTATION: number = 360;
 
     private readonly TRAIL_NEG_COORD: number = -15;
@@ -74,12 +75,13 @@ export class ObjectGeneratorService {
     }
     public generatePosition(objects: IObjet3D[], isThematic: boolean): {x: number, y: number, z: number} {
         let position: {x: number, y: number, z: number};
+        const length: number = isThematic ? this.B0X_LENGHT : this.GEOMETRIC_GAME_SIZE;
         let valid: boolean;
         do {
             position = {
-                x: this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
-                y: isThematic ? 0 : this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
-                z: this.randomInt(-this.B0X_LENGHT, this.B0X_LENGHT),
+                x: this.randomInt(-length, length),
+                y: isThematic ? 0 : this.randomInt(-length, length),
+                z: this.randomInt(-length, length),
             };
             valid = true;
             if (isThematic) {
