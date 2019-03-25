@@ -266,16 +266,14 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        ((this.sceneOriginal.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
-           = new THREE.Color(visible ? 0 : WHITE);
+        this.sceneOriginal.getObjectByName(diff.name).visible = visible;
       }
       if (diff.type !== DELETE_TYPE) {
-        ((this.sceneModif.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
-           = new THREE.Color(visible ? 0 : WHITE);
+        this.sceneModif.getObjectByName(diff.name).visible = visible;
       }
     }
   }
   private stopFlashObject(name: string): void {
-    ((this.sceneOriginal.getObjectByName(name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive = new THREE.Color(0);
+    this.sceneOriginal.getObjectByName(name).visible = true;
   }
 }
