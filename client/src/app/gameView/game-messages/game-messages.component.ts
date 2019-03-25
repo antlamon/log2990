@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from "@angular/core";
 import { SocketService } from "src/app/services/socket.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { IGameMessage } from "../../../../../common/models/simpleGameMessage";
+import { IGameMessage } from "../../../../../common/models/gameMessages";
 import { GameRoomUpdate } from "../../../../../common/communication/message";
 
 @Component({
@@ -29,17 +29,17 @@ export class GameMessagesComponent implements OnDestroy {
     if (update.differencesFound === -1) {
       const msg: IGameMessage = {
         eventType: "identificationError",
-        username: update.username,
+        username: "",
         time: this.getTime(),
-        data: " a fait une Erreur",
+        data: "Erreur",
       };
       this.gameMessages.push(msg);
     } else {
       const msg: IGameMessage = {
         eventType: "differenceFound",
-        username: update.username,
+        username: "",
         time: this.getTime(),
-        data: " a trouvé une différence!",
+        data: "Différence trouvée",
       };
       this.gameMessages.push(msg);
     }
