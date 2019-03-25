@@ -1,5 +1,6 @@
 import { inject, injectable } from "inversify";
 import { Collection } from "mongodb";
+import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../common/communication/message";
 import { IFullGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { IScore } from "../../../common/models/top3";
@@ -23,9 +24,9 @@ export class TimeScoreService {
     public constructor(@inject(TYPES.DatabaseClient) private databaseClient: DatabaseClient) { }
 
     public async resetBestScore(gameType: string, id: string): Promise<void> {
-        if (gameType === this.SIMPLE_COLLECTION) {
+        if (gameType === SIMPLE_GAME_TYPE) {
             return this.resetSimpleGameScore(id);
-        } else if (gameType === this.FREE_COLLECTION) {
+        } else if (gameType === FREE_GAME_TYPE) {
             return this.resetFreeGameScore(id);
         } else {
             throw new Error(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
@@ -40,6 +41,7 @@ export class TimeScoreService {
             if (this.compareScores(nbMinutes, nbSeconds, score[i].score)) {
                 await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, i);
                 highScoreChanged = true;
+                break;
             }
         }
 
@@ -49,7 +51,7 @@ export class TimeScoreService {
     private async resetSimpleGameScore(id: string): Promise<void> {
         const game: IFullGame | null = await this.getSimpleGame(id);
         if (game) {
-            await this.simpleCollection.update(
+            await this.simpleCollection.updateOne(
                 { card: { id } }, {
                     $set: {
                         ...game, card: {
@@ -66,7 +68,7 @@ export class TimeScoreService {
     private async resetFreeGameScore(id: string): Promise<void> {
         const game: IGame3D | null = await this.getFreeGame(id);
         if (game) {
-            await this.freeCollection.update(
+            await this.freeCollection.updateOne(
                 { id }, {
                     $set: {
                         ...game,
@@ -108,18 +110,18 @@ export class TimeScoreService {
 
     private async setHighScore(gameType: string, gameMode: string,
                                id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: number): Promise<void> {
-        if (gameType === this.SIMPLE_COLLECTION) {
+        if (gameType === SIMPLE_GAME_TYPE) {
             let game: IFullGame | null = await this.getSimpleGame(id);
-            if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
-            game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-            await this.simpleCollection.update({ card: { id } }, { $set: { ...game } });
-        } else if (gameType === this.FREE_COLLECTION) {
+            if (game) {
+                game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
+                await this.simpleCollection.updateOne({ card: { id } }, { $set: { ...game } });
+            }
+        } else if (gameType === FREE_GAME_TYPE) {
             let game: IGame3D | null = await this.getFreeGame(id);
-            if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
-            game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-            await this.freeCollection.update({ id }, { $set: { ...game } });
-        } else {
-            throw new Error(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
+            if (game) {
+                game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
+                await this.freeCollection.updateOne({ id }, { $set: { ...game } });
+            }
         }
     }
 
@@ -128,8 +130,7 @@ export class TimeScoreService {
         const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
         if (gameMode === "solo") {
             game.card.solo[pos] = newScore;
-        }
-        if (gameMode === "multi") {
+        } else if (gameMode === "multi") {
             game.card.multi[pos] = newScore;
         }
 
@@ -141,8 +142,7 @@ export class TimeScoreService {
         const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
         if (gameMode === "solo") {
             game.solo[pos] = newScore;
-        }
-        if (gameMode === "multi") {
+        } else if (gameMode === "multi") {
             game.multi[pos] = newScore;
         }
 
@@ -152,7 +152,7 @@ export class TimeScoreService {
     private async getHighScore(gameType: string, gameMode: string, id: string): Promise<IScore[]> {
         let game: IFullGame | IGame3D | null;
         switch (gameType) {
-            case this.SIMPLE_COLLECTION:
+            case SIMPLE_GAME_TYPE:
                 game = await this.getSimpleGame(id);
                 if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
                 switch (gameMode) {
@@ -163,7 +163,7 @@ export class TimeScoreService {
                     default:
                         throw new Error(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
                 }
-            case this.FREE_COLLECTION:
+            case FREE_GAME_TYPE:
                 game = await this.getFreeGame(id);
                 if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
                 switch (gameMode) {
@@ -186,7 +186,7 @@ export class TimeScoreService {
     }
 
     private get simpleCollection(): Collection {
-        if (this._simpleCollection === null) {
+        if (!this._simpleCollection) {
             this._simpleCollection = this.databaseClient.db.collection(this.SIMPLE_COLLECTION);
         }
 
@@ -194,7 +194,7 @@ export class TimeScoreService {
     }
 
     private get freeCollection(): Collection {
-        if (this._freeCollection === null) {
+        if (!this._freeCollection) {
             this._freeCollection = this.databaseClient.db.collection(this.FREE_COLLECTION);
         }
 

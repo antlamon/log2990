@@ -12,11 +12,12 @@ import { FileValidatorService } from "src/app/services/file-validator.service";
 import { GameService } from "src/app/services/game.service";
 import { By } from "@angular/platform-browser";
 import { Game2DViewComponent } from "src/app/gameView/game2D-view/game2D-view.component";
-import { Scene3DComponent } from "src/app/scene3D/scene3-d/scene3-d.component";
 import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
 import { GameMessagesComponent } from "src/app/gameView/game-messages/game-messages.component";
+import { RenderService } from "src/app/scene3D/scene3-d/render.service";
+import { GamecardComponent } from "../../gamecard/gamecard.component";
 
 describe("SimpleGeneratorComponent", () => {
   const LOADING_FILE_DELAY: number = 50;
@@ -34,11 +35,11 @@ describe("SimpleGeneratorComponent", () => {
         Game2DViewComponent,
         Game3DViewComponent,
         Scene3DComponent,
-        ErrorPopupComponent,
+        ErrorPopupComponent
         GameMessagesComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
-      providers: [ModalService, FileValidatorService, GameService]
+      providers: [ModalService, FileValidatorService, GameService, RenderService]
     })
       .compileComponents().then(() => { }, (error: Error) => {
         console.error(error);

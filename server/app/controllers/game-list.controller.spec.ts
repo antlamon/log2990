@@ -13,6 +13,7 @@ import { TYPES } from "../types";
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 const HTTP_OK: number = 200;
+const HTTP_INVALID_PARAM: number = 422;
 const TEST_IMAGES_PATH: string = "./app/documents/test-images/";
 const mockedMessage: Message = {
     title: BASE_ID,
@@ -238,6 +239,27 @@ describe("Game list controller", () => {
         .expect(HTTP_OK)
         .end((error: Error, response: supertest.Response) => {
             expect(response.body).to.eql("error");
+            done(error);
+        });
+    });
+
+    it("Get to reset should complete", (done: Mocha.Done) => {
+        sandbox.on(gameListService, "resetTimeScore", async() => Promise.resolve());
+        supertest(app)
+        .get(baseURL + "reset")
+        .expect(HTTP_OK)
+        .end((error: Error) => {
+            done(error);
+        });
+    });
+
+    it("Get to reset should get an error from promise rejection", (done: Mocha.Done) => {
+        sandbox.on(gameListService, "resetTimeScore", async() => Promise.reject("error"));
+        supertest(app)
+        .get(baseURL + "reset")
+        .expect(HTTP_INVALID_PARAM)
+        .end((error: Error, response: supertest.Response) => {
+            expect(response.body.body).to.eql("error");
             done(error);
         });
     });

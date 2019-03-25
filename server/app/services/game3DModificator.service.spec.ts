@@ -190,9 +190,9 @@ describe("Game3D Modificator service", () => {
 
             const newObj: IDifference[] = service.createModifScene(mockObjects, GEOMETRIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
-            for (let i: number = 0; i < newObj.length; i++) {
-                const objOrig: IObjet3D | undefined = mockObjects.find((obj: IObjet3D) => obj.name === newObj[i].name);
-                const objMod: IObjet3D = (newObj[i].object as IObjet3D);
+            newObj.forEach((diffObj: IDifference) =>  {
+                const objOrig: IObjet3D | undefined = mockObjects.find((obj: IObjet3D) => obj.name === diffObj.name);
+                const objMod: IObjet3D = (diffObj.object as IObjet3D);
                 if ((objOrig as IObjet3D).color !== objMod.color) {
                     if ((objOrig as IObjet3D).position === objMod.position &&
                         (objOrig as IObjet3D).rotation === objMod.rotation &&
@@ -200,7 +200,7 @@ describe("Game3D Modificator service", () => {
                         count++;
                     }
                 }
-            }
+            });
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
 

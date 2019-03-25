@@ -84,9 +84,28 @@ describe("Test for the socketServerManager", () => {
         mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE, { gameRoomId: "123" });
     });
 
-    it("Should handle delete game room event", (done: Mocha.Done) => {
+    it("Should handle check difference 3D event with resolved promise", (done: Mocha.Done) => {
+        mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE_3D, (gameRoom: string) => {
+            expect(gameRoom).to.equal("123");
+            done();
+        });
+        sandbox.on(gameRoomService, "checkDifference3D", async () => Promise.resolve("123"));
+        mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE_3D, { gameRoomId: "123" });
+    });
+
+    it("Should handle delete game  room event", (done: Mocha.Done) => {
         const spy: ChaiSpies.Spy = sandbox.on(gameRoomService, "deleteGameRoom", async () => Promise.resolve());
         mockClientSocket.emit(SocketsEvents.DELETE_GAME_ROOM, "123");
+        setTimeout(
+            () => {
+                expect(spy).to.have.been.called();
+                done();
+            },
+            CONNEXION_DELAY);
+    });
+    it("Should handle delete game 3D room event", (done: Mocha.Done) => {
+        const spy: ChaiSpies.Spy = sandbox.on(gameRoomService, "deleteGame3DRoom", async () => Promise.resolve());
+        mockClientSocket.emit(SocketsEvents.DELETE_GAME_3D_ROOM, "123");
         setTimeout(
             () => {
                 expect(spy).to.have.been.called();

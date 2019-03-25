@@ -30,9 +30,9 @@ export class Game3DModificatorService {
             }
         }
         let nbAdded: number = 0;
-        for (let i: number = 0; i < differences.length; i++) {
-            if (differences[i].name === "") {
-                differences[i].name = (originalScene.length + nbAdded).toString();
+        for (const diff of differences) {
+            if (diff.type === ADD_TYPE) {
+                diff.name = (originalScene.length + nbAdded).toString();
                 nbAdded++;
             }
         }

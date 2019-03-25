@@ -3,11 +3,13 @@ import { Application } from "./app";
 import { ConnexionController } from "./controllers/connexion.controller";
 import { GameListController } from "./controllers/game-list.controller";
 import { IdentificationController } from "./controllers/identification.controller";
+import { Identification3DController } from "./controllers/identification3D.controller";
 import { ImageController } from "./controllers/image.controller";
 import { TimescoreController } from "./controllers/timescore.controller";
 import { DatabaseClient } from "./database.client";
 import { ConvertImage } from "./microservices/convertImage.service";
 import { IdentificationServiceManager } from "./microservices/identification.service.manager";
+import { Identification3DServiceManager } from "./microservices/identification3D.service.manager";
 import { ImageService } from "./microservices/image.service";
 import { TimeScoreService } from "./microservices/timescore.service";
 import { Server } from "./server";
@@ -47,7 +49,10 @@ container.bind(TYPES.SocketServerManager).to(SocketServerManager).inSingletonSco
 container.bind(TYPES.DatabaseClient).to(DatabaseClient).inSingletonScope();
 
 container.bind(TYPES.IdentificationController).to(IdentificationController);
+container.bind(TYPES.Identification3DController).to(Identification3DController);
+
 container.bind(TYPES.IdentificationServiceManager).to(IdentificationServiceManager);
+container.bind(TYPES.Identification3DServiceManager).to(Identification3DServiceManager);
 
 container.bind(TYPES.GameRoomService).to(GameRoomService);
 container.bind(TYPES.FormValidatorService).to(FormValidatorService);
