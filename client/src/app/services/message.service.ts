@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { IGameMessage, IMessageForm } from '../../../../common/models/simpleGameMessage';
-import { Observable, of } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { IGameMessage, IMessageForm } from "../../../../common/models/simpleGameMessage";
+import { Observable, of } from "rxjs";
 import { BASE_SERVER_PATH } from "../global/constants";
 import { catchError } from "rxjs/operators";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from "@angular/common/http";
 import { Message } from "../../../../common/communication/message";
 
 @Injectable({

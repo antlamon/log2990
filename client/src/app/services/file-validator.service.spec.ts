@@ -52,7 +52,7 @@ describe("FileValidatorService", () => {
 
   const service: FileValidatorService = new FileValidatorService();
 
-  it("should be created",() => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 
