@@ -1,7 +1,7 @@
 import Axios, { AxiosResponse } from "axios";
 import { injectable } from "inversify";
 import "reflect-metadata";
-import { IGameMessage, IMessageForm } from "../../../common/models/simpleGameMessage";
+import { IGameMessage, IMessageForm } from "../../../common/models/gameMessages";
 import { BASE_ID, Message } from "../../../common/communication/message";
 
 
