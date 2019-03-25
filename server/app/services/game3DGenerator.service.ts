@@ -81,7 +81,7 @@ export class Game3DGeneratorService {
             solo: this.top3RandomOrder(),
             multi: this.top3RandomOrder(),
             isThematic: true,
-            differences: this.game3DModificator.createModifScene(objects, GEOMETRIC_TYPE_NAME, modifType),
+            differences: this.game3DModificator.createModifScene(objects, THEMATIC_TYPE_NAME, modifType),
             backColor: backGroundColor,
         };
 
