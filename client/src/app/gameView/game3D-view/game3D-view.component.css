@@ -7,8 +7,17 @@
     font-size: 25px;
     font-weight: bold;
 }
+
 .spinny {
     align-self: center;
+}
+
+.disable-click {
+    pointer-events: none;
+}
+
+.cursor-not-allowed {
+    cursor: not-allowed;
 }
 
 .compteur {
