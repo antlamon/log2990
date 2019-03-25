@@ -21,10 +21,11 @@ export class ObjectGeneratorService {
     private readonly MAX_ROCKS: number = 0.2;
     private readonly MAX_FOUNTAINS: number = 0.1;
     private readonly MAX_HORSES: number = 0.2;
-    private readonly MAX_BARREL: number = 0.2;
+    private readonly MAX_BARREL: number = 0.1;
+    private readonly MAX_CHEST: number = 0.1;
     private SCENE_COMPOSITION: Map<string, number> = new Map([
         ["dragon", this.MAX_DRAGONS], ["rock", this.MAX_ROCKS], ["fountain", this.MAX_FOUNTAINS],
-        ["horse", this.MAX_HORSES], ["barrel", this.MAX_BARREL],
+        ["horse", this.MAX_HORSES], ["barrel", this.MAX_BARREL], ["chest", this.MAX_CHEST],
     ]);
 
     public generateRandomGeometricObject(objects: IObjet3D[]): IObjet3D {

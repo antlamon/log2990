@@ -1,0 +1,209 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 1824,
+            "max" : [
+                853
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 854,
+            "max" : [
+                599.9998779296875,
+                821.7262573242188,
+                317.8048095703125
+            ],
+            "min" : [
+                -600.0,
+                2.300380583619699e-05,
+                -317.804931640625
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 854,
+            "max" : [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "min" : [
+                -1.0,
+                -1.0,
+                -1.0
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 854,
+            "max" : [
+                0.9903603792190552,
+                0.9866656810045242
+            ],
+            "min" : [
+                0.009276957251131535,
+                0.07552313804626465
+            ],
+            "type" : "VEC2"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 3648,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 10248,
+            "byteOffset" : 3648,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 10248,
+            "byteOffset" : 13896,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 6832,
+            "byteOffset" : 24144,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 30976,
+            "uri" : "chest.bin"
+        }
+    ],
+    "images" : [
+        {
+            "name" : "SundukMat_normal",
+            "uri" : "SundukMat_normal.jpg"
+        },
+        {
+            "name" : "SundukMat_metallic",
+            "uri" : "SundukMat_metallic.jpg"
+        },
+        {
+            "name" : "SundukMat_roughness",
+            "uri" : "SundukMat_roughness.jpg"
+        },
+        {
+            "name" : "SundukMat_AO",
+            "uri" : "SundukMat_AO.jpg"
+        },
+        {
+            "name" : "SundukMat_albedo",
+            "uri" : "SundukMat_albedo.jpg"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "Chest",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.4705882619409003,
+                    0.4705882619409003,
+                    0.4705882619409003,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 4
+                },
+                "metallicFactor" : 0.0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Untitled",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2,
+                        "POSITION" : 1,
+                        "TEXCOORD_0" : 3
+                    },
+                    "indices" : 0,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Chest",
+            "rotation" : [
+                -6.556707887739321e-08,
+                1.1920928955078125e-07,
+                -2.857997584253258e-15,
+                1.0
+            ],
+            "scale" : [
+                0.0011518235551193357,
+                0.0011518235551193357,
+                0.0011518235551193357
+            ],
+            "translation" : [
+                6.1035152043587e-08,
+                -3.051758312722086e-08,
+                6.1035152043587e-08
+            ]
+        }
+    ],
+    "samplers" : [
+        {}
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        },
+        {
+            "sampler" : 0,
+            "source" : 3
+        },
+        {
+            "sampler" : 0,
+            "source" : 4
+        }
+    ]
+}
