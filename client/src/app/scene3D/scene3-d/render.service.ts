@@ -11,6 +11,7 @@ import { SceneGeneratorService } from "../scene-generator.service";
 @Injectable()
 export class RenderService {
   private readonly FLASH_TIME: number = 150;
+  private readonly WHITE: number = 0xFFFFFF;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -278,7 +279,7 @@ export class RenderService {
         this.sceneOriginal.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
           if ((obj as THREE.Mesh).material) {
             ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
-            new THREE.Color(visible ? 0 : 0xFFFFFF);
+            new THREE.Color(visible ? 0 : this.WHITE);
           }
         });
       }
@@ -286,13 +287,18 @@ export class RenderService {
         this.sceneModif.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
           if ((obj as THREE.Mesh).material) {
             ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
-            new THREE.Color(visible ? 0 : 0xFFFFFF);
+            new THREE.Color(visible ? 0 : this.WHITE);
           }
         });
       }
     }
   }
   private stopFlashObject(name: string): void {
-    this.sceneOriginal.getObjectByName(name).visible = true;
+    this.sceneOriginal.getObjectByName(name).traverse((obj: THREE.Object3D) => {
+      if ((obj as THREE.Mesh).material) {
+        ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+        new THREE.Color(0);
+      }
+    });
   }
 }
