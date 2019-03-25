@@ -9,6 +9,7 @@ import { IGame3D, IDifference } from "../../../../../common/models/game3D";
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { IScore } from "../../../../../common/models/top3";
+import { IndexService } from "src/app/services/index.service";
 const mockObjects: IObjet3D[] = [];
 
 const mockGame3D: IGame3D = {
@@ -32,7 +33,7 @@ describe("Game3DViewComponent", () => {
         TestBed.configureTestingModule({
             declarations: [Game3DViewComponent],
             imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
-            providers: [RenderService, ShapeCreatorService, AppRoutingModule]
+            providers: [RenderService, ShapeCreatorService, AppRoutingModule, IndexService]
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);

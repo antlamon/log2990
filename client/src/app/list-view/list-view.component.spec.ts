@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ListViewComponent } from "./list-view.component";
 import { HttpClientModule } from "@angular/common/http";
-import { AppRoutingModule } from "../app-routing.module";
 import { AdminMenuComponent } from "../adminView/admin-menu/admin-menu.component";
 import { InitialComponent } from "../initial/initial.component";
 import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
@@ -16,20 +15,22 @@ import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.compone
 import { IObjet3D } from "../../../../common/models/objet3D";
 import { IScore } from "../../../../common/models/top3";
 import { RenderService } from "../scene3D/scene3-d/render.service";
-
+import { GamecardComponent } from "../gamecard/gamecard.component";
+import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
+import { IndexService } from "../services/index.service";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
   originalImage: "",
-  solo: [],
-  multi: [],
+  solo: [{name: "mock", score: ""}],
+  multi: [{name: "mock", score: ""}],
 };
 const mockGame3D: IGame3D = {
   name: "mock3DName",
   id: "",
   originalScene: [] as IObjet3D[],
-  solo: [] as IScore[],
-  multi: [] as IScore[],
+  solo: [{name: "mock", score: ""}] as IScore[],
+  multi: [{name: "mock", score: ""}] as IScore[],
   differences: [] as IDifference[],
   isThematic: false,
   backColor: 0,
@@ -43,7 +44,6 @@ describe("ListViewComponent", () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientModule,
-        AppRoutingModule,
         FormsModule,
         MatProgressSpinnerModule
       ],
@@ -56,9 +56,10 @@ describe("ListViewComponent", () => {
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
         Game3DViewComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        GamecardComponent
       ],
-      providers: [RenderService],
+      providers: [RenderService, IndexService],
     })
       .compileComponents().then(() => { }, (error: Error) => { });
   }));
@@ -71,52 +72,6 @@ describe("ListViewComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
-  });
-
-  it("should route to game Play with the proper iD", () => {
-    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    const game: IGame = {
-      id: "",
-      name: "string",
-      originalImage: "string",
-      solo: [],
-      multi: [],
-    };
-    component.playSelectedSimpleGame(game);
-    expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + game.id]);
-  });
-
-  describe("Delete functions", () => {
-    it("Deleting an existing simple games should call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
-      spyOn(window, "confirm").and.returnValue(true);
-      component.simpleGames = [];
-      component.simpleGames.push(mockSimple);
-      component.deleteSimpleGames(mockSimple);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("Deleting a non existing simple games should not call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
-      component.simpleGames = [];
-      component.deleteSimpleGames(mockSimple);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(0);
-    });
-    it("Deleting an existing free games should call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
-      spyOn(window, "confirm").and.returnValue(true);
-      component.freeGames = [];
-      component.freeGames.push(mockGame3D);
-      component.deleteFreeGames(mockGame3D);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(1);
-    });
-
-    it("Deleting a non existing free games should not call the game service", () => {
-      const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
-      component.freeGames = [];
-      component.deleteFreeGames(mockGame3D);
-      expect(gameServiceSpy).toHaveBeenCalledTimes(0);
-    });
   });
   describe("Adding games", () => {
     it("Adding a simple games should change the simple games array", () => {
@@ -140,6 +95,20 @@ describe("ListViewComponent", () => {
       component.freeGames = [mockGame3D];
       component.removeFreeGame(mockGame3D.id);
       expect(component.freeGames.length).toEqual(0);
+    });
+  });
+  describe("Updating score", () => {
+    it("Updating a simple game score should modify the simple games array", () => {
+      component.simpleGames = [mockSimple];
+      component.updateScore({id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []});
+      expect(component.simpleGames[0].solo).toEqual([]);
+      expect(component.simpleGames[0].multi).toEqual([]);
+    });
+    it("Updating a free game score should modify the free games array", () => {
+      component.freeGames = [mockGame3D];
+      component.updateScore({id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []});
+      expect(component.freeGames[0].solo).toEqual([]);
+      expect(component.freeGames[0].multi).toEqual([]);
     });
   });
 

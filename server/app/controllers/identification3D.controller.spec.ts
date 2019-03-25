@@ -5,8 +5,7 @@ import supertest = require("supertest");
 import { Message } from "../../../common/communication/message";
 import { Application } from "../app";
 import { container } from "../inversify.config";
-import { IdentificationServiceManager } from "../microservices/identification.service.manager";
-import { ImageService } from "../microservices/image.service";
+import { Identification3DServiceManager } from "../microservices/identification3D.service.manager";
 import { TYPES } from "../types";
 
 const expect: Chai.ExpectStatic = chai.expect;
@@ -17,20 +16,17 @@ const mockedMessage: Message = {
     body: "Test",
 };
 
-describe("Identification Controller", () => {
+describe("Identification 3D Controller", () => {
     let app: Express.Application;
     const sandbox: ChaiSpies.Sandbox = chai.spy.sandbox();
 
     before(() => {
         container.snapshot();
-        const identificationManager: IdentificationServiceManager = container.get(TYPES.IdentificationServiceManager);
+        const identificationManager: Identification3DServiceManager = container.get(TYPES.Identification3DServiceManager);
         sandbox.on(identificationManager, "startNewService", () => mockedMessage);
         sandbox.on(identificationManager, "getDifference", () => mockedMessage);
         sandbox.on(identificationManager, "deleteService", () => mockedMessage);
-        container.rebind(TYPES.IdentificationServiceManager).toConstantValue(identificationManager);
-        const service: ImageService = container.get<ImageService>(TYPES.ImageService);
-        sandbox.on(service, "imageToString64", () => "");
-        container.rebind(TYPES.ImageService).toConstantValue(service);
+        container.rebind(TYPES.Identification3DServiceManager).toConstantValue(identificationManager);
         app = container.get<Application>(TYPES.Application).app;
     });
 
@@ -41,10 +37,10 @@ describe("Identification Controller", () => {
 
     it("Should return mockedMessage from get", (done: Mocha.Done) => {
         supertest(app)
-        .get("/api/identification")
+        .get("/api/identification3D")
         .query({
             gameRoomId: "test",
-            point: JSON.stringify({"x": 0, "y": 0}),
+            name: "10",
         })
         .expect(200)
         .end((error: Error, response: supertest.Response) => {
@@ -55,7 +51,7 @@ describe("Identification Controller", () => {
 
     it("Should return mockedMessage from delete", (done: Mocha.Done) => {
         supertest(app)
-        .delete("/api/identification")
+        .delete("/api/identification3D")
         .query({
             gameRoomId: "test",
         })
@@ -68,12 +64,10 @@ describe("Identification Controller", () => {
 
     it("Should return mockedMessage from post", (done: Mocha.Done) => {
         supertest(app)
-        .post("/api/identification")
+        .post("/api/identification3D")
         .send({
             "gameRoomId": "test",
-            "originalImageURL": "url1",
-            "modifiedImageURL": "url2",
-            "differenceImageURL": "url3",
+            "differences": "diff",
         })
         .expect("Content-Type", /json/)
         .expect(200)

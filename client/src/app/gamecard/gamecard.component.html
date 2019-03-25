@@ -1,0 +1,69 @@
+<div class="game-card">
+  <div class="game-card-title">{{game.name}}</div>
+  <div class="bottom-card">
+    <div class="game-card-left-content">
+      <div class="game-card-img-container" *ngIf = "isSimpleGame">
+        <img class="game-card-img" src={{game.originalImage}} alt="">
+      </div>
+      <div class="game-card-img-container" *ngIf = "!isSimpleGame">
+          <img *ngIf="imgURL; else spinnyImage" class="game-card-img" src={{imgURL}} alt="">
+        </div>
+      <div class="game-card-buttons" *ngIf="!isAdminMode">
+        <div class="game-card-button-container"><button (click)="playSelectedGame(game)">JOUER</button>
+        </div>
+        <div class="game-card-button-container"><button>CRÉER</button></div>
+      </div>
+      <div class="game-card-buttons" *ngIf="isAdminMode">
+        <div class="game-card-button-container"><button (click)="deleteGame()">SUPPRIMER</button></div>
+        <div class="game-card-button-container"><button (click) = "reinitGame()">RÉINITIALISER</button></div>
+      </div>
+    </div>
+    <div class="game-card-right-content">
+      <div class="top-container">
+        <div class="top-title">TOP SOLO</div>
+        <div class="top-score">
+          <div class="number-column">
+            <div class="score-position">1</div>
+            <div class="score-position">2</div>
+            <div class="score-position">3</div>
+          </div>
+          <div class="name-column">
+            <div *ngFor="let score of game.solo">
+              <div class="name">{{score.name}}</div>
+            </div>
+          </div>
+          <div class="score-column">
+              <div *ngFor="let score of game.solo">
+                  <div class="scores">{{score.score}}</div>
+                </div>
+          </div>
+        </div>
+      </div>
+      <div class="top-container">
+        <div class="top-title">TOP 1V1</div>
+        <div class="top-score">
+          <div class="number-column">
+            <div class="score-position">1</div>
+            <div class="score-position">2</div>
+            <div class="score-position">3</div>
+          </div>
+          <div class="name-column">
+              <div *ngFor="let score of game.multi">
+                <div class="name">{{score.name}}</div>
+              </div>
+            </div>
+            <div class="score-column">
+                <div *ngFor="let score of game.multi">
+                    <div class="scores">{{score.score}}</div>
+                  </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #spinnyImage>
+  <div class="game-card-img">
+    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+  </div>
+</ng-template>
