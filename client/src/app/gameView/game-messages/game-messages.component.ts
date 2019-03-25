@@ -29,17 +29,17 @@ export class GameMessagesComponent implements OnDestroy {
     if (update.differencesFound === -1) {
       const msg: IGameMessage = {
         eventType: "identificationError",
-        username: "",
+        username: update.username,
         time: this.getTime(),
-        data: "Erreur",
+        data: " a fait une Erreur",
       };
       this.gameMessages.push(msg);
     } else {
       const msg: IGameMessage = {
         eventType: "differenceFound",
-        username: "",
+        username: update.username,
         time: this.getTime(),
-        data: "Différence trouvée !",
+        data: " a trouvé une différence!",
       };
       this.gameMessages.push(msg);
     }

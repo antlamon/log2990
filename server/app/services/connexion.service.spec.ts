@@ -5,7 +5,6 @@ import { BASE_ID, ERROR_ID, Message } from "../../../common/communication/messag
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { ConnexionService } from "./connexion.service";
-import { FormValidatorService } from "./formValidator.service";
 import { UsersManager } from "./users.service";
 
 const expect: Chai.ExpectStatic = chai.expect;
@@ -16,16 +15,21 @@ describe("Connexion service", () => {
     describe("Test for the function addName", () => {
         let service: ConnexionService;
         let sandbox: ChaiSpies.Sandbox;
+        container.snapshot();
         const userManager: UsersManager = container.get(TYPES.UserManager);
-        const formValidator: FormValidatorService = container.get(TYPES.FormValidatorService);
+        container.rebind(TYPES.UserManager).toConstantValue(userManager);
 
         beforeEach(() => {
-            service = new ConnexionService(userManager, formValidator);
+            service = container.get(TYPES.ConnexionService);
             sandbox = chai.spy.sandbox();
         });
 
         afterEach(() => {
             sandbox.restore();
+        });
+
+        after(() => {
+            container.restore();
         });
 
         it("A empty username should return an ERROR MESSAGE", () => {

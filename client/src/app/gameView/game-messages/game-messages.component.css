@@ -2,7 +2,6 @@
     display: grid;
     position: absolute;
     width: 800px;
-    height: 200px;
     top: 770px;
     right: 560px;
     background-color: white;
@@ -24,7 +23,7 @@
     /* justify-content: flex-end; */
     flex-flow: column nowrap;
     font-size: 20px;
-    height: 170px;
+    height: 100px;
 }
 
 .messages-container > :first-child {

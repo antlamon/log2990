@@ -39,7 +39,6 @@ import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creato
     Game3DViewComponent,
     GameMessagesComponent,
     Game3DViewComponent,
-    ErrorPopupComponent
     ErrorPopupComponent,
     GamecardComponent
   ],
@@ -65,8 +64,7 @@ import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creato
     FileValidatorService,
     RenderService,
     ShapeCreatorService,
-    GameMessageService
-    ShapeCreatorService,
+    GameMessageService,
     MedievalObjectsCreatorService,
   ],
   bootstrap: [AppComponent]
