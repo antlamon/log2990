@@ -1,0 +1,239 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 1956,
+            "max" : [
+                649
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 650,
+            "max" : [
+                2.1619133949279785,
+                2.150876760482788,
+                1.1920928955078125e-07
+            ],
+            "min" : [
+                -2.6587603092193604,
+                -2.150876760482788,
+                -2.0702435970306396
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 650,
+            "max" : [
+                0.999603271484375,
+                1.0,
+                0.9975585341453552
+            ],
+            "min" : [
+                -0.999603271484375,
+                -1.0,
+                -0.9982299208641052
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 650,
+            "max" : [
+                0.9998685121536255,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "min" : [
+                -0.9996022582054138,
+                -1.0,
+                -1.0,
+                -1.0
+            ],
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 650,
+            "max" : [
+                1.9841954708099365,
+                0.999522001191508
+            ],
+            "min" : [
+                0.0004995005438104272,
+                0.04352438449859619
+            ],
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5126,
+            "count" : 650,
+            "max" : [
+                0.9921875,
+                0.9921875
+            ],
+            "min" : [
+                0.0078125,
+                0.021470487117767334
+            ],
+            "type" : "VEC2"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 3912,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 7800,
+            "byteOffset" : 3912,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 7800,
+            "byteOffset" : 11712,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 10400,
+            "byteOffset" : 19512,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 5200,
+            "byteOffset" : 29912,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 5200,
+            "byteOffset" : 35112,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 40312,
+            "uri" : "ballista.bin"
+        }
+    ],
+    "images" : [
+        {
+            "name" : "Ballista_lambert1_BaseColor.tga",
+            "uri" : "Ballista_lambert1_BaseColor.tga.png"
+        },
+        {
+            "name" : "Ballista_lambert1_Normal.tga",
+            "uri" : "Ballista_lambert1_Normal.tga.png"
+        },
+        {
+            "name" : "Ballista_lambert1_Metallic.tga",
+            "uri" : "Ballista_lambert1_Metallic.tga.png"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "lambert2",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.10449487715959549,
+                    0.03508565202355385,
+                    0.024427568539977074,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 2
+                },
+                "metallicFactor" : 0.0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Untitled.005",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2,
+                        "POSITION" : 1,
+                        "TANGENT" : 3,
+                        "TEXCOORD_0" : 4,
+                        "TEXCOORD_1" : 5
+                    },
+                    "indices" : 0,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Ballista_low",
+            "rotation" : [
+                0.7071068286895752,
+                0.0,
+                -0.0,
+                0.7071067094802856
+            ],
+            "scale" : [
+                0.4840647280216217,
+                0.4840647280216217,
+                0.4840647280216217
+            ],
+            "translation" : [
+                0.0,
+                -0.025765463709831238,
+                -0.0
+            ]
+        }
+    ],
+    "samplers" : [
+        {}
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        }
+    ]
+}
