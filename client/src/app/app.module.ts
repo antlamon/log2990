@@ -22,7 +22,7 @@ import { FileValidatorService } from "./services/file-validator.service";
 import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
 import { SocketService } from "./services/socket.service";
-import { GameMessagesComponent } from './gameView/game-messages/game-messages.component';
+import { GameMessagesComponent } from "./gameView/game-messages/game-messages.component";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 import { GameMessageService } from "../../../server/app/services/game-message.service";
 

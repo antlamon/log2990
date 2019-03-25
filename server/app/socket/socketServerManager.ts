@@ -28,15 +28,15 @@ export class SocketServerManager {
                 await this.handleDeleteGameRoom(socket, gameRoomId);
             });
             socket.on("disconnect", () => {
-                this.emitEvent(SocketsEvents.USER_DECONNECTION, this.userManager.getUsername(socket.client.id));
+                this.emitEvent(SocketsEvents.USER_CONNECTION, this.userManager.getUsername(socket.client.id), "userDisconnected");
                 this.userManager.removeUser(socket.client.id);
             });
 
         });
     }
 
-    public emitEvent<T>(event: string, data?: T): void {
-        this.socketServer.emit(event, data);
+    public emitEvent<T>(event: string, data?: T, dataType?: T): void {
+        this.socketServer.emit(event, data, dataType);
     }
 
     private async handleNewGameRoom(socket: Socket, newGameMessage: NewGameMessage): Promise<void> {
