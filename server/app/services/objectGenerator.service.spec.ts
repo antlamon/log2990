@@ -44,7 +44,7 @@ describe("object generator service", () => {
             mockObjects.splice(0, mockObjects.length);
             for (let i: number = 0; i < NO_MAX_OBJECTS; i++) {
                 mockObjects.push(service.generateRandomGeometricObject(mockObjects));
-                if (mockObjects[i].texture !== "") {
+                if (mockObjects[i].texture !== undefined) {
                     goodtype = false;
                 }
             }
