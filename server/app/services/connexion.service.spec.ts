@@ -96,6 +96,7 @@ describe("Connexion service", () => {
 
         it("A username of regular length and contianing only alphanumerics char should return a BASIC MESSAGE", () => {
             sandbox.on(userManager, "userExist", () => false);
+            sandbox.on(service["socket"], "emitEvent", () => null);
             let username: string = "";
             for (let i: number = 0; i < ConnexionService.MAX_USERNAME_LENGTH; ++i) {
                 username += "a";
