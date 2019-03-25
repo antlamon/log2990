@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../../common/models/game3D";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { CLICK, KEYS, WHITE } from "src/app/global/constants";
+import { CLICK, KEYS } from "src/app/global/constants";
 import { SocketService } from "src/app/services/socket.service";
 import { Obj3DClickMessage, Game3DRoomUpdate, NewGame3DMessage } from "../../../../../common/communication/message";
 import { IndexService } from "src/app/services/index.service";
@@ -82,7 +82,7 @@ export class RenderService {
     }
   }
   public onDestroy(): void {
-    this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.roomId);
+    this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomId);
   }
   public onResize(): void {
     this.camera.aspect = this.getAspectRatio();
