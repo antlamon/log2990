@@ -13,6 +13,7 @@ import { KEYS } from "src/app/global/constants";
 import { IndexService } from "src/app/services/index.service";
 import { HttpClientModule } from "@angular/common/http";
 import { SceneGeneratorService } from "../scene-generator.service";
+import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
@@ -70,7 +71,7 @@ describe("renderService", () => {
   const mockSocketService: SocketService = new SocketService();
   mockSocketService["socket"] = jasmine.createSpyObj("socket", ["on", "emit"]);
   const service: RenderService = new RenderService(
-    new SceneGeneratorService(new ShapeCreatorService()),
+    new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService()),
     mockSocketService, jasmine.createSpyObj({username: ""}));
 
   beforeEach(async(() => {
