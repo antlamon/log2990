@@ -120,6 +120,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
+        //todo send time to gameroom
         this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
         this.timer.setToZero();
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));

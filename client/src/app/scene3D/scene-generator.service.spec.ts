@@ -69,7 +69,7 @@ const differences: IDifference[] = [
   name: "1",
  }
 ];
-let service: SceneGeneratorService;
+let service: SceneGeneratorService = new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService());
 describe("SceneGeneratorService", () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [ShapeCreatorService, SceneGeneratorService, MedievalObjectsCreatorService],
@@ -85,16 +85,8 @@ describe("SceneGeneratorService", () => {
 
       return Promise.resolve(mockMesh);
     });
-    spyOn(service["modelsService"], "createMedievalScene").and.callFake((obj: IObjet3D[]): Promise<THREE.Mesh>[] => {
-      const mockMeshArray: Promise<THREE.Mesh>[] = [];
-      obj.forEach((iobj: IObjet3D) => {
-        const mockMesh: THREE.Mesh = new THREE.Mesh();
-        mockMesh.name = iobj.name;
-        mockMesh.material = new THREE.MeshPhongMaterial({shininess: iobj.color});
-        mockMeshArray.push(Promise.resolve(mockMesh));
-      });
-
-      return mockMeshArray;
+    spyOn(service["modelsService"], "createMedievalScene").and.callFake(async (obj: IObjet3D[]): Promise<THREE.Mesh[]> => {
+      return [];
     });
   });
   describe("Test the function createScene", async () => {

@@ -78,8 +78,9 @@ describe("Game2DViewComponent", () => {
         expect(spy).toHaveBeenCalled();
     });
 
-    it("handle check difference when no differences are found should play a sound", async () => {
+    it("handle check difference when no differences are found should play a sound and show an error popup", async () => {
         const spy: jasmine.Spy = spyOn(component["errorSound"], "play").and.returnValue(Promise.resolve());
+        const spyE: jasmine.Spy = spyOn(component["errorPopup"], "showPopup").and.callFake(() => {});
         const update: GameRoomUpdate = {
             username: "test",
             newImage: "testImage",
@@ -88,9 +89,10 @@ describe("Game2DViewComponent", () => {
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
+        expect(spyE).toHaveBeenCalled();
     });
 
-    it("handle check difference should play the victory sound", async () => {
+    it("handle check difference should play the victory sound with 7 differences", async () => {
         const spy: jasmine.Spy = spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
         const update: GameRoomUpdate = {
             username: "test",
@@ -134,7 +136,7 @@ describe("Game2DViewComponent", () => {
         };
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
-        expect(spy).toHaveBeenCalledWith(["games"]);
+        expect(spy).toHaveBeenCalled()
     });
 
 });

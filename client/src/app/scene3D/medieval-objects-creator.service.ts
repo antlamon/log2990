@@ -11,8 +11,8 @@ export class MedievalObjectsCreatorService {
   private modelsLoader: GLTFLoader = new GLTFLoader();
 
   private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
-  private skyBoxSize: number = 300;
-  private skyBoxURLs: string[] = [
+  private readonly SKY_BOX_SIZE: number = 300;
+  private readonly SKY_BOX_URLS: string[] = [
     "assets/clouds/right.png",
     "assets/clouds/left.png",
     "assets/clouds/top.png",
@@ -59,9 +59,9 @@ export class MedievalObjectsCreatorService {
       const materialArray: THREE.MeshBasicMaterial[] = [];
       for (let i: number = 0; i < faceNb; i++) {
         materialArray[i] = new THREE.MeshBasicMaterial({
-          map: this.skyBoxLoader.load(this.skyBoxURLs[i], () => {
+          map: this.skyBoxLoader.load(this.SKY_BOX_URLS[i], () => {
             if (i === faceNb - 1) { // loading is now done for the whole box
-              const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.skyBoxSize, this.skyBoxSize, this.skyBoxSize);
+              const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.SKY_BOX_SIZE, this.SKY_BOX_SIZE, this.SKY_BOX_SIZE);
               const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
               resolve(skyBox);
             }

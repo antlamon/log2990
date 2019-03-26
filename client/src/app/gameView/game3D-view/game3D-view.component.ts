@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } from "@angular/core";
 import { GameService } from "../../services/game.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 import { SocketService } from "src/app/services/socket.service";
@@ -51,7 +51,8 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private render: RenderService,
         private socket: SocketService,
         private timer: TimerService,
-        private index: IndexService) {
+        private index: IndexService,
+        private router: Router) {
         this.gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
@@ -111,8 +112,10 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
+        //todo send time to gameroom
         this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
         this.timer.setToZero();
+        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 
     private getId(): string {
