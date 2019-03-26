@@ -22,6 +22,7 @@ export class MedievalObjectsCreatorService {
   ];
 
   public constructor() {
+    THREE.Cache.enabled = true;
     this.castleWorld = {
       name: "castle",
       type: "castleWorld",
