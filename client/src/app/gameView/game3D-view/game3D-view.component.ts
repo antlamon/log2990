@@ -90,8 +90,6 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.timer.startTimer();
     }
     private handleCheckDifference(update: Game3DRoomUpdate): void {
-        console.log("wasCalled");
-        console.log(update.differencesFound);
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);

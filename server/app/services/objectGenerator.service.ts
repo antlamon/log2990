@@ -88,7 +88,8 @@ export class ObjectGeneratorService {
                 x: isThematic ? this.randomInt(this.B0X_LENGHT_NEG_X, this.B0X_LENGHT_POS_X)
                     : this.randomInt(-this.GEOMETRIC_GAME_SIZE, this.GEOMETRIC_GAME_SIZE),
                 y: isThematic ? 0 : this.randomInt(-this.GEOMETRIC_GAME_SIZE, this.GEOMETRIC_GAME_SIZE),
-                z: isThematic ? this.randomInt(this.B0X_LENGHT_NEG_Z, this.B0X_LENGHT_POS_Z) :  this.randomInt(-length, length),
+                z: isThematic ? this.randomInt(this.B0X_LENGHT_NEG_Z, this.B0X_LENGHT_POS_Z) :
+                  this.randomInt(-this.GEOMETRIC_GAME_SIZE, this.GEOMETRIC_GAME_SIZE),
             };
             valid = true;
             if (isThematic) {

@@ -59,7 +59,7 @@ export class TimeScoreService {
         const game: IFullGame | null = await this.getSimpleGame(id);
         if (game) {
             await this.simpleCollection.updateOne(
-                { card: { id } }, {
+                { "card.id": id }, {
                     $set: {
                         ...game, card: {
                             ...game.card, id: id, solo: this.top3RandomOrder(),

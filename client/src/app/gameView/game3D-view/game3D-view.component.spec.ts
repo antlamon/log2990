@@ -62,6 +62,7 @@ describe("Game3DViewComponent", () => {
 
     it("should create", () => {
         expect(component).toBeTruthy();
+        spyOn(component["socket"], "unsubscribeTo").and.callFake(() => {});
     });
     it("once game loaded, should call initialize of render and then adde mouse event to the render", async () => {
         const renderSpy: jasmine.Spy  = spyOn(component["render"], "initialize");
@@ -167,6 +168,7 @@ describe("Game3DViewComponent", () => {
         it("handle check difference receiving 7 differences should finish the game by sending an event to the socket ", async () => {
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
             spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+            component["game3D"] = mockGame3D;
             const spySocket: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
                 username: "test",
@@ -180,6 +182,7 @@ describe("Game3DViewComponent", () => {
         });
         it("handle check difference receiving 7 differences should play the victory sound", async () => {
             const spy: jasmine.Spy = spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+            component["game3D"] = mockGame3D;
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
             spyOn(component["socket"], "emitEvent").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
@@ -194,6 +197,7 @@ describe("Game3DViewComponent", () => {
         });
         it("handle check difference receiving 7 differences should stop the timer and navigate to the games list", async () => {
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
+            component["game3D"] = mockGame3D;
             spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
             const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
             const spyT: jasmine.Spy = spyOn(component["timer"], "stopTimer").and.callFake(() => {});
