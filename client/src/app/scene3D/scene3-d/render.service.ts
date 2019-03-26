@@ -10,7 +10,8 @@ import { SceneGeneratorService } from "../scene-generator.service";
 
 @Injectable()
 export class RenderService {
-  private readonly FLASH_TIME: number = 200;
+  private readonly FLASH_TIME: number = 150;
+  private readonly WHITE: number = 0xFFFFFF;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -214,15 +215,24 @@ export class RenderService {
       this.calculateMouse(event, this.containerModif);
     }
     this.raycaster.setFromCamera( this.mouse, this.camera );
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children),
+                                                                              true);
     if (intersects.length > 0) {
+      let objet: THREE.Object3D = intersects[0].object;
+      while (!this.isObjet(objet.name)) {
+        objet = objet.parent;
+      }
+
       const objMessage: Obj3DClickMessage = {
         gameRoomId: this.roomId,
         username: this.index.username,
-        name: intersects[0].object.name,
+        name: objet.name,
       };
       this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
     }
+  }
+  private isObjet(name: string): boolean {
+    return +name >= 0;
   }
 
   private removeDiff(objName: string, type: string): void {
@@ -269,14 +279,29 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        this.sceneOriginal.getObjectByName(diff.name).visible = visible;
+        this.sceneOriginal.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
+          if ((obj as THREE.Mesh).material) {
+            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+            new THREE.Color(visible ? 0 : this.WHITE);
+          }
+        });
       }
       if (diff.type !== DELETE_TYPE) {
-        this.sceneModif.getObjectByName(diff.name).visible = visible;
+        this.sceneModif.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
+          if ((obj as THREE.Mesh).material) {
+            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+            new THREE.Color(visible ? 0 : this.WHITE);
+          }
+        });
       }
     }
   }
   private stopFlashObject(name: string): void {
-    this.sceneOriginal.getObjectByName(name).visible = true;
+    this.sceneOriginal.getObjectByName(name).traverse((obj: THREE.Object3D) => {
+      if ((obj as THREE.Mesh).material) {
+        ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+        new THREE.Color(0);
+      }
+    });
   }
 }
