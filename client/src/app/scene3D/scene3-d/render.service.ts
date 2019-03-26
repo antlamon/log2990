@@ -172,7 +172,7 @@ export class RenderService {
       case DELETE_TYPE: this.stopFlashObject(objName);
                         this.sceneModif.getObjectByName(objName).visible = true;
                         break;
-      default: break;
+      default: return;
     }
     this.soustractDiff(objName);
   }
