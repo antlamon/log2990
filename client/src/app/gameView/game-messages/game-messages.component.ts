@@ -17,12 +17,14 @@ export class GameMessagesComponent implements OnDestroy {
 
   public constructor(private socket: SocketService) {
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleNewIdentification.bind(this));
+    this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleNewIdentification.bind(this));
     this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleConnection.bind(this));
     this.socket.addEvent(SocketsEvents.NEW_BEST_TIME, this.handleNewBestTime.bind(this));
   }
 
   public ngOnDestroy(): void {
     this.gameMessages = [];
+    this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
   }
 
   public handleNewIdentification(update: GameRoomUpdate): void {
@@ -67,7 +69,7 @@ export class GameMessagesComponent implements OnDestroy {
   }
 
   public handleNewBestTime(newScoreUpdate: NewScoreUpdate): void {
-    const newBestMsg: string = `obtient la ${newScoreUpdate.scoreUpdate.insertPos} place dans les meilleurs
+    const newBestMsg: string = `obtient la position ${newScoreUpdate.scoreUpdate.insertPos} dans les meilleurs
      temps du jeu ${newScoreUpdate.gameName} en ${newScoreUpdate.gameMode}`;
 
     const msg: IGameMessage = {

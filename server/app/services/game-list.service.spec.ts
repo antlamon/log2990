@@ -270,7 +270,19 @@ describe("GameList service", () => {
                     status: 200,
                 } as AxiosResponse;
             });
-            service.resetTimeScore("test", "test").then(() => {
+            service.resetTimeScore("simple", mockedFullGame.card.id).then(() => {
+                done();
+            }).catch(() => {
+                fail();
+            });
+        });
+        it("Reseting a valid game should complete", (done: Mocha.Done) => {
+            sandbox.on(Axios, "get", () => {
+                return {
+                    status: 200,
+                } as AxiosResponse;
+            });
+            service.resetTimeScore("free", "123").then(() => {
                 done();
             }).catch(() => {
                 fail();

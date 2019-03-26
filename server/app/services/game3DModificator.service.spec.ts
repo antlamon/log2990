@@ -203,7 +203,6 @@ describe("Game3D Modificator service", () => {
             });
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
-
     });
     describe("Should test the contrast to notice difference", () => {
         it("Should return false, not enough constrast", async () => {

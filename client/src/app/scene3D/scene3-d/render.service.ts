@@ -32,7 +32,7 @@ export class RenderService {
   private diffAreVisible: boolean;
 
   public constructor(private sceneGenerator: SceneGeneratorService) {
-    }
+  }
 
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
     THREE.Cache.enabled = true;
@@ -74,7 +74,7 @@ export class RenderService {
     renderer.render(scene, camera);
 
     return renderer.domElement.toDataURL();
-    }
+  }
   private createCamera(): void {
     const aspectRatio: number = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
