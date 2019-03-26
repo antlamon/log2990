@@ -47,7 +47,7 @@ export class RenderService {
     }
 
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
-
+    THREE.Cache.enabled = true;
     clearInterval(this.timeOutDiff);
     this.roomId = game.id;
     this.containerOriginal = containerO;

@@ -10,7 +10,7 @@ export class ObjectGeneratorService {
     private readonly MAX_SCALE: number = 1.5;
     private readonly WHITE: number = 0x000000;
     private readonly BLACK: number = 0xFFFFFF;
-    private readonly B0X_LENGHT: number = 55;
+    private readonly B0X_LENGHT: number = 50;
     private readonly MAX_ROTATION: number = 360;
 
     private readonly TRAIL_NEG_COORD: number = -15;

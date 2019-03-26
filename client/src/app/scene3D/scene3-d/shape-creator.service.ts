@@ -13,6 +13,7 @@ export class ShapeCreatorService {
   public promisedObjects: Promise<THREE.Mesh>[];
 
   public constructor() {
+    THREE.Cache.enabled = true;
     this.promisedObjects = [];
     this.generateMap();
     this.textureLoader = new THREE.TextureLoader();

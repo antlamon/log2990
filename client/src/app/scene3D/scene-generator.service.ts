@@ -16,6 +16,7 @@ export class SceneGeneratorService {
 
   public constructor(private shapeService: ShapeCreatorService, private modelsService: MedievalObjectsCreatorService) {
     this.textureLoader = new THREE.TextureLoader();
+    THREE.Cache.enabled = true;
    }
 
   public async createScene(objects: IObjet3D[], color: number, isThematic: boolean): Promise<THREE.Scene> {
