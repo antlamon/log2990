@@ -17,6 +17,7 @@ export class GameMessagesComponent implements OnDestroy {
 
   public constructor(private socket: SocketService) {
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleNewIdentification.bind(this));
+    this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleNewIdentification.bind(this));
     this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleConnection.bind(this));
     this.socket.addEvent(SocketsEvents.NEW_BEST_TIME, this.handleNewBestTime.bind(this));
   }
