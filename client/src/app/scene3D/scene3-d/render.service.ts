@@ -42,9 +42,10 @@ export class RenderService {
     this.isThematic = game.isThematic;
     this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic);
+    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic, this.differences);
     this.containerModif = containerM;
-    this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic) :
+    this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
+      game.originalScene, game.backColor, this.isThematic, this.differences) :
      await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
       this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
@@ -70,7 +71,7 @@ export class RenderService {
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
     renderer.domElement.hidden = true;
-    const scene: THREE.Scene = await this.sceneGenerator.createScene(game.originalScene, game.backColor, game.isThematic);
+    const scene: THREE.Scene = await this.sceneGenerator.createScene(game.originalScene, game.backColor, game.isThematic, game.differences);
     renderer.render(scene, camera);
 
     return renderer.domElement.toDataURL();
