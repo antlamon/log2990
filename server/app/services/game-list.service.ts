@@ -29,7 +29,7 @@ export class GameListService {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
-        return this.simpleCollection.find({}, {projection: {_id: 0, card: 1}})
+        return this.simpleCollection.find({}).project({_id: 0, card: 1})
         .map((x: IFullGame) => x.card).toArray();
     }
 

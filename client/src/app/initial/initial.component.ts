@@ -26,7 +26,6 @@ export class InitialComponent {
   public connect(username: string): void {
     this.errors = [];
     if (this.fileValidator.isValidName(username)) {
-      // this.socket.emitEvent(SocketsEvents.USER_CONNECTION, username);
       this.indexService.connect(this.username).subscribe((message: Message) => {
         if (message.title === ERROR_ID ) {
           this.errors.push(message.body);

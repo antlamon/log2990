@@ -1,8 +1,8 @@
 import Axios from "axios";
 import * as chai from "chai";
 import * as spies from "chai-spies";
-import { BASE_ID, ERROR_ID, Game3DRoomUpdate,
-    GameRoomUpdate, NewGame3DMessage, NewGameMessage, EndGameMessage, ScoreUpdate, NewScoreUpdate } from "../../../../common/communication/message";
+import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate,
+    NewGame3DMessage, NewGameMessage, NewScoreUpdate, ScoreUpdate } from "../../../../common/communication/message";
 import { ADD_TYPE } from "../../../../common/models/game3D";
 import { container } from "../../inversify.config";
 import { TYPES } from "../../types";
@@ -181,7 +181,6 @@ describe("GameRoomService", () => {
                     });
         });
     });
-    //TODO: it fails
     describe("End a game", () => {
         it("Ending a game room should send a put request", async () => {
             const mockEndGameMessage: EndGameMessage = {
@@ -201,11 +200,8 @@ describe("GameRoomService", () => {
             await service.createNewGameRoom({gameRoomId: "1", gameName: "bob", username: "user", is3D: false});
             sandbox.restore(Axios);
             sandbox.on(Axios, "put", async () => Promise.resolve({data: { title: BASE_ID, body: mockScoreUpdate }}));
-            service.endGame(mockEndGameMessage).then(
-                (response: NewScoreUpdate) => {
-                    expect(response.username).to.equal("user");
-                },
-            );
+            const newScoreUpdate: NewScoreUpdate = await service.endGame(mockEndGameMessage);
+            expect(newScoreUpdate.scoreUpdate).to.eql(mockScoreUpdate);
         });
     });
     describe("Deleting a game room", () => {

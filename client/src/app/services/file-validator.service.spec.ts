@@ -7,6 +7,7 @@ import { InitialComponent } from "src/app/initial/initial.component";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "./file-validator.service";
 import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
@@ -43,7 +44,7 @@ describe("FileValidatorService", () => {
         GameMessagesComponent,
         GamecardComponent
       ],
-      imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
+      imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, FileValidatorService, Game2DViewComponent, RenderService]
     })
       .compileComponents().then(() => { }, (error: Error) => {
@@ -73,45 +74,50 @@ describe("FileValidatorService", () => {
   });
 
   describe("Test for the function onlyNumeric", () => {
-    it("No letters should pass", () => {
+    it("A string with only letters should return false", () => {
       expect(service.containOnlyNumeric("ALLO")).toEqual(false);
     });
-    it("no special caracter should pass", () => {
+    it("A string with a a special character should return false", () => {
       expect(service.containOnlyNumeric("!1243")).toEqual(false);
     });
-    it("no special caracter should pass", () => {
+    it("A string with a mulitiple special characters should return false", () => {
       expect(service.containOnlyNumeric("!12%?")).toEqual(false);
     });
-    it("only numbers should pass", () => {
+    it("A string with only numbers should return true", () => {
       expect(service.containOnlyNumeric("123")).toEqual(true);
     });
-    it("@#$!@ should not pass", () => {
+    it("A string with only special characters should return false", () => {
       expect(service.containOnlyNumeric("@#$!@ ")).toEqual(false);
     });
   });
 
   describe("Test for the function validating object Qty", () => {
-    it("No number below the constant NO_OBJ_MIN", () => {
+    it("A number far below the constant NO_OBJ_MIN should return false", () => {
       const delta: number = 10;
       const veryBelowMin: number = NO_MIN_OBJECTS - delta;
 
       expect(service.isValidObjNb(veryBelowMin.toString())).toEqual(false);
     });
-    it("No number below the constant NO_OBJ_MIN", () => {
+    it("A number one less than the constant NO_OBJ_MIN should return false", () => {
       const belowMin: number = NO_MIN_OBJECTS - 1;
       expect(service.isValidObjNb(belowMin.toString())).toEqual(false);
     });
-    it("should accept number equal to the constant NO_OBJ_MIN", () => {
+    it("A number equal to the constant NO_OBJ_MIN should return true", () => {
       const min: number = NO_MIN_OBJECTS;
       expect(service.isValidObjNb(min.toString())).toEqual(true);
     });
-    it("No number aboce NO_OBJ_MAX should be accepted", () => {
+    it("A number above NO_OBJ_MAX should return false", () => {
       const tooMuch: number = NO_MAX_OBJECTS + 1;
       expect(service.isValidObjNb(tooMuch.toString())).toEqual(false);
     });
-    it("should accept number equal to the constant NO_OBJ_MAX", () => {
+    it("A number equal to the constant NO_OBJ_MAX should return true", () => {
       const max: number = NO_MAX_OBJECTS;
       expect(service.isValidObjNb(max.toString())).toEqual(true);
+    });
+    it("A number between the two constants should return true", () => {
+      const mid: number = 2;
+      const num: number = (NO_MAX_OBJECTS + NO_MIN_OBJECTS) / mid;
+      expect(service.isValidObjNb(num.toString())).toEqual(true);
     });
   });
 
@@ -126,10 +132,10 @@ describe("FileValidatorService", () => {
       expect(service.isValidGameName("nomdujeu")).toEqual(true);
     });
     it("A name that does not only contains alphanumeric characters should return false", () => {
-      expect(service.containOnlyAlphaNumeric("@#$ans")).toEqual(false);
+      expect(service.isValidGameName("@#$ans")).toEqual(false);
     });
     it("A name that only contains alphanumeric characters should return true", () => {
-      expect(service.containOnlyAlphaNumeric("dksjhfad24324")).toEqual(true);
+      expect(service.isValidGameName("dksjhfad24324")).toEqual(true);
     });
     it("A NULL name should return false", () => {
       expect(service.isValidGameName("")).toEqual(false);
@@ -141,6 +147,9 @@ describe("FileValidatorService", () => {
     });
     it("A username shorter than 3 characters should return false", () => {
       expect(service.isValidName("az")).toEqual(false);
+    });
+    it("A name that does not only contains alphanumeric characters should return false", () => {
+      expect(service.isValidName("@#$ans")).toEqual(false);
     });
     it("A username that contains between 3 and 15 characters should return true", () => {
       expect(service.isValidName("nomdujeu")).toEqual(true);

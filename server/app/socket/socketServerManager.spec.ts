@@ -7,7 +7,7 @@ import { Server } from "../server";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { TYPES } from "../types";
 import { SocketServerManager } from "./socketServerManager";
-//import { EndGameMessage } from "../../../common/communication/message";
+// import { EndGameMessage } from "../../../common/communication/message";
 const expect: Chai.ExpectStatic = chai.expect;
 const SERVER_URL: string = "http://localhost:3000/";
 const CONNEXION_DELAY: number = 100;

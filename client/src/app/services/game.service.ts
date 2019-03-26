@@ -30,7 +30,6 @@ export class GameService {
 
   public getSimpleGame(id: string): Observable<IFullGame> {
     const url: string = this.SIMPLEONE_URL + "?id=" + id;
-    (console as Console).log(url);
 
     return this.http.get<IFullGame>(url).pipe(
       catchError(this.handleError<IFullGame>("getSimpleGame"))

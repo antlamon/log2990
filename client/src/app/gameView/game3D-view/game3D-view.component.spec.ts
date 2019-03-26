@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { Game3DViewComponent } from "./game3D-view.component";
 import { HttpClientModule } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 import { ShapeCreatorService } from "src/app/scene3D/scene3-d/shape-creator.service";
@@ -43,7 +44,7 @@ describe("Game3DViewComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [Game3DViewComponent, ErrorPopupComponent, GameMessagesComponent],
-            imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
+            imports: [HttpClientModule, HttpClientTestingModule, RouterTestingModule, MatProgressSpinnerModule],
             providers: [RenderService, ShapeCreatorService, AppRoutingModule,
                         IndexService, MedievalObjectsCreatorService, SceneGeneratorService
                     ]
