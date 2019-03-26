@@ -124,4 +124,13 @@ describe("GameService", () => {
             }
         );
     });
+    it("The reset fucntion should call the HTTP.get", () => {
+
+        const spy: jasmine.Spy = httpSpy.get.and.returnValue(TestHelper.asyncData({title: "", body: ""}));
+        gameService.resetScore("", "").subscribe(
+            (response: Message) => {
+                expect(spy).toHaveBeenCalled();
+            }
+        );
+    });
 });
