@@ -26,6 +26,7 @@ export class RenderService {
   private rendererM: THREE.WebGLRenderer;
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
+  private readonly GAMMA_FACTOR: number = 2.2;
 
   private cameraZ: number = 20;
   private cameraY: number = 5;
@@ -148,6 +149,8 @@ export class RenderService {
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.gammaFactor = this.GAMMA_FACTOR;
+    renderer.gammaOutput = true;
 
     return renderer;
   }
