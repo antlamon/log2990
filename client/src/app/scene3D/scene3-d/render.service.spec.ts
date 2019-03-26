@@ -63,6 +63,7 @@ describe("renderService", () => {
     isThematic: false,
     backColor: 0xFFFFFF,
   };
+  const SENSITIVITY: number = 0.002;
   const container1: HTMLDivElement = document.createElement("div");
   const container2: HTMLDivElement = document.createElement("div");
   const service: RenderService = new RenderService(
@@ -127,16 +128,21 @@ describe("renderService", () => {
       expect(spy).toHaveBeenCalledWith(move);
     });
     it("Should rotate on x axis", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "rotation").and.callFake(() => {});
       const move: number = 5;
       service.rotateCam("X", move);
-      expect(spy).toHaveBeenCalledWith();
+      expect(service["camera"]["rotation"]["x"]).toEqual(-move * SENSITIVITY);
     });
     it("Should rotate on y axis", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "rotation").and.callFake(() => {});
       const move: number = 5;
       service.rotateCam("Y", move);
-      expect(spy).toHaveBeenCalledWith();
+      expect(service["camera"]["rotation"]["y"]).toEqual(- move * SENSITIVITY);
+    });
+  });
+  describe("Identifying differences tests", () => {
+    it("Should return null if no object is found", async () => {
+      await service.initialize(container1, container2, mockGame);
+      await service.startRenderingLoop();
+      expect(service.identifyDiff(new MouseEvent("click", { clientX: 200, clientY: 900 }))).toEqual(null);
     });
   });
 });
