@@ -38,13 +38,15 @@ export class MedievalObjectsCreatorService {
 
     const objectsTHREE: THREE.Mesh[] = [];
     let toReload: boolean = false;
+
+    objectsTHREE.push(await this.createSkyBox());
+    objectsTHREE.push(await this.createObject(this.castleWorld, false));
+
     for (const obj of objects) {
       toReload = uniqueObject.findIndex((diff: IDifference) => diff.name === obj.name) !== -1;
       objectsTHREE.push(await this.createObject(obj, toReload));
     }
-    objectsTHREE.push(await this.createSkyBox());
-    objectsTHREE.push(await this.createObject(this.castleWorld, false));
-    
+
     return objectsTHREE;
   }
 
@@ -57,17 +59,16 @@ export class MedievalObjectsCreatorService {
           if (!toReload) {
             this.loadedModels.set(object.type, gltf.scene);
           }
-          resolve(this.setPositionParameters(gltf.scene, object));
+          resolve(this.setPositionParameters(gltf.scene.clone(), object));
         }
       );
       } else {
-        resolve(this.setPositionParameters(this.loadedModels.get(object.type), object));
+        resolve(this.setPositionParameters(this.loadedModels.get(object.type).clone(), object));
       }
     });
   }
   private createSkyBox(): Promise<THREE.Mesh> {
     return new Promise<THREE.Mesh>((resolve, reject) => {
-      if ( !this.loadedModels.get("skybox")) {
       this.skyBoxLoader = new THREE.TextureLoader();
       const faceNb: number = 6;
       const materialArray: THREE.MeshBasicMaterial[] = [];
@@ -83,9 +84,6 @@ export class MedievalObjectsCreatorService {
           side: THREE.BackSide
         });
       }
-    } else {
-      return this.loadedModels.get("skybox");
-    }
     });
   }
 

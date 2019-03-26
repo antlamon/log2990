@@ -35,12 +35,15 @@ export class TimeScoreService {
 
     public async changeHighScore(userName: string, gameType: string,
                                  gameMode: string, id: string, nbMinutes: number, nbSeconds: number): Promise<ScoreUpdate> {
-        const score: IScore[] = await this.getHighScore(gameType, gameMode, id);
+        const leaderboard: Leaderboard = await this.getLeaderboard(gameType, id);
+        if (!leaderboard[gameMode]) {
+            throw new Error(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
+        }
         let highScoreChanged: number = -1;
-        let newScore: IScore[][] | null = null;
-        for (let i: number = 0; i < score.length; ++i) {
-            if (this.compareScores(nbMinutes, nbSeconds, score[i].score)) {
-                newScore = await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, i);
+        for (let i: number = 0; i < leaderboard[gameMode].length; ++i) {
+            if (this.compareScores(nbMinutes, nbSeconds, leaderboard[gameMode][i].score)) {
+                leaderboard[gameMode] = this.updateGameScore(leaderboard[gameMode], userName, nbMinutes, nbSeconds, i);
+                await this.setHighScore(gameType, id, leaderboard);
                 highScoreChanged = i + 1;
                 break;
             }
@@ -50,8 +53,8 @@ export class TimeScoreService {
             gameType,
             id,
             insertPos: highScoreChanged,
-            solo: newScore ? newScore[0] : null,
-            multi: newScore ? newScore[1] : null,
+            solo: leaderboard.solo,
+            multi: leaderboard.multi,
         };
     }
 
@@ -61,10 +64,8 @@ export class TimeScoreService {
             await this.simpleCollection.updateOne(
                 { "card.id": id }, {
                     $set: {
-                        ...game, card: {
-                            ...game.card, id: id, solo: this.top3RandomOrder(),
-                            multi: this.top3RandomOrder(),
-                        },
+                        "card.solo": this.top3RandomOrder(),
+                        "card.multi": this.top3RandomOrder(),
                     },
                 });
         } else {
@@ -78,8 +79,8 @@ export class TimeScoreService {
             await this.freeCollection.updateOne(
                 { id }, {
                     $set: {
-                        ...game,
-                        solo: this.top3RandomOrder(), multi: this.top3RandomOrder(),
+                        "solo": this.top3RandomOrder(),
+                        "multi": this.top3RandomOrder(),
                     },
                 });
         } else {
@@ -115,80 +116,57 @@ export class TimeScoreService {
         return Math.round(Math.random() * (max - min + 1) + min);
     }
 
-    private async setHighScore(gameType: string, gameMode: string,
-                               id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: number)
-                               : Promise<IScore[][] | null> {
-        let scores: IScore[][] | null = null;
+    private async setHighScore(gameType: string, id: string, newScores: Leaderboard): Promise<void> {
         if (gameType === SIMPLE_GAME_TYPE) {
-            let game: IFullGame | null = await this.getSimpleGame(id);
-            if (game) {
-                game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-                await this.simpleCollection.updateOne({ "card.id": id }, { $set: { ...game } });
-                scores = [game.card.solo, game.card.multi];
-            }
+            await this.simpleCollection.updateOne(
+                { "card.id": id }, {
+                    $set: {
+                        "card.solo": newScores.solo,
+                        "card.multi": newScores.multi,
+                    },
+                });
         } else {
-            let game: IGame3D | null = await this.getFreeGame(id);
-            if (game) {
-                game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-                await this.freeCollection.updateOne({ id }, { $set: { ...game } });
-                scores = [game.solo, game.multi];
-            }
+            await this.freeCollection.updateOne(
+                { id }, {
+                    $set: {
+                        "solo": newScores.solo,
+                        "multi": newScores.multi,
+                    },
+                });
         }
+    }
+
+    private updateGameScore(scores: IScore[], userName: string,
+                            nbMinutes: number, nbSeconds: number, pos: number): IScore[] {
+        const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
+
+        for (let i: number = scores.length - 1; i > pos; --i) {
+            scores[i] = scores[i - 1];
+        }
+        scores[pos] = newScore;
 
         return scores;
     }
 
-    private updateSimpleGameScore(game: IFullGame, gameMode: string, userName: string,
-                                  nbMinutes: number, nbSeconds: number, pos: number): IFullGame {
-        const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
-        const scores: IScore[] = gameMode === "solo" ? game.card.solo : game.card.multi;
-
-        for (let i: number = scores.length - 1; i > pos; --i) {
-            scores[i] = scores[i - 1];
-        }
-        scores[pos] = newScore;
-
-        return game;
-    }
-
-    private updateFreeGameScore(game: IGame3D, gameMode: string, userName: string,
-                                nbMinutes: number, nbSeconds: number, pos: number): IGame3D {
-        const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
-        const scores: IScore[] = gameMode === "solo" ? game.solo : game.multi;
-
-        for (let i: number = scores.length - 1; i > pos; --i) {
-            scores[i] = scores[i - 1];
-        }
-        scores[pos] = newScore;
-
-        return game;
-    }
-
-    private async getHighScore(gameType: string, gameMode: string, id: string): Promise<IScore[]> {
+    private async getLeaderboard(gameType: string, id: string): Promise<Leaderboard> {
         let game: IFullGame | IGame3D | null;
         switch (gameType) {
             case SIMPLE_GAME_TYPE:
                 game = await this.getSimpleGame(id);
                 if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
-                switch (gameMode) {
-                    case "solo":
-                        return game.card.solo;
-                    case "multi":
-                        return game.card.multi;
-                    default:
-                        throw new Error(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
-                }
+
+                return {
+                    solo: game.card.solo,
+                    multi: game.card.multi,
+                };
             case FREE_GAME_TYPE:
                 game = await this.getFreeGame(id);
                 if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
-                switch (gameMode) {
-                    case "solo":
-                        return game.solo;
-                    case "multi":
-                        return game.multi;
-                    default:
-                        throw new Error(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
-                }
+
+                return {
+                    solo: game.solo,
+                    multi: game.multi,
+                };
             default:
                 throw new Error(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
         }
@@ -217,10 +195,15 @@ export class TimeScoreService {
     }
 
     private async getSimpleGame(id: string): Promise<IFullGame | null> {
-        return this.simpleCollection.findOne({ "card.id": id });
+        return this.simpleCollection.findOne({ "card.id": id }, {projection: {"card.solo": true, "card.multi": true}});
     }
 
     private async getFreeGame(id: string): Promise<IGame3D | null> {
-        return this.freeCollection.findOne({ "id": id });
+        return this.freeCollection.findOne({ "id": id }, {projection: {"solo": true, "multi": true}});
     }
+}
+
+interface Leaderboard {
+    solo: IScore[];
+    multi: IScore[];
 }
