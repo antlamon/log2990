@@ -16,12 +16,12 @@ export class TimescoreController {
         const router: Router = Router();
 
         router.put("/", async (req: Request, res: Response, next: NextFunction) => {
-            const username: string = req.query.username;
-            const gameType: string = req.query.gameType;
-            const gameMode: string = req.query.gameMode;
-            const id: string = req.query.id;
-            const nbMinutes: number = req.query.nbMinutes;
-            const nbSeconds: number = req.query.nbSeconds;
+            const username: string = req.body.username;
+            const gameType: string = req.body.gameType;
+            const gameMode: string = req.body.gameMode;
+            const id: string = req.body.id;
+            const nbMinutes: number = +req.body.nbMinutes;
+            const nbSeconds: number = +req.body.nbSeconds;
             try {
                 res.json({
                     title: BASE_ID,

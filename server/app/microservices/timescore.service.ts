@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { Collection } from "mongodb";
-import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
+import { FREE_GAME_TYPE, ScoreUpdate, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { IFullGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { IScore } from "../../../common/models/top3";
@@ -34,18 +34,25 @@ export class TimeScoreService {
     }
 
     public async changeHighScore(userName: string, gameType: string,
-                                 gameMode: string, id: string, nbMinutes: number, nbSeconds: number): Promise<boolean> {
+                                 gameMode: string, id: string, nbMinutes: number, nbSeconds: number): Promise<ScoreUpdate> {
         const score: IScore[] = await this.getHighScore(gameType, gameMode, id);
-        let highScoreChanged: boolean = false;
+        let highScoreChanged: number = -1;
+        let newScore: IScore[][] | null = null;
         for (let i: number = 0; i < score.length; ++i) {
             if (this.compareScores(nbMinutes, nbSeconds, score[i].score)) {
-                await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, i);
-                highScoreChanged = true;
+                newScore = await this.setHighScore(gameType, gameMode, id, userName, nbMinutes, nbSeconds, i);
+                highScoreChanged = i + 1;
                 break;
             }
         }
 
-        return highScoreChanged;
+        return {
+            gameType,
+            id,
+            insertPos: highScoreChanged,
+            solo: newScore ? newScore[0] : null,
+            multi: newScore ? newScore[1] : null,
+        };
     }
 
     private async resetSimpleGameScore(id: string): Promise<void> {
@@ -109,20 +116,26 @@ export class TimeScoreService {
     }
 
     private async setHighScore(gameType: string, gameMode: string,
-                               id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: number): Promise<void> {
+                               id: string, userName: string, nbMinutes: number, nbSeconds: number, pos: number)
+                               : Promise<IScore[][] | null> {
+        let scores: IScore[][] | null = null;
         if (gameType === SIMPLE_GAME_TYPE) {
             let game: IFullGame | null = await this.getSimpleGame(id);
             if (game) {
                 game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
                 await this.simpleCollection.updateOne({ card: { id } }, { $set: { ...game } });
+                scores = [game.card.solo, game.card.multi];
             }
-        } else if (gameType === FREE_GAME_TYPE) {
+        } else {
             let game: IGame3D | null = await this.getFreeGame(id);
             if (game) {
                 game = this.updateFreeGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
                 await this.freeCollection.updateOne({ id }, { $set: { ...game } });
+                scores = [game.solo, game.multi];
             }
         }
+
+        return scores;
     }
 
     private updateSimpleGameScore(game: IFullGame, gameMode: string, userName: string,
