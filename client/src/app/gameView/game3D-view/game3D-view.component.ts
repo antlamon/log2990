@@ -10,6 +10,7 @@ import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../
 import { CLICK, KEYS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
+import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 
 @Component({
     selector: "app-game3d-view",
@@ -44,14 +45,15 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
     private victorySound: HTMLAudioElement;
+    private render: RenderService;
 
     public constructor(
         private gameService: GameService,
         private route: ActivatedRoute,
-        private render: RenderService,
         private socket: SocketService,
         private timer: TimerService,
         private index: IndexService,
+        private sceneGen: SceneGeneratorService,
         private router: Router) {
         this.gameIsReady = false;
         this.cheatModeActivated = false;
@@ -64,6 +66,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.differencesFound = 0;
         this.disableClick = "";
         this.blockedCursor = "";
+        this.render = new RenderService(this.sceneGen);
     }
 
     public ngOnInit(): void {
@@ -73,7 +76,10 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
+        this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
+        this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE_3D);
         if (this.game3D) {
+            this.render.stopCheatMode();
             this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
         }
     }
@@ -112,9 +118,12 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
-        //todo send time to gameroom
-        this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
-        this.timer.setToZero();
+        this.socket.emitEvent(SocketsEvents.END_GAME, {
+            username: this.index.username,
+            score: this.timer.getTimeAsString(),
+            gameId: this.game3D.id,
+            gameType: "free",
+        });
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 
@@ -148,6 +157,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         const newGameMessage: NewGame3DMessage = {
             username: this.index.username,
             gameRoomId: this.roomID,
+            gameName: this.game3D.name,
             is3D: true,
             differences: this.game3D.differences
         };
@@ -222,6 +232,5 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             name: object ? object.name : null,
         };
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
-
     }
 }

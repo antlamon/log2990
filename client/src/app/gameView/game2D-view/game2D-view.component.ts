@@ -57,6 +57,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
+        this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
+        this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
         if (this.simpleGame) {
             this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
         }
@@ -74,6 +76,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 const newGameMessage: NewGameMessage = {
                     username: this.index.username,
                     gameRoomId: this.simpleGame.card.id,
+                    gameName: this.simpleGame.card.name,
                     is3D: false,
                     originalImage: this.simpleGame.card.originalImage,
                     modifiedImage: this.simpleGame.modifiedImage,
@@ -112,9 +115,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 this.finishGame();
             } else {
                 this.correctSound.play().catch((error: Error) => console.error(error.message));
-                }
-
             }
+
+        }
 
     }
 
@@ -122,9 +125,12 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
-        //todo send time to gameroom
-        this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
-        this.timer.setToZero();
+        this.socket.emitEvent(SocketsEvents.END_GAME, {
+            username: this.index.username,
+            score: this.timer.getTimeAsString(),
+            gameId: this.simpleGame.card.id,
+            gameType: "simple",
+        });
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 

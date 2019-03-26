@@ -1,7 +1,7 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import { Collection, Db, WriteOpResult } from "mongodb";
-import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
+import { FREE_GAME_TYPE, ScoreUpdate, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { container } from "../inversify.config";
@@ -110,65 +110,74 @@ describe("Test for TimeScoreService", () => {
 
         it("Sending a time greater than the ones in the database should return false", async () => {
             const tooMuchMin: number = 100;
-            expect(await service.changeHighScore(
-                mockUsername, FREE_GAME_TYPE, "solo", mockGame3D.id, tooMuchMin, 0)).to.equal(false);
+            const score: ScoreUpdate = await service.changeHighScore(
+                mockUsername, FREE_GAME_TYPE, "solo", mockGame3D.id, tooMuchMin, 0);
+            expect(score.insertPos).to.equal(-1);
         });
 
         it("Sending a time equal to the third best time should return false", async () => {
             const thirdTimeAS: string[] = mockedFullGame.card.multi[2].score.split(":");
-            expect(await service.changeHighScore(
+            expect((await service.changeHighScore(
                 mockUsername, SIMPLE_GAME_TYPE, "multi", mockedFullGame.card.id,
-                +thirdTimeAS[0], +thirdTimeAS[1])).to.equal(false);
+                +thirdTimeAS[0], +thirdTimeAS[1])).insertPos).to.equal(-1);
         });
 
         it("Sending a time equal to the second best time should modify the third best time", async () => {
             const secondTimeAS: string[] = mockedFullGame.card.solo[1].score.split(":");
-            expect(await service.changeHighScore(
+            expect((await service.changeHighScore(
                 mockUsername, SIMPLE_GAME_TYPE, "solo", mockedFullGame.card.id,
-                +secondTimeAS[0], +secondTimeAS[1])).to.equal(true);
+                +secondTimeAS[0], +secondTimeAS[1])).insertPos).to.equal(3);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                         expect(game.card.solo[2].name).to.equal(mockUsername);
                         expect(game.card.solo[2].score).to.equal(game.card.solo[1].score);
                     });
         });
 
-        it("Sending a 00:00 should update the first multi score of free games", async () => {
-            expect(await service.changeHighScore(
+        it("Sending a 00:00 should update the all multi score of free games", async () => {
+            expect((await service.changeHighScore(
                 mockUsername, FREE_GAME_TYPE, "multi", mockGame3D.id,
-                0, 0)).to.eql(true);
+                0, 0)).insertPos).to.eql(1);
             await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
                         expect(game.multi[0].name).to.equal(mockUsername);
                         expect(game.multi[0].score).to.equal("00:00");
+                        expect(game.multi[1]).to.eql(mockGame3D.multi[0]);
+                        expect(game.multi[2]).to.eql(mockGame3D.multi[1]);
                     });
         });
 
-        it("Sending a 00:00 should update the first multi score of simple games", async () => {
-            expect(await service.changeHighScore(
+        it("Sending a 00:00 should update the all multi score of simple games", async () => {
+            expect((await service.changeHighScore(
                 mockUsername, SIMPLE_GAME_TYPE, "multi", mockedFullGame.card.id,
-                0, 0)).to.eql(true);
+                0, 0)).insertPos).to.eql(1);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                         expect(game.card.multi[0].name).to.equal(mockUsername);
                         expect(game.card.multi[0].score).to.equal("00:00");
+                        expect(game.card.multi[1]).to.eql(mockedFullGame.card.multi[0]);
+                        expect(game.card.multi[2]).to.eql(mockedFullGame.card.multi[1]);
                     });
         });
 
-        it("Sending a 00:00 should update the first solo score of free games", async () => {
-            expect(await service.changeHighScore(
+        it("Sending a 00:00 should update the all solo score of free games", async () => {
+            expect((await service.changeHighScore(
                 mockUsername, FREE_GAME_TYPE, "solo", mockGame3D.id,
-                0, 0)).to.eql(true);
+                0, 0)).insertPos).to.eql(1);
             await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
                         expect(game.solo[0].name).to.equal(mockUsername);
                         expect(game.solo[0].score).to.equal("00:00");
+                        expect(game.solo[1]).to.eql(mockGame3D.solo[0]);
+                        expect(game.solo[2]).to.eql(mockGame3D.solo[1]);
                     });
         });
 
-        it("Sending a 00:00 should update the first solo score of simple games", async () => {
-            expect(await service.changeHighScore(
+        it("Sending a 00:00 should update the all solo score of simple games", async () => {
+            expect((await service.changeHighScore(
                 mockUsername, SIMPLE_GAME_TYPE, "solo", mockedFullGame.card.id,
-                0, 0)).to.eql(true);
+                0, 0)).insertPos).to.eql(1);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                         expect(game.card.solo[0].name).to.equal(mockUsername);
                         expect(game.card.solo[0].score).to.equal("00:00");
+                        expect(game.card.solo[1]).to.eql(mockedFullGame.card.solo[0]);
+                        expect(game.card.solo[2]).to.eql(mockedFullGame.card.solo[1]);
                     });
         });
     });

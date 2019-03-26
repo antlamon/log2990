@@ -17,6 +17,7 @@ import { MedievalObjectsCreatorService } from "src/app/scene3D/medieval-objects-
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { MOUSE } from "three";
 import { Game3DRoomUpdate } from "../../../../../common/communication/message";
+import { GameMessagesComponent } from "../game-messages/game-messages.component";
 const mockObjects: IObjet3D[] = [];
 
 const mockGame3D: IGame3D = {
@@ -41,10 +42,11 @@ describe("Game3DViewComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [Game3DViewComponent, ErrorPopupComponent],
+            declarations: [Game3DViewComponent, ErrorPopupComponent, GameMessagesComponent],
             imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
             providers: [RenderService, ShapeCreatorService, AppRoutingModule,
-                        IndexService, MedievalObjectsCreatorService, SceneGeneratorService]
+                        IndexService, MedievalObjectsCreatorService, SceneGeneratorService
+                    ]
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);
@@ -60,6 +62,7 @@ describe("Game3DViewComponent", () => {
 
     it("should create", () => {
         expect(component).toBeTruthy();
+        spyOn(component["socket"], "unsubscribeTo").and.callFake(() => {});
     });
     it("once game loaded, should call initialize of render and then adde mouse event to the render", async () => {
         const renderSpy: jasmine.Spy  = spyOn(component["render"], "initialize");
@@ -155,7 +158,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: 3,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: false,
             };
             component["handleCheckDifference"](update);
             expect(spyDiff).toHaveBeenCalledWith(update.objName, update.diffType);
@@ -164,31 +168,36 @@ describe("Game3DViewComponent", () => {
         it("handle check difference receiving 7 differences should finish the game by sending an event to the socket ", async () => {
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
             spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+            component["game3D"] = mockGame3D;
             const spySocket: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
                 username: "test",
                 differencesFound: 7,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: true,
             };
             component["handleCheckDifference"](update);
             expect(spySocket).toHaveBeenCalled();
         });
         it("handle check difference receiving 7 differences should play the victory sound", async () => {
             const spy: jasmine.Spy = spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+            component["game3D"] = mockGame3D;
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
             spyOn(component["socket"], "emitEvent").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
                 username: "test",
                 differencesFound: 7,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: true,
             };
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
         });
         it("handle check difference receiving 7 differences should stop the timer and navigate to the games list", async () => {
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
+            component["game3D"] = mockGame3D;
             spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
             const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
             const spyT: jasmine.Spy = spyOn(component["timer"], "stopTimer").and.callFake(() => {});
@@ -196,7 +205,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: 7,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: true,
             };
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
@@ -211,7 +221,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: -1,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: false,
             };
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();

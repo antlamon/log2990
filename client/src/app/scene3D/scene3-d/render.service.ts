@@ -6,7 +6,6 @@ import { SceneGeneratorService } from "../scene-generator.service";
 @Injectable()
 export class RenderService {
   private readonly FLASH_TIME: number = 150;
-  private readonly WHITE: number = 0xFFFFFF;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -42,9 +41,10 @@ export class RenderService {
     this.isThematic = game.isThematic;
     this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic);
+    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic, this.differences);
     this.containerModif = containerM;
-    this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic) :
+    this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
+      game.originalScene, game.backColor, this.isThematic, this.differences) :
      await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
       this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
@@ -70,7 +70,7 @@ export class RenderService {
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
     renderer.domElement.hidden = true;
-    const scene: THREE.Scene = await this.sceneGenerator.createScene(game.originalScene, game.backColor, game.isThematic);
+    const scene: THREE.Scene = await this.sceneGenerator.createScene(game.originalScene, game.backColor, game.isThematic, game.differences);
     renderer.render(scene, camera);
 
     return renderer.domElement.toDataURL();
@@ -151,6 +151,7 @@ export class RenderService {
     }
   }
   public identifyDiff(event: MouseEvent): THREE.Object3D {
+    this.changeVisibilityOfDifferencesObjects(true);
     if ( event.clientX < this.containerModif.offsetLeft) {
       this.calculateMouse(event, this.containerOriginal);
     } else {
@@ -184,10 +185,10 @@ export class RenderService {
     switch (type) {
       case ADD_TYPE: this.sceneModif.remove(this.getObject(this.sceneModif, objName));
                      break;
-      case MODIFICATION_TYPE: this.stopFlashObject(objName);
+      case MODIFICATION_TYPE: this.changeVisibilityOfDifferencesObjects(true);
                               this.removeModif(objName);
                               break;
-      case DELETE_TYPE: this.stopFlashObject(objName);
+      case DELETE_TYPE: this.changeVisibilityOfDifferencesObjects(true);
                         this.getObject(this.sceneModif, objName).visible = true;
                         break;
       default: return;
@@ -231,29 +232,11 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        this.getObject(this.sceneOriginal, diff.name).traverse((obj: THREE.Object3D) => {
-          if ((obj as THREE.Mesh).material) {
-            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
-            new THREE.Color(visible ? 0 : this.WHITE);
-          }
-        });
+        this.getObject(this.sceneOriginal, diff.name).visible = visible;
       }
       if (diff.type !== DELETE_TYPE) {
-        this.getObject(this.sceneModif, diff.name).traverse((obj: THREE.Object3D) => {
-          if ((obj as THREE.Mesh).material) {
-            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
-            new THREE.Color(visible ? 0 : this.WHITE);
-          }
-        });
+        this.getObject(this.sceneModif, diff.name).visible = visible;
       }
     }
-  }
-  private stopFlashObject(name: string): void {
-    this.sceneOriginal.getObjectByName(name).traverse((obj: THREE.Object3D) => {
-      if ((obj as THREE.Mesh).material) {
-        ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
-        new THREE.Color(0);
-      }
-    });
   }
 }
