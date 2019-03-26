@@ -48,7 +48,6 @@ export class Game3DModificatorService {
     private createDifference(obj: IObjet3D, objects: IObjet3D[], typeObj: string,
                              typeModif:  {add: boolean, delete: boolean, color: boolean}): IDifference {
 
-        // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
                 return {name: objects.length.toString(), type: ADD_TYPE, object: this.createObject(objects, typeObj)};
@@ -61,10 +60,9 @@ export class Game3DModificatorService {
 
                 return {name: obj.name, type: MODIFICATION_TYPE, object: temp};
             }
+            default: throw new TYPE_ERROR("The modification type is not valid.");
 
         }
-
-        throw new TYPE_ERROR("The modification type is not valid.");
 
     }
 

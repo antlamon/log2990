@@ -181,12 +181,26 @@ describe("GameRoomService", () => {
                     });
         });
     });
+    // TODO: it fails
     // describe("End a game", () => {
     //     it("Ending a game room should send a put request", async () => {
-    //         sandbox.on(Axios, "put", async () => Promise.resolve({data: { title: BASE_ID, body: "error" }}));
-    //         service.endGame({username: "test", score: "1:2:3:4:5:6", gameId: "1", gameType: "test"}).then(
+    //         const mockEndGameMessage: EndGameMessage = {
+    //             username: "user",
+    //             score: "1:23",
+    //             gameId: "1",
+    //             gameType: "test",
+    //         };
+    //         const mockScoreUpdate: ScoreUpdate = {
+    //             id: "1",
+    //             solo: [],
+    //             multi: [],
+    //             insertPos: 2,
+    //             gameType: "test",
+    //         };
+    //         sandbox.on(Axios, "put", async () => Promise.resolve({data: { title: BASE_ID, body: mockScoreUpdate }}));
+    //         service.endGame(mockEndGameMessage).then(
     //             (response: NewScoreUpdate) => {
-    //                 expect(response.username).to.equal("test");
+    //                 expect(response.username).to.equal("user");
     //             },
     //         );
     //     });

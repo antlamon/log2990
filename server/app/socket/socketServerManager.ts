@@ -66,7 +66,7 @@ export class SocketServerManager {
     private async handleCheckDifference3D(event: Obj3DClickMessage): Promise<void> {
         const update: Game3DRoomUpdate = await this.gameRoomService.checkDifference3D(event.gameRoomId, event.username, event.name);
         this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE_3D, event.gameRoomId, update);
-        //this.emitRoomEvent(SocketsEvents.NEW_GAME_MESSAGE, event.gameRoomId, update);
+        this.emitRoomEvent(SocketsEvents.NEW_GAME_MESSAGE, event.gameRoomId, update);
     }
 
     private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {

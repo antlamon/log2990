@@ -92,13 +92,14 @@ describe("Test for the socketServerManager", () => {
         sandbox.on(gameRoomService, "checkDifference3D", async () => Promise.resolve("123"));
         mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE_3D, { gameRoomId: "123" });
     });
+    // TODO cause fails
     // it("Should handle end game event with resolved promise", (done: Mocha.Done) => {
-    //     mockClientSocket.on(SocketsEvents.END_GAME, (gameRoom: string) => {
-    //         expect(gameRoom).to.equal("123");
+    //     mockClientSocket.on(SocketsEvents.END_GAME, (endGameMessage: EndGameMessage) => {
+    //         expect(endGameMessage.gameId).to.equal("123");
     //         done();
     //     });
     //     sandbox.on(gameRoomService, "endGame", async () => Promise.resolve("123"));
-    //     mockClientSocket.emit(SocketsEvents.END_GAME, { gameRoomId: "123" });
+    //     mockClientSocket.emit(SocketsEvents.END_GAME, {username: "test", score: "1:24", gameId: "123", gameType: "test"});
     // });
     it("Should handle delete game  room event", (done: Mocha.Done) => {
         const spy: ChaiSpies.Spy = sandbox.on(gameRoomService, "deleteGameRoom", async () => Promise.resolve());
