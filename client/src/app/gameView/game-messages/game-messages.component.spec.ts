@@ -3,8 +3,10 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { GameMessagesComponent } from "./game-messages.component";
 import { GameRoomUpdate, ScoreUpdate } from "../../../../../common/communication/message";
 
+const ARRAY_TWO_MESSAGES: number = 2;
 const mockUsername: string = "test";
-const mockEventType: string = "userConnected";
+const mockConnectedEvent: string = "userConnected";
+const mockDisconnectedEvent: string = "userDisconnected";
 
 describe("GameMessagesComponent", () => {
   let component: GameMessagesComponent;
@@ -30,20 +32,28 @@ describe("GameMessagesComponent", () => {
   describe("Pushing game messages", () => {
     it("handle new identification should push a new message in the array", () => {
       component.gameMessages = [];
-      const update: GameRoomUpdate = {
+      const updateError: GameRoomUpdate = {
         username: "test",
         newImage: "testImage",
         differencesFound: -1,
         isGameOver: false,
       };
-      component.handleNewIdentification(update);
-      expect(component.gameMessages.length).toEqual(1);
+      const updateDifferenceFound: GameRoomUpdate = {
+        username: "test",
+        newImage: "testImage",
+        differencesFound: 1,
+        isGameOver: false,
+      };
+      component.handleNewIdentification(updateError);
+      component.handleNewIdentification(updateDifferenceFound);
+      expect(component.gameMessages.length).toEqual(ARRAY_TWO_MESSAGES);
     });
 
     it("handle connection should push a new message in the array", () => {
       component.gameMessages = [];
-      component.handleConnection(mockUsername, mockEventType);
-      expect(component.gameMessages.length).toEqual(1);
+      component.handleConnection(mockUsername, mockConnectedEvent);
+      component.handleConnection(mockUsername, mockDisconnectedEvent);
+      expect(component.gameMessages.length).toEqual(ARRAY_TWO_MESSAGES);
     });
 
     it("handle new best time should push a new message in the array", () => {
