@@ -32,10 +32,10 @@ describe("TimeScore Controller", () => {
     });
 
     it("Should return true from put", (done: Mocha.Done) => {
-        sandbox.on(timeScoreService, "changeHighScore", async () => Promise.resolve(true));
+        sandbox.on(timeScoreService, "changeHighScore", async () => Promise.resolve(1));
         supertest(app)
         .put("/api/timescore")
-        .query({
+        .send({
             username: "user",
             gameType: "simple-games",
             gameMode: "solo",
@@ -45,7 +45,7 @@ describe("TimeScore Controller", () => {
         })
         .expect(200)
         .end((error: Error, response: supertest.Response) => {
-            expect(response.body.body).to.eql(true);
+            expect(response.body.body).to.eql(1);
             done(error);
         });
     });
@@ -68,7 +68,7 @@ describe("TimeScore Controller", () => {
         sandbox.on(timeScoreService, "changeHighScore", async () => Promise.reject());
         supertest(app)
         .put("/api/timescore")
-        .query({
+        .send({
             username: "user",
             gameType: "simple-games",
             gameMode: "solo",

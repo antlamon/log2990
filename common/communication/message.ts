@@ -1,4 +1,5 @@
 import { IDifference } from "../models/game3D";
+import { IScore } from "../models/top3";
 
 export interface Message {
     title: string;
@@ -17,6 +18,7 @@ export const FREE_GAME_TYPE:string = "free";
 
 export interface INewGameMessage {
     gameRoomId: string;
+    gameName: string;
     username: string;
     is3D: boolean;
 }
@@ -36,14 +38,16 @@ export interface Point {
     y: number;
 }
 
-export interface GameRoomUpdate {
+interface IGameRoomUpdate {
     username: string;
     differencesFound: number;
+    isGameOver: boolean;
+}
+
+export interface GameRoomUpdate extends IGameRoomUpdate {
     newImage: string;
 }
-export interface Game3DRoomUpdate {
-    username: string;
-    differencesFound: number;
+export interface Game3DRoomUpdate extends IGameRoomUpdate {
     objName: string;
     diffType: string;
 }
@@ -52,9 +56,36 @@ export interface clickMessage {
     username: string;
     gameRoomId: string;
 }
+
 export interface ImageClickMessage extends clickMessage {
     point: Point;
 }
+
 export interface Obj3DClickMessage extends clickMessage {
     name: string;
+}
+
+export interface EndGameMessage {
+    username: string;
+    score: string;
+    gameId: string;
+    gameType: string;
+}
+
+export interface IScoreUpdate {
+    id: string;
+    gameType: string;
+    solo: IScore[] | null;
+    multi: IScore[] | null;
+}
+
+export interface ScoreUpdate extends IScoreUpdate {
+    insertPos: number;
+}
+
+export interface NewScoreUpdate {
+    scoreUpdate: ScoreUpdate;
+    username: string;
+    gameMode: string;
+    gameName: string;
 }
