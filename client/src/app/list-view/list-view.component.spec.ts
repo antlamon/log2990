@@ -22,7 +22,7 @@ import { MedievalObjectsCreatorService } from "../scene3D/medieval-objects-creat
 import { ShapeCreatorService } from "../scene3D/scene3-d/shape-creator.service";
 import { SceneGeneratorService } from "../scene3D/scene-generator.service";
 import { GameMessagesComponent } from "../gameView/game-messages/game-messages.component";
-import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { Observable } from "rxjs";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -50,8 +50,7 @@ describe("ListViewComponent", () => {
       imports: [
         HttpClientModule,
         FormsModule,
-        MatProgressSpinnerModule,
-        HttpClientTestingModule
+        MatProgressSpinnerModule
       ],
       declarations: [
         ListViewComponent,
@@ -102,6 +101,19 @@ describe("ListViewComponent", () => {
       component.freeGames = [mockGame3D];
       component.removeFreeGame(mockGame3D.id);
       expect(component.freeGames.length).toEqual(0);
+    });
+  });
+  describe("Getting games", () => {
+    it("Should define simple games when getting simpleGames", async () => {
+      spyOn(component["gameService"], "getSimpleGames").and.returnValue(Observable.create([mockSimple]));
+      await component.getSimpleGames();
+      expect(component["simpleGames"]).toBeDefined();
+    });
+    it("Should call the setter of imageUrls when getting free games", async () => {
+      spyOn(component["gameService"], "getFreeGames").and.returnValue(Observable.create([mockGame3D]));
+      const spy: jasmine.Spy = spyOn(component["imageURLs"], "set");
+      await component.getFreeGames();
+      expect(spy).toHaveBeenCalled();
     });
   });
   describe("Updating score", () => {
