@@ -131,12 +131,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameId: this.simpleGame.card.id,
             gameType: "simple",
         });
-        setTimeout(
-            () => {
-                this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
-            },
-            this.ONE_SEC_IN_MS * 20
-        );
+        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 
     public sendClick(event: MouseEvent): void {
