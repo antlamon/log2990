@@ -74,6 +74,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
         if (this.game3D) {
+            this.render.stopCheatMode();
             this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
         }
     }
