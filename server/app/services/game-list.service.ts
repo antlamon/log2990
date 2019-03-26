@@ -29,7 +29,7 @@ export class GameListService {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
-        return this.simpleCollection.find({}).project({card: true})
+        return this.simpleCollection.find({}, {projection: {_id: 0, card: 1}})
         .map((x: IFullGame) => x.card).toArray();
     }
 
@@ -132,7 +132,7 @@ export class GameListService {
         });
         if (response.status === GameListService.HTTP_OK) {
             if ( gameType === SIMPLE_GAME_TYPE ) {
-                const tempGame: IFullGame | null = await this.simpleCollection.findOne({"game.id": id});
+                const tempGame: IFullGame | null = await this.simpleCollection.findOne({"card.id": id});
                 if (tempGame) {
                     this.socketController.emitEvent(
                         SocketsEvents.SCORES_UPDATED, {gameType: gameType, id: id, solo: tempGame.card.solo, multi: tempGame.card.multi});

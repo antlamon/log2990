@@ -195,11 +195,11 @@ export class TimeScoreService {
     }
 
     private async getSimpleGame(id: string): Promise<IFullGame | null> {
-        return this.simpleCollection.findOne({ "card.id": id }, {projection: {"card.solo": true, "card.multi": true}});
+        return this.simpleCollection.findOne({ "card.id": id }, {projection: {"card.solo": 1, "card.multi": 1}});
     }
 
     private async getFreeGame(id: string): Promise<IGame3D | null> {
-        return this.freeCollection.findOne({ "id": id }, {projection: {"solo": true, "multi": true}});
+        return this.freeCollection.findOne({ "id": id }, {projection: {solo: 1, multi: 1}});
     }
 }
 
