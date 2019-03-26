@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { INITIAL_MODEL_SIZE, INITIAL_OBJECT_SIZE, IObjet3D, } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
-import { MODELS, TEXTURES } from "../../../common/models/textures";
+import { MODELS } from "../../../common/models/textures";
 
 @injectable()
 export class ObjectGeneratorService {
@@ -15,21 +15,25 @@ export class ObjectGeneratorService {
 
     private readonly TRAIL_NEG_COORD: number = -15;
     private readonly TRAIL_POS_COORD: number = 5;
+    private readonly LEFT_FOUNT_X: number = -30;
+    private readonly LEFT_FOUNT_Z: number = 0;
+    private readonly RIGHT_FOUNT_X: number = 20;
+    private readonly RIGHT_FOUNT_Z: number = 0;
 
     /* the following constants define composition of the medieval forest, expressed in % */
     private readonly MAX_DRAGONS: number = 0.1;
-    private readonly MAX_ROCKS: number = 0.2;
-    private readonly MAX_FOUNTAINS: number = 0.05;
-    private readonly MAX_CARTS: number = 0.7;
+    private readonly MAX_ROCKS: number = 0.1;
+    private readonly MAX_FOUNTAINS: number = 0.1;
+    private readonly MAX_CARTS: number = 0.05;
     private readonly MAX_BARRELS: number = 0.1;
-    private readonly MAX_KNIGHTS: number = 0.05;
-    private readonly MAX_CHESTS: number = 0.1;
-    private readonly MAX_CANONS: number = 0.08;
-    private readonly MAX_BALLISTAS: number = 0.08;
+    private readonly MAX_KNIGHTS: number = 0.2;
+    private readonly MAX_HORSES: number = 0.1;
+    private readonly MAX_CANONS: number = 0.1;
+    private readonly MAX_BALLISTAS: number = 0.05;
     private SCENE_COMPOSITION: Map<string, number> = new Map([
-        ["dragon", this.MAX_DRAGONS], ["rock", this.MAX_ROCKS], ["fountain", this.MAX_FOUNTAINS],
-        ["cart", this.MAX_CARTS], ["barrel", this.MAX_BARRELS], ["knight", this.MAX_KNIGHTS],
-        ["chest", this.MAX_CHESTS], ["canon", this.MAX_CANONS], ["ballista", this.MAX_BALLISTAS],
+        ["knight", this.MAX_KNIGHTS], ["rock", this.MAX_ROCKS], ["fountain", this.MAX_FOUNTAINS],
+        ["cart", this.MAX_CARTS], ["barrel", this.MAX_BARRELS], ["dragon", this.MAX_DRAGONS],
+        ["horse", this.MAX_HORSES], ["canon", this.MAX_CANONS], ["ballista", this.MAX_BALLISTAS],
     ]);
 
     public generateRandomGeometricObject(objects: IObjet3D[]): IObjet3D {
@@ -52,7 +56,6 @@ export class ObjectGeneratorService {
         // tslint:disable-next-line:no-non-null-assertion
         this.SCENE_COMPOSITION.get(type) !== undefined ? qty = this.randomInt(0, this.SCENE_COMPOSITION!.get(type)! * totalQty)
          : qty = totalQty - objects.length;
-
         for (let i: number = 0; i < qty; i++) {
             const obj: IObjet3D = {
                 name: (lastLenght + i).toString(), // object index in array
@@ -86,7 +89,8 @@ export class ObjectGeneratorService {
             valid = true;
             if (isThematic) {
                 valid = ! (this.isColisionWithTrail(position.x) ||
-                this.isColisionWithModels(position.x, position.y, position.z, objects));
+                this.isColisionWithModels(position.x, position.z, objects) ||
+                this.isColisionWithFountains(position.x, position.z));
             } else {
                 valid = !this.isColisionWithShapes(position.x, position.y, position.z, objects);
             }
@@ -98,8 +102,28 @@ export class ObjectGeneratorService {
     private isColisionWithTrail(positionX: number): boolean {
         return positionX > this.TRAIL_NEG_COORD && positionX < this.TRAIL_POS_COORD;
     }
+    private isColisionWithFountains(positionX: number, positionZ: number): boolean {
+        const fountains: IObjet3D[] = [
+            {
+                type: "",
+                position: { x: this.LEFT_FOUNT_X, y: 0, z: this.LEFT_FOUNT_Z},
+                size: 1,
+                rotation: {x: 0, y: 0, z: 0},
+                name: "",
+            },
+            {
+                type: "",
+                position: { x: this.RIGHT_FOUNT_X, y: 0, z: this.RIGHT_FOUNT_Z},
+                size: 1,
+                rotation: {x: 0, y: 0, z: 0},
+                name: "",
+            },
+        ];
 
-    private isColisionWithModels(positionX: number, positionY: number, positionZ: number, objects: IObjet3D[]): boolean {
+        return this.isColisionWithModels(positionX, positionZ, fountains);
+    }
+
+    private isColisionWithModels(positionX: number, positionZ: number, objects: IObjet3D[]): boolean {
         for (const obj of objects) {
             if (Math.pow(obj.position.x - positionX, 2) + Math.pow(positionZ - obj.position.z, 2)
             < Math.pow( INITIAL_MODEL_SIZE * this.MAX_SCALE, 2)) {
