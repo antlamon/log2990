@@ -10,16 +10,18 @@ export class ObjectGeneratorService {
     private readonly MAX_SCALE: number = 1.5;
     private readonly WHITE: number = 0x000000;
     private readonly BLACK: number = 0xFFFFFF;
-    private readonly B0X_LENGHT: number = 58;
-    private readonly GEOMETRIC_GAME_SIZE: number = 300;
+    private readonly B0X_LENGHT_NEG_Z: number = -55;
+    private readonly B0X_LENGHT_POS_Z: number = 63;
+    private readonly B0X_LENGHT_POS_X: number = 45;
+    private readonly B0X_LENGHT_NEG_X: number = -58;
+    private readonly GEOMETRIC_GAME_SIZE: number = 100;
     private readonly MAX_ROTATION: number = 360;
 
     private readonly TRAIL_NEG_COORD: number = -15;
     private readonly TRAIL_POS_COORD: number = 5;
-    private readonly LEFT_FOUNT_X: number = -30;
-    private readonly LEFT_FOUNT_Z: number = 0;
+    private readonly LEFT_FOUNT_X: number = -34;
+    private readonly FOUNTAIN_Z: number = 20;
     private readonly RIGHT_FOUNT_X: number = 20;
-    private readonly RIGHT_FOUNT_Z: number = 0;
 
     /* the following constants define composition of the medieval forest, expressed in % */
     private readonly MAX_DRAGONS: number = 0.1;
@@ -80,13 +82,13 @@ export class ObjectGeneratorService {
     }
     public generatePosition(objects: IObjet3D[], isThematic: boolean): {x: number, y: number, z: number} {
         let position: {x: number, y: number, z: number};
-        const length: number = isThematic ? this.B0X_LENGHT : this.GEOMETRIC_GAME_SIZE;
         let valid: boolean;
         do {
             position = {
-                x: this.randomInt(-length, length),
+                x: isThematic ? this.randomInt(this.B0X_LENGHT_NEG_X, this.B0X_LENGHT_POS_X)
+                    : this.randomInt(-this.GEOMETRIC_GAME_SIZE, this.GEOMETRIC_GAME_SIZE),
                 y: isThematic ? 0 : this.randomInt(-length, length),
-                z: this.randomInt(-length, length),
+                z: isThematic ? this.randomInt(this.B0X_LENGHT_NEG_Z, this.B0X_LENGHT_POS_Z) :  this.randomInt(-length, length),
             };
             valid = true;
             if (isThematic) {
@@ -108,14 +110,14 @@ export class ObjectGeneratorService {
         const fountains: IObjet3D[] = [
             {
                 type: "",
-                position: { x: this.LEFT_FOUNT_X, y: 0, z: this.LEFT_FOUNT_Z},
+                position: { x: this.LEFT_FOUNT_X, y: 0, z: this.FOUNTAIN_Z},
                 size: 1,
                 rotation: {x: 0, y: 0, z: 0},
                 name: "",
             },
             {
                 type: "",
-                position: { x: this.RIGHT_FOUNT_X, y: 0, z: this.RIGHT_FOUNT_Z},
+                position: { x: this.RIGHT_FOUNT_X, y: 0, z: this.FOUNTAIN_Z},
                 size: 1,
                 rotation: {x: 0, y: 0, z: 0},
                 name: "",
