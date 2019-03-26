@@ -77,6 +77,7 @@ describe("GameRoomService", () => {
                 username: "user",
                 newImage: "ok",
                 differencesFound: 1,
+                isGameOver: false,
             };
 
             sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
@@ -96,6 +97,7 @@ describe("GameRoomService", () => {
                 username: "newUser",
                 newImage: "ok",
                 differencesFound: 1,
+                isGameOver: false,
             };
 
             sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
@@ -130,6 +132,7 @@ describe("GameRoomService", () => {
                 objName: "1",
                 diffType: ADD_TYPE,
                 differencesFound: 1,
+                isGameOver: false,
             };
 
             sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: {name: "1", type: ADD_TYPE} }}));
@@ -150,6 +153,7 @@ describe("GameRoomService", () => {
                 objName: "1",
                 diffType: ADD_TYPE,
                 differencesFound: 1,
+                isGameOver: false,
             };
 
             sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: {name: "1", type: ADD_TYPE} }}));
