@@ -54,5 +54,9 @@ describe("InitialComponent", () => {
       component.connect("test123");
       expect(navigateSpy).toHaveBeenCalledTimes(0);
     });
+    it("Should return a list of errors if the name is not valid", () => {
+      component.connect("test fail *");
+      expect(component["errors"]).toEqual(["Le username n'est pas valide"]);
+    });
   });
 });
