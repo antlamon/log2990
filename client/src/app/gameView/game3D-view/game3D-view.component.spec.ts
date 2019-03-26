@@ -17,6 +17,7 @@ import { MedievalObjectsCreatorService } from "src/app/scene3D/medieval-objects-
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { MOUSE } from "three";
 import { Game3DRoomUpdate } from "../../../../../common/communication/message";
+import { GameMessagesComponent } from "../game-messages/game-messages.component";
 const mockObjects: IObjet3D[] = [];
 
 const mockGame3D: IGame3D = {
@@ -41,10 +42,11 @@ describe("Game3DViewComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [Game3DViewComponent, ErrorPopupComponent],
+            declarations: [Game3DViewComponent, ErrorPopupComponent, GameMessagesComponent],
             imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
             providers: [RenderService, ShapeCreatorService, AppRoutingModule,
-                        IndexService, MedievalObjectsCreatorService, SceneGeneratorService]
+                        IndexService, MedievalObjectsCreatorService, SceneGeneratorService
+                    ]
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);

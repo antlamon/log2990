@@ -14,4 +14,5 @@ export class SocketsEvents {
     public static readonly FREE_GAME_DELETED = "delete-free";
     public static readonly SCORES_UPDATED = "scores-update";
     public static readonly END_GAME = "end-game";
+    public static readonly NEW_GAME_MESSAGE = "new-game";
 }
