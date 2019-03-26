@@ -9,6 +9,11 @@ button{
     color:black;
     
 }
+.spinny {
+    align-self: center;
+    width: 100%;
+    height: 100%;
+}
 button:hover{
     cursor: pointer;
     background-color:rgb(100, 142, 219);

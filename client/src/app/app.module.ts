@@ -25,6 +25,7 @@ import { GameMessagesComponent } from "./gameView/game-messages/game-messages.co
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 import { GamecardComponent } from "./gamecard/gamecard.component";
 import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
+import { TimerService } from "./services/timer.service";
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creato
     RenderService,
     ShapeCreatorService,
     MedievalObjectsCreatorService,
+    TimerService
   ],
   bootstrap: [AppComponent]
 })

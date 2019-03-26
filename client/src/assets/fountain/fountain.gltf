@@ -1,0 +1,256 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 1380,
+            "max" : [
+                368
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 369,
+            "max" : [
+                3.257411003112793,
+                2.4416003227233887,
+                0.2412453591823578
+            ],
+            "min" : [
+                -2.224165916442871,
+                -3.03997540473938,
+                -3.151308536529541
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 369,
+            "max" : [
+                1.0,
+                1.0,
+                0.3187047839164734
+            ],
+            "min" : [
+                -1.0,
+                -1.0,
+                -1.0
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 369,
+            "max" : [
+                0.9495968222618103,
+                0.9877498634159565
+            ],
+            "min" : [
+                0.014321071095764637,
+                0.006017029285430908
+            ],
+            "type" : "VEC2"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 2760,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4428,
+            "byteOffset" : 2760,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 4428,
+            "byteOffset" : 7188,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 2952,
+            "byteOffset" : 11616,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 14568,
+            "uri" : "fountain.bin"
+        }
+    ],
+    "images" : [
+        {
+            "name" : "file1",
+            "uri" : "file1.jpg"
+        },
+        {
+            "name" : "file5",
+            "uri" : "file5.jpg"
+        },
+        {
+            "name" : "file2",
+            "uri" : "file2.jpg"
+        },
+        {
+            "name" : "file7",
+            "uri" : "file7.jpg"
+        },
+        {
+            "name" : "file3",
+            "uri" : "file3.jpg"
+        },
+        {
+            "name" : "file8",
+            "uri" : "file8.jpg"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "Castle_Exterior_Tex",
+            "normalTexture" : {
+                "index" : 1
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.6334507559754066,
+                    0.6405325508197031,
+                    0.6055815310117829,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 0
+                },
+                "metallicFactor" : 0.0
+            }
+        },
+        {
+            "name" : "Ground_and_Fountain_Tex",
+            "normalTexture" : {
+                "index" : 3
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 2
+                },
+                "metallicFactor" : 0.0
+            }
+        },
+        {
+            "name" : "Towers_Doors_and_Windows_Tex",
+            "normalTexture" : {
+                "index" : 5
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 4
+                },
+                "metallicFactor" : 0.0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Untitled.425",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2,
+                        "POSITION" : 1,
+                        "TEXCOORD_0" : 3
+                    },
+                    "indices" : 0,
+                    "material" : 1
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Ground_and_Fountain.3607",
+            "rotation" : [
+                0.7071068286895752,
+                0.0,
+                -0.0,
+                0.7071067094802856
+            ],
+            "scale" : [
+                0.5482051968574524,
+                0.5482051968574524,
+                0.5482051968574524
+            ],
+            "translation" : [
+                0.16308286786079407,
+                0.17629432678222656,
+                0.04281306266784668
+            ]
+        }
+    ],
+    "samplers" : [
+        {}
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        },
+        {
+            "sampler" : 0,
+            "source" : 1
+        },
+        {
+            "sampler" : 0,
+            "source" : 2
+        },
+        {
+            "sampler" : 0,
+            "source" : 3
+        },
+        {
+            "sampler" : 0,
+            "source" : 4
+        },
+        {
+            "sampler" : 0,
+            "source" : 5
+        }
+    ]
+}

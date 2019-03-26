@@ -3,3 +3,6 @@ export const TEXTURES: string[] =
     "wood",
     "marble1"]
     // More textures to be added
+export const MODELS: string[] = [ 
+    "dragon", "rock", "fountain", "tree1", "horse", "barrel", "knight", "cart", "canon", "ballista"
+];

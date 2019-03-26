@@ -1,0 +1,197 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 1266,
+            "max" : [
+                472
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 473,
+            "max" : [
+                0.5076040029525757,
+                1.0368549823760986,
+                0.0006040000007487833
+            ],
+            "min" : [
+                -0.3029400110244751,
+                -0.147025004029274,
+                -1.7727539539337158
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 473,
+            "max" : [
+                1.0,
+                0.99993896484375,
+                0.999969482421875
+            ],
+            "min" : [
+                -1.0,
+                -0.99945068359375,
+                -1.0
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 473,
+            "max" : [
+                1.0,
+                1.0,
+                0.8741476535797119,
+                1.0
+            ],
+            "min" : [
+                -1.0,
+                -1.0,
+                -0.9997694492340088,
+                -1.0
+            ],
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 473,
+            "max" : [
+                0.9857839941978455,
+                0.9701569993048906
+            ],
+            "min" : [
+                0.017795000225305557,
+                0.020280003547668457
+            ],
+            "type" : "VEC2"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 2532,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 5676,
+            "byteOffset" : 2532,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 5676,
+            "byteOffset" : 8208,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 7568,
+            "byteOffset" : 13884,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 3784,
+            "byteOffset" : 21452,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 25236,
+            "uri" : "knight.bin"
+        }
+    ],
+    "images" : [
+        {
+            "name" : "chevalier",
+            "uri" : "chevalier.jpg"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "Material01",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.6400000190734865,
+                    0.6400000190734865,
+                    0.6400000190734865,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 0
+                },
+                "metallicFactor" : 0.0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "chevalier",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2,
+                        "POSITION" : 1,
+                        "TANGENT" : 3,
+                        "TEXCOORD_0" : 4
+                    },
+                    "indices" : 0,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "chevalier",
+            "rotation" : [
+                0.7071068286895752,
+                0.0,
+                -0.0,
+                0.7071067094802856
+            ],
+            "scale" : [
+                1.7340724468231201,
+                1.7340724468231201,
+                1.7340724468231201
+            ]
+        }
+    ],
+    "samplers" : [
+        {}
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        }
+    ]
+}

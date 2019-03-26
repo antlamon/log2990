@@ -7,6 +7,8 @@
     font-size: 25px;
     font-weight: bold;
 }
+.spinny {
+}
 
 .compteur {
     position: absolute;
@@ -36,6 +38,11 @@
 }
 
 .game-card-img {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    justify-content: center;
     width: auto;
     height: 640px;
 } 

@@ -6,7 +6,6 @@ import { Message } from "../../../common/communication/message";
 import { Application } from "../app";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
-
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 

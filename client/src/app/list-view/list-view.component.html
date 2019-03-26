@@ -9,7 +9,7 @@
       <h2>2D</h2>
       <div *ngIf="simpleGames; else spinny">
         <div *ngFor="let game of simpleGames">
-          <app-gamecard [game] = game [isAdminMode] = isAdminMode [imgURL] = ""></app-gamecard>
+          <app-gamecard [game] = game [isAdminMode] = isAdminMode [imgURL] = "imageURLs.get(game)"></app-gamecard>
         </div>
         </div>
       </div>
@@ -28,4 +28,7 @@
   <div class="game-card">
     <mat-spinner class="spinny" md-mode="indeterminate" ></mat-spinner>
   </div>
+</ng-template>
+<ng-template #spinnyImage>
+    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
 </ng-template>

@@ -1,0 +1,202 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 2724,
+            "max" : [
+                949
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 950,
+            "max" : [
+                4.258450508117676,
+                3.47663950920105,
+                1.4455842971801758
+            ],
+            "min" : [
+                0.1264514923095703,
+                -2.6127939224243164,
+                -1.6714649200439453
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 950,
+            "max" : [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "min" : [
+                -1.0,
+                -1.0,
+                -1.0
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 950,
+            "max" : [
+                0.9955828189849854,
+                1.0,
+                1.0,
+                1.0
+            ],
+            "min" : [
+                -0.9954254031181335,
+                -0.9308936595916748,
+                -1.0,
+                -1.0
+            ],
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 950,
+            "max" : [
+                0.9898293018341064,
+                0.9749362394213676
+            ],
+            "min" : [
+                0.015569668263196945,
+                0.01723843812942505
+            ],
+            "type" : "VEC2"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 5448,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 11400,
+            "byteOffset" : 5448,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 11400,
+            "byteOffset" : 16848,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 15200,
+            "byteOffset" : 28248,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 7600,
+            "byteOffset" : 43448,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 51048,
+            "uri" : "canon.bin"
+        }
+    ],
+    "images" : [
+        {
+            "name" : "Map14",
+            "uri" : "Map14.png"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "Material39",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.5879999995231628,
+                    0.5879999995231628,
+                    0.5879999995231628,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 0
+                },
+                "metallicFactor" : 0.0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Untitled",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2,
+                        "POSITION" : 1,
+                        "TANGENT" : 3,
+                        "TEXCOORD_0" : 4
+                    },
+                    "indices" : 0,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Cylinder048",
+            "rotation" : [
+                0.5004565715789795,
+                0.5004565715789795,
+                0.49954307079315186,
+                0.49954313039779663
+            ],
+            "scale" : [
+                0.3376144766807556,
+                0.3376144766807556,
+                0.3376144766807556
+            ],
+            "translation" : [
+                0.005257606506347656,
+                -0.07884550094604492,
+                0.12461292743682861
+            ]
+        }
+    ],
+    "samplers" : [
+        {}
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        }
+    ]
+}
