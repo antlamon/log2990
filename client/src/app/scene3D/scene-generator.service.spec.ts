@@ -128,9 +128,15 @@ describe("SceneGeneratorService", () => {
       });
       expect(nbNotVisible).toEqual(1);
     });
-    it("The returned THREE.Scene should have and element which the material is different from the original scene", async () => {
+    it("The returned THREE.Scene should have and element which the material is different from the original scene (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("1") as THREE.Mesh);
+    });
+    it("The returned THREE.Scene should have and element which the material is different from the original scene (thematic)", async () => {
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, differences);
+      let sceneM: THREE.Scene  = await service.createScene(mockObjects, 1, true, differences);
+      sceneM = await service.modifyScene(sceneM, differences);
       expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("1") as THREE.Mesh);
     });
     it("All objects untouched by the differences should stay the same", async () => {
