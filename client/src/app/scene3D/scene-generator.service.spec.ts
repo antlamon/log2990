@@ -117,7 +117,7 @@ describe("SceneGeneratorService", () => {
                                                              differences);
       let nbNotVisible: number = 0;
       sceneM.children.forEach((obj: THREE.Object3D) => {
-        if ( obj.visible === false) {
+        if ( !obj.visible) {
           nbNotVisible++;
         }
       });
