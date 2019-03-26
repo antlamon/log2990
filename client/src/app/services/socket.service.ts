@@ -26,4 +26,8 @@ export class SocketService {
   public emitEvent<T>(eventName: string, data?: T): void {
     this.socket.emit(eventName, data);
   }
+
+  public unsubscribeTo(eventName: string): void {
+    this.socket.off(eventName);
+  }
 }

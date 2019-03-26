@@ -57,6 +57,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
+        this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
+        this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
         if (this.simpleGame) {
             this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
         }
@@ -129,7 +131,12 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameId: this.simpleGame.card.id,
             gameType: "simple",
         });
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        setTimeout(
+            () => {
+                this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+            },
+            this.ONE_SEC_IN_MS * 20
+        );
     }
 
     public sendClick(event: MouseEvent): void {
