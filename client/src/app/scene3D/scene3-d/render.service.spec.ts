@@ -148,16 +148,12 @@ describe("renderService", () => {
   });
   describe("Identifying differences tests", () => {
     it("Should return null if no object is found", async () => {
-      await service.initialize(container1, container2, mockGame);
-      await service.startRenderingLoop();
+      spyOn(service["sceneModif"], "getObjectByName").and.returnValue(new THREE.Object3D());
+      spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(new THREE.Object3D());
+      //await service.initialize(container1, container2, mockGame);
+      //await service.startRenderingLoop();
       expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
                                                             clientY: service["containerOriginal"]["offsetLeft"] - 1 }))).toEqual(null);
-    });
-    it("Should return null if no object is found", async () => {
-      await service.initialize(container1, container2, mockGame);
-      await service.startRenderingLoop();
-      expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
-                                                            clientY: service["containerOriginal"]["offsetLeft"] + 1 }))).toEqual(null);
     });
   });
   describe("Removing differences tests", () => {
