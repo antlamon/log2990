@@ -23,6 +23,7 @@ export class GameMessagesComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.gameMessages = [];
+    this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
   }
 
   public handleNewIdentification(update: GameRoomUpdate): void {
@@ -67,7 +68,7 @@ export class GameMessagesComponent implements OnDestroy {
   }
 
   public handleNewBestTime(newScoreUpdate: NewScoreUpdate): void {
-    const newBestMsg: string = `obtient la ${newScoreUpdate.scoreUpdate.insertPos} place dans les meilleurs
+    const newBestMsg: string = `obtient la position ${newScoreUpdate.scoreUpdate.insertPos} dans les meilleurs
      temps du jeu ${newScoreUpdate.gameName} en ${newScoreUpdate.gameMode}`;
 
     const msg: IGameMessage = {
