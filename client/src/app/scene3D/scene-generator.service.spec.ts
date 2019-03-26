@@ -69,6 +69,20 @@ const differences: IDifference[] = [
   name: "1",
  }
 ];
+const mockDragon: IObjet3D = {
+  name: "1",
+  type: "dragon",
+  position: { x: 0, y: 0, z: 0},
+  size: 1,
+  rotation: {x: 0, y: 0, z: 0},
+};
+const diffDragon: IDifference[] = [
+  {
+    type: MODIFICATION_TYPE,
+    object: mockDragon,
+    name: mockDragon.name,
+    }
+];
 let service: SceneGeneratorService = new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService());
 describe("SceneGeneratorService", () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -106,7 +120,7 @@ describe("SceneGeneratorService", () => {
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
       expect(scene.background).toEqual(sceneM.background);
     });
-    it("The returned modify scene should have more objects when a difference of type ADD is passed to the function", async () => {
+    it("The returned modify scene should have more objects when a ADD_TYPE difference is passed to the function (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
       expect(scene.children.length + 1).toEqual(sceneM.children.length);
@@ -123,10 +137,21 @@ describe("SceneGeneratorService", () => {
       });
       expect(nbNotVisible).toEqual(1);
     });
-    it("The returned THREE.Scene should have and element which the material is different from the original scene", async () => {
+    it("The returned THREE.Scene should have and element which the material is different from the original scene (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
       expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("1") as THREE.Mesh);
+    });
+    it("The returned THREE.Scene should have and element which the material is different from the original scene (thematic)", async () => {
+      spyOn(service, "createScene").and.callFake(async (): Promise<THREE.Scene> => {
+        return new THREE.Scene();
+      });
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, diffDragon);
+      scene.add(await service["modelsService"].createObject(mockDragon, true));
+      let sceneM: THREE.Scene  = await service.createScene(mockObjects, 1, true, diffDragon);
+      sceneM.add(await service["modelsService"].createObject(mockDragon, true));
+      sceneM = await service.modifyScene(sceneM, diffDragon);
+      expect(scene.getObjectByName(mockDragon.name) as THREE.Mesh).not.toEqual(sceneM.getObjectByName(mockDragon.name) as THREE.Mesh);
     });
     it("All objects untouched by the differences should stay the same", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
