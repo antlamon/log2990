@@ -120,9 +120,12 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
-        //todo send time to gameroom
-        this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
-        this.timer.setToZero();
+        this.socket.emitEvent(SocketsEvents.END_GAME, {
+            username: this.index.username,
+            score: this.timer.getTimeAsString(),
+            gameId: this.game3D.id,
+            gameType: "free",
+        });
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 
