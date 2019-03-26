@@ -62,7 +62,7 @@ export class SceneGeneratorService {
         this.modifyObject(scene, diffObj);
         break;
       case DELETE_TYPE:
-        this.deleteObject(scene, diffObj.name);
+        this.hideObject(scene, diffObj.name);
         break;
       default: break;
     }
@@ -97,7 +97,7 @@ export class SceneGeneratorService {
     }
   }
 
-  private deleteObject(scene: THREE.Scene, name: string): void {
+  private hideObject(scene: THREE.Scene, name: string): void {
     scene.getObjectByName(name).visible = false;
   }
 }

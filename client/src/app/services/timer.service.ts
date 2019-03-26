@@ -47,6 +47,7 @@ export class TimerService {
     }
   }
   public setToZero(): void {
+    this.stopTimer();
     this._nbSeconds = 0;
     this._nbMinutes = 0;
   }

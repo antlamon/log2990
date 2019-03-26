@@ -41,6 +41,7 @@ export class ShapeCreatorService {
 
     const shape: THREE.Mesh = this.map.get(obj.type).clone();
 
+    shape.name = obj.name;
     shape.position.x = obj.position.x;
     shape.position.y = obj.position.y;
     shape.position.z = obj.position.z;
@@ -51,7 +52,6 @@ export class ShapeCreatorService {
     shape.material = obj.color !== 0 ?
       new THREE.MeshPhongMaterial({color: obj.color }) :
       new THREE.MeshPhongMaterial({map: this.textureLoader.load(("assets/" + obj.texture + ".jpg")) });
-    shape.name = obj.name;
 
     return Promise.resolve(shape);
   }
