@@ -20,7 +20,6 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    /* justify-content: flex-end; */
     flex-flow: column nowrap;
     font-size: 20px;
     height: 100px;
