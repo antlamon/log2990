@@ -2,7 +2,6 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { NO_MAX_OBJECTS } from "../../../common/models/game3D";
 import { IObjet3D } from "../../../common/models/objet3D";
-import { TEXTURES } from "../../../common/models/textures";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { ObjectGeneratorService } from "./objectGenerator.service";
@@ -31,11 +30,6 @@ describe("object generator service", () => {
     describe("Function shoud return a number in the given interval", () => {
         it("Should return a number in the interval", async () => {
             expect(service.randomInt(MIN, MAX)).to.be.greaterThan(MIN - 1).and.lessThan(MAX + 1);
-        });
-    });
-    describe("Function shoud return texture from the ones given", () => {
-        it("Should return a texture from TEXTURES", async () => {
-            expect(TEXTURES).to.contain(service.randomTexture());
         });
     });
     describe("Generating an object should be randomized", () => {
