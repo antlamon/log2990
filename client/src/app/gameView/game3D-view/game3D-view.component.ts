@@ -10,6 +10,7 @@ import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../
 import { CLICK, KEYS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
+import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 
 @Component({
     selector: "app-game3d-view",
@@ -44,14 +45,15 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
     private victorySound: HTMLAudioElement;
+    private render: RenderService;
 
     public constructor(
         private gameService: GameService,
         private route: ActivatedRoute,
-        private render: RenderService,
         private socket: SocketService,
         private timer: TimerService,
         private index: IndexService,
+        private sceneGen: SceneGeneratorService,
         private router: Router) {
         this.gameIsReady = false;
         this.cheatModeActivated = false;
@@ -64,6 +66,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.differencesFound = 0;
         this.disableClick = "";
         this.blockedCursor = "";
+        this.render = new RenderService(this.sceneGen);
     }
 
     public ngOnInit(): void {
@@ -85,6 +88,8 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.timer.startTimer();
     }
     private handleCheckDifference(update: Game3DRoomUpdate): void {
+        console.log("wasCalled");
+        console.log(update.differencesFound);
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);

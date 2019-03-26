@@ -123,7 +123,7 @@ export class TimeScoreService {
             let game: IFullGame | null = await this.getSimpleGame(id);
             if (game) {
                 game = this.updateSimpleGameScore(game, gameMode, userName, nbMinutes, nbSeconds, pos);
-                await this.simpleCollection.updateOne({ card: { id } }, { $set: { ...game } });
+                await this.simpleCollection.updateOne({ "card.id": id }, { $set: { ...game } });
                 scores = [game.card.solo, game.card.multi];
             }
         } else {
