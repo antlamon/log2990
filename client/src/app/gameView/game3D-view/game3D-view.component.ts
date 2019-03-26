@@ -76,6 +76,8 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
+        this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
+        this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE_3D);
         if (this.game3D) {
             this.render.stopCheatMode();
             this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
@@ -229,6 +231,5 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             name: object ? object.name : null,
         };
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
-
     }
 }
