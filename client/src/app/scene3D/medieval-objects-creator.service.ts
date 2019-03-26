@@ -67,6 +67,7 @@ export class MedievalObjectsCreatorService {
   }
   private createSkyBox(): Promise<THREE.Mesh> {
     return new Promise<THREE.Mesh>((resolve, reject) => {
+      if ( !this.loadedModels.get("skybox")) {
       this.skyBoxLoader = new THREE.TextureLoader();
       const faceNb: number = 6;
       const materialArray: THREE.MeshBasicMaterial[] = [];
@@ -82,6 +83,9 @@ export class MedievalObjectsCreatorService {
           side: THREE.BackSide
         });
       }
+    } else {
+      return this.loadedModels.get("skybox");
+    }
     });
   }
 
