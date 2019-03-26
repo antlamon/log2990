@@ -181,6 +181,16 @@ describe("GameRoomService", () => {
                     });
         });
     });
+    // describe("End a game", () => {
+    //     it("Ending a game room should send a put request", async () => {
+    //         sandbox.on(Axios, "put", async () => Promise.resolve({data: { title: BASE_ID, body: "error" }}));
+    //         service.endGame({username: "test", score: "1:2:3:4:5:6", gameId: "1", gameType: "test"}).then(
+    //             (response: NewScoreUpdate) => {
+    //                 expect(response.username).to.equal("test");
+    //             },
+    //         );
+    //     });
+    // });
     describe("Deleting a game room", () => {
         it("Deleting a game room should send a delete request", async () => {
             const spy: ChaiSpies.Spy = sandbox.on(Axios, "delete", async () => Promise.resolve());
