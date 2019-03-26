@@ -106,8 +106,13 @@ describe("SceneGeneratorService", () => {
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
       expect(scene.background).toEqual(sceneM.background);
     });
-    it("The returned modify scene should have more objects when a difference of type ADD is passed to the function", async () => {
+    it("The returned modify scene should have more objects when a ADD_TYPE difference is passed to the function (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
+      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      expect(scene.children.length + 1).toEqual(sceneM.children.length);
+    });
+    it("The returned modify scene should have more objects when a ADD_TYPE difference is passed to the function (thematic)", async () => {
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, differences);
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
       expect(scene.children.length + 1).toEqual(sceneM.children.length);
     });
