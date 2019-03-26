@@ -85,16 +85,16 @@ describe("SceneGeneratorService", () => {
 
       return Promise.resolve(mockMesh);
     });
-    spyOn(service["modelsService"], "createMedievalScene").and.callFake((obj: IObjet3D[]): Promise<THREE.Mesh[]> => {
-      const mockMeshArray: THREE.Mesh[] = [];
+    spyOn(service["modelsService"], "createMedievalScene").and.callFake((obj: IObjet3D[]): Promise<THREE.Mesh>[] => {
+      const mockMeshArray: Promise<THREE.Mesh>[] = [];
       obj.forEach((iobj: IObjet3D) => {
         const mockMesh: THREE.Mesh = new THREE.Mesh();
         mockMesh.name = iobj.name;
         mockMesh.material = new THREE.MeshPhongMaterial({shininess: iobj.color});
-        mockMeshArray.push(mockMesh);
+        mockMeshArray.push(Promise.resolve(mockMesh));
       });
 
-      return Promise.resolve(mockMeshArray);
+      return mockMeshArray;
     });
   });
   describe("Test the function createScene", async () => {

@@ -72,7 +72,7 @@ describe("Game3DViewComponent", () => {
             const spy: jasmine.Spy = spyOn(component["render"], "moveCam").and.callFake(() => {});
             const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
             Object.defineProperty(keyEvent, "keyCode", {
-            get : (): number =>  KEYS["W"]
+                get : (): number =>  KEYS["W"]
             });
             component["onKeyDown"](keyEvent);
             expect(spy).toHaveBeenCalled();
