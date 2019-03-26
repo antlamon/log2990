@@ -122,21 +122,13 @@ describe("GameList service", () => {
 
     describe("Getting games", () => {
         it("Getting simple games should return SIMPLEGAMES", async () => {
-            service.getSimpleGames().then(
-                (games: IGame[]) => {
-                    expect(games[0]).to.eql(mockedFullGame.card);
-                },
-                () => fail(),
-            );
+            const games: IGame[] = await service.getSimpleGames();
+            expect(games.length).to.eql(1);
         });
 
         it("Getting free games should return FREEGAMES", async () => {
-            service.getFreeGames().then(
-                (games: IGame3D[]) => {
-                    expect(games[0].id).to.eql(mockGame3D.id);
-                },
-                () => fail(),
-            );
+            const games: IGame3D[] = await service.getFreeGames();
+            expect(games.length).to.eql(1);
         });
 
         it("Getting a simple game should return the game", async () => {
