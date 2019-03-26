@@ -19,7 +19,7 @@ export class SceneGeneratorService {
     THREE.Cache.enabled = true;
    }
 
-  public async createScene(objects: IObjet3D[], color: number, isThematic: boolean): Promise<THREE.Scene> {
+  public async createScene(objects: IObjet3D[], color: number, isThematic: boolean, diff: IDifference[]): Promise<THREE.Scene> {
     const scene: THREE.Scene = new THREE.Scene();
     scene.background = new THREE.Color(color);
     this.isThematic = isThematic;
@@ -29,7 +29,7 @@ export class SceneGeneratorService {
     scene.add(light);
     this.shapeService.resetPromises();
     if (this.isThematic) {
-      const objectsRes: THREE.Mesh[] = await this.modelsService.createMedievalScene(objects);
+      const objectsRes: THREE.Mesh[] = await this.modelsService.createMedievalScene(objects, diff);
       for (const obj of objectsRes) {
           scene.add(obj);
         }
@@ -69,7 +69,7 @@ export class SceneGeneratorService {
 }
   private async addObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
     const object: THREE.Mesh = this.isThematic ?
-      await this.modelsService.createObject(diffObj.object) :
+      await this.modelsService.createObject(diffObj.object, true) :
       await this.shapeService.createShape(diffObj.object);
     scene.add(object);
   }
@@ -77,7 +77,7 @@ export class SceneGeneratorService {
   private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
     const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
     const newMesh: THREE.Mesh = this.isThematic ?
-      await this.modelsService.createObject(diffObj.object) :
+      await this.modelsService.createObject(diffObj.object, true) :
       await this.shapeService.createShape(diffObj.object);
     if (this.isThematic) {
       newMesh.traverse((child) => {
