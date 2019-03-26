@@ -11,7 +11,7 @@ export class ObjectGeneratorService {
     private readonly WHITE: number = 0x000000;
     private readonly BLACK: number = 0xFFFFFF;
     private readonly B0X_LENGHT: number = 58;
-    private readonly GEOMETRIC_GAME_SIZE: number = 300;
+    private readonly GEOMETRIC_GAME_SIZE: number = 100;
     private readonly MAX_ROTATION: number = 360;
 
     private readonly TRAIL_NEG_COORD: number = -15;
