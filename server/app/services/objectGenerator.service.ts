@@ -125,7 +125,7 @@ export class ObjectGeneratorService {
 
     private isColisionWithModels(positionX: number, positionZ: number, objects: IObjet3D[]): boolean {
         for (const obj of objects) {
-            if (Math.pow(obj.position.x - positionX, 2) + Math.pow(positionZ - obj.position.z, 2)
+            if (Math.pow(Math.abs(obj.position.x - positionX), 2) + Math.pow(Math.abs(positionZ - obj.position.z), 2)
             < Math.pow( INITIAL_MODEL_SIZE * this.MAX_SCALE, 2)) {
             return true;
             }
@@ -135,8 +135,8 @@ export class ObjectGeneratorService {
     }
     private isColisionWithShapes(positionX: number, positionY: number, positionZ: number, objects: IObjet3D[]): boolean {
         for (const obj of objects) {
-            if (Math.pow(obj.position.x - positionX, 2) + Math.pow(positionY - obj.position.y, 2)
-            + Math.pow(positionZ - obj.position.z, 2)
+            if (Math.pow(Math.abs(obj.position.x - positionX), 2) + Math.pow(Math.abs(positionY - obj.position.y), 2)
+            + Math.pow(Math.abs(positionZ - obj.position.z), 2)
             < Math.pow( INITIAL_OBJECT_SIZE * this.MAX_SCALE, 2)) {
             return true;
             }

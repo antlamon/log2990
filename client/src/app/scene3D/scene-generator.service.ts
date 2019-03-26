@@ -75,7 +75,6 @@ export class SceneGeneratorService {
 
   private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
     const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
-
     const newMesh: THREE.Mesh = this.isThematic ?
       await this.modelsService.createObject(diffObj.object) :
       await this.shapeService.createShape(diffObj.object);
@@ -90,10 +89,11 @@ export class SceneGeneratorService {
            });
         }
       });
+      scene.remove(originalMesh);
+      scene.add(newMesh);
     } else {
       originalMesh.material = newMesh.material;
     }
-    scene.add(newMesh);
   }
 
   private deleteObject(scene: THREE.Scene, name: string): void {

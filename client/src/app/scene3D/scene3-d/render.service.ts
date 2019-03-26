@@ -234,22 +234,32 @@ export class RenderService {
   private isObjet(name: string): boolean {
     return +name >= 0;
   }
-
+  private getObject(scene: THREE.Scene, objName: string): THREE.Object3D {
+    return scene.getObjectByName(objName);
+  }
   private removeDiff(objName: string, type: string): void {
 
     switch (type) {
-      case ADD_TYPE: this.sceneModif.remove(this.sceneModif.getObjectByName(objName));
+      case ADD_TYPE: this.sceneModif.remove(this.getObject(this.sceneModif, objName));
                      break;
       case MODIFICATION_TYPE: this.stopFlashObject(objName);
-                              (this.sceneModif.getObjectByName(objName) as THREE.Mesh).material
-        = (this.sceneOriginal.getObjectByName(objName) as THREE.Mesh).material;
+                              this.removeModif(objName);
                               break;
       case DELETE_TYPE: this.stopFlashObject(objName);
-                        this.sceneModif.getObjectByName(objName).visible = true;
+                        this.getObject(this.sceneModif, objName).visible = true;
                         break;
       default: break;
     }
     this.soustractDiff(objName);
+  }
+  private removeModif(objName: string): void {
+    if (this.isThematic) {
+      this.sceneModif.remove(this.getObject(this.sceneModif, objName));
+      this.sceneModif.add(this.getObject(this.sceneOriginal, objName).clone());
+    } else {
+      (this.getObject(this.sceneModif, objName) as THREE.Mesh).material
+        = (this.getObject(this.sceneOriginal, objName) as THREE.Mesh).material;
+    }
   }
   private soustractDiff(objName: string): void {
     for (let i: number = 0; this.differences.length; i++ ) {
@@ -279,7 +289,7 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        this.sceneOriginal.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
+        this.getObject(this.sceneOriginal, diff.name).traverse((obj: THREE.Object3D) => {
           if ((obj as THREE.Mesh).material) {
             ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
             new THREE.Color(visible ? 0 : this.WHITE);
@@ -287,7 +297,7 @@ export class RenderService {
         });
       }
       if (diff.type !== DELETE_TYPE) {
-        this.sceneModif.getObjectByName(diff.name).traverse((obj: THREE.Object3D) => {
+        this.getObject(this.sceneModif, diff.name).traverse((obj: THREE.Object3D) => {
           if ((obj as THREE.Mesh).material) {
             ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
             new THREE.Color(visible ? 0 : this.WHITE);
