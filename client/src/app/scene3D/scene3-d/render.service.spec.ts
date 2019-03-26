@@ -12,6 +12,8 @@ import { SocketService } from "src/app/services/socket.service";
 import { KEYS } from "src/app/global/constants";
 import { IndexService } from "src/app/services/index.service";
 import { HttpClientModule } from "@angular/common/http";
+import { SceneGeneratorService } from "../scene-generator.service";
+import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
@@ -64,12 +66,13 @@ describe("renderService", () => {
     isThematic: false,
     backColor: 0xFFFFFF,
   };
-  const mockMesh: THREE.Mesh = new THREE.Mesh();
   const container1: HTMLDivElement = document.createElement("div");
   const container2: HTMLDivElement = document.createElement("div");
   const mockSocketService: SocketService = new SocketService();
   mockSocketService["socket"] = jasmine.createSpyObj("socket", ["on", "emit"]);
-  const service: RenderService = new RenderService(new ShapeCreatorService(), mockSocketService, jasmine.createSpyObj({username: ""}));
+  const service: RenderService = new RenderService(
+    new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService()),
+    mockSocketService, jasmine.createSpyObj({username: ""}));
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -81,29 +84,18 @@ describe("renderService", () => {
 
   it("should be created", inject([RenderService], (serv: RenderService) => {
     expect(serv).toBeTruthy();
+    service["sceneOriginal"] = new THREE.Scene();
+    service["sceneModif"] = new THREE.Scene();
   }));
 
   describe("Test for calls within the initialize function", async () => {
     it("container property should be properly affected", async () => {
-      spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
       await service.initialize(container1, container2, mockGame);
       expect(service["containerOriginal"]).toEqual(container1);
     });
     it("should give the background color given in parameters at creation", async () => {
-      spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
       await service.initialize(container1, container2, mockGame);
       expect(service["sceneOriginal"].background).toEqual(new THREE.Color(mockGame.backColor));
-    });
-    it("should call createShape the right amount of times", async () => {
-      const spyShape: jasmine.Spy = spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
-      let nbAdded: number = 0;
-      mockGame.differences.forEach((diff: IDifference) => {
-        if (diff.type === ADD_TYPE) {
-          nbAdded++;
-        }
-      });
-      await service.initialize(container1, container2, mockGame);
-      expect(spyShape).toHaveBeenCalledTimes(mockGame.originalScene.length + nbAdded);
     });
   });
   describe("Test for the resize function", () => {
@@ -119,7 +111,6 @@ describe("renderService", () => {
       expect(spyProjectionMatrix).toHaveBeenCalled();
     });
     it("should set the new size when resized", async () => {
-      spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
       await service.initialize(container1, container2, mockGame);
       const spyRenderer: jasmine.Spy = spyOn(service["rendererO"], "setSize");
       service.onResize();
@@ -175,7 +166,6 @@ describe("renderService", () => {
     });
     describe("Test for the cheat functions", () => {
       it("The key T should call startCheatMode and pressing a second time should stop it", async () => {
-        spyOn(service["shapeService"], "createShape").and.returnValue(Promise.resolve(mockMesh));
         await service.initialize(container1, container2, mockGame);
         const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyT" });
         Object.defineProperty(keyEvent, "keyCode", {

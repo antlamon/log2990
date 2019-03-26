@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { TYPE_ERROR } from "../../../common/models/errors";
 import { ADD_TYPE, DELETE_TYPE, GEOMETRIC_TYPE_NAME, IDifference, MODIFICATION_TYPE } from "../../../common/models/game3D";
 import { IObjet3D, MAX_COLOR } from "../../../common/models/objet3D";
 import { TYPES } from "../types";
@@ -12,6 +13,8 @@ export class Game3DModificatorService {
     private static readonly DELETE: number = 2;
     private static readonly COLOR: number = 3;
     private readonly MINIMUM_CONTRAST: number = 0x00000F;
+    private readonly MIN_SCALE: number = 0.5;
+    private readonly MAX_ROTATION: number = 360;
 
     public constructor(@inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService) {}
 
@@ -33,6 +36,7 @@ export class Game3DModificatorService {
         for (const diff of differences) {
             if (diff.type === ADD_TYPE) {
                 diff.name = (originalScene.length + nbAdded).toString();
+                (diff.object as IObjet3D).name = diff.name;
                 nbAdded++;
             }
         }
@@ -47,20 +51,20 @@ export class Game3DModificatorService {
         // tslint:disable-next-line:switch-default
         switch (this.chooseModif(typeModif)) {
             case(Game3DModificatorService.ADD): {
-                return {name: "", type: ADD_TYPE, object: this.objectGenerator.generateRandomGeometricObject(objects)};
+                return {name: objects.length.toString(), type: ADD_TYPE, object: this.createObject(objects, typeObj)};
             }
             case(Game3DModificatorService.DELETE): {
-                return {name: obj.name, type: DELETE_TYPE, object: this.createObject(objects, typeObj)};
+                return {name: obj.name, type: DELETE_TYPE};
             }
             case(Game3DModificatorService.COLOR): {
                 const temp: IObjet3D = (typeObj === GEOMETRIC_TYPE_NAME) ? this.changeColor(obj) : this.changeTexture(obj);
 
-                return {object: temp, name: obj.name, type: MODIFICATION_TYPE};
+                return {name: obj.name, type: MODIFICATION_TYPE, object: temp};
             }
 
         }
 
-        return obj;
+        throw new TYPE_ERROR("The modification type is not valid.");
 
     }
 
@@ -68,7 +72,13 @@ export class Game3DModificatorService {
         if (typeObj === GEOMETRIC_TYPE_NAME) {
             return this.objectGenerator.generateRandomGeometricObject(objects);
         } else {
-            return this.objectGenerator.generateRandomThematicObject(objects);
+            return {
+                name: objects.length.toString(),
+                type: this.objectGenerator.randomModels(),
+                position: this.objectGenerator.generatePosition(objects, true),
+                size: Math.random() + this.MIN_SCALE, // between 0.5 and 1.5
+                rotation: {x: 0, y: this.objectGenerator.randomInt(0, this.MAX_ROTATION), z: 0},
+            };
         }
     }
 
@@ -90,18 +100,11 @@ export class Game3DModificatorService {
     }
 
     private changeTexture(obj: IObjet3D): IObjet3D {
-
-        const previousText: string = obj.texture as string;
-        let newText: string;
-        do {
-            newText = this.objectGenerator.randomTexture();
-        }   while (newText === previousText);
-
         return {
             type: obj.type,
             name: obj.name,
             color: 0,
-            texture: newText,
+            texture: obj.type + "Modif.png",
             position: obj.position,
             size: obj.size,
             rotation: obj.rotation,

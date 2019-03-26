@@ -1,0 +1,246 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5123,
+            "count" : 4308,
+            "max" : [
+                1057
+            ],
+            "min" : [
+                0
+            ],
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 1058,
+            "max" : [
+                1.9262086153030396,
+                0.8653401136398315,
+                0.7918323874473572
+            ],
+            "min" : [
+                -1.926208257675171,
+                -0.019743263721466064,
+                -1.340712308883667
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 1058,
+            "max" : [
+                0.999542236328125,
+                0.999969482421875,
+                0.99993896484375
+            ],
+            "min" : [
+                -0.999542236328125,
+                -0.999969482421875,
+                -0.9855647683143616
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 1058,
+            "max" : [
+                1.0,
+                0.9999637603759766,
+                0.9999940991401672,
+                1.0
+            ],
+            "min" : [
+                -1.0,
+                -0.9999632835388184,
+                -0.9999940395355225,
+                1.0
+            ],
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5126,
+            "count" : 1058,
+            "max" : [
+                0.9791682958602905,
+                0.9850680828094482
+            ],
+            "min" : [
+                0.008580729365348816,
+                0.01128929853439331
+            ],
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 5,
+            "componentType" : 5123,
+            "count" : 1058,
+            "max" : [
+                0,
+                0,
+                0,
+                0
+            ],
+            "min" : [
+                0,
+                0,
+                0,
+                0
+            ],
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 6,
+            "componentType" : 5126,
+            "count" : 1058,
+            "max" : [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "min" : [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ],
+            "type" : "VEC4"
+        }
+    ],
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter",
+        "version" : "2.0"
+    },
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 8616,
+            "byteOffset" : 0,
+            "target" : 34963
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 12696,
+            "byteOffset" : 8616,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 12696,
+            "byteOffset" : 21312,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 16928,
+            "byteOffset" : 34008,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 8464,
+            "byteOffset" : 50936,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 8464,
+            "byteOffset" : 59400,
+            "target" : 34962
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 16928,
+            "byteOffset" : 67864,
+            "target" : 34962
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 84792,
+            "uri" : "dragon.bin"
+        }
+    ],
+    "images" : [
+        {
+            "name" : "wyvern_diffuse_air",
+            "uri" : "wyvern_diffuse_air.png"
+        }
+    ],
+    "materials" : [
+        {
+            "name" : "WyvernSkin",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1.0
+                ],
+                "baseColorTexture" : {
+                    "index" : 0
+                },
+                "metallicFactor" : 0.0
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "WyvernMesh",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "JOINTS_0" : 5,
+                        "NORMAL" : 2,
+                        "POSITION" : 1,
+                        "TANGENT" : 3,
+                        "TEXCOORD_0" : 4,
+                        "WEIGHTS_0" : 6
+                    },
+                    "indices" : 0,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Wyvern",
+            "scale" : [
+                3.3488380908966064,
+                3.3488380908966064,
+                3.3488380908966064
+            ],
+            "translation" : [
+                0.0,
+                3.558626890182495,
+                -0.0
+            ]
+        }
+    ],
+    "samplers" : [
+        {}
+    ],
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "sampler" : 0,
+            "source" : 0
+        }
+    ]
+}

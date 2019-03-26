@@ -4,13 +4,20 @@
 <div class="divGames">
   <div class="gameImage">
     <p>Image originale:</p>
-    <div #originalContainer class="game-card-img"></div>
+    <div #originalContainer class="game-card-img">
+      <ng-container *ngIf="!gameIsReady; then spinny"></ng-container>
+    </div>
   </div>
   <div class="gameImage">
     <p>Image avec les différences:</p>
-    <div #modifiedContainer class="game-card-img"></div>
+    <div #modifiedContainer class="game-card-img">
+      <ng-container *ngIf="!gameIsReady; then spinny"></ng-container>
+    </div>
   </div>
 </div>
 <div class="messagesBox">
   <div class="messagesBoxTitle"> Messages </div>
 </div>
+<ng-template #spinny>
+  <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+</ng-template>

@@ -1,18 +1,17 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../../common/models/game3D";
-import { MAX_COLOR, IObjet3D } from "../../../../../common/models/objet3D";
-import { ShapeCreatorService } from "./shape-creator.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { CLICK, KEYS, WHITE } from "src/app/global/constants";
+import { CLICK, KEYS } from "src/app/global/constants";
 import { SocketService } from "src/app/services/socket.service";
 import { Obj3DClickMessage, Game3DRoomUpdate, NewGame3DMessage } from "../../../../../common/communication/message";
 import { IndexService } from "src/app/services/index.service";
-//import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
+import { SceneGeneratorService } from "../scene-generator.service";
 
 @Injectable()
 export class RenderService {
-  private readonly FLASH_TIME: number = 200;
+  private readonly FLASH_TIME: number = 150;
+  private readonly WHITE: number = 0xFFFFFF;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -21,42 +20,48 @@ export class RenderService {
   private raycaster: THREE.Raycaster;
   private readonly SENSITIVITY: number = 0.002;
   private press: boolean;
-  //private isThematic: boolean;
+  private isThematic: boolean;
   private cheatModeActivated: boolean;
   private roomId: string;
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
-  private cameraZ: number = 500;
-  private light: THREE.Light;
+  private readonly GAMMA_FACTOR: number = 2.2;
+
+  private cameraZ: number = 20;
+  private cameraY: number = 5;
+
   private fieldOfView: number = 75;
   private nearClippingPane: number = 1;
   private movementSpeed: number = 3;
   private farClippingPane: number = 3000;
-  private skyLight: number = 0x606060;
-  private groundLight: number = 0x404040;
+
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
-  public constructor(private shapeService: ShapeCreatorService, private socket: SocketService, private index: IndexService,
-    /*, private modelsService: MedievalObjectsCreatorService*/) {
+  public constructor(private sceneGenerator: SceneGeneratorService, private socket: SocketService, private index: IndexService) {
     this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
     }
 
   public async initialize(containerO: HTMLDivElement, containerM: HTMLDivElement, game: IGame3D): Promise<void> {
-
+    THREE.Cache.enabled = true;
     clearInterval(this.timeOutDiff);
     this.roomId = game.id;
     this.containerOriginal = containerO;
-    this.containerModif = containerM;
+    this.isThematic = game.isThematic;
     this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
-    this.sceneModif = this.modifyScene(this.sceneOriginal.clone(), game.differences);
+    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic);
     this.cheatModeActivated = false;
+    this.containerModif = containerM;
+    this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic) :
+     await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
+    if (this.isThematic ) {
+      this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
+    }
     const newGameMessage: NewGame3DMessage = {
       username: this.index.username,
       gameRoomId: this.roomId,
@@ -91,75 +96,18 @@ export class RenderService {
     const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
       this.fieldOfView, window.innerWidth / window.innerHeight, this.nearClippingPane, this.farClippingPane);
     camera.position.z = this.cameraZ;
+    camera.position.y = this.cameraY;
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     document.body.appendChild(renderer.domElement);
-    this.sceneOriginal = await this.createScene(game.originalScene, game.backColor);
-    renderer.render(this.sceneOriginal, camera);
     renderer.domElement.hidden = true;
+    const scene: THREE.Scene = await this.sceneGenerator.createScene(game.originalScene, game.backColor, game.isThematic);
+    renderer.render(scene, camera);
 
     return renderer.domElement.toDataURL();
     }
-  private modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): THREE.Scene {
-      for (const diff of diffObjs) {
-        this.addModification(scene, diff);
-      }
-
-      return scene;
-  }
-  private addModification(scene: THREE.Scene, diffObj: IDifference): void {
-
-    switch (diffObj.type) {
-      case ADD_TYPE:
-        this.addObject(scene, diffObj);
-        break;
-      case MODIFICATION_TYPE:
-        this.modifyObject(scene, diffObj);
-        break;
-      case DELETE_TYPE:
-        this.deleteObject(scene, diffObj.name);
-        break;
-      default: break;
-    }
-  }
-  private async addObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
-    const object: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
-    object.name = diffObj.name;
-    scene.add(object);
-  }
-
-  private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
-    const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
-    const newMesh: THREE.Mesh = await this.shapeService.createShape(diffObj.object);
-    originalMesh.material = newMesh.material;
-  }
-
-  private deleteObject(scene: THREE.Scene, name: string): void {
-    scene.getObjectByName(name).visible = false;
-  }
-
-  private async createScene(objects: IObjet3D[], color: number): Promise<THREE.Scene> {
-    const scene: THREE.Scene = new THREE.Scene();
-    scene.background = new THREE.Color(color);
-
-    scene.add( new THREE.HemisphereLight( this.skyLight, this.groundLight ) );
-    this.light = new THREE.DirectionalLight( MAX_COLOR );
-    this.light.position.set( 0, 0, 1 );
-    scene.add(this.light);
-    this.shapeService.resetPromises();
-
-    return Promise.all(this.shapeService.generateGeometricScene(objects)).then((objectsRes: THREE.Mesh[]) => {
-      for (const obj of objectsRes) {
-        scene.add(obj);
-      }
-
-      return scene;
-    });
-
-  }
   private createCamera(): void {
-    /* Camera */
     const aspectRatio: number = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
       this.fieldOfView,
@@ -169,6 +117,7 @@ export class RenderService {
       );
     this.camera.rotation.order = "YXZ";
     this.camera.position.z = this.cameraZ;
+    this.camera.position.y = this.cameraY;
     this.sceneOriginal.add(this.camera);
     this.sceneModif.add(this.camera);
   }
@@ -199,10 +148,10 @@ export class RenderService {
 
   private initializeRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.BasicShadowMap;
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.gammaFactor = this.GAMMA_FACTOR;
+    renderer.gammaOutput = true;
 
     return renderer;
   }
@@ -266,32 +215,51 @@ export class RenderService {
       this.calculateMouse(event, this.containerModif);
     }
     this.raycaster.setFromCamera( this.mouse, this.camera );
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children));
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects( this.sceneModif.children.concat(this.sceneOriginal.children),
+                                                                              true);
     if (intersects.length > 0) {
+      let objet: THREE.Object3D = intersects[0].object;
+      while (!this.isObjet(objet.name)) {
+        objet = objet.parent;
+      }
+
       const objMessage: Obj3DClickMessage = {
         gameRoomId: this.roomId,
         username: this.index.username,
-        name: intersects[0].object.name,
+        name: objet.name,
       };
       this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
     }
   }
-
+  private isObjet(name: string): boolean {
+    return +name >= 0;
+  }
+  private getObject(scene: THREE.Scene, objName: string): THREE.Object3D {
+    return scene.getObjectByName(objName);
+  }
   private removeDiff(objName: string, type: string): void {
 
     switch (type) {
-      case ADD_TYPE: this.sceneModif.getObjectByName(objName).visible = false;
+      case ADD_TYPE: this.sceneModif.remove(this.getObject(this.sceneModif, objName));
                      break;
       case MODIFICATION_TYPE: this.stopFlashObject(objName);
-                              (this.sceneModif.getObjectByName(objName) as THREE.Mesh).material
-        = (this.sceneOriginal.getObjectByName(objName) as THREE.Mesh).material;
+                              this.removeModif(objName);
                               break;
       case DELETE_TYPE: this.stopFlashObject(objName);
-                        this.sceneModif.getObjectByName(objName).visible = true;
+                        this.getObject(this.sceneModif, objName).visible = true;
                         break;
       default: break;
     }
     this.soustractDiff(objName);
+  }
+  private removeModif(objName: string): void {
+    if (this.isThematic) {
+      this.sceneModif.remove(this.getObject(this.sceneModif, objName));
+      this.sceneModif.add(this.getObject(this.sceneOriginal, objName).clone());
+    } else {
+      (this.getObject(this.sceneModif, objName) as THREE.Mesh).material
+        = (this.getObject(this.sceneOriginal, objName) as THREE.Mesh).material;
+    }
   }
   private soustractDiff(objName: string): void {
     for (let i: number = 0; this.differences.length; i++ ) {
@@ -319,19 +287,31 @@ export class RenderService {
    this.changeVisibilityOfDifferencesObjects(this.diffAreVisible);
   }
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
-
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        ((this.sceneOriginal.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
-           = new THREE.Color(visible ? 0 : WHITE);
+        this.getObject(this.sceneOriginal, diff.name).traverse((obj: THREE.Object3D) => {
+          if ((obj as THREE.Mesh).material) {
+            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+            new THREE.Color(visible ? 0 : this.WHITE);
+          }
+        });
       }
       if (diff.type !== DELETE_TYPE) {
-        ((this.sceneModif.getObjectByName(diff.name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive
-           = new THREE.Color(visible ? 0 : WHITE);
+        this.getObject(this.sceneModif, diff.name).traverse((obj: THREE.Object3D) => {
+          if ((obj as THREE.Mesh).material) {
+            ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+            new THREE.Color(visible ? 0 : this.WHITE);
+          }
+        });
       }
     }
   }
   private stopFlashObject(name: string): void {
-    ((this.sceneOriginal.getObjectByName(name) as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive = new THREE.Color(0);
+    this.sceneOriginal.getObjectByName(name).traverse((obj: THREE.Object3D) => {
+      if ((obj as THREE.Mesh).material) {
+        ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
+        new THREE.Color(0);
+      }
+    });
   }
 }

@@ -34,7 +34,7 @@ describe("GameRoomService", () => {
         });
         it("Should return the gameRoomId on resolve for 3D", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            service.createNewGameRoom({ gameRoomId: "test3D", username: "user" } as NewGame3DMessage)
+            service.createNewGameRoom({ gameRoomId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
                 .then(
                     (response: string) => {
                         expect(response).to.equal("ok");
@@ -59,7 +59,7 @@ describe("GameRoomService", () => {
         });
         it("Should return the rejection on reject for 3D", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
-            service.createNewGameRoom({ gameRoomId: "test3D", username: "user" } as NewGame3DMessage)
+            service.createNewGameRoom({ gameRoomId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
                 .then(
                     (error: string) => {
                         done(error);

@@ -6,8 +6,8 @@
         <img class="game-card-img" src={{game.originalImage}} alt="">
       </div>
       <div class="game-card-img-container" *ngIf = "!isSimpleGame">
-          <img class="game-card-img" src={{imgURL}} alt="">
-        </div>
+          <img *ngIf="imgURL; else spinnyImage" class="game-card-img" src={{imgURL}} alt="">
+      </div>
       <div class="game-card-buttons" *ngIf="!isAdminMode">
         <div class="game-card-button-container"><button (click)="playSelectedGame(game)">JOUER</button>
         </div>
@@ -62,3 +62,6 @@
     </div>
   </div>
 </div>
+<ng-template #spinnyImage>
+    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+</ng-template>

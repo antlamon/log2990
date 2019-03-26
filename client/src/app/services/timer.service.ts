@@ -10,7 +10,6 @@ export class TimerService {
   public readonly FORMAT_ZERO_MAX: number = 9;
   private _nbSeconds: number;
   private _nbMinutes: number;
-  private timerEnd: NodeJS.Timeout;
   private timerUpdate: NodeJS.Timeout;
   public constructor() {
     this._nbSeconds = 0;
@@ -18,13 +17,12 @@ export class TimerService {
    }
 
   public startTimer(): void {
+    this.stopTimer();
     this._nbSeconds = 0;
     this._nbMinutes = 0;
     this.timerUpdate = setInterval(this.updateTime.bind(this), this.CONVERSION_SEC_TO_MILI);
-
   }
   public stopTimer(): void {
-    clearTimeout(this.timerEnd);
     clearInterval(this.timerUpdate);
   }
   public getTimeAsString(): string {
@@ -47,6 +45,10 @@ export class TimerService {
       this._nbMinutes++;
       this._nbSeconds = 0;
     }
+  }
+  public setToZero(): void {
+    this._nbSeconds = 0;
+    this._nbMinutes = 0;
   }
   public get nbMinutes(): number {
     return this._nbMinutes;

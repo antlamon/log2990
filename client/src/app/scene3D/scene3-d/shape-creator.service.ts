@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { IObjet3D, INITIAL_OBJECT_SIZE } from "../../../../../common/models/objet3D";
 import * as THREE from "three";
-// import { GEOMETRIC_TYPE_NAME } from "../../../../../common/models/game3D";
 
 @Injectable({
   providedIn: "root"
@@ -14,6 +13,7 @@ export class ShapeCreatorService {
   public promisedObjects: Promise<THREE.Mesh>[];
 
   public constructor() {
+    THREE.Cache.enabled = true;
     this.promisedObjects = [];
     this.generateMap();
     this.textureLoader = new THREE.TextureLoader();
