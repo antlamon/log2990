@@ -148,6 +148,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         const newGameMessage: NewGame3DMessage = {
             username: this.index.username,
             gameRoomId: this.roomID,
+            gameName: this.game3D.name,
             is3D: true,
             differences: this.game3D.differences
         };

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { TimerService } from "src/app/services/timer.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
@@ -38,7 +38,6 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private index: IndexService,
         private timer: TimerService,
         private ref: ChangeDetectorRef,
-        private router: Router
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -74,6 +73,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 const newGameMessage: NewGameMessage = {
                     username: this.index.username,
                     gameRoomId: this.simpleGame.card.id,
+                    gameName: this.simpleGame.card.name,
                     is3D: false,
                     originalImage: this.simpleGame.card.originalImage,
                     modifiedImage: this.simpleGame.modifiedImage,
@@ -112,9 +112,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 this.finishGame();
             } else {
                 this.correctSound.play().catch((error: Error) => console.error(error.message));
-                }
-
             }
+
+        }
 
     }
 
@@ -122,10 +122,12 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this.disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
-        //todo send time to gameroom
-        this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
-        this.timer.setToZero();
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.socket.emitEvent(SocketsEvents.END_GAME, {
+            username: this.index.username,
+            score: this.timer.getTimeAsString(),
+            gameId: this.simpleGame.card.id,
+            gameType: "simple",
+        });
     }
 
     public sendClick(event: MouseEvent): void {

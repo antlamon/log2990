@@ -1,12 +1,11 @@
-import { Component, OnInit, Input} from "@angular/core";
-import { GameService } from "../services/game.service";
-import { IGame } from "../../../../common/models/game";
-import { SocketService } from "../services/socket.service";
+import { Component, Input, OnInit } from "@angular/core";
+import { FREE_GAME_TYPE, IScoreUpdate, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
+import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
 import { RenderService } from "../scene3D/scene3-d/render.service";
-import { IScore } from "../../../../common/models/top3";
-import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
+import { GameService } from "../services/game.service";
+import { SocketService } from "../services/socket.service";
 @Component({
   selector: "app-list-view",
   templateUrl: "./list-view.component.html",
@@ -93,11 +92,4 @@ export class ListViewComponent implements OnInit {
           }
          });
   }
-
-}
-export interface IScoreUpdate  {
-  id: string;
-  gameType: string;
-  solo: IScore[];
-  multi: IScore[];
 }
