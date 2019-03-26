@@ -22,6 +22,7 @@ import { MedievalObjectsCreatorService } from "../scene3D/medieval-objects-creat
 import { ShapeCreatorService } from "../scene3D/scene3-d/shape-creator.service";
 import { SceneGeneratorService } from "../scene3D/scene-generator.service";
 import { GameMessagesComponent } from "../gameView/game-messages/game-messages.component";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -49,7 +50,8 @@ describe("ListViewComponent", () => {
       imports: [
         HttpClientModule,
         FormsModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        HttpClientTestingModule
       ],
       declarations: [
         ListViewComponent,

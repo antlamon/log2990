@@ -8,6 +8,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { Observable, of } from "rxjs";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
 import { RenderService } from "../scene3D/scene3-d/render.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("InitialComponent", () => {
   let component: InitialComponent;
@@ -16,7 +17,7 @@ describe("InitialComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ InitialComponent ],
-      imports: [ FormsModule, RouterTestingModule, HttpClientModule ],
+      imports: [ FormsModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule ],
       providers: [ IndexService, AppRoutingModule, RenderService ],
     })
       .compileComponents().then(() => { }, (error: Error) => {

@@ -7,6 +7,7 @@ import { InitialComponent } from "src/app/initial/initial.component";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ModalService } from "src/app/services/modal.service";
 import { FileValidatorService } from "./file-validator.service";
 import { Game2DViewComponent } from "../gameView/game2D-view/game2D-view.component";
@@ -43,7 +44,7 @@ describe("FileValidatorService", () => {
         GameMessagesComponent,
         GamecardComponent
       ],
-      imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
+      imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, FileValidatorService, Game2DViewComponent, RenderService]
     })
       .compileComponents().then(() => { }, (error: Error) => {

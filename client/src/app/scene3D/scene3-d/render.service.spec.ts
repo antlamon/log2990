@@ -9,6 +9,7 @@ import { IScore } from "../../../../../common/models/top3";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
 import { IndexService } from "src/app/services/index.service";
 import { HttpClientModule } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { SceneGeneratorService } from "../scene-generator.service";
 import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 import { WHITE } from "src/app/global/constants";
@@ -94,7 +95,7 @@ describe("renderService", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [ RenderService, ShapeCreatorService, GamecardComponent, IndexService, MedievalObjectsCreatorService ],
-      imports: [HttpClientModule]
+      imports: [HttpClientModule, HttpClientTestingModule]
     })
     .compileComponents().catch();
   }));
