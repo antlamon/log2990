@@ -1,7 +1,7 @@
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
-import { IGame3D, IDifference, ADD_TYPE } from "../../../../../common/models/game3D";
+import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE } from "../../../../../common/models/game3D";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import {} from "jasmine";
@@ -11,10 +11,11 @@ import { IndexService } from "src/app/services/index.service";
 import { HttpClientModule } from "@angular/common/http";
 import { SceneGeneratorService } from "../scene-generator.service";
 import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
+import { WHITE } from "src/app/global/constants";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
-    color: 0,
+    color: WHITE,
     texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
@@ -23,7 +24,7 @@ describe("renderService", () => {
   };
   const cube: IObjet3D = {
     type: "cube",
-    color: 0,
+    color: WHITE,
     texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
@@ -32,7 +33,7 @@ describe("renderService", () => {
   };
   const cylinder: IObjet3D = {
     type: "cylinder",
-    color: 0,
+    color: WHITE,
     texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
@@ -48,9 +49,9 @@ describe("renderService", () => {
     name: "3",
    },
     {
-    type: ADD_TYPE,
+    type: MODIFICATION_TYPE,
     object: cube,
-    name: "4",
+    name: "1",
    }
   ];
   const mockGame: IGame3D = {
@@ -138,11 +139,84 @@ describe("renderService", () => {
       expect(service["camera"]["rotation"]["y"]).toEqual(- move * SENSITIVITY);
     });
   });
+  describe("Rendering tests", () => {
+    it("Should start the rendering", () => {
+      const spy: jasmine.Spy = spyOn(service["rendererO"], "render");
+      service.startRenderingLoop();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
   describe("Identifying differences tests", () => {
     it("Should return null if no object is found", async () => {
       await service.initialize(container1, container2, mockGame);
       await service.startRenderingLoop();
-      expect(service.identifyDiff(new MouseEvent("click", { clientX: 200, clientY: 900 }))).toEqual(null);
+      expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
+                                                            clientY: service["containerOriginal"]["offsetLeft"] - 1 }))).toEqual(null);
+    });
+    it("Should return null if no object is found", async () => {
+      await service.initialize(container1, container2, mockGame);
+      await service.startRenderingLoop();
+      expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
+                                                            clientY: service["containerOriginal"]["offsetLeft"] + 1 }))).toEqual(null);
     });
   });
+  // describe("Removing differences tests", () => {
+  //   it("Should need a valid type", () => {
+  //     expect(service.removeDiff("1", "tre")).toBeUndefined();
+  //   });
+  //   it("Should remove an object added", async () => {
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneModif"], "remove");
+  //     service.removeDiff("3", ADD_TYPE);
+  //     expect(spy).toHaveBeenCalledWith(service["sceneModif"].getObjectByName("3"));
+  //   });
+  //   it("Should add a removed object", async () => {
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneModif"], "getObjectByName");
+  //     service.removeDiff("1", DELETE_TYPE);
+  //     expect(spy).toHaveBeenCalledWith("1");
+  //   });
+  //   it("Should modify the material of the modified object", async () => {
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneOriginal"], "getObjectByName");
+  //     service.removeDiff("1", MODIFICATION_TYPE);
+  //     expect(spy).toHaveBeenCalledWith("1");
+  //   });
+  // });
+  // describe("Start and stop of cheat mode tests", () => {
+  //   it("Should start the timer when starting", () => {
+  //     service.startCheatMode();
+  //     expect(service["timeOutDiff"]).toBeDefined();
+  //   });
+  //   it("Should stop the flash when stopping", async () => {
+  //     spyOn(service["sceneGenerator"]["shapeService"], "createShape").and.callFake((obj: IObjet3D): Promise<THREE.Mesh> => {
+  //       const mockMesh: THREE.Mesh = new THREE.Mesh();
+  //       mockMesh.name = obj.name;
+  //       mockMesh.material = new THREE.MeshPhongMaterial({shininess: obj.color});
+
+  //       return Promise.resolve(mockMesh);
+  //     });
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneOriginal"], "getObjectByName");
+  //     service.stopCheatMode();
+  //     expect(spy).toHaveBeenCalled();
+  //   });
+  // });
+  // describe("Getting image test", () => {
+  //   it("Should return an image URL as string", () => {
+  //     const spy: jasmine.Spy = spyOn(service["sceneGenerator"], "createScene").and.callFake(() => {});
+  //     service.getImageURL(mockGame);
+  //     expect(spy).toHaveBeenCalled();
+  //   });
+  // });
+  // describe("adding listener test", () => {
+  //   it("Should add event listeners to the renderers", () => {
+  //     service.addListener("mousemove", () => { return; });
+  //     expect(service["rendererO"]["domElement"]["onmousemove"]).toBeDefined();
+  //   });
+  // });
 });
