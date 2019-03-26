@@ -11,12 +11,11 @@
     <div #modifiedContainer class="game-card-img" [ngClass]="disableClick"></div>
   </div>
 </div>
-<div class="messagesBox">
-  <div class="messagesBoxTitle"> Messages </div>
-</div>
+
 <ng-template #spinny>
   <div class="gameImage">
     <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
   </div>
 </ng-template>
+<app-game-messages></app-game-messages>
 <app-error-popup></app-error-popup>
