@@ -85,6 +85,7 @@ describe("renderService", () => {
   }));
 
   describe("Test for calls within the initialize function", async () => {
+    service["differences"] = [];
     it("container property should be properly affected", async () => {
       await service.initialize(container1, container2, mockGame);
       expect(service["containerOriginal"]).toEqual(container1);
@@ -116,6 +117,7 @@ describe("renderService", () => {
     });
   });
   describe("Test the camera movement", () => {
+    service["differences"] = [];
     it("Should translate on x axis", () => {
       const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
       const move: number = 5;
@@ -140,6 +142,7 @@ describe("renderService", () => {
     });
   });
   describe("Rendering tests", () => {
+    service["differences"] = [];
     it("Should start the rendering", () => {
       const spy: jasmine.Spy = spyOn(service["rendererO"], "render");
       service.startRenderingLoop();
@@ -147,6 +150,7 @@ describe("renderService", () => {
     });
   });
   describe("Identifying differences tests", () => {
+    service["differences"] = [];
     it("Should return null if no object is found", async () => {
       spyOn(service["sceneModif"], "getObjectByName").and.returnValue(new THREE.Object3D());
       spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(new THREE.Object3D());
@@ -155,6 +159,7 @@ describe("renderService", () => {
     });
   });
   describe("Removing differences tests", () => {
+    service["differences"] = [];
     it("Should need a valid type", () => {
       expect(service.removeDiff("1", "tre")).toBeUndefined();
     });
@@ -179,19 +184,22 @@ describe("renderService", () => {
     });
   });
   describe("Start and stop of cheat mode tests", () => {
+    service["differences"] = [];
     it("Should start the timer when starting", () => {
       service.startCheatMode();
       expect(service["timeOutDiff"]).toBeDefined();
     });
   });
   describe("Getting image test", () => {
+    service["differences"] = [];
     it("Should return an image URL as string", () => {
-      const spy: jasmine.Spy = spyOn(service["sceneGenerator"], "createScene").and.callFake(() => {});
+      const spy: jasmine.Spy = spyOn(service["sceneGenerator"], "createScene").and.callFake(async () => Promise.resolve(new THREE.Scene()));
       service.getImageURL(mockGame);
       expect(spy).toHaveBeenCalled();
     });
   });
   describe("adding listener test", () => {
+    service["differences"] = [];
     it("Should add event listeners to the renderers", () => {
       service.addListener("mousemove", () => { return; });
       expect(service["rendererO"]["domElement"]["onmousemove"]).toBeDefined();

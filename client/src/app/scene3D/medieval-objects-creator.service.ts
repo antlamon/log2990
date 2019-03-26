@@ -44,7 +44,7 @@ export class MedievalObjectsCreatorService {
     }
     objectsTHREE.push(await this.createSkyBox());
     objectsTHREE.push(await this.createObject(this.castleWorld, false));
-
+    
     return objectsTHREE;
   }
 
@@ -55,13 +55,13 @@ export class MedievalObjectsCreatorService {
       this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
                              (gltf) => {
           if (!toReload) {
-            this.loadedModels.set(object.type, gltf.scene.clone());
+            this.loadedModels.set(object.type, gltf.scene);
           }
           resolve(this.setPositionParameters(gltf.scene, object));
         }
       );
       } else {
-        resolve(this.setPositionParameters(this.loadedModels.get(object.type).clone(), object));
+        resolve(this.setPositionParameters(this.loadedModels.get(object.type), object));
       }
     });
   }

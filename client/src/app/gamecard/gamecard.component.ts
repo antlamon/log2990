@@ -3,7 +3,7 @@ import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
 import { GameService } from "../services/game.service";
 import { Router } from "@angular/router";
-import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../../common/communication/message"
+import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../../common/communication/message";
 
 @Component({
   selector: "app-gamecard",

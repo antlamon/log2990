@@ -56,8 +56,10 @@ describe("Game3DViewComponent", () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(Game3DViewComponent);
         component = fixture.componentInstance;
+        spyOn(component, "ngOnDestroy").and.callFake(() => {});
         fixture.detectChanges();
         spyOn(component["gameService"], "get3DGame").and.returnValue(Promise.resolve(mockGame3D));
+        component["render"]["differences"] = [];
     });
 
     it("should create", () => {
