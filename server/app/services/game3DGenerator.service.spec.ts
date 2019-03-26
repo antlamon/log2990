@@ -4,6 +4,7 @@ import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { GEOMETRIC_TYPE_NAME, IGame3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IObjet3D } from "../../../common/models/objet3D";
+import { IScore } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
@@ -98,6 +99,17 @@ describe("Game3D generator service", () => {
         it("Should throw an error for the wrong number of objects", async () => {
 
             expect(() => service.createRandom3DGame(mockBadNb)).to.throw(FORM_ERROR);
+        });
+    });
+    describe("Top3Random function", () => {
+        it("Should return an array of lenght 3 ", async () => {
+            const top3: IScore[] = service.top3RandomOrder();
+            const top3Size: number = 3;
+            expect(top3.length).to.equal(top3Size);
+        });
+        it("Should return a sorted array, min time to max time", async () => {
+            const top3: IScore[] = service.top3RandomOrder();
+            expect(top3[0].score < top3[1].score && top3[1].score < top3[2].score).to.equal(true);
         });
     });
 });
