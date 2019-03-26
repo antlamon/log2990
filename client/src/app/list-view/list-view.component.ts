@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { FREE_GAME_TYPE, IScoreUpdate, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { IGame } from "../../../../common/models/game";
@@ -12,7 +12,7 @@ import { SocketService } from "../services/socket.service";
   styleUrls: ["./list-view.component.css"]
 })
 
-export class ListViewComponent implements OnInit {
+export class ListViewComponent implements OnInit, OnDestroy {
 
   public simpleGames: IGame[];
   public freeGames: IGame3D[];
@@ -39,12 +39,24 @@ export class ListViewComponent implements OnInit {
     this.isAdminMode = false;
   }
 
+  public ngOnDestroy(): void {
+    this.socket.unsubscribeTo(SocketsEvents.UPDATE_SIMPLES_GAMES);
+    this.socket.unsubscribeTo(SocketsEvents.UPDATE_FREE_GAMES);
+    this.socket.unsubscribeTo(SocketsEvents.SIMPLE_GAME_ADDED);
+    this.socket.unsubscribeTo(SocketsEvents.FREE_GAME_ADDED);
+    this.socket.unsubscribeTo(SocketsEvents.SIMPLE_GAME_DELETED);
+    this.socket.unsubscribeTo(SocketsEvents.FREE_GAME_DELETED);
+    this.socket.unsubscribeTo(SocketsEvents.SCORES_UPDATED);
+  }
+
   private async getImageURL(game: IGame3D): Promise<void> {
     const imageURL: string = await this.renderer.getImageURL(game);
     this.imageURLs.set(game, imageURL);
   }
   public updateScore(upd: IScoreUpdate): void {
+    console.log(upd);
     if (upd.gameType === SIMPLE_GAME_TYPE) {
+      console.log(this.simpleGames);
       const index: number = this.simpleGames.findIndex((x: IGame) => x.id === upd.id);
       if (index !== -1) {
         this.simpleGames[index].solo = upd.solo;
@@ -52,6 +64,7 @@ export class ListViewComponent implements OnInit {
       }
     }
     if (upd.gameType === FREE_GAME_TYPE) {
+      console.log(this.freeGames);
       const index: number = this.freeGames.findIndex((x: IGame3D) => x.id === upd.id);
       if (index !== -1) {
         this.freeGames[index].solo = upd.solo;
