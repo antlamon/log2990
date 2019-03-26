@@ -18,6 +18,9 @@ import { RenderService } from "../scene3D/scene3-d/render.service";
 import { GamecardComponent } from "../gamecard/gamecard.component";
 import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
 import { IndexService } from "../services/index.service";
+import { MedievalObjectsCreatorService } from "../scene3D/medieval-objects-creator.service";
+import { ShapeCreatorService } from "../scene3D/scene3-d/shape-creator.service";
+import { SceneGeneratorService } from "../scene3D/scene-generator.service";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -59,7 +62,7 @@ describe("ListViewComponent", () => {
         ErrorPopupComponent,
         GamecardComponent
       ],
-      providers: [RenderService, IndexService],
+      providers: [RenderService, IndexService, MedievalObjectsCreatorService, ShapeCreatorService, SceneGeneratorService],
     })
       .compileComponents().then(() => { }, (error: Error) => { });
   }));

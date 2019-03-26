@@ -1,23 +1,21 @@
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";
-import { IGame3D, IDifference, ADD_TYPE } from "../../../../../common/models/game3D";
+import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE } from "../../../../../common/models/game3D";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 import { ShapeCreatorService } from "./shape-creator.service";
 import {} from "jasmine";
 import { IScore } from "../../../../../common/models/top3";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
-import { SocketService } from "src/app/services/socket.service";
-
-import { KEYS } from "src/app/global/constants";
 import { IndexService } from "src/app/services/index.service";
 import { HttpClientModule } from "@angular/common/http";
 import { SceneGeneratorService } from "../scene-generator.service";
 import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
+import { WHITE } from "src/app/global/constants";
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
-    color: 0,
+    color: WHITE,
     texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
@@ -26,7 +24,7 @@ describe("renderService", () => {
   };
   const cube: IObjet3D = {
     type: "cube",
-    color: 0,
+    color: WHITE,
     texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
@@ -35,7 +33,7 @@ describe("renderService", () => {
   };
   const cylinder: IObjet3D = {
     type: "cylinder",
-    color: 0,
+    color: WHITE,
     texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
@@ -51,9 +49,9 @@ describe("renderService", () => {
     name: "3",
    },
     {
-    type: ADD_TYPE,
+    type: MODIFICATION_TYPE,
     object: cube,
-    name: "4",
+    name: "1",
    }
   ];
   const mockGame: IGame3D = {
@@ -66,17 +64,15 @@ describe("renderService", () => {
     isThematic: false,
     backColor: 0xFFFFFF,
   };
+  const SENSITIVITY: number = 0.002;
   const container1: HTMLDivElement = document.createElement("div");
   const container2: HTMLDivElement = document.createElement("div");
-  const mockSocketService: SocketService = new SocketService();
-  mockSocketService["socket"] = jasmine.createSpyObj("socket", ["on", "emit"]);
   const service: RenderService = new RenderService(
-    new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService()),
-    mockSocketService, jasmine.createSpyObj({username: ""}));
+    new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService()));
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [ RenderService, ShapeCreatorService, GamecardComponent, IndexService ],
+      providers: [ RenderService, ShapeCreatorService, GamecardComponent, IndexService, MedievalObjectsCreatorService ],
       imports: [HttpClientModule]
     })
     .compileComponents().catch();
@@ -119,66 +115,108 @@ describe("renderService", () => {
       expect(spyRenderer).toHaveBeenCalledWith(width, height);
     });
   });
-  describe("Tests for keyboard events", async () => {
-    it("The key w should call the function this.camera.translateZ with: -this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["W"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(-service["movementSpeed"]);
-    });
-    it("The key s should call the function this.camera.translateZ with: this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyS" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["S"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(service["movementSpeed"]);
-    });
-    it("The key a should call the function this.camera.translateX with: -this.movementSpeed has parameters", () => {
+  describe("Test the camera movement", () => {
+    it("Should translate on x axis", () => {
       const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["A"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(-service["movementSpeed"]);
+      const move: number = 5;
+      service.moveCam("X", move);
+      expect(spy).toHaveBeenCalledWith(move);
     });
-    it("The key d should call the function this.camera.translateX with: this.movementSpeed has parameters", () => {
-      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
-      const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyW" });
-      Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["D"];
-        }
-      });
-      service["onKeyDown"](keyEvent);
-      expect(spy).toHaveBeenCalledWith(service["movementSpeed"]);
+    it("Should translate on z axis", () => {
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
+      const move: number = 5;
+      service.moveCam("Z", move);
+      expect(spy).toHaveBeenCalledWith(move);
     });
-    describe("Test for the cheat functions", () => {
-      it("The key T should call startCheatMode and pressing a second time should stop it", async () => {
-        await service.initialize(container1, container2, mockGame);
-        const keyEvent: KeyboardEvent = new KeyboardEvent("keydown", { code: "keyT" });
-        Object.defineProperty(keyEvent, "keyCode", {
-        get : (): number => {
-          return KEYS["T"];
-        }
-      });
-        service["differences"] = [];
-        service["onKeyDown"](keyEvent);
-        expect(service["cheatModeActivated"]).toEqual(true);
-        service["onKeyDown"](keyEvent);
-        expect(service["cheatModeActivated"]).toEqual(false);
-      });
+    it("Should rotate on x axis", () => {
+      const move: number = 5;
+      service.rotateCam("X", move);
+      expect(service["camera"]["rotation"]["x"]).toEqual(-move * SENSITIVITY);
+    });
+    it("Should rotate on y axis", () => {
+      const move: number = 5;
+      service.rotateCam("Y", move);
+      expect(service["camera"]["rotation"]["y"]).toEqual(- move * SENSITIVITY);
     });
   });
+  describe("Rendering tests", () => {
+    it("Should start the rendering", () => {
+      const spy: jasmine.Spy = spyOn(service["rendererO"], "render");
+      service.startRenderingLoop();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+  describe("Identifying differences tests", () => {
+    it("Should return null if no object is found", async () => {
+      await service.initialize(container1, container2, mockGame);
+      await service.startRenderingLoop();
+      expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
+                                                            clientY: service["containerOriginal"]["offsetLeft"] - 1 }))).toEqual(null);
+    });
+    it("Should return null if no object is found", async () => {
+      await service.initialize(container1, container2, mockGame);
+      await service.startRenderingLoop();
+      expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
+                                                            clientY: service["containerOriginal"]["offsetLeft"] + 1 }))).toEqual(null);
+    });
+  });
+  // describe("Removing differences tests", () => {
+  //   it("Should need a valid type", () => {
+  //     expect(service.removeDiff("1", "tre")).toBeUndefined();
+  //   });
+  //   it("Should remove an object added", async () => {
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneModif"], "remove");
+  //     service.removeDiff("3", ADD_TYPE);
+  //     expect(spy).toHaveBeenCalledWith(service["sceneModif"].getObjectByName("3"));
+  //   });
+  //   it("Should add a removed object", async () => {
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneModif"], "getObjectByName");
+  //     service.removeDiff("1", DELETE_TYPE);
+  //     expect(spy).toHaveBeenCalledWith("1");
+  //   });
+  //   it("Should modify the material of the modified object", async () => {
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneOriginal"], "getObjectByName");
+  //     service.removeDiff("1", MODIFICATION_TYPE);
+  //     expect(spy).toHaveBeenCalledWith("1");
+  //   });
+  // });
+  // describe("Start and stop of cheat mode tests", () => {
+  //   it("Should start the timer when starting", () => {
+  //     service.startCheatMode();
+  //     expect(service["timeOutDiff"]).toBeDefined();
+  //   });
+  //   it("Should stop the flash when stopping", async () => {
+  //     spyOn(service["sceneGenerator"]["shapeService"], "createShape").and.callFake((obj: IObjet3D): Promise<THREE.Mesh> => {
+  //       const mockMesh: THREE.Mesh = new THREE.Mesh();
+  //       mockMesh.name = obj.name;
+  //       mockMesh.material = new THREE.MeshPhongMaterial({shininess: obj.color});
+
+  //       return Promise.resolve(mockMesh);
+  //     });
+  //     await service.initialize(container1, container2, mockGame);
+  //     await service.startRenderingLoop();
+  //     const spy: jasmine.Spy = spyOn(service["sceneOriginal"], "getObjectByName");
+  //     service.stopCheatMode();
+  //     expect(spy).toHaveBeenCalled();
+  //   });
+  // });
+  // describe("Getting image test", () => {
+  //   it("Should return an image URL as string", () => {
+  //     const spy: jasmine.Spy = spyOn(service["sceneGenerator"], "createScene").and.callFake(() => {});
+  //     service.getImageURL(mockGame);
+  //     expect(spy).toHaveBeenCalled();
+  //   });
+  // });
+  // describe("adding listener test", () => {
+  //   it("Should add event listeners to the renderers", () => {
+  //     service.addListener("mousemove", () => { return; });
+  //     expect(service["rendererO"]["domElement"]["onmousemove"]).toBeDefined();
+  //   });
+  // });
 });

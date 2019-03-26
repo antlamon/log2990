@@ -17,6 +17,9 @@ import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 import { RenderService } from "./scene3D/scene3-d/render.service";
 import { GamecardComponent } from "./gamecard/gamecard.component";
+import { SceneGeneratorService } from "./scene3D/scene-generator.service";
+import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
+import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,7 +36,7 @@ describe("AppComponent", () => {
         GamecardComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule],
-      providers: [IndexService, RenderService]
+      providers: [IndexService, RenderService, SceneGeneratorService, ShapeCreatorService, MedievalObjectsCreatorService]
     }).compileComponents();
   }));
   it("should create the app", (() => {

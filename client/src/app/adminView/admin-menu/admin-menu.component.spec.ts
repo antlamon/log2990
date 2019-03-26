@@ -16,6 +16,9 @@ import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.co
 import { RenderService } from "src/app/scene3D/scene3-d/render.service";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
 import { IndexService } from "src/app/services/index.service";
+import { MedievalObjectsCreatorService } from "src/app/scene3D/medieval-objects-creator.service";
+import { ShapeCreatorService } from "src/app/scene3D/scene3-d/shape-creator.service";
+import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
@@ -40,7 +43,7 @@ describe("AdminMenuComponent", () => {
         HttpClientModule,
         MatProgressSpinnerModule
       ],
-      providers: [ModalService, RenderService, IndexService]
+      providers: [ModalService, RenderService, IndexService, MedievalObjectsCreatorService, ShapeCreatorService, SceneGeneratorService]
     })
     .compileComponents().then(() => { }, (error: Error) => {});
   }));
