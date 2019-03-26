@@ -1,23 +1,22 @@
 <div id="gameTitle" class="gameTitle"> {{game3D?.name}} </div>
-<div class="chrono">Temps restant: 00:00</div>
-<div class="compteur">Différences trouvées: 0</div>
+<div class="chrono">Temps:{{timer.getTimeAsString()}}</div>
+<div class="compteur">Différences trouvées: {{differencesFound}}</div>
 <div class="divGames">
-  <div class="gameImage">
+  <div class="gameImage" [ngClass]="blockedCursor">
     <p>Image originale:</p>
-    <div #originalContainer class="game-card-img">
-      <ng-container *ngIf="!gameIsReady; then spinny"></ng-container>
-    </div>
+    <div  #originalContainer class="game-card-img" [ngClass]="disableClick"></div>
   </div>
-  <div class="gameImage">
+  <div class="gameImage" [ngClass]="blockedCursor">
     <p>Image avec les différences:</p>
-    <div #modifiedContainer class="game-card-img">
-      <ng-container *ngIf="!gameIsReady; then spinny"></ng-container>
-    </div>
+    <div #modifiedContainer class="game-card-img" [ngClass]="disableClick"></div>
   </div>
 </div>
 <div class="messagesBox">
   <div class="messagesBoxTitle"> Messages </div>
 </div>
 <ng-template #spinny>
-  <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+  <div class="gameImage">
+    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
+  </div>
 </ng-template>
+<app-error-popup></app-error-popup>

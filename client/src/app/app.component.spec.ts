@@ -19,6 +19,9 @@ import { GameMessagesComponent } from "./gameView/game-messages/game-messages.co
 
 import { RenderService } from "./scene3D/scene3-d/render.service";
 import { GamecardComponent } from "./gamecard/gamecard.component";
+import { SceneGeneratorService } from "./scene3D/scene-generator.service";
+import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
+import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,14 +34,13 @@ describe("AppComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent,
         ErrorPopupComponent,
         GameMessagesComponent,
         ErrorPopupComponent,
         GamecardComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule],
-      providers: [IndexService, RenderService]
+      providers: [IndexService, RenderService, SceneGeneratorService, ShapeCreatorService, MedievalObjectsCreatorService]
     }).compileComponents();
   }));
   it("should create the app", (() => {
