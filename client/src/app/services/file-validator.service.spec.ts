@@ -40,8 +40,7 @@ describe("FileValidatorService", () => {
         Game2DViewComponent,
         Game3DViewComponent,
         ErrorPopupComponent,
-        GameMessagesComponent
-        ErrorPopupComponent,
+        GameMessagesComponent,
         GamecardComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],

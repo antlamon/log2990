@@ -34,8 +34,8 @@ describe("SimpleGeneratorComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent,
-        ErrorPopupComponent
+        GamecardComponent,
+        ErrorPopupComponent,
         GameMessagesComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],

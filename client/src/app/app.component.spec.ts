@@ -31,7 +31,6 @@ describe("AppComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent,
         ErrorPopupComponent,
         GameMessagesComponent,
         ErrorPopupComponent,

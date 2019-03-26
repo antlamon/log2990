@@ -23,7 +23,6 @@ import { GameRoomService } from "./services/rooms/gameRoom.service";
 import { UsersManager } from "./services/users.service";
 import { SocketServerManager } from "./socket/socketServerManager";
 import { TYPES } from "./types";
-import { GameMessageService } from "./services/game-message.service";
 
 const container: Container = new Container();
 
@@ -56,8 +55,6 @@ container.bind(TYPES.Identification3DServiceManager).to(Identification3DServiceM
 
 container.bind(TYPES.GameRoomService).to(GameRoomService);
 container.bind(TYPES.FormValidatorService).to(FormValidatorService);
-
-container.bind(TYPES.GameMessageService).to(GameMessageService);
 
 container.bind(TYPES.TimeScoreController).to(TimescoreController);
 container.bind(TYPES.TimeScoreService).to(TimeScoreService);

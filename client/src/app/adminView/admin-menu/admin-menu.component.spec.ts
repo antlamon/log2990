@@ -32,9 +32,9 @@ describe("AdminMenuComponent", () => {
         ListViewComponent,
         Game2DViewComponent,
         Game3DViewComponent,
-        Scene3DComponent,
-        ErrorPopupComponent
+        GamecardComponent,
         GameMessagesComponent,
+        ErrorPopupComponent
       ],
       imports: [
         AppRoutingModule,
