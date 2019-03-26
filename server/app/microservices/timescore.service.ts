@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { Collection } from "mongodb";
-import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../common/communication/message";
+import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { IFullGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { IScore } from "../../../common/models/top3";
@@ -128,11 +128,12 @@ export class TimeScoreService {
     private updateSimpleGameScore(game: IFullGame, gameMode: string, userName: string,
                                   nbMinutes: number, nbSeconds: number, pos: number): IFullGame {
         const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
-        if (gameMode === "solo") {
-            game.card.solo[pos] = newScore;
-        } else if (gameMode === "multi") {
-            game.card.multi[pos] = newScore;
+        const scores: IScore[] = gameMode === "solo" ? game.card.solo : game.card.multi;
+
+        for (let i: number = scores.length - 1; i > pos; --i) {
+            scores[i] = scores[i - 1];
         }
+        scores[pos] = newScore;
 
         return game;
     }
@@ -140,11 +141,12 @@ export class TimeScoreService {
     private updateFreeGameScore(game: IGame3D, gameMode: string, userName: string,
                                 nbMinutes: number, nbSeconds: number, pos: number): IGame3D {
         const newScore: IScore = { name: userName, score: this.formatTimeScore(nbMinutes, nbSeconds) };
-        if (gameMode === "solo") {
-            game.solo[pos] = newScore;
-        } else if (gameMode === "multi") {
-            game.multi[pos] = newScore;
+        const scores: IScore[] = gameMode === "solo" ? game.solo : game.multi;
+
+        for (let i: number = scores.length - 1; i > pos; --i) {
+            scores[i] = scores[i - 1];
         }
+        scores[pos] = newScore;
 
         return game;
     }

@@ -132,43 +132,51 @@ describe("Test for TimeScoreService", () => {
                     });
         });
 
-        it("Sending a 00:00 should update the first multi score of free games", async () => {
+        it("Sending a 00:00 should update the all multi score of free games", async () => {
             expect(await service.changeHighScore(
                 mockUsername, FREE_GAME_TYPE, "multi", mockGame3D.id,
                 0, 0)).to.eql(true);
             await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
                         expect(game.multi[0].name).to.equal(mockUsername);
                         expect(game.multi[0].score).to.equal("00:00");
+                        expect(game.multi[1]).to.eql(mockGame3D.multi[0]);
+                        expect(game.multi[2]).to.eql(mockGame3D.multi[1]);
                     });
         });
 
-        it("Sending a 00:00 should update the first multi score of simple games", async () => {
+        it("Sending a 00:00 should update the all multi score of simple games", async () => {
             expect(await service.changeHighScore(
                 mockUsername, SIMPLE_GAME_TYPE, "multi", mockedFullGame.card.id,
                 0, 0)).to.eql(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                         expect(game.card.multi[0].name).to.equal(mockUsername);
                         expect(game.card.multi[0].score).to.equal("00:00");
+                        expect(game.card.multi[1]).to.eql(mockedFullGame.card.multi[0]);
+                        expect(game.card.multi[2]).to.eql(mockedFullGame.card.multi[1]);
                     });
         });
 
-        it("Sending a 00:00 should update the first solo score of free games", async () => {
+        it("Sending a 00:00 should update the all solo score of free games", async () => {
             expect(await service.changeHighScore(
                 mockUsername, FREE_GAME_TYPE, "solo", mockGame3D.id,
                 0, 0)).to.eql(true);
             await mockFreeCollection.findOne({"id": mockGame3D.id}).then((game: IGame3D) => {
                         expect(game.solo[0].name).to.equal(mockUsername);
                         expect(game.solo[0].score).to.equal("00:00");
+                        expect(game.solo[1]).to.eql(mockGame3D.solo[0]);
+                        expect(game.solo[2]).to.eql(mockGame3D.solo[1]);
                     });
         });
 
-        it("Sending a 00:00 should update the first solo score of simple games", async () => {
+        it("Sending a 00:00 should update the all solo score of simple games", async () => {
             expect(await service.changeHighScore(
                 mockUsername, SIMPLE_GAME_TYPE, "solo", mockedFullGame.card.id,
                 0, 0)).to.eql(true);
             await mockSimpleCollection.findOne({"card.id": mockedFullGame.card.id}).then((game: IFullGame) => {
                         expect(game.card.solo[0].name).to.equal(mockUsername);
                         expect(game.card.solo[0].score).to.equal("00:00");
+                        expect(game.card.solo[1]).to.eql(mockedFullGame.card.solo[0]);
+                        expect(game.card.solo[2]).to.eql(mockedFullGame.card.solo[1]);
                     });
         });
     });
