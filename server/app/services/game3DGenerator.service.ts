@@ -18,7 +18,7 @@ export class Game3DGeneratorService {
     public static readonly FORMAT_DOUBLE_DIGIT_MAX: number = 10;
     private readonly PALE_COLOR: number = 0x0F0F0F;
     private readonly VARIABLE_MODELS: string[] = [ // models except for trees, that are in all scenes
-        "dragon", "rock", "fountain", "chest", "barrel", "knight", "cart", "canon", "ballista",
+        "dragon", "rock", "fountain", "horse", "barrel", "knight", "cart", "canon", "ballista",
     ];
     public constructor(@inject(TYPES.Game3DModificatorService) private game3DModificator: Game3DModificatorService,
                        @inject(TYPES.ObjectGeneratorService) private objectGenerator: ObjectGeneratorService,

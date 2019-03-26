@@ -119,6 +119,9 @@
             "uri" : "horse.bin"
         }
     ],
+    "extensionsUsed" : [
+        "KHR_materials_unlit"
+    ],
     "images" : [
         {
             "name" : "wizardTowerDiff",
@@ -127,6 +130,9 @@
     ],
     "materials" : [
         {
+            "extensions" : {
+                "KHR_materials_unlit" : {}
+            },
             "name" : "color",
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
@@ -138,7 +144,8 @@
                 "baseColorTexture" : {
                     "index" : 0
                 },
-                "metallicFactor" : 0.0
+                "metallicFactor" : 0.0,
+                "roughnessFactor" : 0.9
             }
         }
     ],

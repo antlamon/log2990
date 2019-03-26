@@ -12,8 +12,11 @@ export class SceneGeneratorService {
   private skyLight: number = 0xF5F5F5;
   private groundLight: number = 0xF5F5F5;
   private isThematic: boolean;
+  private textureLoader: THREE.TextureLoader;
 
-  public constructor(private shapeService: ShapeCreatorService, private modelsService: MedievalObjectsCreatorService) { }
+  public constructor(private shapeService: ShapeCreatorService, private modelsService: MedievalObjectsCreatorService) {
+    this.textureLoader = new THREE.TextureLoader();
+   }
 
   public async createScene(objects: IObjet3D[], color: number, isThematic: boolean): Promise<THREE.Scene> {
     const scene: THREE.Scene = new THREE.Scene();
@@ -72,11 +75,25 @@ export class SceneGeneratorService {
 
   private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
     const originalMesh: THREE.Mesh = (scene.getObjectByName(diffObj.name) as THREE.Mesh);
+
     const newMesh: THREE.Mesh = this.isThematic ?
       await this.modelsService.createObject(diffObj.object) :
       await this.shapeService.createShape(diffObj.object);
-
-    originalMesh.material = newMesh.material;
+    if (this.isThematic) {
+      newMesh.traverse((child) => {
+        if ( child instanceof THREE.Mesh ) {
+           const tex: THREE.Texture = this.textureLoader.load
+           ("assets/" + diffObj.object.type + "/" + diffObj.object.texture, () => {
+             tex.flipY = false;
+             (child.material as THREE.MeshStandardMaterial).map = tex;
+             tex.needsUpdate = true;
+           });
+        }
+      });
+    } else {
+      originalMesh.material = newMesh.material;
+    }
+    scene.add(newMesh);
   }
 
   private deleteObject(scene: THREE.Scene, name: string): void {
