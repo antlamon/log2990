@@ -72,6 +72,7 @@ describe("Game2DViewComponent", () => {
             username: "test",
             newImage: "testImage",
             differencesFound: 3,
+            isGameOver: false,
         };
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
@@ -87,6 +88,7 @@ describe("Game2DViewComponent", () => {
             username: "test",
             newImage: "testImage",
             differencesFound: -1,
+            isGameOver: false,
         };
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
@@ -100,6 +102,7 @@ describe("Game2DViewComponent", () => {
             username: "test",
             newImage: "testImage",
             differencesFound: 7,
+            isGameOver: true,
         };
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
@@ -112,6 +115,7 @@ describe("Game2DViewComponent", () => {
             username: "test",
             newImage: "testImage",
             differencesFound: 7,
+            isGameOver: true,
         };
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
@@ -123,6 +127,7 @@ describe("Game2DViewComponent", () => {
             username: "test",
             newImage: "testImage",
             differencesFound: 7,
+            isGameOver: true,
         };
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
@@ -135,10 +140,11 @@ describe("Game2DViewComponent", () => {
             username: "test",
             newImage: "testImage",
             differencesFound: 7,
+            isGameOver: true,
         };
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
-        expect(spy).toHaveBeenCalled()
+        expect(spy).toHaveBeenCalled();
     });
 
 });

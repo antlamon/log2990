@@ -155,7 +155,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: 3,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: false,
             };
             component["handleCheckDifference"](update);
             expect(spyDiff).toHaveBeenCalledWith(update.objName, update.diffType);
@@ -169,7 +170,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: 7,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: true,
             };
             component["handleCheckDifference"](update);
             expect(spySocket).toHaveBeenCalled();
@@ -182,7 +184,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: 7,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: true,
             };
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
@@ -196,7 +199,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: 7,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: true,
             };
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
@@ -211,7 +215,8 @@ describe("Game3DViewComponent", () => {
                 username: "test",
                 differencesFound: -1,
                 objName: "",
-                diffType: ""
+                diffType: "",
+                isGameOver: false,
             };
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();

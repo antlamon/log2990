@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { GameMessagesComponent } from "./game-messages.component";
-import { GameRoomUpdate } from "../../../../../common/communication/message";
+import { GameRoomUpdate, ScoreUpdate } from "../../../../../common/communication/message";
 
 const mockUsername: string = "test";
 const mockEventType: string = "userConnected";
@@ -34,6 +34,7 @@ describe("GameMessagesComponent", () => {
         username: "test",
         newImage: "testImage",
         differencesFound: -1,
+        isGameOver: false,
       };
       component.handleNewIdentification(update);
       expect(component.gameMessages.length).toEqual(1);
@@ -47,7 +48,12 @@ describe("GameMessagesComponent", () => {
 
     it("handle new best time should push a new message in the array", () => {
       component.gameMessages = [];
-      component.handleNewBestTime(mockUsername, "1", "0");
+      component.handleNewBestTime({
+        scoreUpdate: {insertPos: 1} as ScoreUpdate,
+        gameMode: "solo",
+        gameName: "hello",
+        username: mockUsername
+      });
       expect(component.gameMessages.length).toEqual(1);
     });
   });
