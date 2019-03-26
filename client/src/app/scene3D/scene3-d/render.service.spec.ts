@@ -12,11 +12,11 @@ import { HttpClientModule } from "@angular/common/http";
 import { SceneGeneratorService } from "../scene-generator.service";
 import { MedievalObjectsCreatorService } from "../medieval-objects-creator.service";
 import { WHITE } from "src/app/global/constants";
+
 describe("renderService", () => {
   const cone: IObjet3D = {
     type: "cone",
     color: WHITE,
-    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
@@ -25,7 +25,6 @@ describe("renderService", () => {
   const cube: IObjet3D = {
     type: "cube",
     color: WHITE,
-    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
@@ -34,11 +33,18 @@ describe("renderService", () => {
   const cylinder: IObjet3D = {
     type: "cylinder",
     color: WHITE,
-    texture: "",
     position: { x: 0, y: 0, z: 0},
     size: 0.7,
     rotation: {x: 0, y: 0, z: 0},
     name: "2",
+  };
+  const themeObj: IObjet3D = {
+    type: "tree1",
+    color: 0,
+    position: { x: 0, y: 0, z: 0},
+    size: 0.7,
+    rotation: {x: 0, y: 0, z: 0},
+    name: "0",
   };
   const mockObjects: IObjet3D[] = [cone, cube, cylinder];
 
@@ -54,6 +60,11 @@ describe("renderService", () => {
     name: "1",
    }
   ];
+  const themeDiff: IDifference = {
+    type: MODIFICATION_TYPE,
+    object: themeObj,
+    name: "0",
+  };
   const mockGame: IGame3D = {
     name: "mock",
     id: "mockid",
@@ -62,6 +73,16 @@ describe("renderService", () => {
     multi: [] as IScore[],
     differences: differences,
     isThematic: false,
+    backColor: 0xFFFFFF,
+  };
+  const mockThematic: IGame3D = {
+    name: "mockTheme",
+    id: "2",
+    originalScene: [themeObj],
+    solo: [] as IScore[],
+    multi: [] as IScore[],
+    differences: [themeDiff],
+    isThematic: true,
     backColor: 0xFFFFFF,
   };
   const SENSITIVITY: number = 0.002;
@@ -93,6 +114,10 @@ describe("renderService", () => {
     it("should give the background color given in parameters at creation", async () => {
       await service.initialize(container1, container2, mockGame);
       expect(service["sceneOriginal"].background).toEqual(new THREE.Color(mockGame.backColor));
+    });
+    it("giving a thematic game should also properly affect the container", async () => {
+      await service.initialize(container1, container2, mockThematic);
+      expect(service["containerOriginal"]).toEqual(container1);
     });
   });
   describe("Test for the resize function", () => {
@@ -157,6 +182,19 @@ describe("renderService", () => {
       expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
                                                             clientY: service["containerOriginal"]["offsetLeft"] - 1 }))).toEqual(null);
     });
+    it("Should return an object if found", async () => {
+      const mockCube: THREE.Object3D = await service["sceneGenerator"]["shapeService"].createShape(cube);
+      const mockChild: THREE.Object3D = mockCube.clone();
+      mockChild.name = "hi";
+      mockCube.add(mockChild);
+      const pos: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
+      spyOn(service["sceneModif"], "getObjectByName").and.returnValue(mockCube);
+      spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(mockCube);
+      spyOn(service["raycaster"], "intersectObjects").and.returnValue([{distance: 1, point: pos, object: mockChild}]);
+      const result: THREE.Object3D | null = service.identifyDiff(new MouseEvent("mouseup", { clientX: 0,
+                                                                                             clientY: 0}));
+      expect(result).toEqual(mockCube);
+    });
   });
   describe("Removing differences tests", () => {
     service["differences"] = [];
@@ -181,6 +219,15 @@ describe("renderService", () => {
       const spy: jasmine.Spy = spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(mockMesh);
       service.removeDiff("1", MODIFICATION_TYPE);
       expect(spy).toHaveBeenCalledWith("1");
+    });
+    it("Should modify the texture of the modified object", async () => {
+      service["isThematic"] = true;
+      const mockMesh: THREE.Mesh = new THREE.Mesh();
+      mockMesh.material = new THREE.MeshPhongMaterial();
+      spyOn(service["sceneModif"], "getObjectByName").and.returnValue(mockMesh);
+      const spy: jasmine.Spy = spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(mockMesh);
+      service.removeDiff("0", MODIFICATION_TYPE);
+      expect(spy).toHaveBeenCalledWith("0");
     });
   });
   describe("Start and stop of cheat mode tests", () => {
