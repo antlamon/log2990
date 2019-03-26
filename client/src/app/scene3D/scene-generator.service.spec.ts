@@ -83,13 +83,6 @@ const diffDragon: IDifference[] = [
     name: mockDragon.name,
     }
 ];
-const diffDragonADD: IDifference[] = [
-  {
-    type: ADD_TYPE,
-    object: mockDragon,
-    name: mockDragon.name,
-    }
-];
 let service: SceneGeneratorService = new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService());
 describe("SceneGeneratorService", () => {
   beforeEach(() => TestBed.configureTestingModule({
