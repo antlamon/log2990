@@ -4,18 +4,17 @@
 <div class="divGames">
   <div class="gameImage" [ngClass]="blockedCursor">
     <p>Image originale:</p>
-    <div  #originalContainer class="game-card-img" [ngClass]="disableClick"></div>
+    <div  #originalContainer class="game-card-img" [ngClass]="disableClick">
+      <mat-spinner *ngIf="!gameIsReady" class="spinny" md-mode="indeterminate"></mat-spinner>
+    </div>
   </div>
   <div class="gameImage" [ngClass]="blockedCursor">
     <p>Image avec les différences:</p>
-    <div #modifiedContainer class="game-card-img" [ngClass]="disableClick"></div>
+    <div #modifiedContainer class="game-card-img" [ngClass]="disableClick">
+      <mat-spinner *ngIf="!gameIsReady" class="spinny" md-mode="indeterminate"></mat-spinner>
+    </div>
   </div>
 </div>
 
-<ng-template #spinny>
-  <div class="gameImage">
-    <mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner>
-  </div>
-</ng-template>
 <app-game-messages></app-game-messages>
 <app-error-popup></app-error-popup>

@@ -113,7 +113,8 @@ describe("SceneGeneratorService", () => {
     });
     it("The returned THREE.Scene should have and element which is invisible when a difference of type DELETE is passed", async () => {
       const sceneM: THREE.Scene  = await service.modifyScene((
-        await service.createScene(mockObjects, 1, false, differences)).clone(), differences);
+        await service.createScene(mockObjects, 1, false, differences)).clone(),
+                                                             differences);
       let nbNotVisible: number = 0;
       sceneM.children.forEach((obj: THREE.Object3D) => {
         if ( obj.visible === false) {

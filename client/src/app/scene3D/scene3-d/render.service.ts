@@ -6,7 +6,6 @@ import { SceneGeneratorService } from "../scene-generator.service";
 @Injectable()
 export class RenderService {
   private readonly FLASH_TIME: number = 150;
-  private readonly WHITE: number = 0xFFFFFF;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -152,6 +151,7 @@ export class RenderService {
     }
   }
   public identifyDiff(event: MouseEvent): THREE.Object3D {
+    this.changeVisibilityOfDifferencesObjects(true);
     if ( event.clientX < this.containerModif.offsetLeft) {
       this.calculateMouse(event, this.containerOriginal);
     } else {
@@ -185,10 +185,10 @@ export class RenderService {
     switch (type) {
       case ADD_TYPE: this.sceneModif.remove(this.getObject(this.sceneModif, objName));
                      break;
-      case MODIFICATION_TYPE: this.stopFlashObject(objName);
+      case MODIFICATION_TYPE: this.changeVisibilityOfDifferencesObjects(true);
                               this.removeModif(objName);
                               break;
-      case DELETE_TYPE: this.stopFlashObject(objName);
+      case DELETE_TYPE: this.changeVisibilityOfDifferencesObjects(true);
                         this.getObject(this.sceneModif, objName).visible = true;
                         break;
       default: return;
@@ -232,26 +232,11 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        this.getObject(this.sceneOriginal, diff.name).traverse((obj: THREE.Object3D) => {
-          this.setEmissive(obj, visible);
-        });
+        this.getObject(this.sceneOriginal, diff.name).visible = visible;
       }
       if (diff.type !== DELETE_TYPE) {
-        this.getObject(this.sceneModif, diff.name).traverse((obj: THREE.Object3D) => {
-          this.setEmissive(obj, visible);
-        });
+        this.getObject(this.sceneModif, diff.name).visible = visible;
       }
-    }
-  }
-  private stopFlashObject(name: string): void {
-    this.sceneOriginal.getObjectByName(name).traverse((obj: THREE.Object3D) => {
-      this.setEmissive(obj, true);
-    });
-  }
-  private setEmissive(obj: THREE.Object3D, visible: boolean): void {
-    if ((obj as THREE.Mesh).material) {
-      ((obj as THREE.Mesh).material as THREE.MeshPhongMaterial).emissive =
-      new THREE.Color(visible ? 0 : this.WHITE);
     }
   }
 }
