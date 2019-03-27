@@ -10,6 +10,7 @@ import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../
 import { CLICK, KEYS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
+import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
 
 @Component({
     selector: "app-game3d-view",
@@ -145,9 +146,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
                     this.gameIsReady = true;
                     this.startGame();
                 }
-                );
+                ).catch(() => {throw new THREE_ERROR("error while rendering 3D game"); });
             })
-            .catch(() => "get3DGame");
+            .catch(() => {throw new COMMUNICATION_ERROR("unable to get 3DGames."); });
     }
     private sendCreation(): void {
         this.roomID = this.game3D.id;
