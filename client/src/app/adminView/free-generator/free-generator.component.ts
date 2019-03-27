@@ -17,8 +17,8 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   private noObj: string;
   @Input() public id: string;
   private types: string[];
-  private maxObj: number = NO_MAX_OBJECTS;
-  private minObj: number = NO_MIN_OBJECTS;
+  private readonly maxObj: number = NO_MAX_OBJECTS;
+  private readonly minObj: number = NO_MIN_OBJECTS;
   private addCheckbox: boolean;
   private deleteCheckbox: boolean;
   private colorCheckbox: boolean;

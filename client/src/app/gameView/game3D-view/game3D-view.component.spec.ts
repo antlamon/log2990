@@ -239,6 +239,6 @@ describe("Game3DViewComponent", () => {
     });
     it("get disableClick() should correctly return the value of disableClick", () => {
         component["_disableClick"] = "test123";
-        expect(component.blockedCursor).toEqual("test123");
+        expect(component.disableClick).toEqual("test123");
     });
 });
