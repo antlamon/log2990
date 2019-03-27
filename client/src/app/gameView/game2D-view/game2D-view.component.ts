@@ -16,10 +16,10 @@ import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 })
 export class Game2DViewComponent implements OnInit, OnDestroy {
 
-    public simpleGame: IFullGame;
-    public differencesFound: number;
-    public disableClick: string;
-    public blockedCursor: string;
+    private simpleGame: IFullGame;
+    private differencesFound: number;
+    private _disableClick: string;
+    private _blockedCursor: string;
     private readonly NB_MAX_DIFF: number = 7;
 
     private readonly ONE_SEC_IN_MS: number = 1000;
@@ -43,8 +43,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
         this.differencesFound = 0;
-        this.disableClick = "";
-        this.blockedCursor = "";
+        this._disableClick = "";
+        this._blockedCursor = "";
         this.correctSound = new Audio("assets/correct.wav");
         this.errorSound = new Audio("assets/error.wav");
         this.victorySound = new Audio("assets/Ta-Da.wav");
@@ -98,13 +98,13 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
-            this.disableClick = "disable-click";
-            this.blockedCursor = "cursor-not-allowed";
+            this._disableClick = "disable-click";
+            this._blockedCursor = "cursor-not-allowed";
             setTimeout(
                 () => {
                     this.errorPopup.hidePopup();
-                    this.disableClick = "";
-                    this.blockedCursor = "";
+                    this._disableClick = "";
+                    this._blockedCursor = "";
                 },
                 this.ONE_SEC_IN_MS
             );
@@ -123,7 +123,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     private finishGame(): void {
         this.timer.stopTimer();
-        this.disableClick = "disable-click";
+        this._disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
         this.socket.emitEvent(SocketsEvents.END_GAME, {
             username: this.index.username,
@@ -148,5 +148,11 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
         this.lastClick = event;
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE, imageClickMessage);
+    }
+    public get disableClick(): string {
+        return this._disableClick;
+    }
+    public get blockedCursor(): string {
+        return this._blockedCursor;
     }
 }

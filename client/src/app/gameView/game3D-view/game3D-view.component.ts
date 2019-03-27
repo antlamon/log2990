@@ -19,11 +19,11 @@ import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/e
 })
 export class Game3DViewComponent implements OnInit, OnDestroy {
 
-    public game3D: IGame3D;
-    public gameIsReady: boolean;
-    public differencesFound: number;
-    public disableClick: string;
-    public blockedCursor: string;
+    private game3D: IGame3D;
+    private _gameIsReady: boolean;
+    private differencesFound: number;
+    private _disableClick: string;
+    private _blockedCursor: string;
 
     private readonly ONE_SEC_IN_MS: number = 1000;
     private readonly NB_MAX_DIFF: number = 7;
@@ -54,7 +54,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private index: IndexService,
         private render: RenderService,
         private router: Router) {
-        this.gameIsReady = false;
+        this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
@@ -63,8 +63,8 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.errorSound = new Audio("assets/error.wav");
         this.victorySound = new Audio("assets/Ta-Da.wav");
         this.differencesFound = 0;
-        this.disableClick = "";
-        this.blockedCursor = "";
+        this._disableClick = "";
+        this._blockedCursor = "";
     }
 
     public ngOnInit(): void {
@@ -91,13 +91,13 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         if (update.differencesFound === -1) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
-            this.disableClick = "disable-click";
-            this.blockedCursor = "cursor-not-allowed";
+            this._disableClick = "disable-click";
+            this._blockedCursor = "cursor-not-allowed";
             setTimeout(
                 () => {
                     this.errorPopup.hidePopup();
-                    this.disableClick = "";
-                    this.blockedCursor = "";
+                    this._disableClick = "";
+                    this._blockedCursor = "";
                 },
                 this.ONE_SEC_IN_MS
             );
@@ -114,7 +114,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     private finishGame(): void {
         this.timer.stopTimer();
-        this.disableClick = "disable-click";
+        this._disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
         this.socket.emitEvent(SocketsEvents.END_GAME, {
             username: this.index.username,
@@ -143,7 +143,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
                 this.game3D = response;
                 this.sendCreation();
                 this.render.initialize(this.originalContainer, this.modifiedContainer, this.game3D).then(() => {
-                    this.gameIsReady = true;
+                    this._gameIsReady = true;
                     this.startGame();
                 }
                 ).catch(() => {throw new THREE_ERROR("error while rendering 3D game"); });
@@ -230,5 +230,14 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             name: object ? object.name : null,
         };
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
+    }
+    public get gameIsReady(): boolean {
+        return this._gameIsReady;
+    }
+    public get disableClick(): string {
+        return this._disableClick;
+    }
+    public get blockedCursor(): string {
+        return this._blockedCursor;
     }
 }
