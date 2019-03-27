@@ -257,37 +257,27 @@ describe("GameList service", () => {
         });
 
         it("Reseting a valid game should complete", (done: Mocha.Done) => {
-            sandbox.on(Axios, "get", () => {
-                return {
-                    status: 200,
-                } as AxiosResponse;
-            });
+            sandbox.on(Axios, "get", async () => Promise.resolve({ status: 200 }));
             service.resetTimeScore("simple", mockedFullGame.card.id).then(() => {
                 done();
-            }).catch(() => {
-                fail();
+            }).catch((e: Error) => {
+                done(e);
             });
         });
         it("Reseting a valid game should complete", (done: Mocha.Done) => {
-            sandbox.on(Axios, "get", () => {
-                return {
-                    status: 200,
-                } as AxiosResponse;
-            });
+            sandbox.on(Axios, "get", async () => Promise.resolve({ status: 200 }));
             service.resetTimeScore("free", "123").then(() => {
                 done();
-            }).catch(() => {
-                fail();
+            }).catch((e: Error) => {
+                done(e);
             });
         });
 
         it("Reseting a invalid game should throw an error", (done: Mocha.Done) => {
-            sandbox.on(Axios, "get", () => {
-                return {
-                    data: mockedErrorMessage,
-                    status: 422,
-                } as AxiosResponse;
-            });
+            sandbox.on(Axios, "get", async () => Promise.reject({
+                response: {data: mockedErrorMessage},
+                status: 422,
+            }));
             service.resetTimeScore("test", "test").catch(
                 (error: Error) => {
                     expect(error.message).to.eql(mockedErrorMessage.body);
