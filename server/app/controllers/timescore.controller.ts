@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { inject, injectable } from "inversify";
 import { BASE_ID, ERROR_ID } from "../../../common/communication/message";
+import { INVALID_GAMEMODE_ERROR, INVALID_GAMETYPE_ERROR, INVALID_ID_ERROR } from "../../../common/models/errors";
 import { TimeScoreService } from "../microservices/timescore.service";
 import { TYPES } from "../types";
 
@@ -29,11 +30,15 @@ export class TimescoreController {
                                                                       id, nbMinutes, nbSeconds),
                 });
             } catch (e) {
-                res.status(TimescoreController.INVALID_PARAM);
-                res.json({
-                    title: ERROR_ID,
-                    body: e,
-                });
+                if (e instanceof INVALID_GAMEMODE_ERROR || e instanceof INVALID_GAMETYPE_ERROR || e instanceof INVALID_ID_ERROR) {
+
+                    res.status(TimescoreController.INVALID_PARAM);
+                    res.json({
+                        title: ERROR_ID,
+                        body: e,
+                    });
+                }
+                throw e;
             }
         });
 
@@ -43,11 +48,14 @@ export class TimescoreController {
             try {
                 res.json(await this.timeScoreService.resetBestScore(gameType, id));
             } catch (e) {
-                res.status(TimescoreController.INVALID_PARAM);
-                res.json({
-                    title: ERROR_ID,
-                    body: e,
-                });
+                if (e instanceof INVALID_GAMETYPE_ERROR || e instanceof INVALID_ID_ERROR) {
+                    res.status(TimescoreController.INVALID_PARAM);
+                    res.json({
+                        title: ERROR_ID,
+                        body: e,
+                    });
+                }
+                throw e;
             }
         });
 
