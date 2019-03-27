@@ -2,9 +2,9 @@ import { TestBed } from "@angular/core/testing";
 import { SceneGeneratorService } from "./scene-generator.service";
 import { IDifference, ADD_TYPE, DELETE_TYPE, MODIFICATION_TYPE } from "../../../../common/models/game3D";
 import { IObjet3D } from "../../../../common/models/objet3D";
-import { ShapeCreatorService } from "./scene3-d/shape-creator.service";
+import { ShapeCreatorService } from "./geometric/shape-creator.service";
 import * as THREE from "three";
-import { MedievalObjectsCreatorService } from "./medieval-objects-creator.service";
+import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
 const cone: IObjet3D = {
   type: "cone",
   color: 1,
@@ -69,29 +69,43 @@ const differences: IDifference[] = [
   name: "1",
  }
 ];
+const mockDragon: IObjet3D = {
+  name: "1",
+  type: "dragon",
+  position: { x: 0, y: 0, z: 0},
+  size: 1,
+  rotation: {x: 0, y: 0, z: 0},
+};
+const diffDragon: IDifference[] = [
+  {
+    type: MODIFICATION_TYPE,
+    object: mockDragon,
+    name: mockDragon.name,
+    }
+];
 let service: SceneGeneratorService = new SceneGeneratorService(new ShapeCreatorService(), new MedievalObjectsCreatorService());
 describe("SceneGeneratorService", () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [ShapeCreatorService, SceneGeneratorService, MedievalObjectsCreatorService],
   }));
 
-  it("should be created", () => {
+  it("should be created", async () => {
     service = TestBed.get(SceneGeneratorService);
     expect(service).toBeTruthy();
-    spyOn(service["shapeService"], "createShape").and.callFake((obj: IObjet3D): Promise<THREE.Mesh> => {
+    spyOn(service["shapeService"], "createShape").and.callFake( async (obj: IObjet3D): Promise<THREE.Mesh> => {
       const mockMesh: THREE.Mesh = new THREE.Mesh();
       mockMesh.name = obj.name;
       mockMesh.material = new THREE.MeshPhongMaterial({shininess: obj.color});
 
       return Promise.resolve(mockMesh);
     });
-    spyOn(service["modelsService"], "createMedievalScene").and.callFake(async (obj: IObjet3D[]): Promise<THREE.Mesh[]> => {
-      return [];
-    });
   });
   describe("Test the function createScene", async () => {
     it("The returned THREE.Scene should have the correct background color which was passed has a parameter", async () => {
-      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
+      spyOn(service["modelsService"], "createMedievalScene").and.callFake(async (): Promise<THREE.Mesh[]> => {
+        return [];
+      });
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, differences);
       expect(scene.background).toEqual(new THREE.Color(1));
     });
     it("The returned THREE.Scene should have the correct number of Mesh added in it plus two for the lights", async () => {
@@ -103,34 +117,45 @@ describe("SceneGeneratorService", () => {
   describe("Test the function modifyScene", async () => {
     it("The returned THREE.Scene should have the same background colors", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false , differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       expect(scene.background).toEqual(sceneM.background);
     });
-    it("The returned modify scene should have more objects when a difference of type ADD is passed to the function", async () => {
+    it("The returned modify scene should have more objects when a ADD_TYPE difference is passed to the function (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       expect(scene.children.length + 1).toEqual(sceneM.children.length);
     });
     it("The returned THREE.Scene should have and element which is invisible when a difference of type DELETE is passed", async () => {
-      const sceneM: THREE.Scene  = await service.modifyScene((
+      const sceneM: THREE.Scene  = service.modifyScene((
         await service.createScene(mockObjects, 1, false, differences)).clone(),
-                                                             differences);
+                                                       differences);
       let nbNotVisible: number = 0;
       sceneM.children.forEach((obj: THREE.Object3D) => {
-        if ( obj.visible === false) {
+        if ( !obj.visible) {
           nbNotVisible++;
         }
       });
       expect(nbNotVisible).toEqual(1);
     });
-    it("The returned THREE.Scene should have and element which the material is different from the original scene", async () => {
+    it("The returned THREE.Scene should have and element which the material is different from the original scene (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("1") as THREE.Mesh);
+    });
+    it("The returned THREE.Scene should have and element which the material is different from the original scene (thematic)", async () => {
+      spyOn(service, "createScene").and.callFake(async (): Promise<THREE.Scene> => {
+        return new THREE.Scene();
+      });
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, diffDragon);
+      scene.add(await service["modelsService"].createObject(mockDragon, true));
+      let sceneM: THREE.Scene  = await service.createScene(mockObjects, 1, true, diffDragon);
+      sceneM.add(await service["modelsService"].createObject(mockDragon, true));
+      sceneM = service.modifyScene(sceneM, diffDragon);
+      expect(scene.getObjectByName(mockDragon.name) as THREE.Mesh).not.toEqual(sceneM.getObjectByName(mockDragon.name) as THREE.Mesh);
     });
     it("All objects untouched by the differences should stay the same", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       let areTheSames: boolean = true;
       sceneM.children.forEach((obj: THREE.Object3D) => {
         if ( differences.findIndex((diff: IDifference) => diff.name === obj.name) === -1) {

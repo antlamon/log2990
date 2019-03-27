@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } fro
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
-import { RenderService } from "src/app/scene3D/scene3-d/render.service";
+import { RenderService } from "src/app/scene3D/render.service";
 import { SocketService } from "src/app/services/socket.service";
 import { IndexService } from "src/app/services/index.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
@@ -10,6 +10,7 @@ import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../
 import { CLICK, KEYS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
+import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
 
 @Component({
     selector: "app-game3d-view",
@@ -145,9 +146,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
                     this.gameIsReady = true;
                     this.startGame();
                 }
-                );
+                ).catch(() => {throw new THREE_ERROR("error while rendering 3D game"); });
             })
-            .catch(() => "get3DGame");
+            .catch(() => {throw new COMMUNICATION_ERROR("unable to get 3DGames."); });
     }
     private sendCreation(): void {
         this.roomID = this.game3D.id;

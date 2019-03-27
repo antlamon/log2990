@@ -1,9 +1,9 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, OnDestroy } from "@angular/core";
 import { FREE_GAME_TYPE, IScoreUpdate, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
-import { RenderService } from "../scene3D/scene3-d/render.service";
+import { RenderService } from "../scene3D/render.service";
 import { GameService } from "../services/game.service";
 import { SocketService } from "../services/socket.service";
 @Component({
@@ -12,7 +12,7 @@ import { SocketService } from "../services/socket.service";
   styleUrls: ["./list-view.component.css"]
 })
 
-export class ListViewComponent implements OnInit {
+export class ListViewComponent implements OnInit, OnDestroy {
 
   public simpleGames: IGame[];
   public freeGames: IGame3D[];
@@ -34,17 +34,30 @@ export class ListViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.getSimpleGames();
-    this.getFreeGames();
+    this.getSimpleGames().catch((error) => console.error(error));
+    this.getFreeGames().catch((error) => console.error(error));
     this.isAdminMode = false;
+  }
+
+  public ngOnDestroy(): void {
+    this.socket.unsubscribeTo(SocketsEvents.UPDATE_SIMPLES_GAMES);
+    this.socket.unsubscribeTo(SocketsEvents.UPDATE_FREE_GAMES);
+    this.socket.unsubscribeTo(SocketsEvents.SIMPLE_GAME_ADDED);
+    this.socket.unsubscribeTo(SocketsEvents.FREE_GAME_ADDED);
+    this.socket.unsubscribeTo(SocketsEvents.SIMPLE_GAME_DELETED);
+    this.socket.unsubscribeTo(SocketsEvents.FREE_GAME_DELETED);
+    this.socket.unsubscribeTo(SocketsEvents.SCORES_UPDATED);
   }
 
   private async getImageURL(game: IGame3D): Promise<void> {
     const imageURL: string = await this.renderer.getImageURL(game);
     this.imageURLs.set(game, imageURL);
   }
-  public updateScore(upd: IScoreUpdate): void {
+  public async updateScore(upd: IScoreUpdate): Promise<void> {
     if (upd.gameType === SIMPLE_GAME_TYPE) {
+      if (!this.simpleGames) {
+        await this.getSimpleGames();
+      }
       const index: number = this.simpleGames.findIndex((x: IGame) => x.id === upd.id);
       if (index !== -1) {
         this.simpleGames[index].solo = upd.solo;
@@ -52,6 +65,9 @@ export class ListViewComponent implements OnInit {
       }
     }
     if (upd.gameType === FREE_GAME_TYPE) {
+      if (!this.freeGames) {
+        await this.getFreeGames();
+      }
       const index: number = this.freeGames.findIndex((x: IGame3D) => x.id === upd.id);
       if (index !== -1) {
         this.freeGames[index].solo = upd.solo;
@@ -60,16 +76,15 @@ export class ListViewComponent implements OnInit {
     }
   }
 
-  public getSimpleGames(): void {
-    this.gameService.getSimpleGames()
-        .subscribe((response: IGame[]) => {this.simpleGames = response; });
+  public async getSimpleGames(): Promise<void> {
+    this.simpleGames = await this.gameService.getSimpleGames().toPromise();
   }
   public addSimpleGame(game: IGame): void {
     this.simpleGames.push(game);
   }
   public addFreeGame(game: IGame3D): void {
     this.freeGames.push(game);
-    this.getFreeGames();
+    this.getFreeGames().catch((error) => console.error(error));
   }
   public removeSimpleGame(id: string): void {
     const index: number = this.simpleGames.findIndex((x: IGame) => x.id === id);
@@ -83,13 +98,10 @@ export class ListViewComponent implements OnInit {
       this.freeGames.splice(index, 1);
     }
   }
-  public getFreeGames(): void {
-    this.gameService.getFreeGames()
-        .subscribe((response: IGame3D[]) => {
-          this.freeGames = response;
-          for (const game of response ) {
-            this.getImageURL(game);
-          }
-         });
+  public async getFreeGames(): Promise<void> {
+    this.freeGames = await this.gameService.getFreeGames().toPromise();
+    for (const game of this.freeGames) {
+      this.getImageURL(game).catch((error) => console.error(error));
+    }
   }
 }

@@ -37,7 +37,7 @@ export class ShapeCreatorService {
     return this.promisedObjects;
   }
 
-  public createShape(obj: IObjet3D): Promise<THREE.Mesh> {
+  public async createShape(obj: IObjet3D): Promise<THREE.Mesh> {
 
     const shape: THREE.Mesh = this.map.get(obj.type).clone();
 

@@ -1,9 +1,10 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { Game3DViewComponent } from "./game3D-view.component";
 import { HttpClientModule } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
-import { RenderService } from "src/app/scene3D/scene3-d/render.service";
-import { ShapeCreatorService } from "src/app/scene3D/scene3-d/shape-creator.service";
+import { RenderService } from "src/app/scene3D/render.service";
+import { ShapeCreatorService } from "src/app/scene3D/geometric/shape-creator.service";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 import { IGame3D, IDifference } from "../../../../../common/models/game3D";
 import { AppRoutingModule } from "src/app/app-routing.module";
@@ -13,7 +14,7 @@ import { IndexService } from "src/app/services/index.service";
 import { SocketService } from "src/app/services/socket.service";
 import { KEYS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
-import { MedievalObjectsCreatorService } from "src/app/scene3D/medieval-objects-creator.service";
+import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval-objects-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { MOUSE } from "three";
 import { Game3DRoomUpdate } from "../../../../../common/communication/message";
@@ -43,7 +44,7 @@ describe("Game3DViewComponent", () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [Game3DViewComponent, ErrorPopupComponent, GameMessagesComponent],
-            imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
+            imports: [HttpClientModule, HttpClientTestingModule, RouterTestingModule, MatProgressSpinnerModule],
             providers: [RenderService, ShapeCreatorService, AppRoutingModule,
                         IndexService, MedievalObjectsCreatorService, SceneGeneratorService
                     ]

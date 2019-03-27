@@ -7,7 +7,8 @@ import { AppRoutingModule } from "../app-routing.module";
 import { RouterTestingModule } from "@angular/router/testing";
 import { Observable, of } from "rxjs";
 import { Message, ERROR_ID, BASE_ID } from "../../../../common/communication/message";
-import { RenderService } from "../scene3D/scene3-d/render.service";
+import { RenderService } from "../scene3D/render.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("InitialComponent", () => {
   let component: InitialComponent;
@@ -16,7 +17,7 @@ describe("InitialComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ InitialComponent ],
-      imports: [ FormsModule, RouterTestingModule, HttpClientModule ],
+      imports: [ FormsModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule ],
       providers: [ IndexService, AppRoutingModule, RenderService ],
     })
       .compileComponents().then(() => { }, (error: Error) => {
@@ -53,6 +54,10 @@ describe("InitialComponent", () => {
       const navigateSpy: jasmine.Spy = spyOn((component as any).router, "navigate").and.returnValue(Promise.resolve());
       component.connect("test123");
       expect(navigateSpy).toHaveBeenCalledTimes(0);
+    });
+    it("Should return a list of errors if the name is not valid", () => {
+      component.connect("test fail *");
+      expect(component["errors"]).toEqual(["Le username n'est pas valide"]);
     });
   });
 });

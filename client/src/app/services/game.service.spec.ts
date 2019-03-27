@@ -2,6 +2,7 @@ import { TestBed, inject } from "@angular/core/testing";
 
 import { GameService } from "./game.service";
 import { HttpClientModule } from "@angular/common/http";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { IGame, ISimpleForm, IGame3DForm, IFullGame } from "../../../../common/models/game";
 import { Message, BASE_ID } from "../../../../common/communication/message";
 import { TestHelper } from "src/test.helper";
@@ -18,7 +19,7 @@ describe("GameService", () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientModule],
+            imports: [HttpClientModule, HttpClientTestingModule],
             providers: [GameService]
         });
         httpSpy = jasmine.createSpyObj("HttpClient", ["get", "post", "delete"]);
@@ -121,6 +122,15 @@ describe("GameService", () => {
         gameService.deleteFreeGame(mocked3DGame).subscribe(
             (response: Message) => {
                 expect(response).toEqual(expectedMessage);
+            }
+        );
+    });
+    it("The reset fucntion should call the HTTP.get", () => {
+
+        const spy: jasmine.Spy = httpSpy.get.and.returnValue(TestHelper.asyncData({title: "", body: ""}));
+        gameService.resetScore("", "").subscribe(
+            (response: Message) => {
+                expect(spy).toHaveBeenCalled();
             }
         );
     });

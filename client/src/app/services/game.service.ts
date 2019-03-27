@@ -30,7 +30,6 @@ export class GameService {
 
   public getSimpleGame(id: string): Observable<IFullGame> {
     const url: string = this.SIMPLEONE_URL + "?id=" + id;
-    (console as Console).log(url);
 
     return this.http.get<IFullGame>(url).pipe(
       catchError(this.handleError<IFullGame>("getSimpleGame"))
@@ -102,7 +101,7 @@ export class GameService {
   }
   public resetScore(id: string, gameType: string): Observable<Message> {
     const url: string = this.RESET_URL + "?id=" + id + "&gameType=" + gameType;
-    console.log(url);
+
     return this.http.get<Message>(url).pipe(
       catchError(this.handleError<Message>("resetGame"))
     );

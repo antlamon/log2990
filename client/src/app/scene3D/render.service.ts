@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../../common/models/game3D";
-import { SceneGeneratorService } from "../scene-generator.service";
+import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../common/models/game3D";
+import { SceneGeneratorService } from "./scene-generator.service";
 
 @Injectable()
 export class RenderService {
@@ -45,9 +45,9 @@ export class RenderService {
     this.containerModif = containerM;
     this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
       game.originalScene, game.backColor, this.isThematic, this.differences) :
-     await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
+        this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
-      this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
+      this.sceneModif = this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);

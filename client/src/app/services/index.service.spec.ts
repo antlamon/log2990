@@ -1,7 +1,6 @@
 import { IndexService } from "./index.service";
 import { Message, BASE_ID } from "../../../../common/communication/message";
 import { TestHelper } from "../../test.helper";
-
 // tslint:disable-next-line:no-any Used to mock the http call
 let httpClientSpy: any;
 let indexService: IndexService;

@@ -16,7 +16,7 @@ import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.co
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
 import { GameMessagesComponent } from "src/app/gameView/game-messages/game-messages.component";
-import { RenderService } from "src/app/scene3D/scene3-d/render.service";
+import { RenderService } from "src/app/scene3D/render.service";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
 
 describe("SimpleGeneratorComponent", () => {

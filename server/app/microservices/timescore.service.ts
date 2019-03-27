@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { Collection } from "mongodb";
 import { FREE_GAME_TYPE, ScoreUpdate, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
+import { INVALID_GAMEMODE_ERROR, INVALID_GAMETYPE_ERROR, INVALID_ID_ERROR } from "../../../common/models/errors";
 import { IFullGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { IScore } from "../../../common/models/top3";
@@ -29,7 +30,7 @@ export class TimeScoreService {
         } else if (gameType === FREE_GAME_TYPE) {
             return this.resetFreeGameScore(id);
         } else {
-            throw new Error(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
+            throw new INVALID_GAMETYPE_ERROR(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
         }
     }
 
@@ -37,7 +38,7 @@ export class TimeScoreService {
                                  gameMode: string, id: string, nbMinutes: number, nbSeconds: number): Promise<ScoreUpdate> {
         const leaderboard: Leaderboard = await this.getLeaderboard(gameType, id);
         if (!leaderboard[gameMode]) {
-            throw new Error(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
+            throw new INVALID_GAMEMODE_ERROR(TimeScoreService.INVALID_GAMEMODE_EXCEPTION);
         }
         let highScoreChanged: number = -1;
         for (let i: number = 0; i < leaderboard[gameMode].length; ++i) {
@@ -69,7 +70,7 @@ export class TimeScoreService {
                     },
                 });
         } else {
-            throw new Error(TimeScoreService.INVALID_ID_EXCEPTION);
+            throw new INVALID_ID_ERROR(TimeScoreService.INVALID_ID_EXCEPTION);
         }
     }
 
@@ -84,7 +85,7 @@ export class TimeScoreService {
                     },
                 });
         } else {
-            throw new Error(TimeScoreService.INVALID_ID_EXCEPTION);
+            throw new INVALID_ID_ERROR(TimeScoreService.INVALID_ID_EXCEPTION);
         }
     }
 
@@ -153,7 +154,7 @@ export class TimeScoreService {
         switch (gameType) {
             case SIMPLE_GAME_TYPE:
                 game = await this.getSimpleGame(id);
-                if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
+                if (!game) { throw new INVALID_ID_ERROR(TimeScoreService.INVALID_ID_EXCEPTION); }
 
                 return {
                     solo: game.card.solo,
@@ -161,14 +162,14 @@ export class TimeScoreService {
                 };
             case FREE_GAME_TYPE:
                 game = await this.getFreeGame(id);
-                if (!game) { throw new Error(TimeScoreService.INVALID_ID_EXCEPTION); }
+                if (!game) { throw new INVALID_ID_ERROR(TimeScoreService.INVALID_ID_EXCEPTION); }
 
                 return {
                     solo: game.solo,
                     multi: game.multi,
                 };
             default:
-                throw new Error(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
+                throw new INVALID_GAMETYPE_ERROR(TimeScoreService.INVALID_GAMETYPE_EXCEPTION);
         }
     }
 
@@ -195,11 +196,11 @@ export class TimeScoreService {
     }
 
     private async getSimpleGame(id: string): Promise<IFullGame | null> {
-        return this.simpleCollection.findOne({ "card.id": id }, {projection: {"card.solo": true, "card.multi": true}});
+        return this.simpleCollection.findOne({ "card.id": id }, {projection: {"card.solo": 1, "card.multi": 1}});
     }
 
     private async getFreeGame(id: string): Promise<IGame3D | null> {
-        return this.freeCollection.findOne({ "id": id }, {projection: {"solo": true, "multi": true}});
+        return this.freeCollection.findOne({ "id": id }, {projection: {solo: 1, multi: 1}});
     }
 }
 

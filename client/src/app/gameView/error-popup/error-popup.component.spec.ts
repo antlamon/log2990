@@ -10,7 +10,9 @@ describe("ErrorPopupComponent", () => {
     TestBed.configureTestingModule({
       declarations: [ ErrorPopupComponent ]
     })
-    .compileComponents();
+    .compileComponents().catch((error: Error) => {
+      console.error(error);
+    });
   }));
 
   beforeEach(() => {
@@ -21,5 +23,13 @@ describe("ErrorPopupComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+  it("Should should block popup when showing error", () => {
+    component.showPopup(1, 1);
+    expect(component.errorPopupDisplay).toEqual("block");
+  });
+  it("Should should block popup when showing error", () => {
+    component.hidePopup();
+    expect(component.errorPopupDisplay).toEqual("none");
   });
 });

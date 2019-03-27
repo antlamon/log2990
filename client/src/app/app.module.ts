@@ -15,8 +15,8 @@ import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.componen
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
 import { InitialComponent } from "./initial/initial.component";
 import { ListViewComponent } from "./list-view/list-view.component";
-import { RenderService } from "./scene3D/scene3-d/render.service";
-import { ShapeCreatorService } from "./scene3D/scene3-d/shape-creator.service";
+import { RenderService } from "./scene3D/render.service";
+import { ShapeCreatorService } from "./scene3D/geometric/shape-creator.service";
 import { FileValidatorService } from "./services/file-validator.service";
 import { IndexService } from "./services/index.service";
 import { ModalService } from "./services/modal.service";
@@ -24,7 +24,7 @@ import { SocketService } from "./services/socket.service";
 import { GameMessagesComponent } from "./gameView/game-messages/game-messages.component";
 import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.component";
 import { GamecardComponent } from "./gamecard/gamecard.component";
-import { MedievalObjectsCreatorService } from "./scene3D/medieval-objects-creator.service";
+import { MedievalObjectsCreatorService } from "./scene3D/thematic/medieval-objects-creator.service";
 import { TimerService } from "./services/timer.service";
 
 @NgModule({
