@@ -1,12 +1,13 @@
 button{
     min-width: 150px;
     height:50px;
-    background-color: rgba(232, 233, 238);
+    background-color: #538ea1;
     font-size: 20px;
     transition: all .2s ease-in-out;
     border-radius: 10px;
     font-weight: bold;
     color:black;
+    border: solid;
     
 }
 .spinny {
@@ -16,7 +17,7 @@ button{
 }
 button:hover{
     cursor: pointer;
-    background-color:rgb(100, 142, 219);
+    background-color: #2A5E8F;
 }
 .page-title{
     display: flex;
@@ -32,12 +33,13 @@ button:hover{
     max-width: 750px;
     max-height: 600px;
     height: 600px;
-    background-color:rgb(52, 62, 109);
+    background-color: #ccd9cb;
     margin: 30px;
     transition: all .2s ease-in-out;
     font-weight: bold;
     border: 5px solid black;
     border-radius: 10px;
+    font-family: Trebuchet MS;
 }
 
 .bottom-card{
@@ -56,7 +58,7 @@ button:hover{
     font-family:Trebuchet MS;
     font-size: 70px;
     margin: 10px;
-    background-color: rgba(232, 233, 238);
+    background-color: #edc252;
     border-radius: 5px;
     border: solid black;
 }

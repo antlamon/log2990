@@ -1,6 +1,6 @@
 .simpleViewForm{
     padding: 20px;
-    border: 2px solid gray;
+    border: 2px solid black;
     top: 50%;
     left: 50%;
     margin-top: -275px;
@@ -11,7 +11,7 @@
     flex-direction: column;
     background: #f4f7f8;
     border-radius: 8px;
-	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
     overflow: auto;
     position: fixed;
@@ -61,19 +61,19 @@ button {
 	padding: 19px 39px 18px 39px;
 	color: #FFF;
 	margin: 0 auto;
-	background: #485f91;
+	background: #538ea1;
 	font-size: 18px;
 	text-align: center;
 	font-style: normal;
 	width: 100%;
-	border: 1px solid #1e1f42;
+	border: 1px solid black;
 	border-width: 1px 1px 3px;
 	margin-bottom: 10px;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,0.24), 0 1px 3px 0 rgba(0,0,0,0.19);
 }
 button:hover{
    cursor: pointer;
-   background: #3c3653;
+   background: #2A5E8F;
    box-shadow: 0 4px 6px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
 }
 button:focus,  .uploader + label:focus{
@@ -87,7 +87,7 @@ button:focus,  .uploader + label:focus{
 .textInput{
     border-color: black;
     border-width: 1px;
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background: rgba(255,255,255,.1);
     background-color: #e8eeef;
     color:#8a97a0;
@@ -97,7 +97,7 @@ button:focus,  .uploader + label:focus{
 	font-size: 15px;
 }
 .textInput:focus{
-    background: #d2d9dd;
+    background: white;
 }
 
 #modifiedFileName, #originalFileName {
