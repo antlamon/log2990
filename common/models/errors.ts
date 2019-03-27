@@ -24,3 +24,20 @@ export class FORMAT_ERROR extends Error {
         super(message);
     }
 };
+export class INVALID_ID_ERROR extends Error {
+    public constructor(message: string) {
+        super(message);
+    }
+};
+
+export class INVALID_GAMEMODE_ERROR extends Error {
+    public constructor(message: string) {
+        super(message);
+    }
+};
+
+export class INVALID_GAMETYPE_ERROR extends Error {
+    public constructor(message: string) {
+        super(message);
+    }
+}

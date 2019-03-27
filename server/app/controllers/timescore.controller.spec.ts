@@ -3,6 +3,7 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import supertest = require("supertest");
 import { ERROR_ID } from "../../../common/communication/message";
+import { INVALID_ID_ERROR } from "../../../common/models/errors";
 import { Application } from "../app";
 import { container } from "../inversify.config";
 import { TimeScoreService } from "../microservices/timescore.service";
@@ -64,8 +65,8 @@ describe("TimeScore Controller", () => {
         });
     });
 
-    it("Should return 401 from put", (done: Mocha.Done) => {
-        sandbox.on(timeScoreService, "changeHighScore", async () => Promise.reject());
+    it("Should return 422 from put", (done: Mocha.Done) => {
+        sandbox.on(timeScoreService, "changeHighScore", async () => Promise.reject(new INVALID_ID_ERROR("oups")));
         supertest(app)
         .put("/api/timescore")
         .send({
@@ -83,8 +84,8 @@ describe("TimeScore Controller", () => {
         });
     });
 
-    it("Should return 401 from get to reset", (done: Mocha.Done) => {
-        sandbox.on(timeScoreService, "resetBestScore", async () => Promise.reject());
+    it("Should return 422 from get to reset", (done: Mocha.Done) => {
+        sandbox.on(timeScoreService, "resetBestScore", async () => Promise.reject(new INVALID_ID_ERROR("oups")));
         supertest(app)
         .get("/api/timescore/reset")
         .query({
