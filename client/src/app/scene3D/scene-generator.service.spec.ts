@@ -2,9 +2,9 @@ import { TestBed } from "@angular/core/testing";
 import { SceneGeneratorService } from "./scene-generator.service";
 import { IDifference, ADD_TYPE, DELETE_TYPE, MODIFICATION_TYPE } from "../../../../common/models/game3D";
 import { IObjet3D } from "../../../../common/models/objet3D";
-import { ShapeCreatorService } from "./scene3-d/shape-creator.service";
+import { ShapeCreatorService } from "./geometric/shape-creator.service";
 import * as THREE from "three";
-import { MedievalObjectsCreatorService } from "./medieval-objects-creator.service";
+import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
 const cone: IObjet3D = {
   type: "cone",
   color: 1,

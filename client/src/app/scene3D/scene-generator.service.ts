@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { IObjet3D } from "../../../../common/models/objet3D";
 import * as THREE from "three";
-import { ShapeCreatorService } from "./scene3-d/shape-creator.service";
+import { ShapeCreatorService } from "./geometric/shape-creator.service";
 import { IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../common/models/game3D";
-import { MedievalObjectsCreatorService } from "./medieval-objects-creator.service";
+import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
 import { WHITE } from "../global/constants";
 @Injectable({
   providedIn: "root"

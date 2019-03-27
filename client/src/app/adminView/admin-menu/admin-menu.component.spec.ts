@@ -13,12 +13,12 @@ import { Game2DViewComponent } from "src/app/gameView/game2D-view/game2D-view.co
 import { Game3DViewComponent } from "src/app/gameView/game3D-view/game3D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.component";
-import { RenderService } from "src/app/scene3D/scene3-d/render.service";
+import { RenderService } from "src/app/scene3D/render.service";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
 import { IndexService } from "src/app/services/index.service";
 import { GameMessagesComponent } from "src/app/gameView/game-messages/game-messages.component";
-import { MedievalObjectsCreatorService } from "src/app/scene3D/medieval-objects-creator.service";
-import { ShapeCreatorService } from "src/app/scene3D/scene3-d/shape-creator.service";
+import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval-objects-creator.service";
+import { ShapeCreatorService } from "src/app/scene3D/geometric/shape-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;

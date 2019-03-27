@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import * as THREE from "three";
-import { IObjet3D } from "../../../../common/models/objet3D";
+import { IObjet3D } from "../../../../../common/models/objet3D";
 import GLTFLoader from "three-gltf-loader";
-import { IDifference } from "../../../../common/models/game3D";
+import { IDifference } from "../../../../../common/models/game3D";
 
 @Injectable()
 export class MedievalObjectsCreatorService {

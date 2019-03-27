@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } fro
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
-import { RenderService } from "src/app/scene3D/scene3-d/render.service";
+import { RenderService } from "src/app/scene3D/render.service";
 import { SocketService } from "src/app/services/socket.service";
 import { IndexService } from "src/app/services/index.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";

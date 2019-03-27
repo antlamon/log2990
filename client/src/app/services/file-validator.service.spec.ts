@@ -16,7 +16,7 @@ import { Game3DViewComponent } from "../gameView/game3D-view/game3D-view.compone
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
 import { GameMessagesComponent } from "../gameView/game-messages/game-messages.component";
-import { RenderService } from "../scene3D/scene3-d/render.service";
+import { RenderService } from "../scene3D/render.service";
 import { GamecardComponent } from "../gamecard/gamecard.component";
 describe("FileValidatorService", () => {
 
