@@ -3,6 +3,7 @@ import { IObjet3D } from "../../../../common/models/objet3D";
 import * as THREE from "three";
 import { ShapeCreatorService } from "./geometric/shape-creator.service";
 import { IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../common/models/game3D";
+import { THREE_ERROR } from "../../../../common/models/errors";
 import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
 import { WHITE } from "../global/constants";
 @Injectable({
@@ -56,10 +57,14 @@ export class SceneGeneratorService {
   private addModification(scene: THREE.Scene, diffObj: IDifference): void {
     switch (diffObj.type) {
       case ADD_TYPE:
-        this.addObject(scene, diffObj);
+        this.addObject(scene, diffObj).catch(() => {
+          throw new THREE_ERROR("unable to create a new object.");
+        });
         break;
       case MODIFICATION_TYPE:
-        this.modifyObject(scene, diffObj);
+        this.modifyObject(scene, diffObj).catch(() => {
+          throw new THREE_ERROR("unable to modify a three object.");
+        });
         break;
       case DELETE_TYPE:
         this.hideObject(scene, diffObj.name);

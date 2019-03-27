@@ -12,11 +12,11 @@ import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../../common/communication
 })
 export class GamecardComponent {
   @Input()
-  public game: IGame | IGame3D;
-  @Input()
   public isAdminMode: boolean;
   @Input()
   public imgURL: string;
+  @Input()
+  private game: IGame | IGame3D;
   public constructor(private gameService: GameService, private router: Router) {
     this.isAdminMode = false;
     this.game = {solo: [], multi: [], name: "", id: "", originalImage: ""};

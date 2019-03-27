@@ -2,7 +2,7 @@ div[ng-view]{
     height: 100%;
 }
 html, body { height: 100vh !important;
-background-color: rgb(224, 226, 238);
+background-color: #15506c;
 margin: 0 !important; }
 *{
     margin: 0;

@@ -13,6 +13,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { SceneGeneratorService } from "./scene-generator.service";
 import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
 import { WHITE } from "src/app/global/constants";
+import { THREE_ERROR } from "../../../../common/models/errors";
 
 describe("renderService", () => {
   const cone: IObjet3D = {
@@ -242,7 +243,9 @@ describe("renderService", () => {
     service["differences"] = [];
     it("Should return an image URL as string", () => {
       const spy: jasmine.Spy = spyOn(service["sceneGenerator"], "createScene").and.callFake(async () => Promise.resolve(new THREE.Scene()));
-      service.getImageURL(mockGame);
+      service.getImageURL(mockGame).catch(() => {
+        throw new THREE_ERROR("error while rendering a scene");
+      });
       expect(spy).toHaveBeenCalled();
     });
   });

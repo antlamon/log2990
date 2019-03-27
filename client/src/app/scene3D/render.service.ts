@@ -45,9 +45,9 @@ export class RenderService {
     this.containerModif = containerM;
     this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
       game.originalScene, game.backColor, this.isThematic, this.differences) :
-     await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
+        this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
-      this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
+      this.sceneModif = this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
