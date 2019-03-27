@@ -50,7 +50,7 @@ export class MedievalObjectsCreatorService {
     return objectsTHREE;
   }
 
-  public createObject(object: IObjet3D, toReload: boolean): Promise<THREE.Mesh> {
+  public async createObject(object: IObjet3D, toReload: boolean): Promise<THREE.Mesh> {
 
     return new Promise((resolve, reject) => {
       if (toReload || !this.loadedModels.get(object.type)) {
@@ -67,7 +67,7 @@ export class MedievalObjectsCreatorService {
       }
     });
   }
-  private createSkyBox(): Promise<THREE.Mesh> {
+  private async createSkyBox(): Promise<THREE.Mesh> {
     return new Promise<THREE.Mesh>((resolve, reject) => {
       this.skyBoxLoader = new THREE.TextureLoader();
       const faceNb: number = 6;
