@@ -17,6 +17,8 @@ describe("TimerService", () => {
       service.startTimer();
       setTimeout(() => {
         service.stopTimer();
+        expect(service.nbMinutes).toEqual(0);
+        // tslint:disable-next-line:no-magic-numbers
         expect(service.getTimeAsString()).toEqual("00:02");
         done();
       },         testDelay );

@@ -10,8 +10,8 @@ import { IndexService } from "../services/index.service";
   styleUrls: ["./initial.component.css"]
 })
 export class InitialComponent {
-  public username: string;
   public readonly MESSAGE_BOX_ID: string = "message_box";
+  public username: string;
   private errors: string[];
 
   public constructor(

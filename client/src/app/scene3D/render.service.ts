@@ -6,19 +6,19 @@ import { SceneGeneratorService } from "./scene-generator.service";
 @Injectable()
 export class RenderService {
   private readonly FLASH_TIME: number = 150;
+  private readonly GAMMA_FACTOR: number = 2.2;
+  private readonly SENSITIVITY: number = 0.002;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
   private camera: THREE.PerspectiveCamera;
   private mouse: THREE.Vector2 = new THREE.Vector2();
   private raycaster: THREE.Raycaster;
-  private readonly SENSITIVITY: number = 0.002;
   private isThematic: boolean;
   private rendererO: THREE.WebGLRenderer;
   private rendererM: THREE.WebGLRenderer;
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
-  private readonly GAMMA_FACTOR: number = 2.2;
 
   private cameraZ: number = 20;
   private cameraY: number = 5;
