@@ -1,10 +1,11 @@
-import Axios, { AxiosResponse } from "axios";
+import Axios, { AxiosError, AxiosResponse } from "axios";
 import FormData = require("form-data");
 import { inject, injectable } from "inversify";
 import { Collection, DeleteWriteOpResultObject, ObjectID } from "mongodb";
 import "reflect-metadata";
 import { BASE_ID, ERROR_ID, Message, SIMPLE_GAME_TYPE } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
+import { HTTP_ERROR } from "../../../common/models/errors";
 import { IFullGame, IGame, IGame3DForm, ISimpleForm } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { DatabaseClient } from "../database.client";
@@ -16,7 +17,6 @@ import { Game3DGeneratorService } from "./game3DGenerator.service";
 export class GameListService {
     public static readonly MIN_TIME_TOP_3: number = 15;
     public static readonly MAX_TIME_TOP_3: number = 30;
-    private static readonly HTTP_OK: number = 200;
     private static readonly BMP_S64_HEADER: string = "data:image/bmp;base64,";
     private readonly SIMPLE_COLLECTION: string = "simple-games";
     private readonly FREE_COLLECTION: string = "free-games";
@@ -29,8 +29,8 @@ export class GameListService {
     }
 
     public async getSimpleGames(): Promise<IGame[]> {
-        return this.simpleCollection.find({}).project({_id: 0, card: 1})
-        .map((x: IFullGame) => x.card).toArray();
+        return this.simpleCollection.find({}).project({ _id: 0, card: 1 })
+            .map((x: IFullGame) => x.card).toArray();
     }
 
     public async getSimpleGame(id: string): Promise<IFullGame> {
@@ -124,28 +124,30 @@ export class GameListService {
     }
 
     public async resetTimeScore(gameType: string, id: string): Promise<void> {
-        const response: AxiosResponse = await Axios.get("http://localhost:3000/api/timescore/reset", {
+        await Axios.get("http://localhost:3000/api/timescore/reset", {
             params: {
                 gameType,
                 id,
             },
-        });
-        if (response.status === GameListService.HTTP_OK) {
-            if ( gameType === SIMPLE_GAME_TYPE ) {
-                const tempGame: IFullGame | null = await this.simpleCollection.findOne({"card.id": id});
-                if (tempGame) {
-                    this.socketController.emitEvent(
-                        SocketsEvents.SCORES_UPDATED, {gameType: gameType, id: id, solo: tempGame.card.solo, multi: tempGame.card.multi});
-                }
+        }).catch((axiosError: AxiosError) => {
+            if (axiosError.response) {
+                throw new HTTP_ERROR(axiosError.response.data.body);
             } else {
-                const tempGame: IGame3D | null = await this.freeCollection.findOne({id});
-                if (tempGame) {
-                    this.socketController.emitEvent(
-                        SocketsEvents.SCORES_UPDATED, {gameType: gameType, id: id, solo: tempGame.solo, multi: tempGame.multi});
-                }
+                throw new HTTP_ERROR(axiosError.message);
+            }
+        });
+        if (gameType === SIMPLE_GAME_TYPE) {
+            const tempGame: IFullGame | null = await this.simpleCollection.findOne({ "card.id": id });
+            if (tempGame) {
+                this.socketController.emitEvent(
+                    SocketsEvents.SCORES_UPDATED, { gameType: gameType, id: id, solo: tempGame.card.solo, multi: tempGame.card.multi });
             }
         } else {
-            throw new Error(response.data.body);
+            const tempGame: IGame3D | null = await this.freeCollection.findOne({ id });
+            if (tempGame) {
+                this.socketController.emitEvent(
+                    SocketsEvents.SCORES_UPDATED, { gameType: gameType, id: id, solo: tempGame.solo, multi: tempGame.multi });
+            }
         }
     }
 
