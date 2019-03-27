@@ -19,12 +19,12 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   public readonly ID_ORIGINAL_FILE: string = "originalFile";
   public readonly ID_ORIGINAL_FILENAME: string = "originalFileName";
   public readonly VALID_FILE_EXTENSION: string = "image/bmp";
-  public gameName: string;
 
   private readonly WIDTH_OFFSET: number = 18;
   private readonly HEIGHT_OFFSET: number = 22;
   private modifiedFileIsOK: boolean;
   private originalFileIsOK: boolean;
+  private gameName: string;
 
   private element: HTMLElement;
   @Input() public id: string;
