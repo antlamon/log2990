@@ -13,9 +13,9 @@ export class FormValidatorService {
         return nom.length <= max && nom.length >= min;
     }
     public containOnlyAlphaNumeric(nom: string): boolean {
-        const tryRegex: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
+        const isOnlyAlphaNum: RegExp = new RegExp(/^[a-zA-Z0-9]+$/i);
 
-        return tryRegex.test(nom);
+        return isOnlyAlphaNum.test(nom);
     }
     public validate3DForm(form: IGame3DForm): void {
         if (form.objectQty < NO_MIN_OBJECTS || form.objectQty > NO_MAX_OBJECTS) {
