@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { INITIAL_MODEL_SIZE, INITIAL_OBJECT_SIZE, IObjet3D, } from "../../../common/models/objet3D";
+import { INITIAL_OBJECT_SIZE, IObjet3D, } from "../../../common/models/objet3D";
 import { Shapes, SHAPES_SIZE } from "../../../common/models/shapes";
 import { MODELS } from "../../../common/models/textures";
 
@@ -94,10 +94,10 @@ export class ObjectGeneratorService {
             valid = true;
             if (isThematic) {
                 valid = ! (this.isColisionWithTrail(position.x) ||
-                this.isColisionWithModels(position.x, position.z, objects) ||
+                this.isColisionWithObjects(position.x, 0, position.z, objects) ||
                 this.isColisionWithFountains(position.x, position.z));
             } else {
-                valid = !this.isColisionWithShapes(position.x, position.y, position.z, objects);
+                valid = !this.isColisionWithObjects(position.x, position.y, position.z, objects);
             }
         } while (!valid);
 
@@ -125,20 +125,10 @@ export class ObjectGeneratorService {
             },
         ];
 
-        return this.isColisionWithModels(positionX, positionZ, fountains);
+        return this.isColisionWithObjects(positionX, 0, positionZ, fountains);
     }
 
-    private isColisionWithModels(positionX: number, positionZ: number, objects: IObjet3D[]): boolean {
-        for (const obj of objects) {
-            if (Math.pow(Math.abs(obj.position.x - positionX), 2) + Math.pow(Math.abs(positionZ - obj.position.z), 2)
-            < Math.pow( INITIAL_MODEL_SIZE * this.MAX_SCALE, 2)) {
-            return true;
-            }
-        }
-
-        return false;
-    }
-    private isColisionWithShapes(positionX: number, positionY: number, positionZ: number, objects: IObjet3D[]): boolean {
+    private isColisionWithObjects(positionX: number, positionY: number, positionZ: number, objects: IObjet3D[]): boolean {
         for (const obj of objects) {
             if (Math.pow(Math.abs(obj.position.x - positionX), 2) + Math.pow(Math.abs(positionY - obj.position.y), 2)
             + Math.pow(Math.abs(positionZ - obj.position.z), 2)
