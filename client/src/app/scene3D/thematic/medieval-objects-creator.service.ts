@@ -8,6 +8,7 @@ import { IDifference } from "../../../../../common/models/game3D";
 export class MedievalObjectsCreatorService {
 
   private castleWorld: IObjet3D;
+  private readonly NB_FACES_SKYBOX: number = 6;
 
   private modelsLoader: GLTFLoader = new GLTFLoader();
   private  loadedModels: Map<string, THREE.Object3D>;
@@ -52,7 +53,7 @@ export class MedievalObjectsCreatorService {
 
   public async createObject(object: IObjet3D, toReload: boolean): Promise<THREE.Mesh> {
 
-    return new Promise<THREE.Mesh>((resolve, reject) => {
+    return new Promise<THREE.Mesh>((resolve) => {
       if (toReload || !this.loadedModels.get(object.type)) {
       this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
                              (gltf) => {
@@ -68,14 +69,13 @@ export class MedievalObjectsCreatorService {
     });
   }
   private async createSkyBox(): Promise<THREE.Mesh> {
-    return new Promise<THREE.Mesh>((resolve, reject) => {
+    return new Promise<THREE.Mesh>((resolve) => {
       this.skyBoxLoader = new THREE.TextureLoader();
-      const faceNb: number = 6;
       const materialArray: THREE.MeshBasicMaterial[] = [];
-      for (let i: number = 0; i < faceNb; i++) {
+      for (let i: number = 0; i < this.NB_FACES_SKYBOX; i++) {
         materialArray[i] = new THREE.MeshBasicMaterial({
           map: this.skyBoxLoader.load(this.SKY_BOX_URLS[i], () => {
-            if (i === faceNb - 1) { // loading is now done for the whole box
+            if (i === this.NB_FACES_SKYBOX - 1) { // loading is now done for the whole box
               const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.SKY_BOX_SIZE, this.SKY_BOX_SIZE, this.SKY_BOX_SIZE);
               const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
               resolve(skyBox);

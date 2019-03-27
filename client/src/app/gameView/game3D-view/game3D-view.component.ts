@@ -175,16 +175,16 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     private onKeyDown = (event: KeyboardEvent) => {
         switch (event.keyCode) {
-            case KEYS["S"]: // up
+            case KEYS["S"]:
                 this.render.moveCam("Z", this.movementSpeed);
                 break;
-            case KEYS["W"]: // down
+            case KEYS["W"]:
                 this.render.moveCam("Z", -this.movementSpeed);
                 break;
-            case KEYS["D"]: // up
+            case KEYS["D"]:
                 this.render.moveCam("X", this.movementSpeed);
                 break;
-            case KEYS["A"]: // down
+            case KEYS["A"]:
                 this.render.moveCam("X", -this.movementSpeed);
                 break;
             case KEYS["T"]:
