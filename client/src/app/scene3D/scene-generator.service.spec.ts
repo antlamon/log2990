@@ -127,6 +127,7 @@ describe("SceneGeneratorService", () => {
       spyOn(service["modelsService"], "createObject").and.callFake(async (): Promise<THREE.Mesh> => {
         return new THREE.Mesh();
       });
+      // tslint:disable-next-line: await-promise
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), [{type: ADD_TYPE, object: mockDragon, name: "1"}]);
       expect(scene.children.length + 1).toEqual(sceneM.children.length);
     });
