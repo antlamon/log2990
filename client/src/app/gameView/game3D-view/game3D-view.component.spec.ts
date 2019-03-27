@@ -233,4 +233,12 @@ describe("Game3DViewComponent", () => {
             expect(spyE).toHaveBeenCalled();
         });
     });
+    it("get blockedCursor() should correctly return the value of blockCursor", () => {
+        component["_blockedCursor"] = "test123";
+        expect(component.blockedCursor).toEqual("test123");
+    });
+    it("get disableClick() should correctly return the value of disableClick", () => {
+        component["_disableClick"] = "test123";
+        expect(component.blockedCursor).toEqual("test123");
+    });
 });
