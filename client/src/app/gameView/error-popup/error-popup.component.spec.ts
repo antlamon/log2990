@@ -10,7 +10,9 @@ describe("ErrorPopupComponent", () => {
     TestBed.configureTestingModule({
       declarations: [ ErrorPopupComponent ]
     })
-    .compileComponents();
+    .compileComponents().catch((error: Error) => {
+      console.error(error);
+    });
   }));
 
   beforeEach(() => {
