@@ -51,3 +51,8 @@ export class COMMUNICATION_ERROR extends Error {
         super(message);
     }
 };
+export class HTTP_ERROR extends Error {
+    public constructor(message: string) {
+        super(message);
+    }
+};

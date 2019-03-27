@@ -2,6 +2,7 @@ import { NextFunction, Request, RequestHandler, Response, Router } from "express
 import { inject, injectable } from "inversify";
 import * as multer from "multer";
 import { ERROR_ID, Message } from "../../../common/communication/message";
+import { HTTP_ERROR } from "../../../common/models/errors";
 import { IFullGame, IGame } from "../../../common/models/game";
 import { IGame3D } from "../../../common/models/game3D";
 import { GameListService, MulterFile } from "../services/game-list.service";
@@ -125,11 +126,15 @@ export class GameListController {
             try {
                 res.json(await this.gameListService.resetTimeScore(gameType, id));
             } catch (e) {
-                res.status(GameListController.INVALID_PARAM);
-                res.json({
-                    title: ERROR_ID,
-                    body: e,
-                });
+                if (e instanceof HTTP_ERROR) {
+                    res.status(GameListController.INVALID_PARAM);
+                    res.json({
+                        title: ERROR_ID,
+                        body: e.message,
+                    });
+                } else {
+                    throw e;
+                }
             }
         });
 

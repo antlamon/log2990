@@ -63,9 +63,7 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
   public submit(): void {
     this.errorsMessages = [];
 
-    if (this.fileValidator.isValidGameName(this.gameName) &&
-        this.fileValidator.isValidObjNb(this.noObj) &&
-        this.hasModifications()) {
+    if (this.isValidSubmit()) {
       const newGame: IGame3DForm = {
         name: this.gameName,
         objectType: this.selectedType,
@@ -85,6 +83,12 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     } else {
       this.showErrors();
     }
+  }
+
+  private isValidSubmit(): boolean {
+    return this.fileValidator.isValidGameName(this.gameName) &&
+      this.fileValidator.isValidObjNb(this.noObj) &&
+      this.hasModifications();
   }
   private showErrors(): void {
     if (!this.hasModifications()) {

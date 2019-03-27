@@ -2,6 +2,7 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import supertest = require("supertest");
 import { BASE_ID, Message } from "../../../common/communication/message";
+import { HTTP_ERROR } from "../../../common/models/errors";
 import { IGame } from "../../../common/models/game";
 import { Application } from "../app";
 import { container } from "../inversify.config";
@@ -254,12 +255,12 @@ describe("Game list controller", () => {
     });
 
     it("Get to reset should get an error from promise rejection", (done: Mocha.Done) => {
-        sandbox.on(gameListService, "resetTimeScore", async() => Promise.reject("error"));
+        sandbox.on(gameListService, "resetTimeScore", async() => Promise.reject(new HTTP_ERROR("error")));
         supertest(app)
         .get(baseURL + "reset")
         .expect(HTTP_INVALID_PARAM)
         .end((error: Error, response: supertest.Response) => {
-            expect(response.body.body).to.eql("error");
+            expect(response.body.title).to.eql("error");
             done(error);
         });
     });
