@@ -52,7 +52,7 @@ export class MedievalObjectsCreatorService {
 
   public async createObject(object: IObjet3D, toReload: boolean): Promise<THREE.Mesh> {
 
-    return new Promise((resolve, reject) => {
+    return new Promise<THREE.Mesh>((resolve, reject) => {
       if (toReload || !this.loadedModels.get(object.type)) {
       this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
                              (gltf) => {
