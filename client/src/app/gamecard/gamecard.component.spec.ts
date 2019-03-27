@@ -34,7 +34,7 @@ describe("GamecardComponent", () => {
       imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
       providers: [AppRoutingModule]
     })
-    .compileComponents();
+    .compileComponents().catch((error: Error) => console.error(error));
   }));
 
   beforeEach(() => {

@@ -14,15 +14,16 @@ import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.component";
 import { IObjet3D } from "../../../../common/models/objet3D";
 import { IScore } from "../../../../common/models/top3";
-import { RenderService } from "../scene3D/scene3-d/render.service";
+import { RenderService } from "../scene3D/render.service";
 import { GamecardComponent } from "../gamecard/gamecard.component";
 import { FREE_GAME_TYPE, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
 import { IndexService } from "../services/index.service";
-import { MedievalObjectsCreatorService } from "../scene3D/medieval-objects-creator.service";
-import { ShapeCreatorService } from "../scene3D/scene3-d/shape-creator.service";
+import { MedievalObjectsCreatorService } from "../scene3D/thematic/medieval-objects-creator.service";
+import { ShapeCreatorService } from "../scene3D/geometric/shape-creator.service";
 import { SceneGeneratorService } from "../scene3D/scene-generator.service";
 import { GameMessagesComponent } from "../gameView/game-messages/game-messages.component";
 import { of } from "rxjs";
+import { COMMUNICATION_ERROR } from "../../../../common/models/errors";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -118,13 +119,17 @@ describe("ListViewComponent", () => {
   describe("Updating score", () => {
     it("Updating a simple game score should modify the simple games array", () => {
       component.simpleGames = [mockSimple];
-      component.updateScore({id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []});
+      component.updateScore({id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []}).catch(() => {
+        throw new COMMUNICATION_ERROR("error while updating simple game score");
+      });
       expect(component.simpleGames[0].solo).toEqual([]);
       expect(component.simpleGames[0].multi).toEqual([]);
     });
     it("Updating a free game score should modify the free games array", () => {
       component.freeGames = [mockGame3D];
-      component.updateScore({id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []});
+      component.updateScore({id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []}).catch(() => {
+        throw new COMMUNICATION_ERROR("error while updating free game score");
+      });
       expect(component.freeGames[0].solo).toEqual([]);
       expect(component.freeGames[0].multi).toEqual([]);
     });
