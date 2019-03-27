@@ -238,6 +238,10 @@ describe("renderService", () => {
       service.startCheatMode();
       expect(service["timeOutDiff"]).toBeDefined();
     });
+    it("Should make all differences visible when stopping", () => {
+      service.stopCheatMode();
+      expect(service["diffAreVisible"]).toBe(true);
+    });
   });
   describe("Getting image test", () => {
     service["differences"] = [];
