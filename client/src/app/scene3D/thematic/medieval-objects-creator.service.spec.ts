@@ -103,4 +103,56 @@ describe("MedievalObjectsCreatorService", () => {
       });
     });
   });
+  describe("function createObject", async () => {
+    describe("the Mesh returned should have the correct parameters set by the IObjet3D parameter", async () => {
+      it("the mesh should have the same (x,y,z) coordinate as the IObject3D parameter when function is called with (true)", async () => {
+        const mesh: THREE.Mesh = await service.createObject(mockDragon, true);
+        let isTheSame: Boolean = false;
+        if (mesh.position.x === mockDragon.position.x &&
+           mesh.position.y === mockDragon.position.y &&
+            mesh.position.z === mockDragon.position.z ) {
+              isTheSame = true;
+        }
+        expect(isTheSame).toEqual(true);
+      });
+      it("the mesh should have the same (x,y,z) coordinate as the IObject3D parameter when function is called with (false)", async () => {
+        const mesh: THREE.Mesh = await service.createObject(mockDragon, false);
+        let isTheSame: Boolean = false;
+        if (mesh.position.x === mockDragon.position.x &&
+           mesh.position.y === mockDragon.position.y &&
+            mesh.position.z === mockDragon.position.z ) {
+              isTheSame = true;
+        }
+        expect(isTheSame).toEqual(true);
+      });
+      it("the mesh should have the same (x,y,z) rotation as the IObject3D parameter when function is called with (true)", async () => {
+        const mesh: THREE.Mesh = await service.createObject(mockDragon, true);
+        let isTheSame: Boolean = false;
+        if (mesh.rotation.x === mockDragon.rotation.x &&
+           mesh.rotation.y === mockDragon.rotation.y &&
+            mesh.rotation.z === mockDragon.rotation.z ) {
+              isTheSame = true;
+        }
+        expect(isTheSame).toEqual(true);
+      });
+      it("the mesh should have the same (x,y,z) rotation as the IObject3D parameter when function is called with (false)", async () => {
+        const mesh: THREE.Mesh = await service.createObject(mockDragon, false);
+        let isTheSame: Boolean = false;
+        if (mesh.rotation.x === mockDragon.rotation.x &&
+           mesh.rotation.y === mockDragon.rotation.y &&
+            mesh.rotation.z === mockDragon.rotation.z ) {
+              isTheSame = true;
+        }
+        expect(isTheSame).toEqual(true);
+      });
+      it("the mesh should have the same name as the IObject3D parameter when function is called with (false)", async () => {
+        const mesh: THREE.Mesh = await service.createObject(mockDragon, false);
+        expect(mesh.name).toEqual(mockDragon.name);
+      });
+      it("the mesh should have the same name as the IObject3D parameter when function is called with (true)", async () => {
+        const mesh: THREE.Mesh = await service.createObject(mockDragon, true);
+        expect(mesh.name).toEqual(mockDragon.name);
+      });
+    });
+  });
 });
