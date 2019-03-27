@@ -3,11 +3,11 @@ import spies = require("chai-spies");
 import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
 import { GEOMETRIC_TYPE_NAME, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
+import { Shapes } from "../../../common/models/shapes";
 import { IScore } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
-import { Shapes } from "../../../common/models/shapes";
 
 const mockBadGameType: IGame3DForm = {
     name: "newGame",
