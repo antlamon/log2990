@@ -13,7 +13,7 @@ export class GameMessagesComponent implements OnDestroy {
 
   private readonly PADDED_ZERO: number = -2;
 
-  public gameMessages: IGameMessage[] = [];
+  private gameMessages: IGameMessage[] = [];
 
   public constructor(private socket: SocketService) {
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleNewIdentification.bind(this));

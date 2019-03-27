@@ -48,13 +48,13 @@ describe("GamecardComponent", () => {
   });
   it("should route to game simple Play with the proper iD", () => {
     const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    component.game = mockSimple;
+    component["game"] = mockSimple;
     component.playSelectedGame();
     expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id]);
   });
   it("should route to game free Play with the proper iD", () => {
     const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    component.game = mockGame3D;
+    component["game"] = mockGame3D;
     component.playSelectedGame();
     expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id]);
   });
@@ -63,21 +63,21 @@ describe("GamecardComponent", () => {
     it("Deleting the game who is a simple game should call the game service", () => {
       const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteSimpleGame").and.returnValue({subscribe: () => []});
       spyOn(window, "confirm").and.returnValue(true);
-      component.game = mockSimple;
+      component["game"] = mockSimple;
       component.deleteGame();
       expect(gameServiceSpy).toHaveBeenCalledTimes(1);
     });
     it("Deleting the game who is a free game should call the game service", () => {
       const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "deleteFreeGame").and.returnValue({subscribe: () => []});
       spyOn(window, "confirm").and.returnValue(true);
-      component.game = mockGame3D;
+      component["game"] = mockGame3D;
       component.deleteGame();
       expect(gameServiceSpy).toHaveBeenCalledTimes(1);
     });
     it("The reinit function should call the game service function : resetScore", () => {
       const gameServiceSpy: jasmine.Spy = spyOn(component["gameService"], "resetScore").and.returnValue({subscribe: () => []});
       spyOn(window, "confirm").and.returnValue(true);
-      component.game = mockSimple;
+      component["game"] = mockSimple;
       component.reinitGame();
       expect(gameServiceSpy).toHaveBeenCalledTimes(1);
     });

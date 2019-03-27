@@ -116,19 +116,30 @@ describe("SceneGeneratorService", () => {
   });
   describe("Test the function modifyScene", async () => {
     it("The returned THREE.Scene should have the same background colors", async () => {
-      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false , differences);
-      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
-      expect(scene.background).toEqual(sceneM.background);
+      const scene: THREE.Scene  = new THREE.Scene();
+      scene.background = new THREE.Color(0);
+      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), []);
+      expect(scene.background).toEqual(sceneM.background as THREE.Color);
     });
     it("The returned modify scene should have more objects when a ADD_TYPE difference is passed to the function (geometric)", async () => {
-      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
+      const scene: THREE.Scene  = new THREE.Scene();
+      service["isThematic"] = true;
+      spyOn(service["modelsService"], "createObject").and.callFake(async (): Promise<THREE.Mesh> => {
+        return new THREE.Mesh();
+      });
+      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), [{type: ADD_TYPE, object: mockDragon, name: "1"}]);
       expect(scene.children.length + 1).toEqual(sceneM.children.length);
     });
     it("The returned THREE.Scene should have and element which is invisible when a difference of type DELETE is passed", async () => {
-      const sceneM: THREE.Scene  = service.modifyScene((
-        await service.createScene(mockObjects, 1, false, differences)).clone(),
-                                                       differences);
+      spyOn(service["modelsService"], "createMedievalScene").and.callFake(async (): Promise<THREE.Mesh[]> => {
+        const tempMesh: THREE.Mesh = new THREE.Mesh();
+        tempMesh.name = "0";
+
+        return [tempMesh];
+      });
+      const sceneM: THREE.Scene  = await service.modifyScene((
+        await service.createScene([], 1, true, [])).clone(),
+                                                             [{type: DELETE_TYPE, name: "0"}]);
       let nbNotVisible: number = 0;
       sceneM.children.forEach((obj: THREE.Object3D) => {
         if ( !obj.visible) {
@@ -138,9 +149,19 @@ describe("SceneGeneratorService", () => {
       expect(nbNotVisible).toEqual(1);
     });
     it("The returned THREE.Scene should have and element which the material is different from the original scene (geometric)", async () => {
-      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
-      expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("1") as THREE.Mesh);
+      spyOn(service["modelsService"], "createMedievalScene").and.callFake(async (): Promise<THREE.Mesh[]> => {
+        const tempMesh: THREE.Mesh = new THREE.Mesh();
+        tempMesh.name = "0";
+
+        return [tempMesh];
+      });
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, []);
+      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(),   [{
+        type: MODIFICATION_TYPE,
+        object: cubeM,
+        name: "0",
+       }]);
+      expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("0") as THREE.Mesh);
     });
     it("The returned THREE.Scene should have and element which the material is different from the original scene (thematic)", async () => {
       spyOn(service, "createScene").and.callFake(async (): Promise<THREE.Scene> => {

@@ -31,7 +31,7 @@ describe("GameMessagesComponent", () => {
 
   describe("Pushing game messages", () => {
     it("handle new identification should push a new message in the array", () => {
-      component.gameMessages = [];
+      component["gameMessages"] = [];
       const updateError: GameRoomUpdate = {
         username: "test",
         newImage: "testImage",
@@ -46,25 +46,25 @@ describe("GameMessagesComponent", () => {
       };
       component.handleNewIdentification(updateError);
       component.handleNewIdentification(updateDifferenceFound);
-      expect(component.gameMessages.length).toEqual(ARRAY_TWO_MESSAGES);
+      expect(component["gameMessages"].length).toEqual(ARRAY_TWO_MESSAGES);
     });
 
     it("handle connection should push a new message in the array", () => {
-      component.gameMessages = [];
+      component["gameMessages"] = [];
       component.handleConnection(mockUsername, mockConnectedEvent);
       component.handleConnection(mockUsername, mockDisconnectedEvent);
-      expect(component.gameMessages.length).toEqual(ARRAY_TWO_MESSAGES);
+      expect(component["gameMessages"].length).toEqual(ARRAY_TWO_MESSAGES);
     });
 
     it("handle new best time should push a new message in the array", () => {
-      component.gameMessages = [];
+      component["gameMessages"] = [];
       component.handleNewBestTime({
         scoreUpdate: {insertPos: 1} as ScoreUpdate,
         gameMode: "solo",
         gameName: "hello",
         username: mockUsername
       });
-      expect(component.gameMessages.length).toEqual(1);
+      expect(component["gameMessages"].length).toEqual(1);
     });
   });
 
