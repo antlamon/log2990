@@ -2,9 +2,9 @@ import { TestBed } from "@angular/core/testing";
 import { SceneGeneratorService } from "./scene-generator.service";
 import { IDifference, ADD_TYPE, DELETE_TYPE, MODIFICATION_TYPE } from "../../../../common/models/game3D";
 import { IObjet3D } from "../../../../common/models/objet3D";
-import { ShapeCreatorService } from "./scene3-d/shape-creator.service";
+import { ShapeCreatorService } from "./geometric/shape-creator.service";
 import * as THREE from "three";
-import { MedievalObjectsCreatorService } from "./medieval-objects-creator.service";
+import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
 const cone: IObjet3D = {
   type: "cone",
   color: 1,
@@ -117,18 +117,18 @@ describe("SceneGeneratorService", () => {
   describe("Test the function modifyScene", async () => {
     it("The returned THREE.Scene should have the same background colors", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false , differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       expect(scene.background).toEqual(sceneM.background);
     });
     it("The returned modify scene should have more objects when a ADD_TYPE difference is passed to the function (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       expect(scene.children.length + 1).toEqual(sceneM.children.length);
     });
     it("The returned THREE.Scene should have and element which is invisible when a difference of type DELETE is passed", async () => {
-      const sceneM: THREE.Scene  = await service.modifyScene((
+      const sceneM: THREE.Scene  = service.modifyScene((
         await service.createScene(mockObjects, 1, false, differences)).clone(),
-                                                             differences);
+                                                       differences);
       let nbNotVisible: number = 0;
       sceneM.children.forEach((obj: THREE.Object3D) => {
         if ( !obj.visible) {
@@ -139,7 +139,7 @@ describe("SceneGeneratorService", () => {
     });
     it("The returned THREE.Scene should have and element which the material is different from the original scene (geometric)", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("1") as THREE.Mesh);
     });
     it("The returned THREE.Scene should have and element which the material is different from the original scene (thematic)", async () => {
@@ -150,12 +150,12 @@ describe("SceneGeneratorService", () => {
       scene.add(await service["modelsService"].createObject(mockDragon, true));
       let sceneM: THREE.Scene  = await service.createScene(mockObjects, 1, true, diffDragon);
       sceneM.add(await service["modelsService"].createObject(mockDragon, true));
-      sceneM = await service.modifyScene(sceneM, diffDragon);
+      sceneM = service.modifyScene(sceneM, diffDragon);
       expect(scene.getObjectByName(mockDragon.name) as THREE.Mesh).not.toEqual(sceneM.getObjectByName(mockDragon.name) as THREE.Mesh);
     });
     it("All objects untouched by the differences should stay the same", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
       let areTheSames: boolean = true;
       sceneM.children.forEach((obj: THREE.Object3D) => {
         if ( differences.findIndex((diff: IDifference) => diff.name === obj.name) === -1) {

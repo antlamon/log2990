@@ -1,8 +1,8 @@
 import { TestBed } from "@angular/core/testing";
 import * as THREE from "three";
 import { MedievalObjectsCreatorService } from "./medieval-objects-creator.service";
-import { IObjet3D } from "../../../../common/models/objet3D";
-import { IDifference, ADD_TYPE } from "../../../../common/models/game3D";
+import { IObjet3D } from "../../../../../common/models/objet3D";
+import { IDifference, ADD_TYPE } from "../../../../../common/models/game3D";
 
 describe("MedievalObjectsCreatorService", () => {
   let service: MedievalObjectsCreatorService = new MedievalObjectsCreatorService();

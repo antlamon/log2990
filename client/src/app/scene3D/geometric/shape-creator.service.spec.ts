@@ -1,5 +1,4 @@
 import { TestBed, async, inject } from "@angular/core/testing";
-
 import { ShapeCreatorService } from "./shape-creator.service";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 import * as THREE from "three";

@@ -3,7 +3,7 @@ import { FREE_GAME_TYPE, IScoreUpdate, SIMPLE_GAME_TYPE } from "../../../../comm
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
-import { RenderService } from "../scene3D/scene3-d/render.service";
+import { RenderService } from "../scene3D/render.service";
 import { GameService } from "../services/game.service";
 import { SocketService } from "../services/socket.service";
 @Component({
