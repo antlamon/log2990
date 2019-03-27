@@ -35,10 +35,11 @@ export class TimescoreController {
                     res.status(TimescoreController.INVALID_PARAM);
                     res.json({
                         title: ERROR_ID,
-                        body: e,
+                        body: e.message,
                     });
+                } else {
+                    throw e;
                 }
-                throw e;
             }
         });
 
@@ -52,10 +53,11 @@ export class TimescoreController {
                     res.status(TimescoreController.INVALID_PARAM);
                     res.json({
                         title: ERROR_ID,
-                        body: e,
+                        body: e.message,
                     });
+                } else {
+                    throw e;
                 }
-                throw e;
             }
         });
 

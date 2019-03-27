@@ -2,12 +2,12 @@ import chai = require("chai");
 import spies = require("chai-spies");
 import { FORM_ERROR, TYPE_ERROR } from "../../../common/models/errors";
 import { IGame3DForm } from "../../../common/models/game";
-import { GEOMETRIC_TYPE_NAME, IGame3D, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
-import { IObjet3D } from "../../../common/models/objet3D";
+import { GEOMETRIC_TYPE_NAME, THEMATIC_TYPE_NAME } from "../../../common/models/game3D";
 import { IScore } from "../../../common/models/top3";
 import { container } from "../inversify.config";
 import { TYPES } from "../types";
 import { Game3DGeneratorService } from "./game3DGenerator.service";
+import { Shapes } from "../../../common/models/shapes";
 
 const mockBadGameType: IGame3DForm = {
     name: "newGame",
@@ -41,27 +41,6 @@ const mockBadModifs: IGame3DForm = {
     modifications: {add: false, delete: false, color: false},
 };
 
-const obj3D: IObjet3D = {
-    type: "string",
-    color: 0,
-    texture: "",
-    position: { x: 0, y: 0, z: 0},
-    size: 0.7,
-    rotation: {x: 0, y: 0, z: 0},
-    name: "1",
-};
-
-const mock3DGame: IGame3D = {
-    name: "string",
-    id: "",
-    originalScene: [obj3D],
-    solo: [],
-    multi: [],
-    differences: [],
-    isThematic: false,
-    backColor: 0,
-};
-
 const expect: Chai.ExpectStatic = chai.expect;
 chai.use(spies);
 
@@ -85,10 +64,16 @@ describe("Game3D generator service", () => {
             expect(() => service.createRandom3DGame(mockBadGameType)).to.throw(TYPE_ERROR);
         });
         it("Should return random 3D geometric game", async () => {
-            expect(typeof(service.createRandom3DGame(mockGeometric))).to.eql(typeof(mock3DGame));
+            expect(service.createRandom3DGame(mockGeometric).isThematic).to.eql(false);
         });
         it("Should return random 3D thematic game", async () => {
-            expect(typeof(service.createRandom3DGame(mockThematic))).to.eql(typeof(mock3DGame));
+            expect(service.createRandom3DGame(mockThematic).isThematic).to.eql(true);
+        });
+        it("Should return a game with geometric objects", async () => {
+            expect(Shapes).to.include(service.createRandom3DGame(mockGeometric).originalScene[0].type);
+        });
+        it("Should return a game with thematic objects", async () => {
+            expect(Shapes).to.not.include(service.createRandom3DGame(mockThematic).originalScene[0].type);
         });
     });
     describe("Should validate the number of objects and the modifications", () => {
