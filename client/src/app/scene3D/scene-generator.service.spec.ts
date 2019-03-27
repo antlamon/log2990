@@ -89,10 +89,10 @@ describe("SceneGeneratorService", () => {
     providers: [ShapeCreatorService, SceneGeneratorService, MedievalObjectsCreatorService],
   }));
 
-  it("should be created", () => {
+  it("should be created", async () => {
     service = TestBed.get(SceneGeneratorService);
     expect(service).toBeTruthy();
-    spyOn(service["shapeService"], "createShape").and.callFake((obj: IObjet3D): Promise<THREE.Mesh> => {
+    spyOn(service["shapeService"], "createShape").and.callFake( async (obj: IObjet3D): Promise<THREE.Mesh> => {
       const mockMesh: THREE.Mesh = new THREE.Mesh();
       mockMesh.name = obj.name;
       mockMesh.material = new THREE.MeshPhongMaterial({shininess: obj.color});
