@@ -1,13 +1,14 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import * as SocketClientIO from "socket.io-client";
+import { NewScoreUpdate, ScoreUpdate } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { container } from "../inversify.config";
 import { Server } from "../server";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { TYPES } from "../types";
 import { SocketServerManager } from "./socketServerManager";
-// import { EndGameMessage } from "../../../common/communication/message";
+
 const expect: Chai.ExpectStatic = chai.expect;
 const SERVER_URL: string = "http://localhost:3000/";
 const CONNEXION_DELAY: number = 100;
@@ -93,14 +94,31 @@ describe("Test for the socketServerManager", () => {
         sandbox.on(gameRoomService, "checkDifference3D", async () => Promise.resolve("123"));
         mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE_3D, { gameRoomId: "123" });
     });
-    // it("Should handle end game event with resolved promise", (done: Mocha.Done) => {
-    //     mockClientSocket.on(SocketsEvents.END_GAME, (endGameMessage: EndGameMessage) => {
-    //         expect(endGameMessage.gameId).to.equal("123");
-    //         done();
-    //     });
-    //     sandbox.on(gameRoomService, "endGame", async () => Promise.resolve({scoreUpdate: {position: 1}}));
-    //     mockClientSocket.emit(SocketsEvents.END_GAME, {gameRoomId: "123"} );
-    // });
+
+    it("Should handle end game event with resolved promise", (done: Mocha.Done) => {
+        const mockedNewScoredUpdate: NewScoreUpdate = {
+            username: "test",
+            gameMode: "solo",
+            gameName: "hello",
+            scoreUpdate: {
+                id: "123",
+                gameType: "simple",
+                insertPos: 1,
+                solo: [],
+                multi: [],
+            },
+        };
+        mockClientSocket.on(SocketsEvents.SCORES_UPDATED, (scoreUpdate: ScoreUpdate) => {
+            expect(scoreUpdate).to.eql(mockedNewScoredUpdate.scoreUpdate);
+        });
+        mockClientSocket.on(SocketsEvents.NEW_BEST_TIME, (newScoreUpdate: NewScoreUpdate) => {
+            expect(newScoreUpdate).to.eql(mockedNewScoredUpdate);
+            done();
+        });
+        sandbox.on(gameRoomService, "endGame", async () => Promise.resolve(mockedNewScoredUpdate));
+        mockClientSocket.emit(SocketsEvents.END_GAME, {gameId: "123"} );
+    });
+
     it("Should handle delete game  room event", (done: Mocha.Done) => {
         const spy: ChaiSpies.Spy = sandbox.on(gameRoomService, "deleteGameRoom", async () => Promise.resolve());
         mockClientSocket.emit(SocketsEvents.DELETE_GAME_ROOM, "123");
