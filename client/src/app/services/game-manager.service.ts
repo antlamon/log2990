@@ -6,6 +6,7 @@ import { GameService } from "./game.service";
 import { RenderService } from "../scene3D/render.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { SIMPLE_GAME_TYPE, IScoreUpdate, FREE_GAME_TYPE } from "../../../../common/communication/message";
+import { BehaviorSubject } from "rxjs";
 
 @Injectable({
   providedIn: "root"
@@ -14,6 +15,8 @@ export class GameManagerService {
   private _simpleGames: IGame[];
   private _freeGames: IGame3D[];
   private _imageURLs: Map<IGame3D, string>;
+  private simpleSubject: BehaviorSubject<IGame[]> = new BehaviorSubject([]);
+  private freeSubject: BehaviorSubject<IGame3D[]> = new BehaviorSubject([]);
 
   public constructor(
     private gameService: GameService,
@@ -27,12 +30,14 @@ export class GameManagerService {
       this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.removeFreeGame.bind(this));
       this.socket.addEvent(SocketsEvents.SCORES_UPDATED, this.updateScore.bind(this));
       this._imageURLs = new Map();
+      this._simpleGames = [];
+      this._freeGames = [];
   }
-  public get simpleGames(): IGame[] {
-      return this._simpleGames;
+  public get simpleGames(): BehaviorSubject<IGame[]> {
+      return this.simpleSubject;
   }
-  public get freeGames(): IGame3D[] {
-      return this._freeGames;
+  public get freeGames(): BehaviorSubject<IGame3D[]> {
+      return this.freeSubject;
   }
   public getImageUrl(game: IGame3D): string {
     return this._imageURLs.get(game);
@@ -42,52 +47,59 @@ export class GameManagerService {
       if (!this.simpleGames) {
         await this.getSimpleGames();
       }
-      const index: number = this.simpleGames.findIndex((x: IGame) => x.id === upd.id);
+      const index: number = this._simpleGames.findIndex((x: IGame) => x.id === upd.id);
       if (index !== -1) {
         this.simpleGames[index].solo = upd.solo;
         this.simpleGames[index].multi = upd.multi;
       }
+      this.simpleSubject.next(this._simpleGames);
     }
     if (upd.gameType === FREE_GAME_TYPE) {
       if (!this.freeGames) {
         await this.getFreeGames();
       }
-      const index: number = this.freeGames.findIndex((x: IGame3D) => x.id === upd.id);
+      const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === upd.id);
       if (index !== -1) {
         this.freeGames[index].solo = upd.solo;
         this.freeGames[index].multi = upd.multi;
       }
+      this.freeSubject.next(this._freeGames);
     }
   }
 
   public async getSimpleGames(): Promise<void> {
     this._simpleGames = await this.gameService.getSimpleGames().toPromise();
+    this.simpleSubject.next(this._simpleGames);
   }
   public addSimpleGame(game: IGame): void {
     this._simpleGames.push(game);
+    this.simpleSubject.next(this._simpleGames);
   }
   public addFreeGame(game: IGame3D): void {
     this._freeGames.push(game);
     this.setImageURL(game).catch((error) => console.error(error));
-    // this.getFreeGames().catch((error) => console.error(error));
+    this.freeSubject.next(this._freeGames);
   }
   public removeSimpleGame(id: string): void {
-    const index: number = this.simpleGames.findIndex((x: IGame) => x.id === id);
+    const index: number = this._simpleGames.findIndex((x: IGame) => x.id === id);
     if (index !== -1) {
-      this.simpleGames.splice(index, 1);
+      this._simpleGames.splice(index, 1);
+      this.simpleSubject.next(this._simpleGames);
     }
   }
   public removeFreeGame(id: string): void {
-    const index: number = this.freeGames.findIndex((x: IGame3D) => x.id === id);
+    const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === id);
     if (index !== -1) {
-      this.freeGames.splice(index, 1);
+      this._freeGames.splice(index, 1);
+      this.freeSubject.next(this._freeGames);
     }
   }
   public async getFreeGames(): Promise<void> {
     this._freeGames = await this.gameService.getFreeGames().toPromise();
-    for (const game of this.freeGames) {
+    for (const game of this._freeGames) {
       this.setImageURL(game).catch((error) => console.error(error));
     }
+    this.freeSubject.next(this._freeGames);
   }
   private async setImageURL(game: IGame3D): Promise<void> {
     const imageURL: string = await this.renderer.getImageURL(game);
