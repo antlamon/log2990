@@ -38,7 +38,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     private errorPopup: ErrorPopupComponent;
     private lastClick: MouseEvent;
 
-    private movementSpeed: number = 3;
+    private movementSpeed: number = 0.5;
     private press: boolean;
     private roomID: string;
     private cheatModeActivated: boolean;
