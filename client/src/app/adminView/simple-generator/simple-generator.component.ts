@@ -34,8 +34,13 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
   private originalFile: File;
   private modifiedFile: File;
   private errorsMessages: string[];
-  public constructor(private gameService: GameService, private fileValidator: FileValidatorService,
-                     private modalService: ModalService, public el: ElementRef) {
+
+  public constructor(
+    private gameService: GameService,
+    private fileValidator: FileValidatorService,
+    private modalService: ModalService,
+    public el: ElementRef) {
+
     this.element = el.nativeElement;
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;

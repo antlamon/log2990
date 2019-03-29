@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { TimerService } from "src/app/services/timer.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
@@ -8,6 +8,7 @@ import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
+import { ModalService } from "src/app/services/modal.service";
 
 @Component({
     selector: "app-game2d-view",
@@ -21,7 +22,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private _disableClick: string;
     private _blockedCursor: string;
     private readonly NB_MAX_DIFF: number = 7;
-
+    private readonly MODAL_ID: string = "endingModal";
     private readonly ONE_SEC_IN_MS: number = 1000;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
@@ -38,7 +39,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private index: IndexService,
         private timer: TimerService,
         private ref: ChangeDetectorRef,
-        private router: Router
+        private modalService: ModalService,
+        // private router: Router
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -131,7 +133,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameId: this.simpleGame.card.id,
             gameType: "simple",
         });
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        // this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.openEndingDialog(this.MODAL_ID);
     }
 
     public sendClick(event: MouseEvent): void {
@@ -154,5 +157,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     }
     public get blockedCursor(): string {
         return this._blockedCursor;
+    }
+
+    public openEndingDialog(id: string): void {
+        this.modalService.open(id);
     }
 }
