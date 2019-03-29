@@ -18,6 +18,7 @@ import { ErrorPopupComponent } from "src/app/gameView/error-popup/error-popup.co
 import { GameMessagesComponent } from "src/app/gameView/game-messages/game-messages.component";
 import { RenderService } from "src/app/scene3D/render.service";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("SimpleGeneratorComponent", () => {
   const LOADING_FILE_DELAY: number = 50;
@@ -38,7 +39,7 @@ describe("SimpleGeneratorComponent", () => {
         ErrorPopupComponent,
         GameMessagesComponent
       ],
-      imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule],
+      imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, FileValidatorService, GameService, RenderService]
     })
       .compileComponents().then(() => { }, (error: Error) => {

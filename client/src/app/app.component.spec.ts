@@ -21,6 +21,7 @@ import { GamecardComponent } from "./gamecard/gamecard.component";
 import { SceneGeneratorService } from "./scene3D/scene-generator.service";
 import { ShapeCreatorService } from "./scene3D/geometric/shape-creator.service";
 import { MedievalObjectsCreatorService } from "./scene3D/thematic/medieval-objects-creator.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -38,7 +39,7 @@ describe("AppComponent", () => {
         ErrorPopupComponent,
         GamecardComponent
       ],
-      imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule],
+      imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [IndexService, RenderService, SceneGeneratorService, ShapeCreatorService, MedievalObjectsCreatorService]
     }).compileComponents();
   }));

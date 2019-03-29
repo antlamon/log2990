@@ -14,7 +14,7 @@ export class MedievalObjectsCreatorService {
   private  loadedModels: Map<string, THREE.Object3D>;
 
   private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
-  private readonly SKY_BOX_SIZE: number = 300;
+  private readonly SKY_BOX_SIZE: number = 600;
   private readonly SKY_BOX_URLS: string[] = [
     "assets/clouds/right.png",
     "assets/clouds/left.png",
