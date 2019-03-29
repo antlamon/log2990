@@ -19,11 +19,22 @@ import { SceneGeneratorService } from "../scene3D/scene-generator.service";
 import { GameMessagesComponent } from "../gameView/game-messages/game-messages.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { GameManagerService } from "../services/game-manager.service";
+import { IGame3D } from "../../../../common/models/game3D";
 
 describe("ListViewComponent", () => {
   let component: ListViewComponent;
   let fixture: ComponentFixture<ListViewComponent>;
 
+  const mockGame3D: IGame3D = {
+    name: "mock3DName",
+    id: "",
+    originalScene: [],
+    solo: [],
+    multi: [],
+    differences: [],
+    isThematic: false,
+    backColor: 0,
+  };
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -63,5 +74,10 @@ describe("ListViewComponent", () => {
 
   it("should create", () => {
     expect(component).toBeTruthy();
+  });
+  it("The function getImageUrl should call the game manager", () => {
+    const spy: jasmine.Spy = spyOn(component["gameManager"], "getImageUrl").and.callThrough();
+    component.getImageUrl(mockGame3D);
+    expect(spy).toHaveBeenCalled();
   });
 });

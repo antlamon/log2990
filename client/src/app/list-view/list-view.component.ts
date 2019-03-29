@@ -10,15 +10,17 @@ import { GameManagerService } from "../services/game-manager.service";
 
 export class ListViewComponent {
 
-  public constructor(private gameManager: GameManagerService){ }
   @Input() public isAdminMode: boolean;
-
-  public get simpleGames(): IGame[] {
-    return this.gameManager.simpleGames;
-  }
-  public get freeGames(): IGame3D[] {
-    return this.gameManager.freeGames;
-  }
+  public simpleGames: IGame[];
+  public freeGames: IGame3D[];
+  public constructor(private gameManager: GameManagerService){
+    this.gameManager.freeGames.subscribe((games: IGame3D[]) => {
+      this.freeGames = games;
+    });
+    this.gameManager.simpleGames.subscribe((games: IGame[]) => {
+      this.simpleGames = games;
+    });
+   }
   public getImageUrl(game: IGame3D): string {
     return this.gameManager.getImageUrl(game);
   }

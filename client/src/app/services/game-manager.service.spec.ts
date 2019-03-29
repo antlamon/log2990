@@ -46,7 +46,7 @@ describe("GameManagerService", () => {
     it("Adding a simple games should change the simple games array", () => {
       service["_simpleGames"] = [];
       service.addSimpleGame(mockSimple);
-      expect(service.simpleGames.length).toEqual(1);
+      expect(service["_simpleGames"].length).toEqual(1);
     });
     it("Adding a free games should change the simple games array", () => {
       service["_freeGames"] = [];
@@ -70,26 +70,26 @@ describe("GameManagerService", () => {
     it("Should define simple games when getting simpleGames", async () => {
       spyOn(service["gameService"], "getSimpleGames").and.returnValue(of([mockSimple]));
       await service.getSimpleGames();
-      expect(service.simpleGames).toEqual([mockSimple]);
+      expect(service["_simpleGames"]).toEqual([mockSimple]);
     });
     it("Should define free games when getting free games", async () => {
       spyOn(service["gameService"], "getFreeGames").and.returnValue(of([mockGame3D]));
       await service.getFreeGames();
-      expect(service.freeGames).toEqual([mockGame3D]);
+      expect(service["_freeGames"]).toEqual([mockGame3D]);
     });
   });
   describe("Updating score", () => {
     it("Updating a simple game score should modify the simple games array", () => {
       service["_simpleGames"] = [mockSimple];
       service.updateScore({id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []});
-      expect(service.simpleGames[0].solo).toEqual([]);
-      expect(service.simpleGames[0].multi).toEqual([]);
+      expect(service["_simpleGames"][0].solo).toEqual([]);
+      expect(service["_simpleGames"][0].multi).toEqual([]);
     });
     it("Updating a free game score should modify the free games array", () => {
       service["_freeGames"] = [mockGame3D];
       service.updateScore({id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []});
-      expect(service.freeGames[0].solo).toEqual([]);
-      expect(service.freeGames[0].multi).toEqual([]);
+      expect(service["_freeGames"][0].solo).toEqual([]);
+      expect(service["_freeGames"][0].multi).toEqual([]);
     });
   });
 });

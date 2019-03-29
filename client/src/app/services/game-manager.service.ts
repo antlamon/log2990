@@ -32,6 +32,8 @@ export class GameManagerService {
       this._imageURLs = new Map();
       this._simpleGames = [];
       this._freeGames = [];
+      this.getSimpleGames();
+      this.getFreeGames();
   }
   public get simpleGames(): BehaviorSubject<IGame[]> {
       return this.simpleSubject;
@@ -49,8 +51,8 @@ export class GameManagerService {
       }
       const index: number = this._simpleGames.findIndex((x: IGame) => x.id === upd.id);
       if (index !== -1) {
-        this.simpleGames[index].solo = upd.solo;
-        this.simpleGames[index].multi = upd.multi;
+        this._simpleGames[index].solo = upd.solo;
+        this._simpleGames[index].multi = upd.multi;
       }
       this.simpleSubject.next(this._simpleGames);
     }
@@ -60,8 +62,8 @@ export class GameManagerService {
       }
       const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === upd.id);
       if (index !== -1) {
-        this.freeGames[index].solo = upd.solo;
-        this.freeGames[index].multi = upd.multi;
+        this._freeGames[index].solo = upd.solo;
+        this._freeGames[index].multi = upd.multi;
       }
       this.freeSubject.next(this._freeGames);
     }
