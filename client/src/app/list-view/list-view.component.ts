@@ -13,7 +13,7 @@ export class ListViewComponent {
   @Input() public isAdminMode: boolean;
   public simpleGames: IGame[];
   public freeGames: IGame3D[];
-  public constructor(private gameManager: GameManagerService){
+  public constructor(private gameManager: GameManagerService) {
     this.gameManager.freeGames.subscribe((games: IGame3D[]) => {
       this.freeGames = games;
     });
