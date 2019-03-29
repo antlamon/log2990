@@ -20,6 +20,8 @@ import { GameMessagesComponent } from "../gameView/game-messages/game-messages.c
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { GameManagerService } from "../services/game-manager.service";
 import { IGame3D } from "../../../../common/models/game3D";
+import { AppRoutingModule } from "../app-routing.module";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("ListViewComponent", () => {
   let component: ListViewComponent;
@@ -41,27 +43,21 @@ describe("ListViewComponent", () => {
         HttpClientModule,
         FormsModule,
         MatProgressSpinnerModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
       declarations: [
-        ListViewComponent,
-        AdminMenuComponent,
-        InitialComponent,
-        Game2DViewComponent,
-        Game3DViewComponent,
-        SimpleGeneratorComponent,
-        FreeGeneratorComponent,
-        Game3DViewComponent,
-        ErrorPopupComponent,
-        GamecardComponent,
+        ListViewComponent, AdminMenuComponent,
+        InitialComponent, Game2DViewComponent,
+        Game3DViewComponent, SimpleGeneratorComponent,
+        FreeGeneratorComponent, Game3DViewComponent,
+        ErrorPopupComponent, GamecardComponent,
         GameMessagesComponent
       ],
-      providers: [GameManagerService,
-                  RenderService,
-                  IndexService,
-                  MedievalObjectsCreatorService,
-                  ShapeCreatorService,
-                  SceneGeneratorService],
+      providers: [GameManagerService, RenderService,
+                  IndexService, MedievalObjectsCreatorService,
+                  ShapeCreatorService, SceneGeneratorService,
+                  AppRoutingModule],
     })
       .compileComponents().then(() => { }, (error: Error) => { });
   }));
