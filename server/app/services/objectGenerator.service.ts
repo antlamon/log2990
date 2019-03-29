@@ -10,18 +10,15 @@ export class ObjectGeneratorService {
     private readonly MAX_SCALE: number = 1.5;
     private readonly WHITE: number = 0x000000;
     private readonly BLACK: number = 0xFFFFFF;
-    private readonly B0X_LENGHT_NEG_Z: number = -55;
+    private readonly B0X_LENGHT_NEG_Z: number = -65;
     private readonly B0X_LENGHT_POS_Z: number = 63;
-    private readonly B0X_LENGHT_POS_X: number = 45;
+    private readonly B0X_LENGHT_POS_X: number = 60;
     private readonly B0X_LENGHT_NEG_X: number = -58;
     private readonly GEOMETRIC_GAME_SIZE: number = 100;
     private readonly MAX_ROTATION: number = 360;
 
     private readonly TRAIL_NEG_COORD: number = -15;
-    private readonly TRAIL_POS_COORD: number = 5;
-    private readonly LEFT_FOUNT_X: number = -34;
-    private readonly FOUNTAIN_Z: number = 20;
-    private readonly RIGHT_FOUNT_X: number = 20;
+    private readonly TRAIL_POS_COORD: number = 10;
 
     /* the following constants define composition of the medieval forest, expressed in % */
     private readonly MAX_DRAGONS: number = 0.1;
@@ -94,8 +91,7 @@ export class ObjectGeneratorService {
             valid = true;
             if (isThematic) {
                 valid = ! (this.isColisionWithTrail(position.x) ||
-                this.isColisionWithObjects(position.x, 0, position.z, objects) ||
-                this.isColisionWithFountains(position.x, position.z));
+                this.isColisionWithObjects(position.x, 0, position.z, objects));
             } else {
                 valid = !this.isColisionWithObjects(position.x, position.y, position.z, objects);
             }
@@ -106,26 +102,6 @@ export class ObjectGeneratorService {
     }
     private isColisionWithTrail(positionX: number): boolean {
         return positionX > this.TRAIL_NEG_COORD && positionX < this.TRAIL_POS_COORD;
-    }
-    private isColisionWithFountains(positionX: number, positionZ: number): boolean {
-        const fountains: IObjet3D[] = [
-            {
-                type: "",
-                position: { x: this.LEFT_FOUNT_X, y: 0, z: this.FOUNTAIN_Z},
-                size: 1,
-                rotation: {x: 0, y: 0, z: 0},
-                name: "",
-            },
-            {
-                type: "",
-                position: { x: this.RIGHT_FOUNT_X, y: 0, z: this.FOUNTAIN_Z},
-                size: 1,
-                rotation: {x: 0, y: 0, z: 0},
-                name: "",
-            },
-        ];
-
-        return this.isColisionWithObjects(positionX, 0, positionZ, fountains);
     }
 
     private isColisionWithObjects(positionX: number, positionY: number, positionZ: number, objects: IObjet3D[]): boolean {
