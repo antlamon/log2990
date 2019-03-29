@@ -30,8 +30,6 @@ export class GameManagerService {
       this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.removeFreeGame.bind(this));
       this.socket.addEvent(SocketsEvents.SCORES_UPDATED, this.updateScore.bind(this));
       this._imageURLs = new Map();
-      this._simpleGames = [];
-      this._freeGames = [];
       this.getSimpleGames();
       this.getFreeGames();
   }
@@ -46,7 +44,7 @@ export class GameManagerService {
   }
   public async updateScore(upd: IScoreUpdate): Promise<void> {
     if (upd.gameType === SIMPLE_GAME_TYPE) {
-      if (!this.simpleGames) {
+      if (!this._simpleGames) {
         await this.getSimpleGames();
       }
       const index: number = this._simpleGames.findIndex((x: IGame) => x.id === upd.id);
@@ -57,7 +55,7 @@ export class GameManagerService {
       this.simpleSubject.next(this._simpleGames);
     }
     if (upd.gameType === FREE_GAME_TYPE) {
-      if (!this.freeGames) {
+      if (!this._freeGames) {
         await this.getFreeGames();
       }
       const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === upd.id);
