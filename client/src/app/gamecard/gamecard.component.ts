@@ -29,6 +29,9 @@ export class GamecardComponent {
       this.router.navigate(["free-game/" + this.game.id]).catch((error: Error) => console.error(error.message));
     }
   }
+  public createMultiGame(): void {
+    this.router.navigate(["waiting/" + this.game.id]).catch((error: Error) => console.error(error.message));
+  }
   public deleteGame(): void {
     if (this.game) {
       if (confirm("Voulez vous supprimer le jeu " + this.game.name + " ?")) {

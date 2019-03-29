@@ -26,6 +26,7 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
 import { GamecardComponent } from "./gamecard/gamecard.component";
 import { MedievalObjectsCreatorService } from "./scene3D/thematic/medieval-objects-creator.service";
 import { TimerService } from "./services/timer.service";
+import { WaitingComponent } from "./waiting/waiting.component";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { TimerService } from "./services/timer.service";
     GameMessagesComponent,
     Game3DViewComponent,
     ErrorPopupComponent,
-    GamecardComponent
+    GamecardComponent,
+    WaitingComponent,
   ],
   imports: [
     FormsModule,
