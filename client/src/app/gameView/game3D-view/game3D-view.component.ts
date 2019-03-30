@@ -54,6 +54,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private index: IndexService,
         private render: RenderService,
         private router: Router) {
+        if (!this.index.username) {
+            this.router.navigate([""]);
+        }
         this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
