@@ -1,10 +1,7 @@
 .messagesBox{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     display: grid;
-    position: absolute;
     width: 700px;
-    top: 770px;
-    right: 610px;
     background-color: #ccd9cb;
     border: solid black;
     border-radius: 8px;
