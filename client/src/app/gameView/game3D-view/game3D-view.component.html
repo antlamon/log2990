@@ -1,6 +1,4 @@
 <div id="gameTitle" class="gameTitle"> {{game3D?.name}} </div>
-<div class="chrono">Temps: {{timer.getTimeAsString()}}</div>
-<div class="compteur">Différences trouvées: {{differencesFound}}</div>
 <div class="divGames">
   <div class="gameImage" [ngClass]="blockedCursor">
     <p>Image originale:</p>
@@ -15,6 +13,11 @@
     </div>
   </div>
 </div>
-
-<app-game-messages></app-game-messages>
+<div class="infoBottom">
+  <div class="gameInfo">
+    <div class="chrono">Temps: {{timer.getTimeAsString()}}</div>
+    <div class="compteur">Différences trouvées: {{differencesFound}}</div>
+  </div>
+  <app-game-messages></app-game-messages>
+</div>
 <app-error-popup></app-error-popup>
