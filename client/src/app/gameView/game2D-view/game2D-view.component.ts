@@ -134,6 +134,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameId: this.simpleGame.card.id,
             gameType: "simple",
         });
+        this.getBack();
+    }
+    private getBack(): void {
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 

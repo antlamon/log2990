@@ -1,4 +1,8 @@
+<body>
+<div class="top-row">
+<button (click) ="getBack()">QUITTER</button>
 <div id="gameTitle" class="gameTitle"> {{game3D?.name}} </div>
+</div>
 <div class="divGames">
   <div class="gameImage" [ngClass]="blockedCursor">
     <p>Image originale:</p>
@@ -21,3 +25,4 @@
   <app-game-messages></app-game-messages>
 </div>
 <app-error-popup></app-error-popup>
+</body>

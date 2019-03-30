@@ -125,6 +125,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             gameId: this.game3D.id,
             gameType: "free",
         });
+        this.getBack();
+    }
+    private getBack(): void {
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 

@@ -8,6 +8,9 @@
     font-weight: bold;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+html, body {
+    height: 100%;
+  }
 
 .spinny {
 }
@@ -104,4 +107,25 @@
 .gameInfo {
     height: 130px;
     width: 500px;
+}
+button{
+    min-width: 150px;
+    height:50px;
+    background-color: #538ea1;
+    font-size: 20px;
+    transition: all .2s ease-in-out;
+    border-radius: 10px;
+    font-weight: bold;
+    color:black;
+    border: solid;
+    
+}
+button:hover{
+    cursor: pointer;
+    background-color: #2A5E8F;
+}
+.top-row {
+    display: flex;
+    flex-direction: row;
+    top: 50px;
 }
