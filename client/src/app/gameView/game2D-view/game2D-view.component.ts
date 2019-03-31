@@ -40,6 +40,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private ref: ChangeDetectorRef,
         private router: Router
     ) {
+        if (!this.index.username) {
+            this.router.navigate([""]);
+        }
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
         this.differencesFound = 0;
@@ -131,6 +134,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameId: this.simpleGame.card.id,
             gameType: "simple",
         });
+        this.getBack();
+    }
+    private getBack(): void {
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 

@@ -1,6 +1,7 @@
-<div class="gameTitle"> {{simpleGame?.card.name}}</div>
-<div class="chrono">Temps: {{timer.getTimeAsString()}}</div>
-<div class="compteur">Différences trouvées: {{differencesFound}}</div>
+<div class="top-row">
+    <button (click) ="getBack()">QUITTER</button>
+    <div id="gameTitle" class="gameTitle"> {{simpleGame?.card.name}} </div>
+    </div>
 <div class="divGames">
   <div class="gameImage">
     <p>Image originale:</p>
@@ -15,6 +16,12 @@
     </div>
   </div>
 </div>
-<app-game-messages></app-game-messages>
+<div class="infoBottom">
+  <div class="gameInfo">
+    <div class="chrono">Temps: {{timer.getTimeAsString()}}</div>
+    <div class="compteur">Différences trouvées: {{differencesFound}}</div>
+  </div>
+  <app-game-messages></app-game-messages>
+</div>
 <ng-template #spinny><mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner></ng-template>
 <app-error-popup></app-error-popup>

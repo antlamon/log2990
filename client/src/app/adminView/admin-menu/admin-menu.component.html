@@ -4,7 +4,7 @@
     <button (click)="openFreeDialog('freeModal')">Créer un jeu libre</button>
   </div>
   <div class="fiche de jeu">
-    <app-list-view #games></app-list-view>
+    <app-list-view #games [isAdminMode] = true></app-list-view>
   </div>
 
   <app-simple-generator id="simpleModal" class="modal-body">

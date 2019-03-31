@@ -1,5 +1,4 @@
 .chrono {
-    position: absolute;
     color: white;
     top: 800px;
     left: 220px;
@@ -7,9 +6,11 @@
     font-weight: bold;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
+html, body {
+    height: 100%;
+  }
 
 .compteur {
-    position: absolute;
     color: white;
     top: 770px;
     left: 220px;
@@ -61,10 +62,24 @@
     border: solid black;
 
 }
+
+.gameInfo {
+    height: 130px;
+    width: 500px;
+}
+
 .mockImages {
     outline: 5px solid black;
     width: 640px;
     height: 480px;
+}
+
+.infoBottom {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 770px;
+    left: 220px;
 }
 
 .gameImage > p {
@@ -84,4 +99,25 @@
 .spinny {
     top: 35%;
     left: 40%;
+}
+button{
+    min-width: 150px;
+    height:50px;
+    background-color: #538ea1;
+    font-size: 20px;
+    transition: all .2s ease-in-out;
+    border-radius: 10px;
+    font-weight: bold;
+    color:black;
+    border: solid;
+    
+}
+button:hover{
+    cursor: pointer;
+    background-color: #2A5E8F;
+}
+.top-row {
+    display: flex;
+    flex-direction: row;
+    top: 50px;
 }

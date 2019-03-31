@@ -147,12 +147,16 @@ describe("renderService", () => {
     service["differences"] = [];
     it("Should translate on x axis", () => {
       const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callFake(() => {});
+      // tslint:disable-next-line:no-any
+      spyOn(service as any, "detectCollision").and.callFake(() => {});
       const move: number = 5;
       service.moveCam("X", move);
       expect(spy).toHaveBeenCalledWith(move);
     });
     it("Should translate on z axis", () => {
       const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callFake(() => {});
+      // tslint:disable-next-line:no-any
+      spyOn(service as any, "detectCollision").and.callFake(() => {});
       const move: number = 5;
       service.moveCam("Z", move);
       expect(spy).toHaveBeenCalledWith(move);
