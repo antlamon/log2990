@@ -4,6 +4,8 @@ import * as SocketIO from "socket.io";
 import { EndGameMessage, Game3DRoomUpdate, GameRoomUpdate, ImageClickMessage,
      INewGameMessage, NewScoreUpdate, Obj3DClickMessage } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
+import { IGame } from "../../../common/models/game";
+import { IGame3D } from "../../../common/models/game3D";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { UsersManager } from "../services/users.service";
 import { TYPES } from "../types";
@@ -39,10 +41,23 @@ export class SocketServerManager {
                 this.emitEvent(SocketsEvents.USER_CONNECTION, this.userManager.getUsername(socket.client.id), "userDisconnected");
                 this.userManager.removeUser(socket.client.id);
             });
-
+            this.initializeMultiplayerGame(socket);
         });
     }
-
+    private initializeMultiplayerGame(socket: Socket): void {
+        socket.on(SocketsEvents.NEW_MULTIPLAYER_GAME, (id: string) => {
+            this.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, id);
+        });
+        socket.on(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame|IGame3D) => {
+            this.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, game);
+        });
+        socket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
+            this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, id);
+        });
+        socket.on(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
+            this.emitEvent(SocketsEvents.NEW_GAME_LIST_LOADED);
+        });
+    }
     public emitEvent<T>(event: string, data?: T, dataType?: T): void {
         this.socketServer.emit(event, data, dataType);
     }
