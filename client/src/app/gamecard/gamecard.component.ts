@@ -1,25 +1,44 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
 import { GameService } from "../services/game.service";
 import { Router } from "@angular/router";
 import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../../common/communication/message";
+import { SocketService } from "../services/socket.service";
+import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 
 @Component({
   selector: "app-gamecard",
   templateUrl: "./gamecard.component.html",
   styleUrls: ["./gamecard.component.css"]
 })
-export class GamecardComponent {
+export class GamecardComponent implements OnInit {
   @Input()
   public isAdminMode: boolean;
   @Input()
   public imgURL: string;
   @Input()
   private game: IGame | IGame3D;
-  public constructor(private gameService: GameService, private router: Router) {
+  public isJoinable: boolean;
+  public constructor(private gameService: GameService, private router: Router, private socket: SocketService) {
     this.isAdminMode = false;
     this.game = {solo: [], multi: [], name: "", id: "", originalImage: ""};
+    this.isJoinable = false;
+   }
+  public ngOnInit(): void {
+    this.socket.addEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, (gameID: string ) => {
+      this.handleNewMulitplayerGamer(gameID);
+    });
+    this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (gam: IGame3D|IGame|string) => {
+      if (this.game.id === (gam as IGame).id) {
+        this.isJoinable = false;
+      }
+    });
+    this.socket.addEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
+      if (this.game.id === id) {
+        this.isJoinable = false;
+      }
+    });
    }
 
   public playSelectedGame(): void {
@@ -30,7 +49,12 @@ export class GamecardComponent {
     }
   }
   public createMultiGame(): void {
+    this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.game.id);
     this.router.navigate(["waiting/" + this.game.id]).catch((error: Error) => console.error(error.message));
+  }
+  public joinMultiGame(): void {
+    this.socket.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.game);
+    this.playSelectedGame();
   }
   public deleteGame(): void {
     if (this.game) {
@@ -52,6 +76,11 @@ export class GamecardComponent {
   }
   public get isSimpleGame(): boolean {
     return (this.game) && "originalImage" in this.game;
+  }
+  private handleNewMulitplayerGamer(iD: string): void {
+    if (this.game.id === iD) {
+      this.isJoinable = true;
+    }
   }
 
 }
