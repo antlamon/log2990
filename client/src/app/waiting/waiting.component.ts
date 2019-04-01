@@ -1,18 +1,20 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, AfterViewInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { IGame3D } from "../../../../common/models/game3D";
 import { IGame } from "../../../../common/models/game";
+import { IndexService } from "../services/index.service";
 
 @Component({
   selector: "app-waiting",
   templateUrl: "./waiting.component.html",
   styleUrls: ["./waiting.component.css"]
 })
-export class WaitingComponent implements OnInit, OnDestroy {
+export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public constructor (private router: Router, private socket: SocketService, private route: ActivatedRoute) { }
+  public constructor (private router: Router, private socket: SocketService, private route: ActivatedRoute,
+                      private index: IndexService) { }
   public ngOnInit(): void {
         this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => {
           if (game.id === this.getId()) {
@@ -22,6 +24,11 @@ export class WaitingComponent implements OnInit, OnDestroy {
         this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
           this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
         });
+  }
+  public ngAfterViewInit(): void {
+    if (!this.index.username) {
+      this.router.navigate([""]);
+    }
   }
   public ngOnDestroy(): void {
     this.socket.unsubscribeTo(SocketsEvents.NEW_GAME_LIST_LOADED);
