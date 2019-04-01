@@ -21,6 +21,7 @@ import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval
 import { ShapeCreatorService } from "src/app/scene3D/geometric/shape-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { WaitingComponent } from "src/app/waiting/waiting.component";
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
@@ -38,7 +39,8 @@ describe("AdminMenuComponent", () => {
         Game3DViewComponent,
         GamecardComponent,
         GameMessagesComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        WaitingComponent,
       ],
       imports: [
         AppRoutingModule,

@@ -16,6 +16,7 @@ import { GameMessagesComponent } from "src/app/gameView/game-messages/game-messa
 import { RenderService } from "src/app/scene3D/render.service";
 import { GamecardComponent } from "../../gamecard/gamecard.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { WaitingComponent } from "src/app/waiting/waiting.component";
 
 describe("FreeGeneratorComponent", () => {
   let component: FreeGeneratorComponent;
@@ -33,7 +34,8 @@ describe("FreeGeneratorComponent", () => {
         Game3DViewComponent,
         ErrorPopupComponent,
         GameMessagesComponent,
-        GamecardComponent
+        GamecardComponent,
+        WaitingComponent,
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, RenderService]
