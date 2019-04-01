@@ -38,12 +38,12 @@ button:focus{
 }
 .text {
   position: relative;
-  left: 38%;
+  left: 40%;
   margin-top: 1.6em;
   text-align: center;
   width: 400px;
   font-size: 2em;
-  color: hsla(0, 0%, 0%, 0.4);
+  color: #fcfcf666;
 }
 .spinner .spinner-circle {
   position: absolute;
@@ -53,19 +53,19 @@ button:focus{
   border-color: #181818 transparent #181818 transparent;
 }
 .spinner .spinner-circle.spinner-circle-outer {
-  width: 51.2px;
-  height: 51.2px;
-  border-width: 12.8px;
-  top: -6.400000000000002px;
-  left: -6.400000000000002px;
+  width: 102.4px;
+  height: 102.4px;
+  border-width: 25.6px;
+  top: -43.800000000000002px;
+  left: -43.800000000000002px;
   opacity: 0.2;
   filter: alpha(opacity=50);
   animation: spinner-rotate-outer 2s 0s ease-in-out infinite;
 }
 .spinner .spinner-circle.spinner-circle-inner {
-  width: 25.6px;
-  height: 25.6px;
-  border-width: 6.4px;
+  width: 51.2px;
+  height: 51.2px;
+  border-width: 12.8px;
   top: 12.799999999999999px;
   left: 12.799999999999999px;
   opacity: 0.0;
