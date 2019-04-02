@@ -248,11 +248,19 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        this.getObject(this.sceneOriginal, diff.name).visible = visible;
+        this.setVisibilty(this.sceneOriginal, diff.name, visible);
       }
       if (diff.type !== DELETE_TYPE) {
-        this.getObject(this.sceneModif, diff.name).visible = visible;
+        this.setVisibilty(this.sceneModif, diff.name, visible);
       }
+    }
+  }
+  private setVisibilty(scene: THREE.Scene, name: string, visible: boolean): void {
+    const obj: THREE.Mesh = this.getObject(scene, name) as THREE.Mesh;
+    if (obj.isMesh) {
+      (obj.material as THREE.Material).visible = visible;
+    } else {
+      obj.visible = visible;
     }
   }
 }
