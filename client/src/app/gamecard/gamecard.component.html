@@ -9,13 +9,14 @@
           <img *ngIf="imgURL; else spinnyImage" class="game-card-img" src={{imgURL}} alt="">
       </div>
       <div class="game-card-buttons" *ngIf="!isAdminMode">
-        <div class="game-card-button-container"><button (click)="playSelectedGame(game)">JOUER</button>
+        <div class="game-card-button-container"><button (click)="playSelectedGame()">JOUER</button>
         </div>
-        <div class="game-card-button-container"><button>CRÉER</button></div>
+        <div class="game-card-button-container" *ngIf="!isJoinable"><button (click)="createMultiGame()">CRÉER</button></div>
+        <div class="game-card-button-container" *ngIf="isJoinable"><button class="joindreBouton" (click)="joinMultiGame()">JOINDRE</button></div>
       </div>
       <div class="game-card-buttons" *ngIf="isAdminMode">
         <div class="game-card-button-container"><button (click)="deleteGame()">SUPPRIMER</button></div>
-        <div class="game-card-button-container"><button (click) = "reinitGame()">RÉINITIALISER</button></div>
+        <div class="game-card-button-container"><button  (click) = "reinitGame()">RÉINITIALISER</button></div>
       </div>
     </div>
     <div class="game-card-right-content">

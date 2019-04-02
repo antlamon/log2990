@@ -15,4 +15,8 @@ export class SocketsEvents {
     public static readonly SCORES_UPDATED = "scores-update";
     public static readonly END_GAME = "end-game";
     public static readonly NEW_GAME_MESSAGE = "new-game";
+    public static readonly NEW_MULTIPLAYER_GAME = "new-multi-game";
+    public static readonly CANCEL_MULTIPLAYER_GAME = "cancel-multi-game";
+    public static readonly START_MULTIPLAYER_GAME = "start-multi-game";
+    public static readonly NEW_GAME_LIST_LOADED = "new-game-list-loaded";
 }

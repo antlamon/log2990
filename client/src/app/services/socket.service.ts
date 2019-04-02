@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import * as ClientSocketIO from "socket.io-client";
 import {BASE_SERVER_PATH} from "../global/constants";
+import { IGame } from "../../../../common/models/game";
+import { IGame3D } from "../../../../common/models/game3D";
 type Socket = SocketIOClient.Socket;
 @Injectable({
   providedIn: "root"
@@ -19,7 +21,7 @@ export class SocketService {
     return this.socket.id;
   }
 
-  public addEvent( eventName: string, eventFunction: () => void): void {
+  public addEvent( eventName: string, eventFunction: (iD?: string | IGame | IGame3D) => void): void {
     this.socket.on(eventName, eventFunction);
   }
 
