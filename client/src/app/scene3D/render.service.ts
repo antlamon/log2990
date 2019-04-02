@@ -97,10 +97,23 @@ export class RenderService {
 
   public startRenderingLoop(): void {
     this.raycaster = new THREE.Raycaster();
-
+    this.setDiffObjs();
     this.render();
   }
-
+  private setDiffObjs(): void {
+    const array1: THREE.Object3D[] = [];
+    const array2: THREE.Object3D[] = [];
+    console.log(this.sceneModif.children)
+    console.log(this.differences)
+    for (const diff of this.differences) {
+      if (diff.type !== ADD_TYPE) {
+        array1.push(this.getObject(this.sceneOriginal, diff.name));
+      }
+      array2.push(this.getObject(this.sceneModif, diff.name));
+    }
+    console.log(array1)
+    console.log(array2)
+  }
   private createRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
     const renderer: THREE.WebGLRenderer = this.initializeRenderer(container);
     container.appendChild(renderer.domElement);
