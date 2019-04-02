@@ -35,7 +35,7 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
     this.socket.unsubscribeTo(SocketsEvents.START_MULTIPLAYER_GAME);
   }
   public cancel(): void {
-    this.socket.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, this.getId);
+    this.socket.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, this.getId());
     this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
   }
   private startGame(game: IGame | IGame3D ): void {
