@@ -12,7 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { SceneGeneratorService } from "./scene-generator.service";
 import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
-import { WHITE } from "src/app/global/constants";
+import { WHITE, AXIS } from "src/app/global/constants";
 import { THREE_ERROR } from "../../../../common/models/errors";
 
 describe("renderService", () => {
@@ -150,7 +150,7 @@ describe("renderService", () => {
       // tslint:disable-next-line:no-any
       spyOn(service as any, "detectCollision").and.callFake(() => {});
       const move: number = 5;
-      service.moveCam("X", move);
+      service.moveCam(AXIS.X, move);
       expect(spy).toHaveBeenCalledWith(move);
     });
     it("Should translate on z axis", () => {
@@ -158,17 +158,17 @@ describe("renderService", () => {
       // tslint:disable-next-line:no-any
       spyOn(service as any, "detectCollision").and.callFake(() => {});
       const move: number = 5;
-      service.moveCam("Z", move);
+      service.moveCam(AXIS.Z, move);
       expect(spy).toHaveBeenCalledWith(move);
     });
     it("Should rotate on x axis", () => {
       const move: number = 5;
-      service.rotateCam("X", move);
+      service.rotateCam(AXIS.X, move);
       expect(service["camera"]["rotation"]["x"]).toEqual(-move * SENSITIVITY);
     });
     it("Should rotate on y axis", () => {
       const move: number = 5;
-      service.rotateCam("Y", move);
+      service.rotateCam(AXIS.Y, move);
       expect(service["camera"]["rotation"]["y"]).toEqual(- move * SENSITIVITY);
     });
   });

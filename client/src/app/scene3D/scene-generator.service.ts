@@ -47,14 +47,14 @@ export class SceneGeneratorService {
     }
 
   }
-  public async modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): Promise<THREE.Scene> {
+  public modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): THREE.Scene {
     for (const diff of diffObjs) {
-      await this.addModification(scene, diff);
+      this.addModification(scene, diff);
     }
 
     return scene;
 }
-  private async addModification(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
+  private addModification(scene: THREE.Scene, diffObj: IDifference): void {
     switch (diffObj.type) {
       case ADD_TYPE:
         this.addObject(scene, diffObj).catch(() => {
