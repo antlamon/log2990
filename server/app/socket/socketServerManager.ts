@@ -65,11 +65,11 @@ export class SocketServerManager {
     private async handleNewGameRoom(socket: Socket, newGameMessage: INewGameMessage): Promise<void> {
 
         try {
-            const roomId: string = await this.gameRoomService.createNewGameRoom(newGameMessage);
+            const roomId: string = await this.gameRoomService.createNewSoloGameRoom(newGameMessage);
             socket.join(roomId);
-            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId);
+            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId, roomId);
         } catch (rejection) {
-            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, rejection.message);
+            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, {message: rejection.message});
         }
     }
 
@@ -94,7 +94,7 @@ export class SocketServerManager {
     }
 
     private async handleEndGame(socket: Socket, endGameMessage: EndGameMessage): Promise<void> {
-        socket.leave(endGameMessage.gameId);
+        socket.leave(endGameMessage.gameRoomId);
         const newScoreUpdate: NewScoreUpdate = await this.gameRoomService.endGame(endGameMessage);
         if (newScoreUpdate.scoreUpdate.insertPos !== -1) {
             this.emitEvent(SocketsEvents.SCORES_UPDATED, newScoreUpdate.scoreUpdate);

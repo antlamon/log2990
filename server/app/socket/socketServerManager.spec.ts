@@ -59,21 +59,22 @@ describe("Test for the socketServerManager", () => {
     });
 
     it("Should handle new-game-room event with resolved promise", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CREATE_GAME_ROOM, () => {
+        mockClientSocket.on(SocketsEvents.CREATE_GAME_ROOM, (gameRoomId: string) => {
             mockClientSocket.off(SocketsEvents.CREATE_GAME_ROOM);
+            expect(gameRoomId).to.eql("123");
             done();
         });
-        sandbox.on(gameRoomService, "createNewGameRoom", async () => Promise.resolve("123"));
+        sandbox.on(gameRoomService, "createNewSoloGameRoom", async () => Promise.resolve("123"));
         mockClientSocket.emit(SocketsEvents.CREATE_GAME_ROOM);
     });
 
     it("Should handle new-game-room event with rejected promise", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CREATE_GAME_ROOM, (rejection: string) => {
+        mockClientSocket.on(SocketsEvents.CREATE_GAME_ROOM, (rejection: Error) => {
             mockClientSocket.off(SocketsEvents.CREATE_GAME_ROOM);
-            expect(rejection).to.equal("123");
+            expect(rejection.message).to.equal("123");
             done();
         });
-        sandbox.on(gameRoomService, "createNewGameRoom", async () => Promise.reject({ message: "123" }));
+        sandbox.on(gameRoomService, "createNewSoloGameRoom", async () => Promise.reject(new Error("123")));
         mockClientSocket.emit(SocketsEvents.CREATE_GAME_ROOM);
     });
 

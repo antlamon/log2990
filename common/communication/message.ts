@@ -17,10 +17,11 @@ export const SIMPLE_GAME_TYPE: string = "simple";
 export const FREE_GAME_TYPE:string = "free";
 
 export interface INewGameMessage {
-    gameRoomId: string;
+    gameId: string;
     gameName: string;
     username: string;
     is3D: boolean;
+    gameRoomId?: string;
 }
 
 export interface NewGameMessage extends INewGameMessage{
@@ -70,6 +71,7 @@ export interface EndGameMessage {
     score: string;
     gameId: string;
     gameType: string;
+    gameRoomId: string;
 }
 
 export interface IScoreUpdate {

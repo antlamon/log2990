@@ -1,4 +1,5 @@
 import Axios, { AxiosResponse } from "axios";
+import { Guid } from "guid-typescript";
 import { injectable } from "inversify";
 import {
     BASE_ID, EndGameMessage, Game3DRoomUpdate, GameRoomUpdate,
@@ -18,7 +19,9 @@ export class GameRoomService {
         this.gameRooms = {} as GameRooms;
     }
 
-    public async createNewGameRoom(newGameMessage: INewGameMessage): Promise<string> {
+    public async createNewSoloGameRoom(newGameMessage: INewGameMessage): Promise<string> {
+        const gameRoomId: string = Guid.create().toString();
+        newGameMessage.gameRoomId = gameRoomId;
         const response: AxiosResponse = await Axios.post(newGameMessage.is3D ?
             this.IDENTIFICATION_3D_URL : this.IDENTIFICATION_URL,
                                                          newGameMessage);
@@ -29,14 +32,14 @@ export class GameRoomService {
             username: newGameMessage.username,
             differencesFound: 0,
         };
-        this.gameRooms[newGameMessage.gameRoomId] = {
+        this.gameRooms[gameRoomId] = {
             game: {
-                gameId: newGameMessage.gameRoomId,
+                gameId: newGameMessage.gameId,
                 gameName: newGameMessage.gameName,
             },
             gamer: [],
         };
-        this.gameRooms[newGameMessage.gameRoomId].gamer.push(newGamer);
+        this.gameRooms[gameRoomId].gamer.push(newGamer);
 
         return response.data.body;
     }
@@ -116,9 +119,9 @@ export class GameRoomService {
     }
 
     public async endGame(endGameMessage: EndGameMessage): Promise<NewScoreUpdate> {
-        const gameMode: string = this.gameRooms[endGameMessage.gameId].gamer.length === 1 ? "solo" : "multi";
+        const gameMode: string = this.gameRooms[endGameMessage.gameRoomId].gamer.length === 1 ? "solo" : "multi";
         const scoreTime: string[] = endGameMessage.score.split(":");
-        const gameName: string = this.gameRooms[endGameMessage.gameId].game.gameName;
+        const gameName: string = this.gameRooms[endGameMessage.gameRoomId].game.gameName;
         const scoreUpdate: AxiosResponse = await Axios.put(this.TIMESCORE_URL, {
             username: endGameMessage.username, gameType: endGameMessage.gameType, gameMode: gameMode,
             id: endGameMessage.gameId, nbMinutes: scoreTime[0], nbSeconds: scoreTime[1],

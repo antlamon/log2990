@@ -17,6 +17,7 @@ import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 export class Game2DViewComponent implements OnInit, OnDestroy {
 
     private simpleGame: IFullGame;
+    private gameRoomId: string;
     private differencesFound: number;
     private _disableClick: string;
     private _blockedCursor: string;
@@ -63,7 +64,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
         if (this.simpleGame) {
-            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.gameRoomId);
         }
     }
 
@@ -78,7 +79,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 this.simpleGame = response;
                 const newGameMessage: NewGameMessage = {
                     username: this.index.username,
-                    gameRoomId: this.simpleGame.card.id,
+                    gameId: this.simpleGame.card.id,
                     gameName: this.simpleGame.card.name,
                     is3D: false,
                     originalImage: this.simpleGame.card.originalImage,
@@ -89,10 +90,12 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             });
     }
 
-    private handleCreateGameRoom(rejection?: string): void {
-        if (rejection !== null) {
-            alert(rejection);
+    private handleCreateGameRoom(response: string | Error): void {
+        console.log(response);
+        if (typeof response !== "string") {
+            alert(response);
         }
+        this.gameRoomId = response as string;
         this.ref.reattach();
         this.timer.startTimer();
     }
@@ -133,6 +136,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             score: this.timer.getTimeAsString(),
             gameId: this.simpleGame.card.id,
             gameType: "simple",
+            gameRoomId: this.gameRoomId,
         });
         this.getBack();
     }
@@ -148,7 +152,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         };
         const imageClickMessage: ImageClickMessage = {
             point: point,
-            gameRoomId: this.simpleGame.card.id,
+            gameRoomId: this.gameRoomId,
             username: this.index.username,
         };
 

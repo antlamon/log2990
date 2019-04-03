@@ -84,10 +84,11 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
         }
     }
-    private handleCreateGameRoom(rejection?: string): void {
-        if (rejection !== null) {
-            alert(rejection);
+    private handleCreateGameRoom(response: string | Error): void {
+        if (typeof response !== "string") {
+            alert(response);
         }
+        this.roomID = response as string;
         this.timer.startTimer();
     }
     private handleCheckDifference(update: Game3DRoomUpdate): void {
@@ -157,10 +158,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             .catch(() => {throw new COMMUNICATION_ERROR("unable to get 3DGames."); });
     }
     private sendCreation(): void {
-        this.roomID = this.game3D.id;
         const newGameMessage: NewGame3DMessage = {
             username: this.index.username,
-            gameRoomId: this.roomID,
+            gameId: this.game3D.id,
             gameName: this.game3D.name,
             is3D: true,
             differences: this.game3D.differences

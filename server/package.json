@@ -58,6 +58,7 @@
     "debug": "^4.1.1",
     "express": "~4.16.0",
     "form-data": "^2.3.3",
+    "guid-typescript": "^1.0.9",
     "inversify": "^4.13.0",
     "mongo-mock": "^3.4.0",
     "mongodb": "^3.1.13",

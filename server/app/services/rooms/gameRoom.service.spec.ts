@@ -22,7 +22,7 @@ describe("GameRoomService", () => {
     describe("Creating new game room", () => {
         it("Should return the gameRoomId on resolve", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            service.createNewGameRoom({ gameRoomId: "test", username: "user" } as NewGameMessage)
+            service.createNewSoloGameRoom({ gameId: "test", username: "user" } as NewGameMessage)
                 .then(
                     (response: string) => {
                         expect(response).to.equal("ok");
@@ -34,7 +34,7 @@ describe("GameRoomService", () => {
         });
         it("Should return the gameRoomId on resolve for 3D", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            service.createNewGameRoom({ gameRoomId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
+            service.createNewSoloGameRoom({ gameId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
                 .then(
                     (response: string) => {
                         expect(response).to.equal("ok");
@@ -47,7 +47,7 @@ describe("GameRoomService", () => {
 
         it("Should return the rejection on reject", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
-            service.createNewGameRoom({ gameRoomId: "test", username: "user" } as NewGameMessage)
+            service.createNewSoloGameRoom({ gameId: "test", username: "user" } as NewGameMessage)
                 .then(
                     (error: string) => {
                         done(error);
@@ -59,7 +59,7 @@ describe("GameRoomService", () => {
         });
         it("Should return the rejection on reject for 3D", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
-            service.createNewGameRoom({ gameRoomId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
+            service.createNewSoloGameRoom({ gameId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
                 .then(
                     (error: string) => {
                         done(error);
@@ -72,7 +72,28 @@ describe("GameRoomService", () => {
     });
 
     describe("Checking Difference", () => {
-        it("Should return the gameRoomId on resolve", (done: Mocha.Done) => {
+        service["gameRooms"]["test"] = {
+            game: {
+                gameId: "test",
+                gameName: "testName",
+            },
+            gamer: [{
+                username: "user",
+                differencesFound: 0,
+            }],
+        };
+        service["gameRooms"]["test3D"] = {
+            game: {
+                gameId: "test",
+                gameName: "testName",
+            },
+            gamer: [{
+                username: "user",
+                differencesFound: 0,
+            }],
+        };
+
+        it("Should return the ok on resolve", (done: Mocha.Done) => {
             const mockedGameRoomUpdate: GameRoomUpdate = {
                 username: "user",
                 newImage: "ok",
@@ -92,7 +113,7 @@ describe("GameRoomService", () => {
                     });
         });
 
-        it("Should return the gameRoomId on resolve", (done: Mocha.Done) => {
+        it("Should return the ok on resolve for newuser", (done: Mocha.Done) => {
             const mockedGameRoomUpdate: GameRoomUpdate = {
                 username: "newUser",
                 newImage: "ok",
@@ -126,7 +147,7 @@ describe("GameRoomService", () => {
         });
     });
     describe("Checking Difference 3D", () => {
-        it("Should return the gameRoomId on resolve", (done: Mocha.Done) => {
+        it("Should return a valid Game3DRoomUpdate on resolve", (done: Mocha.Done) => {
             const mockedGameRoomUpdate: Game3DRoomUpdate = {
                 username: "user",
                 objName: "1",
@@ -147,7 +168,7 @@ describe("GameRoomService", () => {
                     });
         });
 
-        it("Should return the gameRoomId on resolve", (done: Mocha.Done) => {
+        it("Should return a valid Game3DRoomUpdate on resolve for new user", (done: Mocha.Done) => {
             const mockedGameRoomUpdate: Game3DRoomUpdate = {
                 username: "newUser",
                 objName: "1",
@@ -188,6 +209,7 @@ describe("GameRoomService", () => {
                 score: "1:23",
                 gameId: "1",
                 gameType: "test",
+                gameRoomId: "test",
             };
             const mockScoreUpdate: ScoreUpdate = {
                 id: "1",
@@ -196,9 +218,6 @@ describe("GameRoomService", () => {
                 insertPos: 2,
                 gameType: "test",
             };
-            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            await service.createNewGameRoom({gameRoomId: "1", gameName: "bob", username: "user", is3D: false});
-            sandbox.restore(Axios);
             sandbox.on(Axios, "put", async () => Promise.resolve({data: { title: BASE_ID, body: mockScoreUpdate }}));
             const newScoreUpdate: NewScoreUpdate = await service.endGame(mockEndGameMessage);
             expect(newScoreUpdate.scoreUpdate).to.eql(mockScoreUpdate);
