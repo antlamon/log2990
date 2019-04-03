@@ -96,3 +96,27 @@
     font-weight: bold;
     font-size: 20px;
 }
+
+/* MODAL STYLES
+-------------------------------*/
+app-ending-message {
+    /* modals are hidden by default */
+    display: none;
+    z-index: 1000;
+
+  }
+  
+  
+  .modal-body {
+    /* padding: 20px; */
+    background: #fff;
+  
+    /* margin exposes part of the modal background */
+    /* margin: 40px; */
+  }
+  
+  body.modal-open {
+    /* body overflow is hidden to hide main scrollbar when modal window is open */
+    overflow: none;
+  }
+
