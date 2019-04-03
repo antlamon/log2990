@@ -7,7 +7,7 @@ import { SocketService } from "src/app/services/socket.service";
 import { IndexService } from "src/app/services/index.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../../../common/communication/message";
-import { CLICK, KEYS } from "src/app/global/constants";
+import { CLICK, KEYS, AXIS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
@@ -168,30 +168,33 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
     }
     private startGame(): void {
-        document.addEventListener("keydown", this.onKeyDown, false);
         this.addFunctions();
         this.render.startRenderingLoop();
     }
     private addFunctions(): void {
+        document.addEventListener("contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false);
+        document.addEventListener("keydown", this.onKeyDown, false);
+
         this.render.addListener("mousemove", this.onMouseMove);
-        this.render.addListener("contextmenu", (event: MouseEvent) => { event.preventDefault(); });
         this.render.addListener("mousedown", this.onMouseDown);
         this.render.addListener("mouseup", this.onMouseUp);
+
+        document.addEventListener("mouseup", () => this.press = false, false);
     }
 
     private onKeyDown = (event: KeyboardEvent) => {
         switch (event.keyCode) {
             case KEYS["S"]:
-                this.render.moveCam("Z", this.movementSpeed);
+                this.render.moveCam(AXIS.Z, this.movementSpeed);
                 break;
             case KEYS["W"]:
-                this.render.moveCam("Z", -this.movementSpeed);
+                this.render.moveCam(AXIS.Z, -this.movementSpeed);
                 break;
             case KEYS["D"]:
-                this.render.moveCam("X", this.movementSpeed);
+                this.render.moveCam(AXIS.X, this.movementSpeed);
                 break;
             case KEYS["A"]:
-                this.render.moveCam("X", -this.movementSpeed);
+                this.render.moveCam(AXIS.X, -this.movementSpeed);
                 break;
             case KEYS["T"]:
                 this.cheatModeActivated = !this.cheatModeActivated;
@@ -206,8 +209,8 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     }
     private onMouseMove = (event: MouseEvent) => {
         if (!this.press) { return; }
-        this.render.rotateCam("Y", event.movementX);
-        this.render.rotateCam("X", event.movementY);
+        this.render.rotateCam(AXIS.Y, event.movementX);
+        this.render.rotateCam(AXIS.X, event.movementY);
     }
 
     private onMouseUp = (event: MouseEvent) => {

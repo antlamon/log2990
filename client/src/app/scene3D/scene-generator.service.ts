@@ -76,7 +76,7 @@ export class SceneGeneratorService {
     const object: THREE.Mesh = this.isThematic ?
       await this.modelsService.createObject(diffObj.object, true) :
       await this.shapeService.createShape(diffObj.object);
-    scene.add(object);
+    await scene.add(object);
   }
 
   private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
