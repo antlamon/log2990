@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../common/models/game3D";
 import { SceneGeneratorService } from "./scene-generator.service";
+import { AXIS } from "../global/constants";
 
 @Injectable()
 export class RenderService {
@@ -46,9 +47,9 @@ export class RenderService {
     this.containerModif = containerM;
     this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
       game.originalScene, game.backColor, this.isThematic, this.differences) :
-        this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
+        await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
-      this.sceneModif = this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
+      this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
@@ -146,26 +147,26 @@ export class RenderService {
     this.rendererO.render(this.sceneOriginal, this.camera);
     this.rendererM.render(this.sceneModif, this.camera);
   }
-  public rotateCam(angle: string, mouvement: number): void {
+  public rotateCam(angle: number, mouvement: number): void {
     switch (angle) {
-      case "X": this.camera.rotation.x -= mouvement * this.SENSITIVITY;
-                break;
-      case "Y": this.camera.rotation.y -= mouvement * this.SENSITIVITY;
-                break;
+      case AXIS.X: this.camera.rotation.x -= mouvement * this.SENSITIVITY;
+                   break;
+      case AXIS.Y: this.camera.rotation.y -= mouvement * this.SENSITIVITY;
+                   break;
       default: break;
     }
   }
-  public moveCam(axis: string, mouvement: number): void {
+  public moveCam(axis: number, mouvement: number): void {
 
     switch (axis) {
-      case "X":  if (!this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
+      case AXIS.X:  if (!this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
                   this.camera.translateX(mouvement);
                   }
-                 break;
-      case "Z": if (!this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
+                    break;
+      case AXIS.Z: if (!this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
                   this.camera.translateZ(mouvement);
                 }
-                break;
+                   break;
       default: break;
     }
   }
