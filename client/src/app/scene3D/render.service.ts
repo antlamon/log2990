@@ -8,6 +8,7 @@ export class RenderService {
   private readonly FLASH_TIME: number = 150;
   private readonly GAMMA_FACTOR: number = 2.2;
   private readonly SENSITIVITY: number = 0.002;
+  private readonly COLLISION_DISTANCE: number = 4;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
@@ -142,14 +143,29 @@ export class RenderService {
     }
   }
   public moveCam(axis: string, mouvement: number): void {
+
     switch (axis) {
-      case "X": this.camera.translateX(mouvement);
-                break;
-      case "Z": this.camera.translateZ(mouvement);
+      case "X":  if (!this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
+                  this.camera.translateX(mouvement);
+                  }
+                 break;
+      case "Z": if (!this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
+                  this.camera.translateZ(mouvement);
+                }
                 break;
       default: break;
     }
   }
+  private detectCollision(direction: THREE.Vector3): boolean {
+    const pos: THREE.Vector3 = this.camera.position.clone();
+    direction.applyQuaternion(this.camera.quaternion);
+    this.raycaster.set(pos, direction.normalize());
+    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects(this.sceneModif.children.concat(this.sceneOriginal.children),
+                                                                             true);
+
+    return intersects.length > 0 && intersects[0].distance < this.COLLISION_DISTANCE;
+  }
+
   public identifyDiff(event: MouseEvent): THREE.Object3D {
     this.changeVisibilityOfDifferencesObjects(true);
     if ( event.clientX < this.containerModif.offsetLeft) {
@@ -232,11 +248,19 @@ export class RenderService {
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     for (const diff of this.differences) {
       if (diff.type !== ADD_TYPE) {
-        this.getObject(this.sceneOriginal, diff.name).visible = visible;
+        this.setVisibilty(this.sceneOriginal, diff.name, visible);
       }
       if (diff.type !== DELETE_TYPE) {
-        this.getObject(this.sceneModif, diff.name).visible = visible;
+        this.setVisibilty(this.sceneModif, diff.name, visible);
       }
+    }
+  }
+  private setVisibilty(scene: THREE.Scene, name: string, visible: boolean): void {
+    const obj: THREE.Mesh = this.getObject(scene, name) as THREE.Mesh;
+    if (obj.isMesh) {
+      (obj.material as THREE.Material).visible = visible;
+    } else {
+      obj.visible = visible;
     }
   }
 }

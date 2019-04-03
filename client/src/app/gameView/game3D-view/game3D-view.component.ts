@@ -60,10 +60,10 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private timer: TimerService,
         private index: IndexService,
         private render: RenderService,
-        private modalService: ModalService,
-        // private router: Router
-        ) {
-
+        private router: Router) {
+        if (!this.index.username) {
+            this.router.navigate([""]);
+        }
         this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
@@ -132,6 +132,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             gameId: this.game3D.id,
             gameType: "free",
         });
+    }
+    private getBack(): void {
+        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
         this.openEndingDialog(this.SOLO_MODAL);
     }
 

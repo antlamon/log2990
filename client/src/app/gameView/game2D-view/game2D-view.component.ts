@@ -47,6 +47,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private ref: ChangeDetectorRef,
         private modalService: ModalService,
     ) {
+        if (!this.index.username) {
+            this.router.navigate([""]);
+        }
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
         this.differencesFound = 0;
@@ -139,6 +142,10 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameType: "simple",
         });
         this.openEndingDialog(this.SOLO_MODAL);
+        this.getBack();
+    }
+    private getBack(): void {
+        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 
     public sendClick(event: MouseEvent): void {

@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { ListViewComponent } from "src/app/list-view/list-view.component";
 import { ModalService } from "../../services/modal.service";
 
@@ -8,13 +8,9 @@ import { ModalService } from "../../services/modal.service";
   styleUrls: ["./admin-menu.component.css"],
 })
 
-export class AdminMenuComponent implements AfterViewInit {
+export class AdminMenuComponent {
 
   @ViewChild(ListViewComponent) public games: ListViewComponent;
-
-  public ngAfterViewInit(): void {
-    this.games.isAdminMode = true;
-  }
 
   public constructor(private modalService: ModalService) {}
 

@@ -7,6 +7,7 @@ import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
 import {} from "jasmine";
 import { MatProgressSpinnerModule } from "@angular/material";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -31,7 +32,7 @@ describe("GamecardComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ GamecardComponent ],
-      imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule],
+      imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [AppRoutingModule]
     })
     .compileComponents().catch((error: Error) => console.error(error));

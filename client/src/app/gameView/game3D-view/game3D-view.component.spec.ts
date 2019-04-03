@@ -59,7 +59,7 @@ describe("Game3DViewComponent", () => {
         component = fixture.componentInstance;
         spyOn(component, "ngOnDestroy").and.callFake(() => {});
         fixture.detectChanges();
-        spyOn(component["gameService"], "get3DGame").and.callFake( async () => mockGame3D);
+        spyOn(component["gameService"], "get3DGame").and.returnValue(Promise.resolve(mockGame3D));
         component["render"]["differences"] = [];
     });
 
@@ -68,7 +68,11 @@ describe("Game3DViewComponent", () => {
         spyOn(component["socket"], "unsubscribeTo").and.callFake(() => {});
     });
     it("once game loaded, should call initialize of render and then adde mouse event to the render", async () => {
-        const renderSpy: jasmine.Spy  = spyOn(component["render"], "initialize");
+        const renderSpy: jasmine.Spy  = spyOn(component["render"], "initialize").and.callThrough();
+        // tslint:disable-next-line:no-any
+        spyOn((component as any), "sendCreation").and.callFake(() => {});
+        // tslint:disable-next-line:no-any
+        spyOn((component as any), "startGame").and.callFake(() => {});
         spyOn(component["socket"], "emitEvent").and.callFake(() => {});
         component.get3DGame();
         setTimeout(() => {

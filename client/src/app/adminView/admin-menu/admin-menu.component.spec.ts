@@ -20,6 +20,8 @@ import { GameMessagesComponent } from "src/app/gameView/game-messages/game-messa
 import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval-objects-creator.service";
 import { ShapeCreatorService } from "src/app/scene3D/geometric/shape-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { WaitingComponent } from "src/app/waiting/waiting.component";
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
@@ -37,12 +39,14 @@ describe("AdminMenuComponent", () => {
         Game3DViewComponent,
         GamecardComponent,
         GameMessagesComponent,
-        ErrorPopupComponent
+        ErrorPopupComponent,
+        WaitingComponent,
       ],
       imports: [
         AppRoutingModule,
         FormsModule,
         HttpClientModule,
+        HttpClientTestingModule,
         MatProgressSpinnerModule
       ],
       providers: [ModalService, RenderService, IndexService, MedievalObjectsCreatorService, ShapeCreatorService, SceneGeneratorService]

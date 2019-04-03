@@ -18,6 +18,7 @@ import { ErrorPopupComponent } from "../gameView/error-popup/error-popup.compone
 import { GameMessagesComponent } from "../gameView/game-messages/game-messages.component";
 import { RenderService } from "../scene3D/render.service";
 import { GamecardComponent } from "../gamecard/gamecard.component";
+import { WaitingComponent } from "../waiting/waiting.component";
 describe("FileValidatorService", () => {
 
   const LARGER_WIDTH: number = 1000;
@@ -42,7 +43,8 @@ describe("FileValidatorService", () => {
         Game3DViewComponent,
         ErrorPopupComponent,
         GameMessagesComponent,
-        GamecardComponent
+        GamecardComponent,
+        WaitingComponent,
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, FileValidatorService, Game2DViewComponent, RenderService]

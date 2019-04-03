@@ -1,5 +1,7 @@
 export class SocketsEvents {
     public static readonly UPDATE_SIMPLES_GAMES = "update-singles-games";
+    public static readonly SOCKET_CONNECTION = "connect";
+    public static readonly SOCKET_DISCONNECTION = "disconnect";
     public static readonly UPDATE_FREE_GAMES = "update-free-games";
     public static readonly CHECK_DIFFERENCE = "check-difference";
     public static readonly CHECK_DIFFERENCE_3D = "check-difference-3D";
@@ -15,4 +17,8 @@ export class SocketsEvents {
     public static readonly SCORES_UPDATED = "scores-update";
     public static readonly END_GAME = "end-game";
     public static readonly NEW_GAME_MESSAGE = "new-game";
+    public static readonly NEW_MULTIPLAYER_GAME = "new-multi-game";
+    public static readonly CANCEL_MULTIPLAYER_GAME = "cancel-multi-game";
+    public static readonly START_MULTIPLAYER_GAME = "start-multi-game";
+    public static readonly NEW_GAME_LIST_LOADED = "new-game-list-loaded";
 }
