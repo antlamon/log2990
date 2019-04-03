@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } from "@angular/core";
 import { GameService } from "../../services/game.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
 import { RenderService } from "src/app/scene3D/render.service";
 import { SocketService } from "src/app/services/socket.service";
@@ -11,6 +11,7 @@ import { CLICK, KEYS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
+import { ModalService } from "src/app/services/modal.service";
 
 @Component({
     selector: "app-game3d-view",
@@ -27,6 +28,12 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     private readonly ONE_SEC_IN_MS: number = 1000;
     private readonly NB_MAX_DIFF: number = 7;
+
+    private readonly SOLO_MODAL: string = "soloEndGame";
+    // tslint:disable-next-line: comment-format
+    // Ne pas delete
+    // private readonly MULT_WIN_MODAL: string = "multWinGame";
+    // private readonly MULT_LOST_MODAL: string = "multLostGame";
 
     @ViewChild("originalContainer")
     private originalContainerRef: ElementRef;
@@ -53,7 +60,10 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private timer: TimerService,
         private index: IndexService,
         private render: RenderService,
-        private router: Router) {
+        private modalService: ModalService,
+        // private router: Router
+        ) {
+
         this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
@@ -122,7 +132,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             gameId: this.game3D.id,
             gameType: "free",
         });
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.openEndingDialog(this.SOLO_MODAL);
     }
 
     private getId(): string {
@@ -239,5 +249,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     }
     public get blockedCursor(): string {
         return this._blockedCursor;
+    }
+
+    public openEndingDialog(id: string): void {
+        this.modalService.open(id);
     }
 }

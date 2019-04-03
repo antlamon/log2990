@@ -22,7 +22,13 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private _disableClick: string;
     private _blockedCursor: string;
     private readonly NB_MAX_DIFF: number = 7;
-    private readonly MODAL_ID: string = "endingModal";
+
+    private readonly SOLO_MODAL: string = "soloEndGame";
+    // tslint:disable-next-line: comment-format
+    // Ne pas delete
+    // private readonly MULT_WIN_MODAL: string = "multWinGame";
+    // private readonly MULT_LOST_MODAL: string = "multLostGame";
+
     private readonly ONE_SEC_IN_MS: number = 1000;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
@@ -40,7 +46,6 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private timer: TimerService,
         private ref: ChangeDetectorRef,
         private modalService: ModalService,
-        // private router: Router
     ) {
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
@@ -133,8 +138,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameId: this.simpleGame.card.id,
             gameType: "simple",
         });
-        // this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
-        this.openEndingDialog(this.MODAL_ID);
+        this.openEndingDialog(this.SOLO_MODAL);
     }
 
     public sendClick(event: MouseEvent): void {

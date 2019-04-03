@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ElementRef, Input } from '@angular/core';
 import { IModal } from 'src/app/models/modal';
 import { ModalService } from 'src/app/services/modal.service';
 import { Router } from '@angular/router';
@@ -12,9 +12,13 @@ export class EndingMessageComponent implements OnInit, OnDestroy, IModal {
 
   private element: HTMLElement;
   private modalRef: EndingMessageComponent;
-  public id: string = "endingModal";
 
-  constructor(private modalService: ModalService, private router: Router, public el: ElementRef) { 
+  @Input() public id: string;
+  @Input() public isSoloGame: boolean;
+  @Input() public isMultGame: boolean;
+  @Input() public isWin: boolean;
+
+  public constructor(private modalService: ModalService, private router: Router, public el: ElementRef) {
     this.element = el.nativeElement;
   }
 
