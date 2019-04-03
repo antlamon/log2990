@@ -16,18 +16,26 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
   public constructor (private router: Router, private socket: SocketService, private route: ActivatedRoute,
                       private index: IndexService) { }
   public ngOnInit(): void {
-        this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => {
+      this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.handleGameDeleted.bind(this));
+      this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.handleGameDeleted.bind(this));
+      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => {
           if (game.id === this.getId()) {
             this.startGame(game);
           }
         });
-        this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
+      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
           this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
         });
   }
   public ngAfterViewInit(): void {
     if (!this.index.username) {
       this.router.navigate([""]);
+    }
+  }
+  private handleGameDeleted(id: string): void {
+    if (this.getId() === id) {
+      alert("Le jeu a été supprimer. Vous allez être renvoyé à la liste des jeux");
+      this.cancel();
     }
   }
   public ngOnDestroy(): void {
@@ -51,5 +59,6 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
   private getId(): string {
     return String(this.route.snapshot.paramMap.get("id"));
   }
+
 
 }
