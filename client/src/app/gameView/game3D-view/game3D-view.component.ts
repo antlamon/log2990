@@ -174,9 +174,12 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     private addFunctions(): void {
         document.addEventListener("contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false);
         document.addEventListener("keydown", this.onKeyDown, false);
+
         this.render.addListener("mousemove", this.onMouseMove);
         this.render.addListener("mousedown", this.onMouseDown);
         this.render.addListener("mouseup", this.onMouseUp);
+
+        document.addEventListener("mouseup", () => this.press = false, false);
     }
 
     private onKeyDown = (event: KeyboardEvent) => {
