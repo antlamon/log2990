@@ -18,19 +18,15 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit(): void {
       this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.handleGameDeleted.bind(this));
       this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.handleGameDeleted.bind(this));
-      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => {
-            this.startGame(game);
-        });
-      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
-          this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
-        });
+      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => this.startGame(game));
+      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED,
+                           () => this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId()));
   }
   public ngAfterViewInit(): void {
     if (!this.index.username) {
       this.router.navigate([""]);
     }
   }
-  @HostListener("window:beforeunload")
   public ngOnDestroy(): void {
     this.socket.unsubscribeTo(SocketsEvents.NEW_GAME_LIST_LOADED);
     this.socket.unsubscribeTo(SocketsEvents.START_MULTIPLAYER_GAME);
