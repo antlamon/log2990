@@ -12,7 +12,9 @@ button {
 	cursor:pointer;
 	color:black;
 	font-family:Trebuchet MS;
-  margin-top:200px;
+  position: absolute;
+  top: 60%;
+  left: 47%;
 	font-size:20px;
 	padding:6px 20px;
 	text-decoration:none;
@@ -32,7 +34,7 @@ button:focus{
   width:200px;
   height: 200px;
   position: relative;
-  top: 35%;
+  top: 38%;
   left:48%;
   line-height: 100%;
 }
