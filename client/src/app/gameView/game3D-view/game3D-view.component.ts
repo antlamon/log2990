@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } from "@angular/core";
 import { GameService } from "../../services/game.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
 import { RenderService } from "src/app/scene3D/render.service";
 import { SocketService } from "src/app/services/socket.service";
@@ -60,6 +60,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private timer: TimerService,
         private index: IndexService,
         private render: RenderService,
+        private modalService: ModalService,
         private router: Router) {
         if (!this.index.username) {
             this.router.navigate([""]);
@@ -132,11 +133,12 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             gameId: this.game3D.id,
             gameType: "free",
         });
-    }
-    private getBack(): void {
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
         this.openEndingDialog(this.SOLO_MODAL);
     }
+    // private getBack(): void {
+    //     this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+    //     this.openEndingDialog(this.SOLO_MODAL);
+    // }
 
     private getId(): string {
         return String(this.route.snapshot.paramMap.get("id"));

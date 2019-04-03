@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { TimerService } from "src/app/services/timer.service";
 import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
@@ -46,7 +46,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private timer: TimerService,
         private ref: ChangeDetectorRef,
         private modalService: ModalService,
-    ) {
+        private router: Router) {
+
         if (!this.index.username) {
             this.router.navigate([""]);
         }
@@ -142,7 +143,6 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             gameType: "simple",
         });
         this.openEndingDialog(this.SOLO_MODAL);
-        this.getBack();
     }
     private getBack(): void {
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));

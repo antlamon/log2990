@@ -26,7 +26,7 @@ import { ErrorPopupComponent } from "./gameView/error-popup/error-popup.componen
 import { GamecardComponent } from "./gamecard/gamecard.component";
 import { MedievalObjectsCreatorService } from "./scene3D/thematic/medieval-objects-creator.service";
 import { TimerService } from "./services/timer.service";
-import { EndingMessageComponent } from './gameView/ending-message/ending-message.component';
+import { EndingMessageComponent } from "./gameView/ending-message/ending-message.component";
 import { WaitingComponent } from "./waiting/waiting.component";
 
 @NgModule({
@@ -43,7 +43,7 @@ import { WaitingComponent } from "./waiting/waiting.component";
     Game3DViewComponent,
     ErrorPopupComponent,
     GamecardComponent,
-    EndingMessageComponent
+    EndingMessageComponent,
     GamecardComponent,
     WaitingComponent,
   ],
