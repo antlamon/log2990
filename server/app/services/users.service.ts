@@ -18,7 +18,7 @@ export class UsersManager {
     public addUser(socketId: string): void {
         this.users.push(
             {
-                username: "--",
+                username: "",
                 socketId: socketId,
             });
     }
