@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
@@ -53,6 +53,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private timer: TimerService,
         private index: IndexService,
         private render: RenderService,
+        private ref: ChangeDetectorRef,
         private router: Router) {
         if (!this.index.username) {
             this.router.navigate([""]);
@@ -87,6 +88,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     }
     private handleCreateGameRoom(response: NewGameStarted): void {
         this.gameRoomId = response.gameRoomId;
+        this.ref.reattach();
         this.timer.startTimer();
     }
     private handleCheckDifference(update: Game3DRoomUpdate): void {
@@ -149,6 +151,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     public get3DGame(): void {
         this.gameService.get3DGame(this.getId())
             .then((response: IGame3D) => {
+                this.ref.detach();
                 this.game3D = response;
                 this.sendCreation();
                 this.render.initialize(this.originalContainer, this.modifiedContainer, this.game3D).then(() => {
