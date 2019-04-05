@@ -129,6 +129,7 @@ describe("GamecardComponent", () => {
       component["game"] = mockSimple;
       component["handleStartMulitplayerGamer"]("badID");
       expect(component["isJoinable"]).toEqual(initialValue);
+      // TODO : REFACTOR WHEN ANTOINE IS DONE
     });
   });
   describe("HandleCancelMultiPlayerGame function", () => {
@@ -136,6 +137,7 @@ describe("GamecardComponent", () => {
       component["game"] = mockSimple;
       component["handleCancelMulitplayerGamer"](mockSimple.id);
       expect(component["isJoinable"]).toEqual(false);
+      // TODO : REFACTOR WHEN ANTOINE IS DONE
     });
     it("isJoinable should not change if the game doesnt have the proper ID", () => {
       const initialValue: boolean = component["isJoinable"];

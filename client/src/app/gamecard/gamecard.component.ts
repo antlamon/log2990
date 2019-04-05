@@ -75,6 +75,7 @@ export class GamecardComponent implements OnInit {
   private handleStartMulitplayerGamer(gam: IGame3D|IGame|string): void {
     if (this.game.id === (gam as IGame).id) {
       this.isJoinable = false;
+      // TODO : REFACTOR WHEN ANTOINE IS DONE
     }
   }
   private handleCancelMulitplayerGamer(iD: string): void {
