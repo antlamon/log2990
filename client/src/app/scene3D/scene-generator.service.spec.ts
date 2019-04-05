@@ -102,11 +102,18 @@ describe("SceneGeneratorService", () => {
   });
   describe("Test the function createScene", async () => {
     it("The returned THREE.Scene should have the correct background color which was passed has a parameter", async () => {
+      spyOn(service["shapeService"], "generateGeometricScene").and.callFake((): Promise<THREE.Mesh>[] => {
+        return [];
+      });
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
+      expect(scene.background).toEqual(new THREE.Color(1));
+    });
+    it("The returned THREE.Scene should have the correct background color which was passed has a parameter", async () => {
       spyOn(service["modelsService"], "createMedievalScene").and.callFake(async (): Promise<THREE.Mesh[]> => {
         return [];
       });
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, differences);
-      expect(scene.background).toEqual(new THREE.Color(1));
+      expect(scene.background).toBeDefined();
     });
     it("The returned THREE.Scene should have the correct number of Mesh added in it plus two for the lights", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
