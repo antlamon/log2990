@@ -86,7 +86,7 @@ export class GamecardComponent implements OnInit {
       }
     }
   }
-  
+
   public get isSimpleGame(): boolean {
     return (this.game) && "originalImage" in this.game;
   }

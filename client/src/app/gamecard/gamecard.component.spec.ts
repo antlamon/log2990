@@ -9,6 +9,7 @@ import {} from "jasmine";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { WAITING_PATH } from "../global/constants";
+import { NewMultiplayerGame } from "../../../../common/communication/message";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -107,14 +108,22 @@ describe("GamecardComponent", () => {
   });
   describe("HandleNewMultiPlayerGame function", () => {
     it("should set isJoinable to true if the game has the proper ID", () => {
+      const newMultiplayerGame: NewMultiplayerGame = {
+        gameId: mockSimple.id,
+        gameRoomId: "1234"
+      };
       component["game"] = mockSimple;
-      component["handleNewMulitplayerGamer"](mockSimple.id);
+      component["handleNewMulitplayerGamer"](newMultiplayerGame);
       expect(component["isJoinable"]).toEqual(true);
     });
     it("isJoinable should not change if the game doesnt have the proper ID", () => {
       const initialValue: boolean = component["isJoinable"];
+      const newMultiplayerGame: NewMultiplayerGame = {
+        gameId: "badID",
+        gameRoomId: "1234"
+      };
       component["game"] = mockSimple;
-      component["handleNewMulitplayerGamer"]("badID");
+      component["handleNewMulitplayerGamer"](newMultiplayerGame);
       expect(component["isJoinable"]).toEqual(initialValue);
     });
   });

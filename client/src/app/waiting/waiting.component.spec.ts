@@ -7,6 +7,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { HttpClientModule } from "@angular/common/http";
 import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
+import { INewGameMessage } from "../../../../common/communication/message";
 
 describe("WaitingComponent", () => {
   let component: WaitingComponent;
@@ -54,28 +55,28 @@ describe("WaitingComponent", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue(mocked2DGame.id);
-      component["startGame"](mocked2DGame);
+      component["startGame"]({gameId: mocked2DGame.id, gameRoomId: "1234", is3D: false} as INewGameMessage);
       expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mocked2DGame.id]);
     });
     it("should route to game free Play with the proper iD", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue(mocked3DGame.id);
-      component["startGame"](mocked3DGame);
+      component["startGame"]({gameId: mocked3DGame.id, gameRoomId: "1234", is3D: false} as INewGameMessage);
       expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mocked3DGame.id]);
     });
     it("should NOT route to game simple Play when the iD is not the right one", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue("wrongID");
-      component["startGame"](mocked2DGame);
+      component["startGame"]({gameId: mocked2DGame.id, gameRoomId: "1234", is3D: false} as INewGameMessage);
       expect(routeSpy).toHaveBeenCalledTimes(0);
     });
     it("should NOT route to game free Play when the iD is not the right one", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue("wrongID");
-      component["startGame"](mocked3DGame);
+      component["startGame"]({gameId: mocked3DGame.id, gameRoomId: "1234", is3D: false} as INewGameMessage);
       expect(routeSpy).toHaveBeenCalledTimes(0);
     });
   });
