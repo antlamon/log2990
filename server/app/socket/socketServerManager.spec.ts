@@ -1,7 +1,7 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import * as SocketClientIO from "socket.io-client";
-import { NewScoreUpdate, ScoreUpdate } from "../../../common/communication/message";
+import { NewScoreUpdate } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { container } from "../inversify.config";
 import { Server } from "../server";
@@ -110,10 +110,7 @@ describe("Test for the socketServerManager", () => {
                 multi: [],
             },
         };
-        mockClientSocket.on(SocketsEvents.SCORES_UPDATED, (scoreUpdate: ScoreUpdate) => {
-            expect(scoreUpdate).to.eql(mockedNewScoredUpdate.scoreUpdate);
-        });
-        mockClientSocket.on(SocketsEvents.NEW_BEST_TIME, (newScoreUpdate: NewScoreUpdate) => {
+        mockClientSocket.on(SocketsEvents.SCORES_UPDATED, (newScoreUpdate: NewScoreUpdate) => {
             expect(newScoreUpdate).to.eql(mockedNewScoredUpdate);
             done();
         });

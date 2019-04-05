@@ -48,13 +48,11 @@ export class SocketServerManager {
     private initializeMultiplayerGame(socket: Socket): void {
         socket.on(SocketsEvents.NEW_MULTIPLAYER_GAME, async (gameMessage: INewGameMessage) => {
             const newMultiplayerGame: NewMultiplayerGame = this.gameRoomService.createWaitingGameRoom(gameMessage);
-            socket.join(newMultiplayerGame.gameRoomId);
             this.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, newMultiplayerGame);
         });
         socket.on(SocketsEvents.START_MULTIPLAYER_GAME, async (gameMessage: INewGameMessage) => {
             if (gameMessage.gameRoomId) {
                 this.gameRoomService.joinGameRoom(gameMessage.username, gameMessage.gameRoomId);
-                socket.join(gameMessage.gameRoomId);
                 this.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, gameMessage);
             }
         });
@@ -105,8 +103,7 @@ export class SocketServerManager {
         socket.leave(endGameMessage.gameRoomId);
         const newScoreUpdate: NewScoreUpdate = await this.gameRoomService.endGame(endGameMessage);
         if (newScoreUpdate.scoreUpdate.insertPos !== -1) {
-            this.emitEvent(SocketsEvents.SCORES_UPDATED, newScoreUpdate.scoreUpdate);
-            this.emitEvent(SocketsEvents.NEW_BEST_TIME, newScoreUpdate);
+            this.emitEvent(SocketsEvents.SCORES_UPDATED, newScoreUpdate);
         }
     }
 
