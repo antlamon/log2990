@@ -8,13 +8,13 @@ export interface Message {
 
 export interface Message3D {
     title: string;
-    body: {name: string; type: string; };
+    body: { name: string; type: string; };
 }
 
 export const ERROR_ID: string = "error";
-export const BASE_ID:string = "base";
+export const BASE_ID: string = "base";
 export const SIMPLE_GAME_TYPE: string = "simple";
-export const FREE_GAME_TYPE:string = "free";
+export const FREE_GAME_TYPE: string = "free";
 
 export interface INewGameMessage {
     gameId: string;
@@ -24,15 +24,26 @@ export interface INewGameMessage {
     gameRoomId?: string;
 }
 
-export interface NewGameMessage extends INewGameMessage{
+export interface NewGameMessage extends INewGameMessage {
     originalImage: string;
     modifiedImage: string;
     differenceImage: string;
 }
-export interface NewGame3DMessage extends INewGameMessage{
+export interface NewGame3DMessage extends INewGameMessage {
     differences: IDifference[];
 }
 
+
+export interface Gamer {
+    username: string;
+    differencesFound: number;
+    isReady: boolean;
+}
+
+export interface NewGameStarted {
+    gameRoomId: string;
+    players: Gamer[];
+}
 
 export interface Point {
     x: number;
@@ -90,4 +101,13 @@ export interface NewScoreUpdate {
     username: string;
     gameMode: string;
     gameName: string;
+}
+
+export interface NewMultiplayerGame {
+    gameId: string;
+    gameRoomId: string;
+}
+
+export interface JoinMultiplayerGame extends NewMultiplayerGame {
+    username: string;
 }

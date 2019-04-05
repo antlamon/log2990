@@ -6,7 +6,7 @@ import { RenderService } from "src/app/scene3D/render.service";
 import { SocketService } from "src/app/services/socket.service";
 import { IndexService } from "src/app/services/index.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../../../common/communication/message";
+import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage, NewGameStarted } from "../../../../../common/communication/message";
 import { CLICK, KEYS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
@@ -40,7 +40,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     private movementSpeed: number = 0.5;
     private press: boolean;
-    private roomID: string;
+    private gameRoomId: string;
     private cheatModeActivated: boolean;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
@@ -72,6 +72,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.timer.setToZero();
+        this.gameRoomId = this.getGameRoomId();
         this.get3DGame();
     }
 
@@ -81,14 +82,11 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE_3D);
         if (this.game3D) {
             this.render.stopCheatMode();
-            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.gameRoomId);
         }
     }
-    private handleCreateGameRoom(response: string | Error): void {
-        if (typeof response !== "string") {
-            alert(response);
-        }
-        this.roomID = response as string;
+    private handleCreateGameRoom(response: NewGameStarted): void {
+        this.gameRoomId = response.gameRoomId;
         this.timer.startTimer();
     }
     private handleCheckDifference(update: Game3DRoomUpdate): void {
@@ -132,6 +130,10 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
     }
 
+    private getGameRoomId(): string {
+        return this.route.snapshot.queryParamMap.get("gameRoomId");
+    }
+
     private getId(): string {
         return String(this.route.snapshot.paramMap.get("id"));
     }
@@ -163,6 +165,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             gameId: this.game3D.id,
             gameName: this.game3D.name,
             is3D: true,
+            gameRoomId: this.gameRoomId,
             differences: this.game3D.differences
         };
         this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
@@ -231,7 +234,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         const object: THREE.Object3D | null = this.render.identifyDiff(event);
         this.lastClick = event;
         const objMessage: Obj3DClickMessage = {
-            gameRoomId: this.roomID,
+            gameRoomId: this.gameRoomId,
             username: this.index.username,
             name: object ? object.name : null,
         };

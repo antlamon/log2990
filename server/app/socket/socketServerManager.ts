@@ -1,11 +1,9 @@
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
-import { EndGameMessage, Game3DRoomUpdate, GameRoomUpdate, ImageClickMessage,
-     INewGameMessage, NewScoreUpdate, Obj3DClickMessage } from "../../../common/communication/message";
+import { EndGameMessage, Game3DRoomUpdate, GameRoomUpdate, ImageClickMessage, INewGameMessage,
+     NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Obj3DClickMessage, Gamer } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
-import { IGame } from "../../../common/models/game";
-import { IGame3D } from "../../../common/models/game3D";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { UsersManager } from "../services/users.service";
 import { TYPES } from "../types";
@@ -45,11 +43,17 @@ export class SocketServerManager {
         });
     }
     private initializeMultiplayerGame(socket: Socket): void {
-        socket.on(SocketsEvents.NEW_MULTIPLAYER_GAME, (id: string) => {
-            this.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, id);
+        socket.on(SocketsEvents.NEW_MULTIPLAYER_GAME, async (gameMessage: INewGameMessage) => {
+            const newMultiplayerGame: NewMultiplayerGame = this.gameRoomService.createWaitingGameRoom(gameMessage);
+            socket.join(newMultiplayerGame.gameRoomId);
+            this.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, newMultiplayerGame);
         });
-        socket.on(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame|IGame3D) => {
-            this.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, game);
+        socket.on(SocketsEvents.START_MULTIPLAYER_GAME, async (gameMessage: INewGameMessage) => {
+            if (gameMessage.gameRoomId) {
+                this.gameRoomService.joinGameRoom(gameMessage.username, gameMessage.gameRoomId);
+                socket.join(gameMessage.gameRoomId);
+                this.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, gameMessage);
+            }
         });
         socket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
             this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, id);
@@ -63,13 +67,14 @@ export class SocketServerManager {
     }
 
     private async handleNewGameRoom(socket: Socket, newGameMessage: INewGameMessage): Promise<void> {
-
         try {
-            const roomId: string = await this.gameRoomService.createNewSoloGameRoom(newGameMessage);
-            socket.join(roomId);
-            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, roomId, roomId);
+            const newGameStarted: NewGameStarted = await this.gameRoomService.startGameRoom(newGameMessage);
+            socket.join(newGameStarted.gameRoomId);
+            if (!newGameStarted.players.some((gamer: Gamer) => !gamer.isReady)) {
+                this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, newGameStarted.gameRoomId, newGameStarted);
+            }
         } catch (rejection) {
-            this.emitRoomEvent(SocketsEvents.CREATE_GAME_ROOM, socket.id, {message: rejection.message});
+            console.error(rejection);
         }
     }
 

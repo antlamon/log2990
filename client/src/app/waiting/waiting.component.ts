@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-import { IGame3D } from "../../../../common/models/game3D";
-import { IGame } from "../../../../common/models/game";
+import { INewGameMessage } from "../../../../common/communication/message";
 
 @Component({
   selector: "app-waiting",
@@ -14,11 +13,7 @@ export class WaitingComponent implements OnInit, OnDestroy {
 
   public constructor (private router: Router, private socket: SocketService, private route: ActivatedRoute) { }
   public ngOnInit(): void {
-        this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => {
-          if (game.id === this.getId()) {
-            this.startGame(game);
-          }
-        });
+        this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.startGame.bind(this));
         this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
           this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
         });
@@ -31,16 +26,18 @@ export class WaitingComponent implements OnInit, OnDestroy {
     this.socket.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, this.getId);
     this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
   }
-  private startGame(game: IGame | IGame3D ): void {
-    if (this.isSimpleGame(game)) {
-      this.router.navigate(["simple-game/" + game.id]).catch((error: Error) => console.error(error.message));
-   } else {
-     this.router.navigate(["free-game/" + game.id]).catch((error: Error) => console.error(error.message));
-   }
+  private startGame(gameMessage: INewGameMessage ): void {
+    if (this.getId() === gameMessage.gameId) {
+      if (!gameMessage.is3D) {
+        this.router.navigate(["simple-game/" + gameMessage.gameId], {queryParams: {gameRoomId: gameMessage.gameRoomId}})
+        .catch((error: Error) => console.error(error.message));
+     } else {
+       this.router.navigate(["free-game/" + gameMessage.gameId], {queryParams: {gameRoomId: gameMessage.gameRoomId}})
+       .catch((error: Error) => console.error(error.message));
+     }
+    }
   }
-  private isSimpleGame(game: IGame | IGame3D): boolean {
-    return (game) && "originalImage" in game;
-  }
+
   private getId(): string {
     return String(this.route.snapshot.paramMap.get("id"));
   }

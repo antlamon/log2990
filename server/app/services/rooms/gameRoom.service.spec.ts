@@ -1,8 +1,8 @@
 import Axios from "axios";
 import * as chai from "chai";
 import * as spies from "chai-spies";
-import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate,
-    NewGame3DMessage, NewGameMessage, NewScoreUpdate, ScoreUpdate } from "../../../../common/communication/message";
+import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate, NewGame3DMessage,
+     NewGameMessage, NewGameStarted, NewScoreUpdate, ScoreUpdate } from "../../../../common/communication/message";
 import { ADD_TYPE } from "../../../../common/models/game3D";
 import { container } from "../../inversify.config";
 import { TYPES } from "../../types";
@@ -22,10 +22,10 @@ describe("GameRoomService", () => {
     describe("Creating new game room", () => {
         it("Should return the gameRoomId on resolve", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            service.createNewSoloGameRoom({ gameId: "test", username: "user" } as NewGameMessage)
+            service.startGameRoom({ gameId: "test", username: "user" } as NewGameMessage)
                 .then(
-                    (response: string) => {
-                        expect(response).to.equal("ok");
+                    (response: NewGameStarted) => {
+                        expect(response.gameRoomId).to.equal("ok");
                         done();
                     },
                     (error: string) => {
@@ -34,10 +34,10 @@ describe("GameRoomService", () => {
         });
         it("Should return the gameRoomId on resolve for 3D", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            service.createNewSoloGameRoom({ gameId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
+            service.startGameRoom({ gameId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
                 .then(
-                    (response: string) => {
-                        expect(response).to.equal("ok");
+                    (response: NewGameStarted) => {
+                        expect(response.gameRoomId).to.equal("ok");
                         done();
                     },
                     (error: string) => {
@@ -47,9 +47,9 @@ describe("GameRoomService", () => {
 
         it("Should return the rejection on reject", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
-            service.createNewSoloGameRoom({ gameId: "test", username: "user" } as NewGameMessage)
+            service.startGameRoom({ gameId: "test", username: "user" } as NewGameMessage)
                 .then(
-                    (error: string) => {
+                    (error: NewGameStarted) => {
                         done(error);
                     },
                     (rejection: Error) => {
@@ -59,9 +59,9 @@ describe("GameRoomService", () => {
         });
         it("Should return the rejection on reject for 3D", (done: Mocha.Done) => {
             sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
-            service.createNewSoloGameRoom({ gameId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
+            service.startGameRoom({ gameId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
                 .then(
-                    (error: string) => {
+                    (error: NewGameStarted) => {
                         done(error);
                     },
                     (rejection: Error) => {
@@ -80,7 +80,9 @@ describe("GameRoomService", () => {
             gamer: [{
                 username: "user",
                 differencesFound: 0,
+                isReady: true,
             }],
+            serviceStarted: true,
         };
         service["gameRooms"]["test3D"] = {
             game: {
@@ -90,7 +92,9 @@ describe("GameRoomService", () => {
             gamer: [{
                 username: "user",
                 differencesFound: 0,
+                isReady: true,
             }],
+            serviceStarted: true,
         };
 
         it("Should return the ok on resolve", (done: Mocha.Done) => {

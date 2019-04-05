@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChil
 import { ActivatedRoute, Router } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { TimerService } from "src/app/services/timer.service";
-import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point, NewGameStarted } from "../../../../../common/communication/message";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
@@ -56,6 +56,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.timer.setToZero();
+        this.gameRoomId = this.getGameRoomId();
         this.getSimpleGame();
     }
 
@@ -68,34 +69,34 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         }
     }
 
+    private getGameRoomId(): string {
+        return this.route.snapshot.queryParamMap.get("gameRoomId");
+    }
     private getId(): string {
         return String(this.route.snapshot.paramMap.get("id"));
     }
 
     private getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
-            .subscribe((response: IFullGame) => {
-                this.ref.detach();
-                this.simpleGame = response;
-                const newGameMessage: NewGameMessage = {
+        .subscribe((response: IFullGame) => {
+            this.ref.detach();
+            this.simpleGame = response;
+            const newGameMessage: NewGameMessage = {
                     username: this.index.username,
                     gameId: this.simpleGame.card.id,
                     gameName: this.simpleGame.card.name,
                     is3D: false,
+                    gameRoomId: this.gameRoomId,
                     originalImage: this.simpleGame.card.originalImage,
                     modifiedImage: this.simpleGame.modifiedImage,
                     differenceImage: this.simpleGame.differenceImage
                 };
-                this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
+            this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
             });
     }
 
-    private handleCreateGameRoom(response: string | Error): void {
-        console.log(response);
-        if (typeof response !== "string") {
-            alert(response);
-        }
-        this.gameRoomId = response as string;
+    private handleCreateGameRoom(response: NewGameStarted): void {
+        this.gameRoomId = response.gameRoomId;
         this.ref.reattach();
         this.timer.startTimer();
     }

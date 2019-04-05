@@ -64,7 +64,7 @@ describe("Test for the socketServerManager", () => {
             expect(gameRoomId).to.eql("123");
             done();
         });
-        sandbox.on(gameRoomService, "createNewSoloGameRoom", async () => Promise.resolve("123"));
+        sandbox.on(gameRoomService, "startGameRoom", async () => Promise.resolve("123"));
         mockClientSocket.emit(SocketsEvents.CREATE_GAME_ROOM);
     });
 
@@ -74,7 +74,7 @@ describe("Test for the socketServerManager", () => {
             expect(rejection.message).to.equal("123");
             done();
         });
-        sandbox.on(gameRoomService, "createNewSoloGameRoom", async () => Promise.reject(new Error("123")));
+        sandbox.on(gameRoomService, "startGameRoom", async () => Promise.reject(new Error("123")));
         mockClientSocket.emit(SocketsEvents.CREATE_GAME_ROOM);
     });
 
