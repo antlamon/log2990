@@ -99,10 +99,10 @@ export class RenderService {
 
   public startRenderingLoop(): void {
     this.raycaster = new THREE.Raycaster();
-    this.setDiffObjs();
+    this.setCollidableObjs();
     this.render();
   }
-  private setDiffObjs(): void {
+  private setCollidableObjs(): void {
     this.collidableObjs = this.sceneModif.children;
 
     for (const diff of this.differences) {
