@@ -26,19 +26,9 @@ export class GamecardComponent implements OnInit {
     this.isJoinable = false;
    }
   public ngOnInit(): void {
-    this.socket.addEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, (gameID: string ) => {
-      this.handleNewMulitplayerGamer(gameID);
-    });
-    this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (gam: IGame3D|IGame|string) => {
-      if (this.game.id === (gam as IGame).id) {
-        this.isJoinable = false;
-      }
-    });
-    this.socket.addEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
-      if (this.game.id === id) {
-        this.isJoinable = false;
-      }
-    });
+    this.socket.addEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.handleNewMulitplayerGamer.bind(this));
+    this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.handleStartMulitplayerGamer.bind(this));
+    this.socket.addEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, this.handleCancelMulitplayerGamer.bind(this));
    }
 
   public playSelectedGame(): void {
@@ -80,6 +70,16 @@ export class GamecardComponent implements OnInit {
   private handleNewMulitplayerGamer(iD: string): void {
     if (this.game.id === iD) {
       this.isJoinable = true;
+    }
+  }
+  private handleStartMulitplayerGamer(gam: IGame3D|IGame|string): void {
+    if (this.game.id === (gam as IGame).id) {
+      this.isJoinable = false;
+    }
+  }
+  private handleCancelMulitplayerGamer(iD: string): void {
+    if (this.game.id === iD) {
+      this.isJoinable = false;
     }
   }
 
