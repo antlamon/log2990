@@ -79,4 +79,27 @@ describe("WaitingComponent", () => {
       expect(routeSpy).toHaveBeenCalledTimes(0);
     });
   });
+  describe("Cancel function", () => {
+    it("should route back to the game list when called", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component.cancel();
+      expect(routeSpy).toHaveBeenCalledWith(["games"]);
+    });
+  });
+  describe("HandleGameDeleted function", () => {
+    it("should route back to the games list ONLY if it has the correct ID", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      // tslint:disable-next-line:no-any
+      spyOn<any>(component, "getId").and.returnValue("goodId");
+      component["handleGameDeleted"]("goodId");
+      expect(routeSpy).toHaveBeenCalledWith(["games"]);
+    });
+    it("should NOT route back to the games list if it DOES NOT have the correct ID", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      // tslint:disable-next-line:no-any
+      spyOn<any>(component, "getId").and.returnValue("goodId");
+      component["handleGameDeleted"]("wrongID");
+      expect(routeSpy).toHaveBeenCalledTimes(0);
+    });
+  });
 });
