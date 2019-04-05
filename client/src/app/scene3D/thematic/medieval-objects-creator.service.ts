@@ -8,22 +8,16 @@ import { Object3D } from "three";
 @Injectable()
 export class MedievalObjectsCreatorService {
 
+  private readonly SKY_BOX_HEIGHT: number = 200;
+  private readonly SKY_BOX_WIDTH: number = 200;
+  private readonly SKY_BOX_DEPTH: number = 450;
+  private readonly ASSETS: string = "../../assets/";
+  private readonly GLTF_EXTENSION: string = ".gltf";
+
   private castleWorld: IObjet3D;
-  private readonly NB_FACES_SKYBOX: number = 6;
 
   private modelsLoader: GLTFLoader = new GLTFLoader();
   private  loadedModels: Map<string, THREE.Object3D>;
-
-  private skyBoxLoader: THREE.TextureLoader = new THREE.TextureLoader();
-  private readonly SKY_BOX_SIZE: number = 600;
-  private readonly SKY_BOX_URLS: string[] = [
-    "assets/clouds/right.png",
-    "assets/clouds/left.png",
-    "assets/clouds/top.png",
-    "assets/clouds/bottom.png",
-    "assets/clouds/back.png",
-    "assets/clouds/front.png",
-  ];
 
   public constructor() {
     this.loadedModels = new Map();
@@ -44,8 +38,13 @@ export class MedievalObjectsCreatorService {
     objectsTHREE.push(await this.createSkyBox());
 
     tempSceneChildren = await this.createObjectsFromScene(this.castleWorld, false);
+    let i: number = 1000;
     tempSceneChildren.forEach( (obj: THREE.Mesh) => {
-      objectsTHREE.push(obj);
+      obj.name = i.toString();
+      ++i;
+      if (obj.name !== "1005") {
+        objectsTHREE.push(obj);
+      }
     });
     for (const obj of objects) {
       toReload = uniqueObject.findIndex((diff: IDifference) => diff.name === obj.name) !== -1;
@@ -59,7 +58,7 @@ export class MedievalObjectsCreatorService {
 
     return new Promise<THREE.Mesh>((resolve) => {
       if (toReload || !this.loadedModels.get(object.type)) {
-      this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
+      this.modelsLoader.load(this.ASSETS + object.type + "/" + object.type + this.GLTF_EXTENSION,
                              (gltf) => {
           if (!toReload) {
             this.loadedModels.set(object.type, gltf.scene);
@@ -87,23 +86,16 @@ export class MedievalObjectsCreatorService {
     });
   }
   private async createSkyBox(): Promise<THREE.Mesh> {
+
     return new Promise<THREE.Mesh>((resolve) => {
-      this.skyBoxLoader = new THREE.TextureLoader();
-      const materialArray: THREE.MeshBasicMaterial[] = [];
-      for (let i: number = 0; i < this.NB_FACES_SKYBOX; i++) {
-        materialArray[i] = new THREE.MeshBasicMaterial({
-          map: this.skyBoxLoader.load(this.SKY_BOX_URLS[i], () => {
-            if (i === this.NB_FACES_SKYBOX - 1) { // loading is now done for the whole box
-              const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.SKY_BOX_SIZE, this.SKY_BOX_SIZE, this.SKY_BOX_SIZE);
-              const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
-              skyBox.name = "sky";
-              resolve(skyBox);
-            }
-          }),
-          side: THREE.BackSide
-        });
+      const materialArray: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({side: THREE.BackSide});
+      materialArray.visible = false;
+      const skyGeometry: THREE.Geometry = new THREE.BoxGeometry(this.SKY_BOX_WIDTH, this.SKY_BOX_HEIGHT, this.SKY_BOX_DEPTH);
+      const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
+      skyBox.name = "sky";
+      resolve(skyBox);
       }
-    });
+    );
   }
 
   private setPositionParameters(object: THREE.Object3D, parameters: IObjet3D): THREE.Mesh {

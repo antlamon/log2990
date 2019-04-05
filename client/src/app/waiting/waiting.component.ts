@@ -18,9 +18,8 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit(): void {
       this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.handleGameDeleted.bind(this));
       this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.handleGameDeleted.bind(this));
-      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => this.startGame(game));
-      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED,
-                           () => this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId()));
+      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.startGame.bind(this));
+      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, this.emitEventToNewPlayer.bind(this));
   }
   public ngAfterViewInit(): void {
     if (!this.index.username) {
@@ -40,6 +39,9 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
       alert("Le jeu a été supprimer. Vous allez être renvoyé à la liste des jeux");
       this.cancel();
     }
+  }
+  private emitEventToNewPlayer(): void {
+    this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
   }
   private startGame(game: IGame | IGame3D ): void {
     if (game.id === this.getId()) {

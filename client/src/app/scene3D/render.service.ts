@@ -101,17 +101,17 @@ export class RenderService {
 
   public startRenderingLoop(): void {
     this.raycaster = new THREE.Raycaster();
-    this.setDiffObjs();
+    this.setCollidableObjs();
     this.render();
   }
-  private setDiffObjs(): void {
+  private setCollidableObjs(): void {
     this.collidableObjs = this.sceneModif.children;
     this.boxObjs = [];
     this.sceneModif.children.forEach((obj: THREE.Object3D) => {
+      console.log(obj);
+      console.log(new THREE.Box3().setFromObject(obj));
       if (obj.name !== "sky") {
-      this.boxObjs.push( new THREE.Box3().setFromObject(obj));
-      } else {
-
+        this.boxObjs.push( new THREE.Box3().setFromObject(obj));
       }
     });
 
@@ -165,6 +165,7 @@ export class RenderService {
     }
   }
   public moveCam(axis: number, mouvement: number): void {
+    console.log(this.camera.position);
     switch (axis) {
       case AXIS.X: this.camera.translateX(mouvement);
                    if (this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
