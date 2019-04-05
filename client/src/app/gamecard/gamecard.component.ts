@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../../common/communication/message";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-
+import {SIMPLE_GAME_PATH, FREE_GAME_PATH, WAITING_PATH} from "../../app/global/constants";
 @Component({
   selector: "app-gamecard",
   templateUrl: "./gamecard.component.html",
@@ -43,14 +43,14 @@ export class GamecardComponent implements OnInit {
 
   public playSelectedGame(): void {
     if (this.isSimpleGame) {
-       this.router.navigate(["simple-game/" + this.game.id]).catch((error: Error) => console.error(error.message));
+       this.router.navigate([SIMPLE_GAME_PATH + this.game.id]).catch((error: Error) => console.error(error.message));
     } else {
-      this.router.navigate(["free-game/" + this.game.id]).catch((error: Error) => console.error(error.message));
+      this.router.navigate([FREE_GAME_PATH + this.game.id]).catch((error: Error) => console.error(error.message));
     }
   }
   public createMultiGame(): void {
     this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.game.id);
-    this.router.navigate(["waiting/" + this.game.id]).catch((error: Error) => console.error(error.message));
+    this.router.navigate([WAITING_PATH + this.game.id]).catch((error: Error) => console.error(error.message));
   }
   public joinMultiGame(): void {
     this.socket.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.game);

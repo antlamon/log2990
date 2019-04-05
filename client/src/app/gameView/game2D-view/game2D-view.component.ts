@@ -8,6 +8,7 @@ import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
+import {GAMES_LIST_PATH} from "../../../app/global/constants";
 
 @Component({
     selector: "app-game2d-view",
@@ -137,7 +138,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.getBack();
     }
     private getBack(): void {
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
     }
 
     public sendClick(event: MouseEvent): void {

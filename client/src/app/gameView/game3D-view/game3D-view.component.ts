@@ -11,7 +11,7 @@ import { CLICK, KEYS, AXIS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
-
+import {GAMES_LIST_PATH} from "../../../app/global/constants";
 @Component({
     selector: "app-game3d-view",
     templateUrl: "./game3D-view.component.html",
@@ -128,7 +128,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.getBack();
     }
     private getBack(): void {
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
     }
 
     private getId(): string {
