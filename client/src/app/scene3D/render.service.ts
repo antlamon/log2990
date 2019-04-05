@@ -9,7 +9,7 @@ export class RenderService {
   private readonly FLASH_TIME: number = 150;
   private readonly GAMMA_FACTOR: number = 2.2;
   private readonly SENSITIVITY: number = 0.002;
-  private readonly COLLISION_DISTANCE: number = 4;
+  //private readonly COLLISION_DISTANCE: number = 4;
   private readonly FIELD_OF_VIEW: number = 75;
   private readonly NEAR_CLIPPING_PLANE: number = 1;
   private readonly FAR_CLIPPING_PLANE: number = 3000;
@@ -29,6 +29,8 @@ export class RenderService {
   private sceneModif: THREE.Scene;
 
   private collidableObjs: THREE.Object3D[];
+  private boxObjs: THREE.Box3[];
+  //private outerObjs: THREE.Box3[];
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
@@ -104,10 +106,19 @@ export class RenderService {
   }
   private setDiffObjs(): void {
     this.collidableObjs = this.sceneModif.children;
+    this.boxObjs = [];
+    this.sceneModif.children.forEach((obj: THREE.Object3D) => {
+      if (obj.name !== "sky" && obj.name !== "castle") {
+      this.boxObjs.push( new THREE.Box3().setFromObject(obj));
+      } else {
+
+      }
+    });
 
     for (const diff of this.differences) {
       if (diff.type === DELETE_TYPE) {
         this.collidableObjs.push(this.getObject(this.sceneOriginal, diff.name));
+        this.boxObjs.push( new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name)));
       }
     }
 
@@ -155,27 +166,37 @@ export class RenderService {
   }
   public moveCam(axis: number, mouvement: number): void {
     switch (axis) {
-      case AXIS.X:  if (!this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
-                  this.camera.translateX(mouvement);
+      case AXIS.X: this.camera.translateX(mouvement);
+                   if (this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
+                      this.camera.translateX(-mouvement);
                   }
-                    break;
-      case AXIS.Z: if (!this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
-                  this.camera.translateZ(mouvement);
+                   break;
+      case AXIS.Z: this.camera.translateZ(mouvement);
+                   if (this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
+                  this.camera.translateZ(-mouvement);
                 }
                    break;
       default: break;
     }
   }
   private detectCollision(direction: THREE.Vector3): boolean {
-    const pos: THREE.Vector3 = this.camera.position.clone();
+    const t: THREE.Vector3 = this.camera.position.clone().add(direction);
+    const sphere: THREE.Sphere = new THREE.Sphere(t, 0.5);
     direction.applyQuaternion(this.camera.quaternion);
+    const pos: THREE.Vector3 = this.camera.position.clone();
     if ( this.isThematic && pos.y + direction.y < 1) {
       return true;
     }
-    this.raycaster.set(pos, direction.normalize());
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects(this.collidableObjs, true);
+    let coll: boolean = false;
 
-    return intersects.length > 0 && intersects[0].distance < this.COLLISION_DISTANCE;
+    for (const box of this.boxObjs) {
+      if(box.intersectsSphere(sphere)) {
+        coll = true;
+        break;
+      }
+    }
+
+    return coll;
   }
 
   public identifyDiff(event: MouseEvent): THREE.Object3D {

@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { IObjet3D } from "../../../../../common/models/objet3D";
 import GLTFLoader from "three-gltf-loader";
 import { IDifference } from "../../../../../common/models/game3D";
+import { Object3D } from "three";
 
 @Injectable()
 export class MedievalObjectsCreatorService {
@@ -39,10 +40,13 @@ export class MedievalObjectsCreatorService {
 
     const objectsTHREE: THREE.Mesh[] = [];
     let toReload: boolean = false;
-
+    let tempSceneChildren: THREE.Mesh [] = [];
     objectsTHREE.push(await this.createSkyBox());
-    objectsTHREE.push(await this.createObject(this.castleWorld, false));
 
+    tempSceneChildren = await this.createObjectsFromScene(this.castleWorld, false);
+    tempSceneChildren.forEach( (obj: THREE.Mesh) => {
+      objectsTHREE.push(obj);
+    });
     for (const obj of objects) {
       toReload = uniqueObject.findIndex((diff: IDifference) => diff.name === obj.name) !== -1;
       objectsTHREE.push(await this.createObject(obj, toReload));
@@ -68,6 +72,20 @@ export class MedievalObjectsCreatorService {
       }
     });
   }
+  private async createObjectsFromScene(object: IObjet3D, toReload: boolean): Promise<THREE.Mesh[]> {
+    return new Promise<THREE.Mesh[]>((resolve) => {
+      if (toReload || !this.loadedModels.get(object.type)) {
+      this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
+                             (gltf) => {
+        this.setPositionParameters(gltf.scene.clone(), object);
+        const childs: Object3D[] = gltf.scene.children;
+        resolve(childs as THREE.Mesh[]);
+      });
+    } else {
+      resolve(this.loadedModels.get(object.type).clone().children as THREE.Mesh[]);
+    }
+    });
+  }
   private async createSkyBox(): Promise<THREE.Mesh> {
     return new Promise<THREE.Mesh>((resolve) => {
       this.skyBoxLoader = new THREE.TextureLoader();
@@ -78,6 +96,7 @@ export class MedievalObjectsCreatorService {
             if (i === this.NB_FACES_SKYBOX - 1) { // loading is now done for the whole box
               const skyGeometry: THREE.BoxGeometry = new THREE.BoxGeometry(this.SKY_BOX_SIZE, this.SKY_BOX_SIZE, this.SKY_BOX_SIZE);
               const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
+              skyBox.name = "sky";
               resolve(skyBox);
             }
           }),
