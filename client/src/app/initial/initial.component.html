@@ -1,12 +1,12 @@
 <div class="main-container">
   <div class="flex-items"><img src="assets/Logo.png" class="logo" alt="Logo missing"></div>
   <div class="flex-items">
-   <label>Name:
-     <input [(ngModel)]="username" placeholder=" Enter Name" title="Your name must be between 3 and 10 letters and contain only alphanumericals"/>
+   <label>Nom:
+     <input [(ngModel)]="username" placeholder="Entrez votre nom" title="Your name must be between 3 and 10 letters and contain only alphanumericals"/>
    </label>
     <div class="flex-items">
-      <div class="connect-button" (click)="connect(username)"*ngIf="username">Connect</div>
-      <div class="disable-button" *ngIf="!(username)">Connect</div>
+      <div class="connect-button" (click)="connect(username)"*ngIf="username">Se connecter</div>
+      <div class="disable-button" *ngIf="!(username)">Se connecter</div>
     </div>
     <div *ngFor="let error of errors">
       <div class ="error-box">{{error}}</div>

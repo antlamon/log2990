@@ -19,7 +19,7 @@ export class SocketServerManager {
 
     public initializeSocket(server: Server): void {
         this.socketServer = SocketIO(server);
-        this.socketServer.on("connect", (socket: Socket) => {
+        this.socketServer.on(SocketsEvents.SOCKET_CONNECTION, (socket: Socket) => {
             this.userManager.addUser(socket.client.id);
             socket.on(SocketsEvents.CREATE_GAME_ROOM, async (newGameMessage: INewGameMessage) => {
                 await this.handleNewGameRoom(socket, newGameMessage);
@@ -35,9 +35,12 @@ export class SocketServerManager {
             socket.on(SocketsEvents.END_GAME, async (endGameMessage: EndGameMessage) => {
                 await this.handleEndGame(socket, endGameMessage);
             });
-            socket.on("disconnect", () => {
-                this.emitEvent(SocketsEvents.USER_CONNECTION, this.userManager.getUsername(socket.client.id), "userDisconnected");
+            socket.on(SocketsEvents.SOCKET_DISCONNECTION, () => {
+                const userName: string = this.userManager.getUsername(socket.client.id);
                 this.userManager.removeUser(socket.client.id);
+                if (userName) {
+                    this.emitEvent(SocketsEvents.USER_CONNECTION, userName, "userDisconnected");
+                }
             });
             this.initializeMultiplayerGame(socket);
         });

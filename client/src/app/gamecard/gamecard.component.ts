@@ -1,12 +1,13 @@
 import { Component, Input, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { FREE_GAME_TYPE, INewGameMessage, NewMultiplayerGame, SIMPLE_GAME_TYPE } from "../../../../common/communication/message";
+import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { IGame } from "../../../../common/models/game";
 import { IGame3D } from "../../../../common/models/game3D";
+import { FREE_GAME_PATH, SIMPLE_GAME_PATH, WAITING_PATH } from "../../app/global/constants";
 import { GameService } from "../services/game.service";
-import { Router } from "@angular/router";
-import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE, NewMultiplayerGame, INewGameMessage} from "../../../../common/communication/message";
-import { SocketService } from "../services/socket.service";
-import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { IndexService } from "../services/index.service";
+import { SocketService } from "../services/socket.service";
 
 @Component({
   selector: "app-gamecard",
@@ -29,6 +30,7 @@ export class GamecardComponent implements OnInit {
     this.game = {solo: [], multi: [], name: "", id: "", originalImage: ""};
     this.isJoinable = false;
    }
+
   public ngOnInit(): void {
     this.socket.addEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.handleNewMulitplayerGamer.bind(this));
     this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.resetJoinableGame.bind(this));
@@ -37,13 +39,14 @@ export class GamecardComponent implements OnInit {
 
   public playSelectedGame(): void {
     if (this.isSimpleGame) {
-       this.router.navigate(["simple-game/" + this.game.id], {queryParams: {gameRoomId: this.joinableGameRoomId}})
+       this.router.navigate([SIMPLE_GAME_PATH + this.game.id], {queryParams: {gameRoomId: this.joinableGameRoomId}})
        .catch((error: Error) => console.error(error.message));
     } else {
-      this.router.navigate(["free-game/" + this.game.id], {queryParams: {gameRoomId: this.joinableGameRoomId}})
+      this.router.navigate([FREE_GAME_PATH + this.game.id], {queryParams: {gameRoomId: this.joinableGameRoomId}})
       .catch((error: Error) => console.error(error.message));
     }
   }
+
   public createMultiGame(): void {
     this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, {
       gameId: this.game.id,
@@ -51,8 +54,9 @@ export class GamecardComponent implements OnInit {
       is3D: !this.isSimpleGame,
       username: this.indexService.username,
     });
-    this.router.navigate(["waiting/" + this.game.id]).catch((error: Error) => console.error(error.message));
+    this.router.navigate([WAITING_PATH + this.game.id]).catch((error: Error) => console.error(error.message));
   }
+
   public joinMultiGame(): void {
     this.socket.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, {
       gameId: this.game.id,
@@ -62,6 +66,7 @@ export class GamecardComponent implements OnInit {
     });
     this.playSelectedGame();
   }
+
   public deleteGame(): void {
     if (this.game) {
       if (confirm("Voulez vous supprimer le jeu " + this.game.name + " ?")) {
@@ -73,6 +78,7 @@ export class GamecardComponent implements OnInit {
       }
     }
   }
+
   public reinitGame(): void {
     if (this.game) {
       if (confirm("Voulez vous reinitialiser le score du jeu " + this.game.name + " ?")) {
@@ -80,6 +86,7 @@ export class GamecardComponent implements OnInit {
       }
     }
   }
+  
   public get isSimpleGame(): boolean {
     return (this.game) && "originalImage" in this.game;
   }

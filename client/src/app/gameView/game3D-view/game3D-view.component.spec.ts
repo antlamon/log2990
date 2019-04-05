@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from "@angular/material";
 import { IScore } from "../../../../../common/models/top3";
 import { IndexService } from "src/app/services/index.service";
 import { SocketService } from "src/app/services/socket.service";
-import { KEYS } from "src/app/global/constants";
+import { KEYS, AXIS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval-objects-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
@@ -87,7 +87,7 @@ describe("Game3DViewComponent", () => {
                 get : (): number =>  KEYS["W"]
             });
             component["onKeyDown"](keyEvent);
-            expect(spy).toHaveBeenCalledWith("Z", -component["movementSpeed"]);
+            expect(spy).toHaveBeenCalledWith(AXIS.Z, -component["movementSpeed"]);
         });
         it("The key S should call the function this.render.moveCam with the parameters z and this.movementSpeed", () => {
             const spy: jasmine.Spy = spyOn(component["render"], "moveCam").and.callFake(() => {});
@@ -96,7 +96,7 @@ describe("Game3DViewComponent", () => {
                 get : (): number =>  KEYS["S"]
             });
             component["onKeyDown"](keyEvent);
-            expect(spy).toHaveBeenCalledWith("Z", component["movementSpeed"]);
+            expect(spy).toHaveBeenCalledWith(AXIS.Z, component["movementSpeed"]);
         });
         it("The key D should call the function this.render.moveCam with the parameters X and -this.movementSpeed", () => {
             const spy: jasmine.Spy = spyOn(component["render"], "moveCam").and.callFake(() => {});
@@ -105,7 +105,7 @@ describe("Game3DViewComponent", () => {
                 get : (): number =>  KEYS["D"]
             });
             component["onKeyDown"](keyEvent);
-            expect(spy).toHaveBeenCalledWith("X", component["movementSpeed"]);
+            expect(spy).toHaveBeenCalledWith(AXIS.X, component["movementSpeed"]);
         });
         it("The key A should call the function this.render.moveCam with the parameters X and this.movementSpeed", () => {
             const spy: jasmine.Spy = spyOn(component["render"], "moveCam").and.callFake(() => {});
@@ -114,7 +114,7 @@ describe("Game3DViewComponent", () => {
                 get : (): number =>  KEYS["A"]
             });
             component["onKeyDown"](keyEvent);
-            expect(spy).toHaveBeenCalledWith("X", -component["movementSpeed"]);
+            expect(spy).toHaveBeenCalledWith(AXIS.X, -component["movementSpeed"]);
         });
         it("The key T should call the function startCheat mode the first time and stopCheatMode the second time", () => {
             const spyStart: jasmine.Spy = spyOn(component["render"], "startCheatMode").and.callFake(() => {});
@@ -153,8 +153,8 @@ describe("Game3DViewComponent", () => {
             const mouseEventDrag: MouseEvent = new MouseEvent("mousemove");
             component["onMouseDown"](mouseEventClick);
             component["onMouseMove"](mouseEventDrag);
-            expect(spy).toHaveBeenCalledWith("X", mouseEventDrag.movementY);
-            expect(spy).toHaveBeenCalledWith("Y", mouseEventDrag.movementX);
+            expect(spy).toHaveBeenCalledWith(AXIS.X, mouseEventDrag.movementY);
+            expect(spy).toHaveBeenCalledWith(AXIS.Y, mouseEventDrag.movementX);
         });
     });
     describe("Test for the function handle check differences", () => {

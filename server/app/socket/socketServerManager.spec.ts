@@ -32,6 +32,7 @@ describe("Test for the socketServerManager", () => {
         nbUser = testManager["userManager"]["users"].length;
         mockClientSocket = SocketClientIO.connect(SERVER_URL);
         mockClientSocket.on("connect", () => {
+            testManager["userManager"].setUserName("mock", mockClientSocket.id);
             done();
         });
     });

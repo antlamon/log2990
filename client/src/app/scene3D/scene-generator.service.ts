@@ -10,8 +10,12 @@ import { WHITE } from "../global/constants";
   providedIn: "root"
 })
 export class SceneGeneratorService {
-  private skyLight: number = 0xF5F5F5;
-  private groundLight: number = 0xF5F5F5;
+  private readonly ASSETS: string = "assets/";
+  private readonly SKYBOX_PATH: string = this.ASSETS + "/sky/";
+  private readonly SKYBOX_FILES: string[] = ["posx.png", "negx.png", "posy.png", "negy.png", "posz.png", "negz.png"];
+
+  private readonly SKY_LIGHT: number = 0xF5F5F5;
+  private readonly GROUND_LIGHT: number = 0xF5F5F5;
   private isThematic: boolean;
   private textureLoader: THREE.TextureLoader;
 
@@ -22,9 +26,9 @@ export class SceneGeneratorService {
 
   public async createScene(objects: IObjet3D[], color: number, isThematic: boolean, diff: IDifference[]): Promise<THREE.Scene> {
     const scene: THREE.Scene = new THREE.Scene();
-    scene.background = new THREE.Color(color);
     this.isThematic = isThematic;
-    scene.add( new THREE.HemisphereLight( this.skyLight, this.groundLight ) );
+    scene.background = this.isThematic ? this.createSkyBox() : new THREE.Color(color);
+    scene.add( new THREE.HemisphereLight( this.SKY_LIGHT, this.GROUND_LIGHT ) );
     const light: THREE.DirectionalLight = new THREE.DirectionalLight( WHITE );
     light.position.set( 0, 0, 1 );
     scene.add(light);
@@ -45,7 +49,12 @@ export class SceneGeneratorService {
         return scene;
       });
     }
+  }
+  private createSkyBox(): THREE.CubeTexture {
+    const loader: THREE.CubeTextureLoader = new THREE.CubeTextureLoader();
+    loader.setPath(this.SKYBOX_PATH);
 
+    return loader.load(this.SKYBOX_FILES);
   }
   public modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): THREE.Scene {
     for (const diff of diffObjs) {
@@ -76,7 +85,7 @@ export class SceneGeneratorService {
     const object: THREE.Mesh = this.isThematic ?
       await this.modelsService.createObject(diffObj.object, true) :
       await this.shapeService.createShape(diffObj.object);
-    scene.add(object);
+    await scene.add(object);
   }
 
   private async modifyObject(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
@@ -88,7 +97,7 @@ export class SceneGeneratorService {
       newMesh.traverse((child) => {
         if ( child instanceof THREE.Mesh ) {
            const tex: THREE.Texture = this.textureLoader.load
-           ("assets/" + diffObj.object.type + "/" + diffObj.object.texture, () => {
+           (this.ASSETS + diffObj.object.type + "/" + diffObj.object.texture, () => {
              tex.flipY = false;
              (child.material as THREE.MeshStandardMaterial).map = tex;
              tex.needsUpdate = true;

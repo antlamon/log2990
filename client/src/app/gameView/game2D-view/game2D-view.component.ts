@@ -8,6 +8,7 @@ import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
+import {GAMES_LIST_PATH, INITIAL_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH} from "../../../app/global/constants";
 
 @Component({
     selector: "app-game2d-view",
@@ -42,16 +43,16 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         private router: Router
     ) {
         if (!this.index.username) {
-            this.router.navigate([""]);
+            this.router.navigate([INITIAL_PATH]);
         }
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
         this.differencesFound = 0;
         this._disableClick = "";
         this._blockedCursor = "";
-        this.correctSound = new Audio("assets/correct.wav");
-        this.errorSound = new Audio("assets/error.wav");
-        this.victorySound = new Audio("assets/Ta-Da.wav");
+        this.correctSound = new Audio(CORRECT_SOUND_PATH);
+        this.errorSound = new Audio(ERROR_SOUND_PATH);
+        this.victorySound = new Audio(VICTORY_SOUND_PATH);
     }
 
     public ngOnInit(): void {
@@ -142,7 +143,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.getBack();
     }
     private getBack(): void {
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
     }
 
     public sendClick(event: MouseEvent): void {

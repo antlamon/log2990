@@ -6,14 +6,14 @@ import {InitialComponent} from "./initial/initial.component";
 import { Game2DViewComponent } from "./gameView/game2D-view/game2D-view.component";
 import { Game3DViewComponent } from "./gameView/game3D-view/game3D-view.component";
 import { WaitingComponent } from "./waiting/waiting.component";
-
+import {GAMES_LIST_PATH, INITIAL_PATH, SIMPLE_GAME_PATH, FREE_GAME_PATH, ADMIN_PATH, WAITING_PATH} from "../app/global/constants";
 const routes: Routes = [
-  { path: "admin", component: AdminMenuComponent },
-  { path: "games", component: ListViewComponent },
-  { path: "", component: InitialComponent },
-  { path: "simple-game/:id", component: Game2DViewComponent },
-  { path: "free-game/:id", component: Game3DViewComponent },
-  { path: "waiting/:id", component: WaitingComponent },
+  { path: ADMIN_PATH, component: AdminMenuComponent },
+  { path: GAMES_LIST_PATH, component: ListViewComponent },
+  { path: INITIAL_PATH, component: InitialComponent },
+  { path: SIMPLE_GAME_PATH + ":id", component: Game2DViewComponent },
+  { path: FREE_GAME_PATH + ":id", component: Game3DViewComponent },
+  { path: WAITING_PATH + ":id", component: WaitingComponent },
 
 ];
 
