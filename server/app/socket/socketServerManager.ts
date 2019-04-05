@@ -39,6 +39,8 @@ export class SocketServerManager {
             });
             socket.on(SocketsEvents.SOCKET_DISCONNECTION, () => {
                 const userName: string = this.userManager.getUsername(socket.client.id);
+                console.log(userName);
+                console.log(socket.client.id);
                 if (userName) {
                     this.emitEvent(SocketsEvents.USER_CONNECTION, userName, "userDisconnected");
                     this.userManager.removeUser(socket.client.id);
