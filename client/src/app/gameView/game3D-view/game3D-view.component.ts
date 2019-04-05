@@ -77,6 +77,10 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
+        document.removeEventListener("contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false);
+        document.removeEventListener("keydown", this.onKeyDown, false);
+        document.removeEventListener("mouseup", () => this.press = false, false);
+
         this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE_3D);
         if (this.game3D) {
