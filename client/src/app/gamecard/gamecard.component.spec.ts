@@ -8,6 +8,7 @@ import { IGame3D } from "../../../../common/models/game3D";
 import {} from "jasmine";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { WAITING_PATH } from "../global/constants";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -81,6 +82,27 @@ describe("GamecardComponent", () => {
       component["game"] = mockSimple;
       component.reinitGame();
       expect(gameServiceSpy).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe("CreateMultiGame function", () => {
+    it("should route to the waiting view with the gameID when called", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component.createMultiGame();
+      expect(routeSpy).toHaveBeenCalledWith([WAITING_PATH + component["game"].id]);
+    });
+  });
+  describe("joinMultiGame function", () => {
+    it("should route to game simple Play with the proper iD", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component["game"] = mockSimple;
+      component.joinMultiGame();
+      expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id]);
+    });
+    it("should route to game free Play with the proper iD", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component["game"] = mockGame3D;
+      component.joinMultiGame();
+      expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id]);
     });
   });
 });
