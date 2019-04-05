@@ -105,4 +105,43 @@ describe("GamecardComponent", () => {
       expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id]);
     });
   });
+  describe("HandleNewMultiPlayerGame function", () => {
+    it("should set isJoinable to true if the game has the proper ID", () => {
+      component["game"] = mockSimple;
+      component["handleNewMulitplayerGamer"](mockSimple.id);
+      expect(component["isJoinable"]).toEqual(true);
+    });
+    it("isJoinable should not change if the game doesnt have the proper ID", () => {
+      const initialValue: boolean = component["isJoinable"];
+      component["game"] = mockSimple;
+      component["handleNewMulitplayerGamer"]("badID");
+      expect(component["isJoinable"]).toEqual(initialValue);
+    });
+  });
+  describe("HandleStartMultiPlayerGame function", () => {
+    it("should set isJoinable to false if the game has the proper ID", () => {
+      component["game"] = mockSimple;
+      component["handleStartMulitplayerGamer"](mockSimple.id);
+      expect(component["isJoinable"]).toEqual(false);
+    });
+    it("isJoinable should not change if the game doesnt have the proper ID", () => {
+      const initialValue: boolean = component["isJoinable"];
+      component["game"] = mockSimple;
+      component["handleStartMulitplayerGamer"]("badID");
+      expect(component["isJoinable"]).toEqual(initialValue);
+    });
+  });
+  describe("HandleCancelMultiPlayerGame function", () => {
+    it("should set isJoinable to false if the game has the proper ID", () => {
+      component["game"] = mockSimple;
+      component["handleCancelMulitplayerGamer"](mockSimple.id);
+      expect(component["isJoinable"]).toEqual(false);
+    });
+    it("isJoinable should not change if the game doesnt have the proper ID", () => {
+      const initialValue: boolean = component["isJoinable"];
+      component["game"] = mockSimple;
+      component["handleCancelMulitplayerGamer"]("badID");
+      expect(component["isJoinable"]).toEqual(initialValue);
+    });
+  });
 });
