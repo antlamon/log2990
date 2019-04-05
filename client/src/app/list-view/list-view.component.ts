@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { IndexService } from "../services/index.service";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
+import { INITIAL_PATH } from "../global/constants";
 @Component({
   selector: "app-list-view",
   templateUrl: "./list-view.component.html",
@@ -34,7 +35,7 @@ export class ListViewComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     if (!this.isAdminMode) {
       if (!this.index.username) {
-        this.router.navigate([""]);
+        this.router.navigate([INITIAL_PATH]);
       }
     }
   }
