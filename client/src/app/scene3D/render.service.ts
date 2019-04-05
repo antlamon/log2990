@@ -108,7 +108,7 @@ export class RenderService {
     this.collidableObjs = this.sceneModif.children;
     this.boxObjs = [];
     this.sceneModif.children.forEach((obj: THREE.Object3D) => {
-      if (obj.name !== "sky" && obj.name !== "castle") {
+      if (obj.name !== "sky") {
       this.boxObjs.push( new THREE.Box3().setFromObject(obj));
       } else {
 
