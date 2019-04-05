@@ -10,6 +10,8 @@ export class MedievalObjectsCreatorService {
   private readonly SKY_BOX_HEIGHT: number = 200;
   private readonly SKY_BOX_WIDTH: number = 200;
   private readonly SKY_BOX_DEPTH: number = 450;
+  private readonly ASSETS: string = "../../assets/";
+  private readonly GLTF_EXTENSION: string = ".gltf";
 
   private castleWorld: IObjet3D;
 
@@ -47,7 +49,7 @@ export class MedievalObjectsCreatorService {
 
     return new Promise<THREE.Mesh>((resolve) => {
       if (toReload || !this.loadedModels.get(object.type)) {
-      this.modelsLoader.load("../../assets/" + object.type + "/" + object.type + ".gltf",
+      this.modelsLoader.load(this.ASSETS + object.type + "/" + object.type + this.GLTF_EXTENSION,
                              (gltf) => {
           if (!toReload) {
             this.loadedModels.set(object.type, gltf.scene);
