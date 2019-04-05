@@ -30,7 +30,6 @@ export class RenderService {
 
   private collidableObjs: THREE.Object3D[];
   private boxObjs: THREE.Box3[];
-  //private outerObjs: THREE.Box3[];
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
@@ -108,8 +107,6 @@ export class RenderService {
     this.collidableObjs = this.sceneModif.children;
     this.boxObjs = [];
     this.sceneModif.children.forEach((obj: THREE.Object3D) => {
-      console.log(obj);
-      console.log(new THREE.Box3().setFromObject(obj));
       if (obj.name !== "sky") {
         this.boxObjs.push( new THREE.Box3().setFromObject(obj));
       }
@@ -165,16 +162,15 @@ export class RenderService {
     }
   }
   public moveCam(axis: number, mouvement: number): void {
-    console.log(this.camera.position);
     switch (axis) {
       case AXIS.X: this.camera.translateX(mouvement);
                    if (this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
-                      this.camera.translateX(-mouvement);
+                      this.camera.translateX(-mouvement * 1.5);
                   }
                    break;
       case AXIS.Z: this.camera.translateZ(mouvement);
                    if (this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
-                  this.camera.translateZ(-mouvement);
+                  this.camera.translateZ(-mouvement * 1.5);
                 }
                    break;
       default: break;
@@ -191,7 +187,7 @@ export class RenderService {
     let coll: boolean = false;
 
     for (const box of this.boxObjs) {
-      if(box.intersectsSphere(sphere)) {
+      if (box.intersectsSphere(sphere)) {
         coll = true;
         break;
       }

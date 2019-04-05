@@ -38,13 +38,8 @@ export class MedievalObjectsCreatorService {
     objectsTHREE.push(await this.createSkyBox());
 
     tempSceneChildren = await this.createObjectsFromScene(this.castleWorld, false);
-    let i: number = 1000;
     tempSceneChildren.forEach( (obj: THREE.Mesh) => {
-      obj.name = i.toString();
-      ++i;
-      if (obj.name !== "1005") {
         objectsTHREE.push(obj);
-      }
     });
     for (const obj of objects) {
       toReload = uniqueObject.findIndex((diff: IDifference) => diff.name === obj.name) !== -1;
