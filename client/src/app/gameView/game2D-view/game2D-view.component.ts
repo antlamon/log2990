@@ -2,7 +2,8 @@ import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChil
 import { ActivatedRoute, Router } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { TimerService } from "src/app/services/timer.service";
-import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point, NewGameStarted } from "../../../../../common/communication/message";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point,
+    NewGameStarted, Gamer } from "../../../../../common/communication/message";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
@@ -19,10 +20,11 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     private simpleGame: IFullGame;
     private gameRoomId: string;
-    private differencesFound: number;
+    private gamers: Gamer[];
     private _disableClick: string;
     private _blockedCursor: string;
     private readonly NB_MAX_DIFF: number = 7;
+    private readonly NB_MAX_DIFF_MULTI: number = 4;
 
     private readonly ONE_SEC_IN_MS: number = 1000;
     private correctSound: HTMLAudioElement;
@@ -47,7 +49,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         }
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
-        this.differencesFound = 0;
+        this.gamers = [];
         this._disableClick = "";
         this._blockedCursor = "";
         this.correctSound = new Audio(CORRECT_SOUND_PATH);
@@ -98,12 +100,38 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     private handleCreateGameRoom(response: NewGameStarted): void {
         this.gameRoomId = response.gameRoomId;
+        this.gamers = response.players;
         this.ref.reattach();
         this.timer.startTimer();
     }
 
     private handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
+            this.handleDifferenceError(update.username);
+        } else {
+            this.simpleGame.modifiedImage = update.newImage;
+            const gamer: Gamer = this.gamers.find((x: Gamer) => x.username === update.username);
+            gamer.differencesFound = update.differencesFound;
+            const isGameOver: boolean = gamer.differencesFound === (this.gamers.length > 1 ? this.NB_MAX_DIFF_MULTI : this.NB_MAX_DIFF);
+            if (update.username === this.index.username) {
+                if (isGameOver) {
+                    this.finishGame();
+                } else if (this.index.username === update.username) {
+                    this.correctSound.play().catch((error: Error) => console.error(error.message));
+                }
+            } else {
+                if (isGameOver) {
+                    this.timer.stopTimer();
+                    this._disableClick = "disable-click";
+                    // tslint:disable-next-line:no-suspicious-comment
+                    // TODO TELL THE GAMER THAT HE'S BAD
+                }
+            }
+        }
+    }
+
+    private handleDifferenceError(username: string): void {
+        if (this.index.username === username) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
             this._disableClick = "disable-click";
@@ -116,17 +144,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 },
                 this.ONE_SEC_IN_MS
             );
-        } else {
-            this.simpleGame.modifiedImage = update.newImage;
-            this.differencesFound = update.differencesFound;
-            if (this.differencesFound === this.NB_MAX_DIFF) {
-                this.finishGame();
-            } else {
-                this.correctSound.play().catch((error: Error) => console.error(error.message));
-            }
-
         }
-
     }
 
     private finishGame(): void {
