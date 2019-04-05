@@ -11,7 +11,7 @@ import { CLICK, KEYS, AXIS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
-import {GAMES_LIST_PATH} from "../../../app/global/constants";
+import {GAMES_LIST_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH} from "../../../app/global/constants";
 @Component({
     selector: "app-game3d-view",
     templateUrl: "./game3D-view.component.html",
@@ -62,9 +62,9 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.press = false;
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
-        this.correctSound = new Audio("assets/correct.wav");
-        this.errorSound = new Audio("assets/error.wav");
-        this.victorySound = new Audio("assets/Ta-Da.wav");
+        this.correctSound = new Audio(CORRECT_SOUND_PATH);
+        this.errorSound = new Audio(ERROR_SOUND_PATH);
+        this.victorySound = new Audio(VICTORY_SOUND_PATH);
         this.differencesFound = 0;
         this._disableClick = "";
         this._blockedCursor = "";
