@@ -11,7 +11,7 @@ import { CLICK, KEYS, AXIS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
-import {GAMES_LIST_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH} from "../../../app/global/constants";
+import {GAMES_LIST_PATH, INITIAL_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH} from "../../../app/global/constants";
 @Component({
     selector: "app-game3d-view",
     templateUrl: "./game3D-view.component.html",
@@ -55,7 +55,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private render: RenderService,
         private router: Router) {
         if (!this.index.username) {
-            this.router.navigate([""]);
+            this.router.navigate([INITIAL_PATH]);
         }
         this._gameIsReady = false;
         this.cheatModeActivated = false;
