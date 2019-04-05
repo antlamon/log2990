@@ -13,8 +13,6 @@
     border-radius: 8px;
 	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
-      
-    /* enables scrolling for tall modals */
     overflow: auto;
     position: fixed;
 
@@ -38,9 +36,8 @@ button {
 	text-align: center;
 	font-style: normal;
 	width: 100%;
-	border: 1px solid #1e1f42;
-    border-width: 1px 1px 3px;
-    border-radius: 8px;
+	border: 1px solid black;
+	border-width: 1px 1px 3px;
 	margin-bottom: 10px;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,0.24), 0 1px 3px 0 rgba(0,0,0,0.19);
 }
