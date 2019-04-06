@@ -9,11 +9,11 @@ export class RenderService {
   private readonly FLASH_TIME: number = 150;
   private readonly GAMMA_FACTOR: number = 2.2;
   private readonly SENSITIVITY: number = 0.002;
-  private readonly CAMERA_RADIUS_COLLISION: number = 0.5;
+  private readonly CAMERA_RADIUS_COLLISION: number = 0.2;
   private readonly FIELD_OF_VIEW: number = 75;
   private readonly NEAR_CLIPPING_PLANE: number = 1;
   private readonly FAR_CLIPPING_PLANE: number = 3000;
-  private readonly PUSHBACK_FACTOR: number = 1.1;
+  // readonly PUSHBACK_FACTOR: number = 0.2;
   private readonly CAMERA_Z: number = 20;
   private readonly CAMERA_Y: number = 5;
 
@@ -171,26 +171,20 @@ export class RenderService {
   public moveCam(axis: number, mouvement: number): void {
     switch (axis) {
       case AXIS.X: this.camera.translateX(mouvement);
-                   if (this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
-                      this.camera.translateX(-mouvement * this.PUSHBACK_FACTOR);
+                   while (this.detectCollision()) {
+                      this.camera.translateX(-mouvement);
                     }
                    break;
-      case AXIS.Z: this.camera.translateZ(mouvement);
-                   if (this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
-                  this.camera.translateZ(-mouvement * this.PUSHBACK_FACTOR);
-                  }
-                   break;
+      case AXIS.Z:  this.camera.translateZ(mouvement);
+                    while (this.detectCollision()) {
+                      this.camera.translateZ(-mouvement);
+                    }
+                    break;
       default: break;
     }
   }
-  private detectCollision(direction: THREE.Vector3): boolean {
-    const t: THREE.Vector3 = this.camera.position.clone().add(direction);
-    const sphere: THREE.Sphere = new THREE.Sphere(t, this.CAMERA_RADIUS_COLLISION);
-    direction.applyQuaternion(this.camera.quaternion);
-    const pos: THREE.Vector3 = this.camera.position.clone();
-    if ( this.isThematic && pos.y + direction.y < 1) { // DO THE SAME FOR ALL SKYBOX
-      return true;
-    }
+  private detectCollision(): boolean {
+    const sphere: THREE.Sphere = new THREE.Sphere(this.camera.position.clone(), this.CAMERA_RADIUS_COLLISION);
     let coll: boolean = false;
     for (const box of this.hitboxes) {
       if (box[1].intersectsSphere(sphere)) {
@@ -239,11 +233,13 @@ export class RenderService {
       case MODIFICATION_TYPE: this.changeVisibilityOfDifferencesObjects(true);
                               this.removeModif(objName);
                               break;
-      case DELETE_TYPE: this.changeVisibilityOfDifferencesObjects(true);
+      case DELETE_TYPE:
                         this.getObject(this.sceneModif, objName).visible = true;
                         break;
       default: return;
     }
+    this.changeVisibilityOfDifferencesObjects(true);
+    this.differencesObjects = this.differencesObjects.filter((obj: THREE.Object3D) => obj.name !== objName);
   }
   private removeModif(objName: string): void {
     if (this.isThematic) {
