@@ -13,7 +13,6 @@ export class RenderService {
   private readonly FIELD_OF_VIEW: number = 75;
   private readonly NEAR_CLIPPING_PLANE: number = 1;
   private readonly FAR_CLIPPING_PLANE: number = 3000;
-  // readonly PUSHBACK_FACTOR: number = 0.2;
   private readonly CAMERA_Z: number = 20;
   private readonly CAMERA_Y: number = 5;
 
@@ -189,9 +188,11 @@ export class RenderService {
     for (const box of this.hitboxes) {
       if (box[1].intersectsSphere(sphere)) {
         coll = true;
+        console.error("break");
         break;
       }
     }
+    console.error("return");
 
     return coll;
   }

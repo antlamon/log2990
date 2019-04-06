@@ -273,4 +273,29 @@ describe("renderService", () => {
       expect(service["rendererO"]["domElement"]["onmousemove"]).toBeDefined();
     });
   });
+  describe("Test for collisons", () => {
+    it("The function moveCam should call the function detectCollision", () => {
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["camera"] = new THREE.PerspectiveCamera();
+      const spy: jasmine.Spy = spyOn((service as any), "detectCollision");
+      service.moveCam(AXIS.X, 1);
+      service.moveCam(AXIS.Z, 1);
+      // tslint:disable-next-line:no-magic-numbers
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+    it("If the camera is inside a hitboxe, the function move came should be called at least once with a inverse mouvement", () => {
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [["mockHitbox", new THREE.Box3(new THREE.Vector3(-1, -1, -1), new THREE.Vector3(1, 1, 1))]];
+      service["camera"] = new THREE.PerspectiveCamera();
+      service["camera"].position.set(-1, 0, 0);
+      const spyX: jasmine.Spy = spyOn(service["camera"], "translateX").and.callThrough();
+      const spyZ: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callThrough();
+      service.moveCam(AXIS.X, 1);
+      expect(spyX).toHaveBeenCalledWith(-1);
+      service["camera"].position.set(0, 0, -1);
+      service.moveCam(AXIS.Z, 1);
+      expect(spyZ).toHaveBeenCalledWith(-1);
+    });
+  });
 });
