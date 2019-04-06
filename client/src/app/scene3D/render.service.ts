@@ -9,11 +9,11 @@ export class RenderService {
   private readonly FLASH_TIME: number = 150;
   private readonly GAMMA_FACTOR: number = 2.2;
   private readonly SENSITIVITY: number = 0.002;
-  //private readonly COLLISION_DISTANCE: number = 4;
+  private readonly CAMERA_RADIUS_COLLISION: number = 0.5;
   private readonly FIELD_OF_VIEW: number = 75;
   private readonly NEAR_CLIPPING_PLANE: number = 1;
   private readonly FAR_CLIPPING_PLANE: number = 3000;
-
+  private readonly PUSHBACK_FACTOR: number = 1.1;
   private readonly CAMERA_Z: number = 20;
   private readonly CAMERA_Y: number = 5;
 
@@ -28,8 +28,8 @@ export class RenderService {
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
 
-  private collidableObjs: THREE.Object3D[];
-  private boxObjs: THREE.Box3[];
+  private hitboxes: [string, THREE.Box3][];
+  private differencesObjects: THREE.Object3D[];
   private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
@@ -49,9 +49,9 @@ export class RenderService {
     this.containerModif = containerM;
     this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
       game.originalScene, game.backColor, this.isThematic, this.differences) :
-        this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
+        await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
-      this.sceneModif = this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
+      this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
@@ -100,22 +100,31 @@ export class RenderService {
 
   public startRenderingLoop(): void {
     this.raycaster = new THREE.Raycaster();
-    this.setCollidableObjs();
+    this.setCollidableAndFlashingObjs();
     this.render();
   }
-  private setCollidableObjs(): void {
-    this.collidableObjs = this.sceneModif.children;
-    this.boxObjs = [];
+  private setCollidableAndFlashingObjs(): void {
+    this.hitboxes = [];
+    this.differencesObjects = [];
     this.sceneModif.children.forEach((obj: THREE.Object3D) => {
-      if (obj.name !== "sky") {
-        this.boxObjs.push( new THREE.Box3().setFromObject(obj));
+      if (obj.name !== "sky") { // TO CHANGE FOR TYPE INSTEAD AND NEW SKYBOX
+        this.hitboxes.push( [obj.name, new THREE.Box3().setFromObject(obj)]);
       }
     });
-
     for (const diff of this.differences) {
-      if (diff.type === DELETE_TYPE) {
-        this.collidableObjs.push(this.getObject(this.sceneOriginal, diff.name));
-        this.boxObjs.push( new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name)));
+      switch (diff.type) {
+        case DELETE_TYPE:
+          this.hitboxes.push( [diff.name, new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name))]);
+          this.differencesObjects.push(this.getObject(this.sceneOriginal, diff.name));
+          break;
+        case ADD_TYPE:
+          this.differencesObjects.push(this.getObject(this.sceneModif, diff.name));
+          break;
+        case MODIFICATION_TYPE:
+          this.differencesObjects.push(this.getObject(this.sceneOriginal, diff.name));
+          this.differencesObjects.push(this.getObject(this.sceneModif, diff.name));
+          break;
+        default:
       }
     }
 
@@ -165,29 +174,28 @@ export class RenderService {
     switch (axis) {
       case AXIS.X: this.camera.translateX(mouvement);
                    if (this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
-                      this.camera.translateX(-mouvement * 1.5);
-                  }
+                      this.camera.translateX(-mouvement * this.PUSHBACK_FACTOR);
+                    }
                    break;
       case AXIS.Z: this.camera.translateZ(mouvement);
                    if (this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
-                  this.camera.translateZ(-mouvement * 1.5);
-                }
+                  this.camera.translateZ(-mouvement * this.PUSHBACK_FACTOR);
+                  }
                    break;
       default: break;
     }
   }
   private detectCollision(direction: THREE.Vector3): boolean {
     const t: THREE.Vector3 = this.camera.position.clone().add(direction);
-    const sphere: THREE.Sphere = new THREE.Sphere(t, 0.5);
+    const sphere: THREE.Sphere = new THREE.Sphere(t, this.CAMERA_RADIUS_COLLISION);
     direction.applyQuaternion(this.camera.quaternion);
     const pos: THREE.Vector3 = this.camera.position.clone();
-    if ( this.isThematic && pos.y + direction.y < 1) {
+    if ( this.isThematic && pos.y + direction.y < 1) { // DO THE SAME FOR ALL SKYBOX
       return true;
     }
     let coll: boolean = false;
-
-    for (const box of this.boxObjs) {
-      if (box.intersectsSphere(sphere)) {
+    for (const box of this.hitboxes) {
+      if (box[1].intersectsSphere(sphere)) {
         coll = true;
         break;
       }
@@ -213,10 +221,9 @@ export class RenderService {
       }
 
       return objet;
-    } else {
-
-      return null;
     }
+
+    return null;
 
   }
   private isObjet(name: string): boolean {
@@ -227,9 +234,9 @@ export class RenderService {
   }
 
   public removeDiff(objName: string, type: string): void {
-
     switch (type) {
       case ADD_TYPE: this.sceneModif.remove(this.getObject(this.sceneModif, objName));
+                     this.hitboxes = this.hitboxes.filter((box: [string, THREE.Box3]) => box[0] !== objName);
                      break;
       case MODIFICATION_TYPE: this.changeVisibilityOfDifferencesObjects(true);
                               this.removeModif(objName);
@@ -276,21 +283,12 @@ export class RenderService {
    this.changeVisibilityOfDifferencesObjects(this.diffAreVisible);
   }
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
-    for (const diff of this.differences) {
-      if (diff.type !== ADD_TYPE) {
-        this.setVisibilty(this.sceneOriginal, diff.name, visible);
+    this.differencesObjects.forEach((obj: THREE.Mesh) => {
+      if (obj.isMesh) {
+        (obj.material as THREE.Material).visible = visible;
+      } else {
+        obj.visible = visible;
       }
-      if (diff.type !== DELETE_TYPE) {
-        this.setVisibilty(this.sceneModif, diff.name, visible);
-      }
-    }
-  }
-  private setVisibilty(scene: THREE.Scene, name: string, visible: boolean): void {
-    const obj: THREE.Mesh = this.getObject(scene, name) as THREE.Mesh;
-    if (obj.isMesh) {
-      (obj.material as THREE.Material).visible = visible;
-    } else {
-      obj.visible = visible;
-    }
+    });
   }
 }
