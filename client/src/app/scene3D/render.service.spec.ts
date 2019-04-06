@@ -211,7 +211,10 @@ describe("renderService", () => {
     });
     it("Should remove an object added", async () => {
       service["differencesObjects"] = [];
-      await service.initialize(container1, container2, mockGame);
+      service["sceneModif"] = new THREE.Scene();
+      const tempObj: THREE.Mesh = new THREE.Mesh();
+      tempObj.name = "3";
+      service["sceneModif"].add(tempObj);
       const spy: jasmine.Spy = spyOn(service["sceneModif"], "remove");
       service.removeDiff("3", ADD_TYPE);
       expect(spy).toHaveBeenCalledWith(service["sceneModif"].getObjectByName("3"));
