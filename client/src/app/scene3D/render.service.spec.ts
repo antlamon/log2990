@@ -185,6 +185,7 @@ describe("renderService", () => {
     it("Should return null if no object is found", async () => {
       spyOn(service["sceneModif"], "getObjectByName").and.returnValue(new THREE.Object3D());
       spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(new THREE.Object3D());
+      service["differencesObjects"] = [];
       expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
                                                             clientY: service["containerOriginal"]["offsetLeft"] - 1 }))).toEqual(null);
     });
@@ -196,6 +197,7 @@ describe("renderService", () => {
       const pos: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
       spyOn(service["sceneModif"], "getObjectByName").and.returnValue(mockCube);
       spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(mockCube);
+      service["differencesObjects"] = [];
       spyOn(service["raycaster"], "intersectObjects").and.returnValue([{distance: 1, point: pos, object: mockChild}]);
       const result: THREE.Object3D | null = service.identifyDiff(new MouseEvent("mouseup", { clientX: 0,
                                                                                              clientY: 0}));
@@ -203,22 +205,25 @@ describe("renderService", () => {
     });
   });
   describe("Removing differences tests", () => {
-    service["differences"] = [];
     it("Should need a valid type", () => {
+      service["differencesObjects"] = [];
       expect(service.removeDiff("1", "tre")).toBeUndefined();
     });
     it("Should remove an object added", async () => {
+      service["differencesObjects"] = [];
       await service.initialize(container1, container2, mockGame);
       const spy: jasmine.Spy = spyOn(service["sceneModif"], "remove");
       service.removeDiff("3", ADD_TYPE);
       expect(spy).toHaveBeenCalledWith(service["sceneModif"].getObjectByName("3"));
     });
     it("Should add a removed object", async () => {
+      service["differencesObjects"] = [];
       const spy: jasmine.Spy = spyOn(service["sceneModif"], "getObjectByName").and.returnValue(new THREE.Mesh());
       service.removeDiff("1", DELETE_TYPE);
       expect(spy).toHaveBeenCalledWith("1");
     });
     it("Should modify the material of the modified object", async () => {
+      service["differencesObjects"] = [];
       const mockMesh: THREE.Mesh = new THREE.Mesh();
       mockMesh.material = new THREE.MeshPhongMaterial();
       spyOn(service["sceneModif"], "getObjectByName").and.returnValue(mockMesh);
@@ -227,6 +232,7 @@ describe("renderService", () => {
       expect(spy).toHaveBeenCalledWith("1");
     });
     it("Should modify the texture of the modified object", async () => {
+      service["differencesObjects"] = [];
       service["isThematic"] = true;
       const mockMesh: THREE.Mesh = new THREE.Mesh();
       mockMesh.material = new THREE.MeshPhongMaterial();
@@ -237,18 +243,18 @@ describe("renderService", () => {
     });
   });
   describe("Start and stop of cheat mode tests", () => {
-    service["differences"] = [];
+    service["differencesObjects"] = [];
     it("Should start the timer when starting", () => {
       service.startCheatMode();
       expect(service["timeOutDiff"]).toBeDefined();
     });
-    it("Should make all differences visible when stopping", () => {
+    it("Should make all differencesObjects visible when stopping", () => {
       service.stopCheatMode();
       expect(service["diffAreVisible"]).toBe(true);
     });
   });
   describe("Getting image test", () => {
-    service["differences"] = [];
+    service["differencesObjects"] = [];
     it("Should return an image URL as string", () => {
       const spy: jasmine.Spy = spyOn(service["sceneGenerator"], "createScene").and.callFake(async () => Promise.resolve(new THREE.Scene()));
       service.getImageURL(mockGame).catch(() => {
@@ -258,7 +264,7 @@ describe("renderService", () => {
     });
   });
   describe("adding listener test", () => {
-    service["differences"] = [];
+    service["differencesObjects"] = [];
     it("Should add event listeners to the renderers", () => {
       service.addListener("mousemove", () => { return; });
       expect(service["rendererO"]["domElement"]["onmousemove"]).toBeDefined();

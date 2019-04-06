@@ -30,7 +30,6 @@ export class RenderService {
 
   private hitboxes: [string, THREE.Box3][];
   private differencesObjects: THREE.Object3D[];
-  private differences: IDifference[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
@@ -42,13 +41,12 @@ export class RenderService {
     clearInterval(this.timeOutDiff);
     this.containerOriginal = containerO;
     this.isThematic = game.isThematic;
-    this.differences = game.differences;
     this.diffAreVisible = true;
     this.mouse = new THREE.Vector2();
-    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic, this.differences);
+    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic, game.differences);
     this.containerModif = containerM;
     this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
-      game.originalScene, game.backColor, this.isThematic, this.differences) :
+      game.originalScene, game.backColor, this.isThematic, game.differences) :
         await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
       this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
@@ -56,6 +54,7 @@ export class RenderService {
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
     this.rendererM = this.createRenderer(this.containerModif);
+    this.setCollidableAndFlashingObjs(game.differences);
   }
 
   public onResize(): void {
@@ -100,10 +99,9 @@ export class RenderService {
 
   public startRenderingLoop(): void {
     this.raycaster = new THREE.Raycaster();
-    this.setCollidableAndFlashingObjs();
     this.render();
   }
-  private setCollidableAndFlashingObjs(): void {
+  private setCollidableAndFlashingObjs(differences: IDifference[]): void {
     this.hitboxes = [];
     this.differencesObjects = [];
     this.sceneModif.children.forEach((obj: THREE.Object3D) => {
@@ -111,7 +109,7 @@ export class RenderService {
         this.hitboxes.push( [obj.name, new THREE.Box3().setFromObject(obj)]);
       }
     });
-    for (const diff of this.differences) {
+    for (const diff of differences) {
       switch (diff.type) {
         case DELETE_TYPE:
           this.hitboxes.push( [diff.name, new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name))]);
@@ -246,7 +244,6 @@ export class RenderService {
                         break;
       default: return;
     }
-    this.soustractDiff(objName);
   }
   private removeModif(objName: string): void {
     if (this.isThematic) {
@@ -255,15 +252,6 @@ export class RenderService {
     } else {
       (this.getObject(this.sceneModif, objName) as THREE.Mesh).material
         = (this.getObject(this.sceneOriginal, objName) as THREE.Mesh).material;
-    }
-  }
-  private soustractDiff(objName: string): void {
-    for (let i: number = 0; this.differences.length; i++ ) {
-      if (this.differences[i].name === objName) {
-        this.differences.splice(i, 1);
-
-        return;
-      }
     }
   }
   private calculateMouse(event: MouseEvent, container: HTMLDivElement): void {
@@ -284,11 +272,7 @@ export class RenderService {
   }
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
     this.differencesObjects.forEach((obj: THREE.Mesh) => {
-      if (obj.isMesh) {
-        (obj.material as THREE.Material).visible = visible;
-      } else {
         obj.visible = visible;
-      }
     });
   }
 }
