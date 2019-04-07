@@ -12,7 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { SceneGeneratorService } from "./scene-generator.service";
 import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
-import { WHITE, AXIS } from "src/app/global/constants";
+import { WHITE, AXIS, SQUARE_BOX_LENGHT, SKY_BOX_DEPTH } from "src/app/global/constants";
 import { THREE_ERROR } from "../../../../common/models/errors";
 
 describe("renderService", () => {
@@ -87,6 +87,7 @@ describe("renderService", () => {
     isThematic: true,
     backColor: 0xFFFFFF,
   };
+
   const SENSITIVITY: number = 0.002;
   const container1: HTMLDivElement = document.createElement("div");
   const container2: HTMLDivElement = document.createElement("div");
@@ -275,9 +276,12 @@ describe("renderService", () => {
   });
   describe("Test for collisons", () => {
     it("The function moveCam should call the function detectCollision", () => {
+      // tslint:disable-next-line:no-any
+      spyOn(service as any, "detectOutOfBox").and.returnValue(false);
       service["differencesObjects"] = [];
       service["hitboxes"] = [];
       service["camera"] = new THREE.PerspectiveCamera();
+      // tslint:disable-next-line:no-any
       const spy: jasmine.Spy = spyOn((service as any), "detectCollision");
       service.moveCam(AXIS.X, 1);
       service.moveCam(AXIS.Z, 1);
@@ -285,17 +289,57 @@ describe("renderService", () => {
       expect(spy).toHaveBeenCalledTimes(2);
     });
     it("If the camera is inside a hitboxe, the function move came should be called at least once with a inverse mouvement", () => {
+      // tslint:disable-next-line:no-any
+      spyOn(service as any, "detectOutOfBox").and.returnValue(false);
       service["differencesObjects"] = [];
       service["hitboxes"] = [["mockHitbox", new THREE.Box3(new THREE.Vector3(-1, -1, -1), new THREE.Vector3(1, 1, 1))]];
       service["camera"] = new THREE.PerspectiveCamera();
       service["camera"].position.set(-1, 0, 0);
       const spyX: jasmine.Spy = spyOn(service["camera"], "translateX").and.callThrough();
       const spyZ: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callThrough();
-      service.moveCam(AXIS.X, 1);
-      expect(spyX).toHaveBeenCalledWith(-1);
+      const mouvement: number = 1;
+      service.moveCam(AXIS.X, mouvement);
+      expect(spyX).toHaveBeenCalledWith(-mouvement);
       service["camera"].position.set(0, 0, -1);
+      service.moveCam(AXIS.Z, mouvement);
+      expect(spyZ).toHaveBeenCalledWith(-mouvement);
+    });
+  });
+  describe("Tests for out of box", () => {
+    it("The function moveCam should call the function detectOutOfBox", () => {
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["camera"] = new THREE.PerspectiveCamera();
+      // tslint:disable-next-line:no-any
+      const spy: jasmine.Spy = spyOn((service as any), "detectOutOfBox");
+      service.moveCam(AXIS.X, 1);
       service.moveCam(AXIS.Z, 1);
-      expect(spyZ).toHaveBeenCalledWith(-1);
+      // tslint:disable-next-line:no-magic-numbers
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it("Should call the fucntion move to be call with the opposite mouvement when getting out of box geometric", () => {
+
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["isThematic"] = false;
+      service["camera"] = new THREE.PerspectiveCamera();
+      service["camera"].translateX(SQUARE_BOX_LENGHT);
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callThrough();
+      const mouvement: number = 1;
+      service.moveCam(AXIS.X, mouvement);
+      expect(spy).toHaveBeenCalledWith(-mouvement);
+    });
+    it("Should call the fucntion move to be call with the opposite mouvement when getting out of box thematic", () => {
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["isThematic"] = true;
+      service["camera"] = new THREE.PerspectiveCamera();
+      service["camera"].position.set(0, 1, SKY_BOX_DEPTH);
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callThrough();
+      const mouvement: number = 1;
+      service.moveCam(AXIS.Z, mouvement);
+      expect(spy).toHaveBeenCalledWith(-mouvement);
     });
   });
 });
