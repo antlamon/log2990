@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../common/models/game3D";
 import { SceneGeneratorService } from "./scene-generator.service";
-import { AXIS } from "../global/constants";
+import { AXIS, SQUARE_BOX_LENGHT, SKY_BOX_WIDTH, SKY_BOX_HEIGHT, SKY_BOX_DEPTH, FLOOR_LEVEL } from "../global/constants";
 
 @Injectable()
 export class RenderService {
@@ -104,9 +104,7 @@ export class RenderService {
     this.hitboxes = [];
     this.differencesObjects = [];
     this.sceneModif.children.forEach((obj: THREE.Object3D) => {
-      if (obj.name !== "sky") { // TO CHANGE FOR TYPE INSTEAD AND NEW SKYBOX
         this.hitboxes.push( [obj.name, new THREE.Box3().setFromObject(obj)]);
-      }
     });
     for (const diff of differences) {
       switch (diff.type) {
@@ -170,17 +168,38 @@ export class RenderService {
   public moveCam(axis: number, mouvement: number): void {
     switch (axis) {
       case AXIS.X: this.camera.translateX(mouvement);
-                   while (this.detectCollision()) {
+                   while (this.isUnautorisedMove()) {
                       this.camera.translateX(-mouvement);
                     }
                    break;
       case AXIS.Z:  this.camera.translateZ(mouvement);
-                    while (this.detectCollision()) {
+                    while (this.isUnautorisedMove()) {
                       this.camera.translateZ(-mouvement);
                     }
                     break;
       default: break;
     }
+  }
+  private isUnautorisedMove(): boolean {
+    
+    return this.detectCollision() || this.detectOutOfBox();
+  }
+  private detectOutOfBox(): boolean {
+
+    const pos: THREE.Vector3 = this.camera.position.clone().applyQuaternion(this.sceneOriginal.quaternion);
+    
+    return this.outOfOneSide(pos.x, SKY_BOX_WIDTH) || this.outOfOneSide(pos.y, SKY_BOX_HEIGHT, FLOOR_LEVEL) || this.outOfOneSide(pos.z, SKY_BOX_DEPTH);
+  }
+  private outOfOneSide(pos: number, max: number, min?: number): boolean {
+
+    if (!min || !this.isThematic) {
+      if (!this.isThematic) {
+        max = SQUARE_BOX_LENGHT;
+      }
+      min = -max;
+    }
+
+    return pos < min || pos > max;
   }
   private detectCollision(): boolean {
     const sphere: THREE.Sphere = new THREE.Sphere(this.camera.position.clone(), this.CAMERA_RADIUS_COLLISION);
@@ -188,11 +207,9 @@ export class RenderService {
     for (const box of this.hitboxes) {
       if (box[1].intersectsSphere(sphere)) {
         coll = true;
-        console.error("break");
         break;
       }
     }
-    console.error("return");
 
     return coll;
   }
