@@ -18,24 +18,12 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit(): void {
       this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.handleGameDeleted.bind(this));
       this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.handleGameDeleted.bind(this));
-      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (game: IGame | IGame3D) => {
-          if (game.id === this.getId()) {
-            this.startGame(game);
-          }
-        });
-      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
-          this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
-        });
+      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.startGame.bind(this));
+      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, this.emitEventToNewPlayer.bind(this));
   }
   public ngAfterViewInit(): void {
     if (!this.index.username) {
       this.router.navigate([""]);
-    }
-  }
-  private handleGameDeleted(id: string): void {
-    if (this.getId() === id) {
-      alert("Le jeu a été supprimer. Vous allez être renvoyé à la liste des jeux");
-      this.cancel();
     }
   }
   public ngOnDestroy(): void {
@@ -46,12 +34,23 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
     this.socket.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, this.getId());
     this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
   }
+  private handleGameDeleted(id: string): void {
+    if (this.getId() === id) {
+      alert("Le jeu a été supprimer. Vous allez être renvoyé à la liste des jeux");
+      this.cancel();
+    }
+  }
+  private emitEventToNewPlayer(): void {
+    this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
+  }
   private startGame(game: IGame | IGame3D ): void {
-    if (this.isSimpleGame(game)) {
-      this.router.navigate(["simple-game/" + game.id]).catch((error: Error) => console.error(error.message));
-   } else {
-     this.router.navigate(["free-game/" + game.id]).catch((error: Error) => console.error(error.message));
-   }
+    if (game.id === this.getId()) {
+        if (this.isSimpleGame(game)) {
+          this.router.navigate(["simple-game/" + game.id]).catch((error: Error) => console.error(error.message));
+      } else {
+        this.router.navigate(["free-game/" + game.id]).catch((error: Error) => console.error(error.message));
+      }
+    }
   }
   private isSimpleGame(game: IGame | IGame3D): boolean {
     return (game) && "originalImage" in game;
@@ -59,6 +58,5 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
   private getId(): string {
     return String(this.route.snapshot.paramMap.get("id"));
   }
-
 
 }

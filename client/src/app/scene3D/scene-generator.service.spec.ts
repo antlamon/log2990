@@ -102,11 +102,18 @@ describe("SceneGeneratorService", () => {
   });
   describe("Test the function createScene", async () => {
     it("The returned THREE.Scene should have the correct background color which was passed has a parameter", async () => {
+      spyOn(service["shapeService"], "generateGeometricScene").and.callFake((): Promise<THREE.Mesh>[] => {
+        return [];
+      });
+      const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
+      expect(scene.background).toEqual(new THREE.Color(1));
+    });
+    it("The returned THREE.Scene should have the correct background color which was passed has a parameter", async () => {
       spyOn(service["modelsService"], "createMedievalScene").and.callFake(async (): Promise<THREE.Mesh[]> => {
         return [];
       });
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, differences);
-      expect(scene.background).toEqual(new THREE.Color(1));
+      expect(scene.background).toBeDefined();
     });
     it("The returned THREE.Scene should have the correct number of Mesh added in it plus two for the lights", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
@@ -118,7 +125,7 @@ describe("SceneGeneratorService", () => {
     it("The returned THREE.Scene should have the same background colors", async () => {
       const scene: THREE.Scene  = new THREE.Scene();
       scene.background = new THREE.Color(0);
-      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), []);
+      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), []);
       expect(scene.background).toEqual(sceneM.background as THREE.Color);
     });
     it("The returned modify scene should have more objects when a ADD_TYPE difference is passed to the function (geometric)", async () => {
@@ -138,7 +145,7 @@ describe("SceneGeneratorService", () => {
 
         return [tempMesh];
       });
-      const sceneM: THREE.Scene  = service.modifyScene((
+      const sceneM: THREE.Scene  = await service.modifyScene((
         await service.createScene([], 1, true, [])).clone(),
                                                        [{type: DELETE_TYPE, name: "0"}]);
       let nbNotVisible: number = 0;
@@ -157,7 +164,7 @@ describe("SceneGeneratorService", () => {
         return [tempMesh];
       });
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, []);
-      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(),   [{
+      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(),   [{
         type: MODIFICATION_TYPE,
         object: cubeM,
         name: "0",
@@ -172,12 +179,12 @@ describe("SceneGeneratorService", () => {
       scene.add(await service["modelsService"].createObject(mockDragon, true));
       let sceneM: THREE.Scene  = await service.createScene(mockObjects, 1, true, diffDragon);
       sceneM.add(await service["modelsService"].createObject(mockDragon, true));
-      sceneM = service.modifyScene(sceneM, diffDragon);
+      sceneM = await service.modifyScene(sceneM, diffDragon);
       expect(scene.getObjectByName(mockDragon.name) as THREE.Mesh).not.toEqual(sceneM.getObjectByName(mockDragon.name) as THREE.Mesh);
     });
     it("All objects untouched by the differences should stay the same", async () => {
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, false, differences);
-      const sceneM: THREE.Scene  = service.modifyScene(scene.clone(), differences);
+      const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(), differences);
       let areTheSames: boolean = true;
       sceneM.children.forEach((obj: THREE.Object3D) => {
         if ( differences.findIndex((diff: IDifference) => diff.name === obj.name) === -1) {

@@ -2,18 +2,24 @@ import { Injectable } from "@angular/core";
 import * as THREE from "three";
 import { IGame3D, IDifference, ADD_TYPE, MODIFICATION_TYPE, DELETE_TYPE } from "../../../../common/models/game3D";
 import { SceneGeneratorService } from "./scene-generator.service";
+import { AXIS, SQUARE_BOX_LENGHT, SKY_BOX_WIDTH, SKY_BOX_HEIGHT, SKY_BOX_DEPTH, FLOOR_LEVEL } from "../global/constants";
 
 @Injectable()
 export class RenderService {
   private readonly FLASH_TIME: number = 150;
   private readonly GAMMA_FACTOR: number = 2.2;
   private readonly SENSITIVITY: number = 0.002;
-  private readonly COLLISION_DISTANCE: number = 4;
+  private readonly CAMERA_RADIUS_COLLISION: number = 0.2;
+  private readonly FIELD_OF_VIEW: number = 75;
+  private readonly NEAR_CLIPPING_PLANE: number = 1;
+  private readonly FAR_CLIPPING_PLANE: number = 3000;
+  private readonly CAMERA_Z: number = 20;
+  private readonly CAMERA_Y: number = 5;
 
   private containerOriginal: HTMLDivElement;
   private containerModif: HTMLDivElement;
   private camera: THREE.PerspectiveCamera;
-  private mouse: THREE.Vector2 = new THREE.Vector2();
+  private mouse: THREE.Vector2;
   private raycaster: THREE.Raycaster;
   private isThematic: boolean;
   private rendererO: THREE.WebGLRenderer;
@@ -21,14 +27,8 @@ export class RenderService {
   private sceneOriginal: THREE.Scene;
   private sceneModif: THREE.Scene;
 
-  private cameraZ: number = 20;
-  private cameraY: number = 5;
-
-  private fieldOfView: number = 75;
-  private nearClippingPane: number = 1;
-  private farClippingPane: number = 3000;
-
-  private differences: IDifference[];
+  private hitboxes: [string, THREE.Box3][];
+  private differencesObjects: THREE.Object3D[];
   private timeOutDiff: NodeJS.Timeout;
   private diffAreVisible: boolean;
 
@@ -40,19 +40,20 @@ export class RenderService {
     clearInterval(this.timeOutDiff);
     this.containerOriginal = containerO;
     this.isThematic = game.isThematic;
-    this.differences = game.differences;
     this.diffAreVisible = true;
-    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic, this.differences);
+    this.mouse = new THREE.Vector2();
+    this.sceneOriginal = await this.sceneGenerator.createScene(game.originalScene, game.backColor, this.isThematic, game.differences);
     this.containerModif = containerM;
     this.sceneModif = this.isThematic ? await this.sceneGenerator.createScene(
-      game.originalScene, game.backColor, this.isThematic, this.differences) :
-        this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
+      game.originalScene, game.backColor, this.isThematic, game.differences) :
+        await this.sceneGenerator.modifyScene(this.sceneOriginal.clone(true), game.differences);
     if (this.isThematic ) {
-      this.sceneModif = this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
+      this.sceneModif = await this.sceneGenerator.modifyScene(this.sceneModif, game.differences);
     }
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
     this.rendererM = this.createRenderer(this.containerModif);
+    this.setCollidableAndFlashingObjs(game.differences);
   }
 
   public onResize(): void {
@@ -63,9 +64,9 @@ export class RenderService {
 
   public async getImageURL(game: IGame3D): Promise<string> {
     const camera: THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
-      this.fieldOfView, window.innerWidth / window.innerHeight, this.nearClippingPane, this.farClippingPane);
-    camera.position.z = this.cameraZ;
-    camera.position.y = this.cameraY;
+      this.FIELD_OF_VIEW, window.innerWidth / window.innerHeight, this.NEAR_CLIPPING_PLANE, this.FAR_CLIPPING_PLANE);
+    camera.position.z = this.CAMERA_Z;
+    camera.position.y = this.CAMERA_Y;
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -79,14 +80,14 @@ export class RenderService {
   private createCamera(): void {
     const aspectRatio: number = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
-      this.fieldOfView,
+      this.FIELD_OF_VIEW,
       aspectRatio,
-      this.nearClippingPane,
-      this.farClippingPane
+      this.NEAR_CLIPPING_PLANE,
+      this.FAR_CLIPPING_PLANE
       );
     this.camera.rotation.order = "YXZ";
-    this.camera.position.z = this.cameraZ;
-    this.camera.position.y = this.cameraY;
+    this.camera.position.z = this.CAMERA_Z;
+    this.camera.position.y = this.CAMERA_Y;
     this.sceneOriginal.add(this.camera);
     this.sceneModif.add(this.camera);
   }
@@ -97,10 +98,32 @@ export class RenderService {
 
   public startRenderingLoop(): void {
     this.raycaster = new THREE.Raycaster();
-
     this.render();
   }
+  private setCollidableAndFlashingObjs(differences: IDifference[]): void {
+    this.hitboxes = [];
+    this.differencesObjects = [];
+    this.sceneModif.children.forEach((obj: THREE.Object3D) => {
+        this.hitboxes.push( [obj.name, new THREE.Box3().setFromObject(obj)]);
+    });
+    for (const diff of differences) {
+      switch (diff.type) {
+        case DELETE_TYPE:
+          this.hitboxes.push( [diff.name, new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name))]);
+          this.differencesObjects.push(this.getObject(this.sceneOriginal, diff.name));
+          break;
+        case ADD_TYPE:
+          this.differencesObjects.push(this.getObject(this.sceneModif, diff.name));
+          break;
+        case MODIFICATION_TYPE:
+          this.differencesObjects.push(this.getObject(this.sceneOriginal, diff.name));
+          this.differencesObjects.push(this.getObject(this.sceneModif, diff.name));
+          break;
+        default:
+      }
+    }
 
+  }
   private createRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
     const renderer: THREE.WebGLRenderer = this.initializeRenderer(container);
     container.appendChild(renderer.domElement);
@@ -133,37 +156,64 @@ export class RenderService {
     this.rendererO.render(this.sceneOriginal, this.camera);
     this.rendererM.render(this.sceneModif, this.camera);
   }
-  public rotateCam(angle: string, mouvement: number): void {
+  public rotateCam(angle: number, mouvement: number): void {
     switch (angle) {
-      case "X": this.camera.rotation.x -= mouvement * this.SENSITIVITY;
-                break;
-      case "Y": this.camera.rotation.y -= mouvement * this.SENSITIVITY;
-                break;
+      case AXIS.X: this.camera.rotation.x -= mouvement * this.SENSITIVITY;
+                   break;
+      case AXIS.Y: this.camera.rotation.y -= mouvement * this.SENSITIVITY;
+                   break;
       default: break;
     }
   }
-  public moveCam(axis: string, mouvement: number): void {
-
+  public moveCam(axis: number, mouvement: number): void {
     switch (axis) {
-      case "X":  if (!this.detectCollision(new THREE.Vector3(mouvement, 0, 0))) {
-                  this.camera.translateX(mouvement);
-                  }
-                 break;
-      case "Z": if (!this.detectCollision(new THREE.Vector3(0, 0, mouvement))) {
-                  this.camera.translateZ(mouvement);
-                }
-                break;
+      case AXIS.X: this.camera.translateX(mouvement);
+                   while (this.isUnautorisedMove()) {
+                      this.camera.translateX(-mouvement);
+                    }
+                   break;
+      case AXIS.Z:  this.camera.translateZ(mouvement);
+                    while (this.isUnautorisedMove()) {
+                      this.camera.translateZ(-mouvement);
+                    }
+                    break;
       default: break;
     }
   }
-  private detectCollision(direction: THREE.Vector3): boolean {
-    const pos: THREE.Vector3 = this.camera.position.clone();
-    direction.applyQuaternion(this.camera.quaternion);
-    this.raycaster.set(pos, direction.normalize());
-    const intersects: THREE.Intersection[] = this.raycaster.intersectObjects(this.sceneModif.children.concat(this.sceneOriginal.children),
-                                                                             true);
+  private isUnautorisedMove(): boolean {
 
-    return intersects.length > 0 && intersects[0].distance < this.COLLISION_DISTANCE;
+    return this.detectCollision() || this.detectOutOfBox();
+  }
+  private detectOutOfBox(): boolean {
+
+    const pos: THREE.Vector3 = this.camera.position.clone().applyQuaternion(this.sceneOriginal.quaternion);
+
+    return this.outOfOneSide(pos.x, SKY_BOX_WIDTH)
+    || this.outOfOneSide(pos.y, SKY_BOX_HEIGHT, FLOOR_LEVEL)
+    || this.outOfOneSide(pos.z, SKY_BOX_DEPTH);
+  }
+  private outOfOneSide(pos: number, max: number, min?: number): boolean {
+
+    if (!min || !this.isThematic) {
+      if (!this.isThematic) {
+        max = SQUARE_BOX_LENGHT;
+      }
+      min = -max;
+    }
+
+    return pos < min || pos > max;
+  }
+  private detectCollision(): boolean {
+    const sphere: THREE.Sphere = new THREE.Sphere(this.camera.position.clone(), this.CAMERA_RADIUS_COLLISION);
+    let coll: boolean = false;
+    for (const box of this.hitboxes) {
+      if (box[1].intersectsSphere(sphere)) {
+        coll = true;
+        break;
+      }
+    }
+
+    return coll;
   }
 
   public identifyDiff(event: MouseEvent): THREE.Object3D {
@@ -183,10 +233,9 @@ export class RenderService {
       }
 
       return objet;
-    } else {
-
-      return null;
     }
+
+    return null;
 
   }
   private isObjet(name: string): boolean {
@@ -197,19 +246,20 @@ export class RenderService {
   }
 
   public removeDiff(objName: string, type: string): void {
-
     switch (type) {
       case ADD_TYPE: this.sceneModif.remove(this.getObject(this.sceneModif, objName));
+                     this.hitboxes = this.hitboxes.filter((box: [string, THREE.Box3]) => box[0] !== objName);
                      break;
       case MODIFICATION_TYPE: this.changeVisibilityOfDifferencesObjects(true);
                               this.removeModif(objName);
                               break;
-      case DELETE_TYPE: this.changeVisibilityOfDifferencesObjects(true);
+      case DELETE_TYPE:
                         this.getObject(this.sceneModif, objName).visible = true;
                         break;
       default: return;
     }
-    this.soustractDiff(objName);
+    this.changeVisibilityOfDifferencesObjects(true);
+    this.differencesObjects = this.differencesObjects.filter((obj: THREE.Object3D) => obj.name !== objName);
   }
   private removeModif(objName: string): void {
     if (this.isThematic) {
@@ -218,15 +268,6 @@ export class RenderService {
     } else {
       (this.getObject(this.sceneModif, objName) as THREE.Mesh).material
         = (this.getObject(this.sceneOriginal, objName) as THREE.Mesh).material;
-    }
-  }
-  private soustractDiff(objName: string): void {
-    for (let i: number = 0; this.differences.length; i++ ) {
-      if (this.differences[i].name === objName) {
-        this.differences.splice(i, 1);
-
-        return;
-      }
     }
   }
   private calculateMouse(event: MouseEvent, container: HTMLDivElement): void {
@@ -246,21 +287,8 @@ export class RenderService {
    this.changeVisibilityOfDifferencesObjects(this.diffAreVisible);
   }
   private changeVisibilityOfDifferencesObjects(visible: boolean): void {
-    for (const diff of this.differences) {
-      if (diff.type !== ADD_TYPE) {
-        this.setVisibilty(this.sceneOriginal, diff.name, visible);
-      }
-      if (diff.type !== DELETE_TYPE) {
-        this.setVisibilty(this.sceneModif, diff.name, visible);
-      }
-    }
-  }
-  private setVisibilty(scene: THREE.Scene, name: string, visible: boolean): void {
-    const obj: THREE.Mesh = this.getObject(scene, name) as THREE.Mesh;
-    if (obj.isMesh) {
-      (obj.material as THREE.Material).visible = visible;
-    } else {
-      obj.visible = visible;
-    }
+    this.differencesObjects.forEach((obj: THREE.Mesh) => {
+        obj.visible = visible;
+    });
   }
 }

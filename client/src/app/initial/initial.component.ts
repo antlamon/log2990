@@ -1,9 +1,9 @@
-import { Component } from "@angular/core";
+import { Component} from "@angular/core";
 import { Router } from "@angular/router";
 import { BASE_ID, ERROR_ID, Message } from "../../../../common/communication/message";
 import { FileValidatorService } from "../services/file-validator.service";
 import { IndexService } from "../services/index.service";
-
+import {GAMES_LIST_PATH} from "../../app/global/constants";
 @Component({
   selector: "app-initial",
   templateUrl: "./initial.component.html",
@@ -31,7 +31,7 @@ export class InitialComponent {
           this.errors.push(message.body);
         }
         if (message.title === BASE_ID) {
-          this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+          this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
         }
       });
     } else {

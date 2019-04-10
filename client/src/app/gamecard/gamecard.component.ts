@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 import {FREE_GAME_TYPE, SIMPLE_GAME_TYPE} from "../../../../common/communication/message";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-
+import {SIMPLE_GAME_PATH, FREE_GAME_PATH, WAITING_PATH} from "../../app/global/constants";
 @Component({
   selector: "app-gamecard",
   templateUrl: "./gamecard.component.html",
@@ -26,31 +26,21 @@ export class GamecardComponent implements OnInit {
     this.isJoinable = false;
    }
   public ngOnInit(): void {
-    this.socket.addEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, (gameID: string ) => {
-      this.handleNewMulitplayerGamer(gameID);
-    });
-    this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, (gam: IGame3D|IGame|string) => {
-      if (this.game.id === (gam as IGame).id) {
-        this.isJoinable = false;
-      }
-    });
-    this.socket.addEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
-      if (this.game.id === id) {
-        this.isJoinable = false;
-      }
-    });
+    this.socket.addEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.handleNewMulitplayerGamer.bind(this));
+    this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.handleStartMulitplayerGamer.bind(this));
+    this.socket.addEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, this.handleCancelMulitplayerGamer.bind(this));
    }
 
   public playSelectedGame(): void {
     if (this.isSimpleGame) {
-       this.router.navigate(["simple-game/" + this.game.id]).catch((error: Error) => console.error(error.message));
+       this.router.navigate([SIMPLE_GAME_PATH + this.game.id]).catch((error: Error) => console.error(error.message));
     } else {
-      this.router.navigate(["free-game/" + this.game.id]).catch((error: Error) => console.error(error.message));
+      this.router.navigate([FREE_GAME_PATH + this.game.id]).catch((error: Error) => console.error(error.message));
     }
   }
   public createMultiGame(): void {
     this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.game.id);
-    this.router.navigate(["waiting/" + this.game.id]).catch((error: Error) => console.error(error.message));
+    this.router.navigate([WAITING_PATH + this.game.id]).catch((error: Error) => console.error(error.message));
   }
   public joinMultiGame(): void {
     this.socket.emitEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.game);
@@ -80,6 +70,17 @@ export class GamecardComponent implements OnInit {
   private handleNewMulitplayerGamer(iD: string): void {
     if (this.game.id === iD) {
       this.isJoinable = true;
+    }
+  }
+  private handleStartMulitplayerGamer(gam: IGame3D|IGame|string): void {
+    if (this.game.id === (gam as IGame).id) {
+      this.isJoinable = false;
+      // TODO : REFACTOR WHEN ANTOINE IS DONE
+    }
+  }
+  private handleCancelMulitplayerGamer(iD: string): void {
+    if (this.game.id === iD) {
+      this.isJoinable = false;
     }
   }
 

@@ -43,14 +43,14 @@ describe("MedievalObjectsCreatorService", () => {
     expect(service).toBeTruthy();
   });
   describe("function createMedievalScene", async () => {
-    describe("The returned THREE.Mesh[] should have the correct number of Mesh added in it plus two for castle and the skybox ", () => {
-      it("should return an array of lenght 2 when called with an empty IObjet3D array", async () => {
+    describe("The returned THREE.Mesh[] should have the correct number of Mesh added in it plus six for the castle", () => {
+      it("should return an array of lenght 6 when called with an empty IObjet3D array", async () => {
         const mockMeshs: THREE.Mesh[] = await service.createMedievalScene(mockObjs, []);
         const sizeGiven: number = mockMeshs.length;
-        const sizeExpected: number = 2;
+        const sizeExpected: number = 6;
         expect(sizeGiven).toEqual(sizeExpected);
       });
-      it("should return an array of lenght 5 when called with an IObjet3D array of size 3", async () => {
+      it("should return an array of lenght 9 when called with an IObjet3D array of size 3", async () => {
         mockObjs = [];
         const objQty: number = 3;
         for (let i: number = 0; i < objQty; i++) {
@@ -58,10 +58,10 @@ describe("MedievalObjectsCreatorService", () => {
         }
         const mockMeshs: THREE.Mesh[] = await service.createMedievalScene(mockObjs, []);
         const sizeGiven: number = mockMeshs.length;
-        const sizeExpected: number = 5;
+        const sizeExpected: number = 9;
         expect(sizeGiven).toEqual(sizeExpected);
       });
-      it("should return an array of lenght 12 when called with an IObjet3D array of size 10", async () => {
+      it("should return an array of lenght 16 when called with an IObjet3D array of size 10", async () => {
         mockObjs = [];
         const objQty: number = 10;
         for (let i: number = 0; i < objQty; i++) {
@@ -69,7 +69,7 @@ describe("MedievalObjectsCreatorService", () => {
         }
         const mockMeshs: THREE.Mesh[] = await service.createMedievalScene(mockObjs, []);
         const sizeGiven: number = mockMeshs.length;
-        const sizeExpected: number = 12;
+        const sizeExpected: number = 16;
         expect(sizeGiven).toEqual(sizeExpected);
       });
     });

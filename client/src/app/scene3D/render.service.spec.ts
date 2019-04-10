@@ -12,7 +12,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { SceneGeneratorService } from "./scene-generator.service";
 import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
-import { WHITE } from "src/app/global/constants";
+import { WHITE, AXIS, SQUARE_BOX_LENGHT, SKY_BOX_DEPTH } from "src/app/global/constants";
 import { THREE_ERROR } from "../../../../common/models/errors";
 
 describe("renderService", () => {
@@ -87,6 +87,7 @@ describe("renderService", () => {
     isThematic: true,
     backColor: 0xFFFFFF,
   };
+
   const SENSITIVITY: number = 0.002;
   const container1: HTMLDivElement = document.createElement("div");
   const container2: HTMLDivElement = document.createElement("div");
@@ -150,7 +151,7 @@ describe("renderService", () => {
       // tslint:disable-next-line:no-any
       spyOn(service as any, "detectCollision").and.callFake(() => {});
       const move: number = 5;
-      service.moveCam("X", move);
+      service.moveCam(AXIS.X, move);
       expect(spy).toHaveBeenCalledWith(move);
     });
     it("Should translate on z axis", () => {
@@ -158,17 +159,17 @@ describe("renderService", () => {
       // tslint:disable-next-line:no-any
       spyOn(service as any, "detectCollision").and.callFake(() => {});
       const move: number = 5;
-      service.moveCam("Z", move);
+      service.moveCam(AXIS.Z, move);
       expect(spy).toHaveBeenCalledWith(move);
     });
     it("Should rotate on x axis", () => {
       const move: number = 5;
-      service.rotateCam("X", move);
+      service.rotateCam(AXIS.X, move);
       expect(service["camera"]["rotation"]["x"]).toEqual(-move * SENSITIVITY);
     });
     it("Should rotate on y axis", () => {
       const move: number = 5;
-      service.rotateCam("Y", move);
+      service.rotateCam(AXIS.Y, move);
       expect(service["camera"]["rotation"]["y"]).toEqual(- move * SENSITIVITY);
     });
   });
@@ -185,6 +186,7 @@ describe("renderService", () => {
     it("Should return null if no object is found", async () => {
       spyOn(service["sceneModif"], "getObjectByName").and.returnValue(new THREE.Object3D());
       spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(new THREE.Object3D());
+      service["differencesObjects"] = [];
       expect(service.identifyDiff(new MouseEvent("click", { clientX: 200,
                                                             clientY: service["containerOriginal"]["offsetLeft"] - 1 }))).toEqual(null);
     });
@@ -196,6 +198,7 @@ describe("renderService", () => {
       const pos: THREE.Vector3 = new THREE.Vector3(0, 0, 0);
       spyOn(service["sceneModif"], "getObjectByName").and.returnValue(mockCube);
       spyOn(service["sceneOriginal"], "getObjectByName").and.returnValue(mockCube);
+      service["differencesObjects"] = [];
       spyOn(service["raycaster"], "intersectObjects").and.returnValue([{distance: 1, point: pos, object: mockChild}]);
       const result: THREE.Object3D | null = service.identifyDiff(new MouseEvent("mouseup", { clientX: 0,
                                                                                              clientY: 0}));
@@ -203,22 +206,28 @@ describe("renderService", () => {
     });
   });
   describe("Removing differences tests", () => {
-    service["differences"] = [];
     it("Should need a valid type", () => {
+      service["differencesObjects"] = [];
       expect(service.removeDiff("1", "tre")).toBeUndefined();
     });
     it("Should remove an object added", async () => {
-      await service.initialize(container1, container2, mockGame);
+      service["differencesObjects"] = [];
+      service["sceneModif"] = new THREE.Scene();
+      const tempObj: THREE.Mesh = new THREE.Mesh();
+      tempObj.name = "3";
+      service["sceneModif"].add(tempObj);
       const spy: jasmine.Spy = spyOn(service["sceneModif"], "remove");
       service.removeDiff("3", ADD_TYPE);
       expect(spy).toHaveBeenCalledWith(service["sceneModif"].getObjectByName("3"));
     });
     it("Should add a removed object", async () => {
+      service["differencesObjects"] = [];
       const spy: jasmine.Spy = spyOn(service["sceneModif"], "getObjectByName").and.returnValue(new THREE.Mesh());
       service.removeDiff("1", DELETE_TYPE);
       expect(spy).toHaveBeenCalledWith("1");
     });
     it("Should modify the material of the modified object", async () => {
+      service["differencesObjects"] = [];
       const mockMesh: THREE.Mesh = new THREE.Mesh();
       mockMesh.material = new THREE.MeshPhongMaterial();
       spyOn(service["sceneModif"], "getObjectByName").and.returnValue(mockMesh);
@@ -227,6 +236,7 @@ describe("renderService", () => {
       expect(spy).toHaveBeenCalledWith("1");
     });
     it("Should modify the texture of the modified object", async () => {
+      service["differencesObjects"] = [];
       service["isThematic"] = true;
       const mockMesh: THREE.Mesh = new THREE.Mesh();
       mockMesh.material = new THREE.MeshPhongMaterial();
@@ -237,18 +247,18 @@ describe("renderService", () => {
     });
   });
   describe("Start and stop of cheat mode tests", () => {
-    service["differences"] = [];
+    service["differencesObjects"] = [];
     it("Should start the timer when starting", () => {
       service.startCheatMode();
       expect(service["timeOutDiff"]).toBeDefined();
     });
-    it("Should make all differences visible when stopping", () => {
+    it("Should make all differencesObjects visible when stopping", () => {
       service.stopCheatMode();
       expect(service["diffAreVisible"]).toBe(true);
     });
   });
   describe("Getting image test", () => {
-    service["differences"] = [];
+    service["differencesObjects"] = [];
     it("Should return an image URL as string", () => {
       const spy: jasmine.Spy = spyOn(service["sceneGenerator"], "createScene").and.callFake(async () => Promise.resolve(new THREE.Scene()));
       service.getImageURL(mockGame).catch(() => {
@@ -258,10 +268,78 @@ describe("renderService", () => {
     });
   });
   describe("adding listener test", () => {
-    service["differences"] = [];
+    service["differencesObjects"] = [];
     it("Should add event listeners to the renderers", () => {
       service.addListener("mousemove", () => { return; });
       expect(service["rendererO"]["domElement"]["onmousemove"]).toBeDefined();
+    });
+  });
+  describe("Test for collisons", () => {
+    it("The function moveCam should call the function detectCollision", () => {
+      // tslint:disable-next-line:no-any
+      spyOn(service as any, "detectOutOfBox").and.returnValue(false);
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["camera"] = new THREE.PerspectiveCamera();
+      // tslint:disable-next-line:no-any
+      const spy: jasmine.Spy = spyOn((service as any), "detectCollision");
+      service.moveCam(AXIS.X, 1);
+      service.moveCam(AXIS.Z, 1);
+      // tslint:disable-next-line:no-magic-numbers
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+    it("If the camera is inside a hitboxe, the function move came should be called at least once with a inverse mouvement", () => {
+      // tslint:disable-next-line:no-any
+      spyOn(service as any, "detectOutOfBox").and.returnValue(false);
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [["mockHitbox", new THREE.Box3(new THREE.Vector3(-1, -1, -1), new THREE.Vector3(1, 1, 1))]];
+      service["camera"] = new THREE.PerspectiveCamera();
+      service["camera"].position.set(-1, 0, 0);
+      const spyX: jasmine.Spy = spyOn(service["camera"], "translateX").and.callThrough();
+      const spyZ: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callThrough();
+      const mouvement: number = 1;
+      service.moveCam(AXIS.X, mouvement);
+      expect(spyX).toHaveBeenCalledWith(-mouvement);
+      service["camera"].position.set(0, 0, -1);
+      service.moveCam(AXIS.Z, mouvement);
+      expect(spyZ).toHaveBeenCalledWith(-mouvement);
+    });
+  });
+  describe("Tests for out of box", () => {
+    it("The function moveCam should call the function detectOutOfBox", () => {
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["camera"] = new THREE.PerspectiveCamera();
+      // tslint:disable-next-line:no-any
+      const spy: jasmine.Spy = spyOn((service as any), "detectOutOfBox");
+      service.moveCam(AXIS.X, 1);
+      service.moveCam(AXIS.Z, 1);
+      // tslint:disable-next-line:no-magic-numbers
+      expect(spy).toHaveBeenCalledTimes(2);
+    });
+
+    it("Should call the fucntion move to be call with the opposite mouvement when getting out of box geometric", () => {
+
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["isThematic"] = false;
+      service["camera"] = new THREE.PerspectiveCamera();
+      service["camera"].translateX(SQUARE_BOX_LENGHT);
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateX").and.callThrough();
+      const mouvement: number = 1;
+      service.moveCam(AXIS.X, mouvement);
+      expect(spy).toHaveBeenCalledWith(-mouvement);
+    });
+    it("Should call the fucntion move to be call with the opposite mouvement when getting out of box thematic", () => {
+      service["differencesObjects"] = [];
+      service["hitboxes"] = [];
+      service["isThematic"] = true;
+      service["camera"] = new THREE.PerspectiveCamera();
+      service["camera"].position.set(0, 1, SKY_BOX_DEPTH);
+      const spy: jasmine.Spy = spyOn(service["camera"], "translateZ").and.callThrough();
+      const mouvement: number = 1;
+      service.moveCam(AXIS.Z, mouvement);
+      expect(spy).toHaveBeenCalledWith(-mouvement);
     });
   });
 });
