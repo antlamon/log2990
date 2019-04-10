@@ -144,6 +144,7 @@ export class GameRoomService {
                 : gamer.differencesFound === this.MAX_MULTI_DIFFERENCES,
         };
     }
+
     public cancelWaitingRoom(gameId: string): void {
         for (const index in this.gameRooms) {
             if (this.gameRooms[index].game.gameId === gameId && !this.gameRooms[index].serviceStarted) {

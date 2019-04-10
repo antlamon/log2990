@@ -2,8 +2,8 @@ import Axios from "axios";
 import * as chai from "chai";
 import * as spies from "chai-spies";
 import { Guid } from "guid-typescript";
-import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate,
-    NewGame3DMessage, NewGameMessage, NewGameStarted, NewScoreUpdate, ScoreUpdate, INewGameMessage, NewMultiplayerGame } from "../../../../common/communication/message";
+import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate, INewGameMessage,NewGame3DMessage,
+    NewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, ScoreUpdate } from "../../../../common/communication/message";
 import { ADD_TYPE } from "../../../../common/models/game3D";
 import { container } from "../../inversify.config";
 import { TYPES } from "../../types";
@@ -22,19 +22,19 @@ describe("GameRoomService", () => {
 
     describe("Creating new game room", () => {
         it("Should return the gameRoomId on resolve", async () => {
-            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
+            sandbox.on(Axios, "post", async () => Promise.resolve({ data: { title: BASE_ID, body: "ok" } }));
             const response: NewGameStarted = await service.startGameRoom({ gameId: "test", username: "user" } as NewGameMessage);
             expect(Guid.isGuid(response.gameRoomId)).to.eql(true);
         });
         it("Should return the gameRoomId on resolve for 3D", async () => {
-            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
+            sandbox.on(Axios, "post", async () => Promise.resolve({ data: { title: BASE_ID, body: "ok" } }));
             const response: NewGameStarted = await
-            service.startGameRoom({ gameId: "test", username: "user", is3D: true } as NewGameMessage);
+                service.startGameRoom({ gameId: "test", username: "user", is3D: true } as NewGameMessage);
             expect(Guid.isGuid(response.gameRoomId)).to.eql(true);
         });
 
         it("Should return the rejection on reject", (done: Mocha.Done) => {
-            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
+            sandbox.on(Axios, "post", async () => Promise.resolve({ data: { title: ERROR_ID, body: "error" } }));
             service.startGameRoom({ gameId: "test", username: "user" } as NewGameMessage)
                 .then(
                     (error: NewGameStarted) => {
@@ -46,7 +46,7 @@ describe("GameRoomService", () => {
                     });
         });
         it("Should return the rejection on reject for 3D", (done: Mocha.Done) => {
-            sandbox.on(Axios, "post", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
+            sandbox.on(Axios, "post", async () => Promise.resolve({ data: { title: ERROR_ID, body: "error" } }));
             service.startGameRoom({ gameId: "test3D", username: "user", is3D: true } as NewGame3DMessage)
                 .then(
                     (error: NewGameStarted) => {
@@ -59,16 +59,34 @@ describe("GameRoomService", () => {
         });
         it("Should return the gameRoomId on creating a waiting gameRoom", async () => {
             const response: NewMultiplayerGame =
-            service.createWaitingGameRoom({gameId: "123", username: "user", gameName: "name"} as INewGameMessage);
+                service.createWaitingGameRoom({ gameId: "123", username: "user", gameName: "name" } as INewGameMessage);
             expect(response.gameId).to.eql("123");
             expect(service["gameRooms"][response.gameRoomId]).to.eql({
                 game: {
                     gameId: "123",
                     gameName: "name",
                 },
-                gamer: [{username: "user", differencesFound: 0, isReady: false}],
+                gamer: [{ username: "user", differencesFound: 0, isReady: false }],
                 serviceStarted: false,
             });
+        });
+    });
+
+    describe("Finding waiting rooms", () => {
+        it("Should return the waiting gameRooms of the service", () => {
+            // tslint:disable-next-line:typedef
+            const mockedGameRoom = {
+                game: {
+                    gameId: "Finding",
+                    gameName: "name",
+                },
+                gamer: [{ username: "user", differencesFound: 0, isReady: false }],
+                serviceStarted: false,
+            };
+            const mockedMultiplayerGame: NewMultiplayerGame = {gameId: mockedGameRoom.game.gameId, gameRoomId: "findingPlayers"};
+            service["gameRooms"]["findingPlayers"] = mockedGameRoom;
+            const gameRooms: NewMultiplayerGame[] = service.findWaitingGameRooms();
+            expect(gameRooms).to.deep.include(mockedMultiplayerGame);
         });
     });
 
@@ -106,8 +124,8 @@ describe("GameRoomService", () => {
                 isGameOver: false,
             };
 
-            sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            service.checkDifference("test", "user", {x: 0, y: 0})
+            sandbox.on(Axios, "get", async () => Promise.resolve({ data: { title: BASE_ID, body: "ok" } }));
+            service.checkDifference("test", "user", { x: 0, y: 0 })
                 .then(
                     (response: GameRoomUpdate) => {
                         expect(response).to.eql(mockedGameRoomUpdate);
@@ -119,8 +137,8 @@ describe("GameRoomService", () => {
         });
 
         it("Should throw if the user is not asigned", (done: Mocha.Done) => {
-            sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: "ok" }}));
-            service.checkDifference("test", "newUser", {x: 0, y: 0})
+            sandbox.on(Axios, "get", async () => Promise.resolve({ data: { title: BASE_ID, body: "ok" } }));
+            service.checkDifference("test", "newUser", { x: 0, y: 0 })
                 .then(
                     (response: GameRoomUpdate) => {
                         done(response);
@@ -132,7 +150,7 @@ describe("GameRoomService", () => {
         });
 
         it("Should return no difference on rejected difference", (done: Mocha.Done) => {
-            sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
+            sandbox.on(Axios, "get", async () => Promise.resolve({ data: { title: ERROR_ID, body: "error" } }));
             service.checkDifference("test", "user", { x: 0, y: 0 })
                 .then(
                     (update: GameRoomUpdate) => {
@@ -154,7 +172,7 @@ describe("GameRoomService", () => {
                 isGameOver: false,
             };
 
-            sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: {name: "1", type: ADD_TYPE} }}));
+            sandbox.on(Axios, "get", async () => Promise.resolve({ data: { title: BASE_ID, body: { name: "1", type: ADD_TYPE } } }));
             service.checkDifference3D("test3D", "user", "1")
                 .then(
                     (response: Game3DRoomUpdate) => {
@@ -167,7 +185,7 @@ describe("GameRoomService", () => {
         });
 
         it("Should throw if the user is not asigned", (done: Mocha.Done) => {
-            sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: BASE_ID, body: {name: "1", type: ADD_TYPE} }}));
+            sandbox.on(Axios, "get", async () => Promise.resolve({ data: { title: BASE_ID, body: { name: "1", type: ADD_TYPE } } }));
             service.checkDifference3D("test3D", "newUser", "1")
                 .then(
                     (response: Game3DRoomUpdate) => {
@@ -180,7 +198,7 @@ describe("GameRoomService", () => {
         });
 
         it("Should return no difference on rejected difference", (done: Mocha.Done) => {
-            sandbox.on(Axios, "get", async () => Promise.resolve({data: { title: ERROR_ID, body: "error" }}));
+            sandbox.on(Axios, "get", async () => Promise.resolve({ data: { title: ERROR_ID, body: "error" } }));
             service.checkDifference3D("test3D", "user", "1")
                 .then(
                     (update: Game3DRoomUpdate) => {
@@ -208,7 +226,7 @@ describe("GameRoomService", () => {
                 insertPos: 2,
                 gameType: "test",
             };
-            sandbox.on(Axios, "put", async () => Promise.resolve({data: { title: BASE_ID, body: mockScoreUpdate }}));
+            sandbox.on(Axios, "put", async () => Promise.resolve({ data: { title: BASE_ID, body: mockScoreUpdate } }));
             const newScoreUpdate: NewScoreUpdate = await service.endGame(mockEndGameMessage);
             expect(newScoreUpdate.scoreUpdate).to.eql(mockScoreUpdate);
         });
@@ -223,6 +241,12 @@ describe("GameRoomService", () => {
             const spy: ChaiSpies.Spy = sandbox.on(Axios, "delete", async () => Promise.resolve());
             await service.deleteGame3DRoom("test3D");
             expect(spy).to.have.been.called();
+        });
+        it("Canceling a waiting game room should delete the correct room", async () => {
+            const newGameRoom: NewMultiplayerGame = service.createWaitingGameRoom(
+                { username: "user", gameId: "wait", gameName: "name" } as INewGameMessage);
+            service.cancelWaitingRoom(newGameRoom.gameId);
+            expect(service["gameRooms"][newGameRoom.gameRoomId]).to.eql(undefined);
         });
     });
 });
