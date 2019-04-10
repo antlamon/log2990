@@ -3,7 +3,7 @@ import * as chai from "chai";
 import * as spies from "chai-spies";
 import { Guid } from "guid-typescript";
 import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate,
-    NewGame3DMessage, NewGameMessage, NewGameStarted, NewScoreUpdate, ScoreUpdate } from "../../../../common/communication/message";
+    NewGame3DMessage, NewGameMessage, NewGameStarted, NewScoreUpdate, ScoreUpdate, INewGameMessage, NewMultiplayerGame } from "../../../../common/communication/message";
 import { ADD_TYPE } from "../../../../common/models/game3D";
 import { container } from "../../inversify.config";
 import { TYPES } from "../../types";
@@ -56,6 +56,19 @@ describe("GameRoomService", () => {
                         expect(rejection.message).to.equal("error");
                         done();
                     });
+        });
+        it("Should return the gameRoomId on creating a waiting gameRoom", async () => {
+            const response: NewMultiplayerGame =
+            service.createWaitingGameRoom({gameId: "123", username: "user", gameName: "name"} as INewGameMessage);
+            expect(response.gameId).to.eql("123");
+            expect(service["gameRooms"][response.gameRoomId]).to.eql({
+                game: {
+                    gameId: "123",
+                    gameName: "name",
+                },
+                gamer: [{username: "user", differencesFound: 0, isReady: false}],
+                serviceStarted: false,
+            });
         });
     });
 

@@ -46,7 +46,7 @@ export class GameRoomService {
         };
     }
 
-    public createWaitingGameRoom(newGameMessage: INewGameMessage):NewMultiplayerGame {
+    public createWaitingGameRoom(newGameMessage: INewGameMessage): NewMultiplayerGame {
         const gameRoomId: string = Guid.create().toString();
         this.createGameRoom(gameRoomId, newGameMessage.gameId, newGameMessage.gameName);
         this.joinGameRoom(newGameMessage.username, gameRoomId);
