@@ -116,7 +116,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             if (update.username === this.index.username) {
                 if (isGameOver) {
                     this.finishGame();
-                } else if (this.index.username === update.username) {
+                } else {
                     this.correctSound.play().catch((error: Error) => console.error(error.message));
                 }
             } else {
