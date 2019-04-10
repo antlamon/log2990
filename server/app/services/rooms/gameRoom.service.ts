@@ -57,6 +57,22 @@ export class GameRoomService {
         };
     }
 
+    public findWaitingGameRooms(): NewMultiplayerGame[] {
+
+        const waitingRooms: NewMultiplayerGame[] = [];
+
+        for (const index in this.gameRooms) {
+            if (!this.gameRooms[index].serviceStarted) {
+                waitingRooms.push({
+                    gameId: this.gameRooms[index].game.gameId,
+                    gameRoomId: index,
+                });
+            }
+        }
+
+        return waitingRooms;
+    }
+
     public joinGameRoom(username: string, gameRoomId: string): void {
         const newGamer: Gamer = {
             username,
@@ -127,6 +143,14 @@ export class GameRoomService {
             isGameOver: this.gameRooms[gameRoomId].gamer.length === 1 ? gamer.differencesFound === this.MAX_SOLO_DIFFERENCES
                 : gamer.differencesFound === this.MAX_MULTI_DIFFERENCES,
         };
+    }
+    public cancelWaitingRoom(gameId: string): void {
+        for (const index in this.gameRooms) {
+            if (this.gameRooms[index].game.gameId === gameId && !this.gameRooms[index].serviceStarted) {
+                    delete this.gameRooms[index];
+                    break;
+            }
+        }
     }
 
     public async deleteGameRoom(gameRoomId: string): Promise<void> {

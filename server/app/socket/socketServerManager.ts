@@ -60,10 +60,14 @@ export class SocketServerManager {
             }
         });
         socket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
+            this.gameRoomService.cancelWaitingRoom(id);
             this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, id);
         });
         socket.on(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
-            this.emitEvent(SocketsEvents.NEW_GAME_LIST_LOADED);
+            const waitingRooms: NewMultiplayerGame[] = this.gameRoomService.findWaitingGameRooms();
+            for (const room of waitingRooms) {
+                this.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, room);
+            }
         });
     }
     public emitEvent<T>(event: string, data?: T, dataType?: T): void {
