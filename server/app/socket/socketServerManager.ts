@@ -1,8 +1,8 @@
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
-import { EndGameMessage, Game3DRoomUpdate, GameRoomUpdate, ImageClickMessage, INewGameMessage,
-     NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Obj3DClickMessage, Gamer } from "../../../common/communication/message";
+import { EndGameMessage, Game3DRoomUpdate, Gamer, GameRoomUpdate, ImageClickMessage,
+     INewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Obj3DClickMessage } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { UsersManager } from "../services/users.service";
@@ -57,10 +57,14 @@ export class SocketServerManager {
             }
         });
         socket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
+            this.gameRoomService.cancelWaitingRoom(id);
             this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, id);
         });
         socket.on(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
-            this.emitEvent(SocketsEvents.NEW_GAME_LIST_LOADED);
+            const waitingRooms: NewMultiplayerGame[] = this.gameRoomService.findWaitingGameRooms();
+            for (const room of waitingRooms) {
+                this.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, room);
+            }
         });
     }
     public emitEvent<T>(event: string, data?: T, dataType?: T): void {
