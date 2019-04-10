@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from "@angular/material";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { WAITING_PATH } from "../global/constants";
 import { NewMultiplayerGame } from "../../../../common/communication/message";
+import { IndexService } from "../services/index.service";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -35,7 +36,7 @@ describe("GamecardComponent", () => {
     TestBed.configureTestingModule({
       declarations: [ GamecardComponent ],
       imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule, HttpClientTestingModule],
-      providers: [AppRoutingModule]
+      providers: [AppRoutingModule, IndexService]
     })
     .compileComponents().catch((error: Error) => console.error(error));
   }));
