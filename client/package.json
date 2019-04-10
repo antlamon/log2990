@@ -32,6 +32,7 @@
     "express": "^4.16.4",
     "mock-socket": "^8.0.5",
     "mockserver": "^3.0.0",
+    "ngx-modialog": "^5.0.1",
     "rxjs": "^6.0.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
@@ -42,7 +43,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.12.1",
     "@angular/cli": "~7.1.4",
-    "@angular/compiler-cli": "~7.1.0",
+    "@angular/compiler-cli": "^7.2.12",
     "@angular/language-service": "~7.1.0",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component} from "@angular/core";
 import { Router } from "@angular/router";
 import { BASE_ID, ERROR_ID, Message } from "../../../../common/communication/message";
 import { FileValidatorService } from "../services/file-validator.service";
