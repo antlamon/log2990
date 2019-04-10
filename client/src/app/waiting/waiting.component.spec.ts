@@ -56,14 +56,14 @@ describe("WaitingComponent", () => {
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue(mocked2DGame.id);
       component["startGame"]({gameId: mocked2DGame.id, gameRoomId: "1234", is3D: false} as INewGameMessage);
-      expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mocked2DGame.id]);
+      expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mocked2DGame.id], {queryParams: {gameRoomId: "1234"}});
     });
     it("should route to game free Play with the proper iD", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue(mocked3DGame.id);
-      component["startGame"]({gameId: mocked3DGame.id, gameRoomId: "1234", is3D: false} as INewGameMessage);
-      expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mocked3DGame.id]);
+      component["startGame"]({gameId: mocked3DGame.id, gameRoomId: "1234", is3D: true} as INewGameMessage);
+      expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mocked3DGame.id], {queryParams: {gameRoomId: "1234"}});
     });
     it("should NOT route to game simple Play when the iD is not the right one", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
