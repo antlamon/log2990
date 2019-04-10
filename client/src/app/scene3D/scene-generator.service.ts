@@ -56,17 +56,17 @@ export class SceneGeneratorService {
 
     return loader.load(this.SKYBOX_FILES);
   }
-  public modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): THREE.Scene {
+  public async modifyScene(scene: THREE.Scene, diffObjs: IDifference[]): Promise<THREE.Scene> {
     for (const diff of diffObjs) {
-      this.addModification(scene, diff);
+      await this.addModification(scene, diff);
     }
 
     return scene;
 }
-  private addModification(scene: THREE.Scene, diffObj: IDifference): void {
+  private async addModification(scene: THREE.Scene, diffObj: IDifference): Promise<void> {
     switch (diffObj.type) {
       case ADD_TYPE:
-        this.addObject(scene, diffObj).catch(() => {
+        await this.addObject(scene, diffObj).catch(() => {
           throw new THREE_ERROR("unable to create a new object.");
         });
         break;

@@ -7,9 +7,6 @@ import { IDifference } from "../../../../../common/models/game3D";
 @Injectable()
 export class MedievalObjectsCreatorService {
 
-  private readonly SKY_BOX_HEIGHT: number = 200;
-  private readonly SKY_BOX_WIDTH: number = 200;
-  private readonly SKY_BOX_DEPTH: number = 450;
   private readonly ASSETS: string = "../../assets/";
   private readonly GLTF_EXTENSION: string = ".gltf";
 
@@ -33,10 +30,12 @@ export class MedievalObjectsCreatorService {
 
     const objectsTHREE: THREE.Mesh[] = [];
     let toReload: boolean = false;
-
-    objectsTHREE.push(await this.createSkyBox());
-    objectsTHREE.push(await this.createObject(this.castleWorld, false));
-
+    let tempSceneChildren: THREE.Mesh [] = [];
+ 
+    tempSceneChildren = await this.createObjectsFromScene(this.castleWorld, false);
+    tempSceneChildren.forEach( (obj: THREE.Mesh) => {
+        objectsTHREE.push(obj);
+    });
     for (const obj of objects) {
       toReload = uniqueObject.findIndex((diff: IDifference) => diff.name === obj.name) !== -1;
       objectsTHREE.push(await this.createObject(obj, toReload));
@@ -62,16 +61,19 @@ export class MedievalObjectsCreatorService {
       }
     });
   }
-  private async createSkyBox(): Promise<THREE.Mesh> {
-
-    return new Promise<THREE.Mesh>((resolve) => {
-      const materialArray: THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial({side: THREE.BackSide});
-      materialArray.visible = false;
-      const skyGeometry: THREE.Geometry = new THREE.BoxGeometry(this.SKY_BOX_WIDTH, this.SKY_BOX_HEIGHT, this.SKY_BOX_DEPTH);
-      const skyBox: THREE.Mesh = new THREE.Mesh(skyGeometry, materialArray);
-      resolve(skyBox);
-      }
-    );
+  private async createObjectsFromScene(object: IObjet3D, toReload: boolean): Promise<THREE.Mesh[]> {
+    return new Promise<THREE.Mesh[]>((resolve) => {
+      if (toReload || !this.loadedModels.get(object.type)) {
+      this.modelsLoader.load(this.ASSETS + object.type + "/" + object.type + ".gltf",
+                             (gltf) => {
+        this.setPositionParameters(gltf.scene.clone(), object);
+        const childs: THREE.Object3D[] = gltf.scene.children;
+        resolve(childs as THREE.Mesh[]);
+      });
+    } else {
+      resolve(this.loadedModels.get(object.type).clone().children as THREE.Mesh[]);
+    }
+    });
   }
 
   private setPositionParameters(object: THREE.Object3D, parameters: IObjet3D): THREE.Mesh {

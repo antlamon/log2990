@@ -60,7 +60,7 @@ describe("Game3DViewComponent", () => {
         spyOn(component, "ngOnDestroy").and.callFake(() => {});
         fixture.detectChanges();
         spyOn(component["gameService"], "get3DGame").and.returnValue(Promise.resolve(mockGame3D));
-        component["render"]["differences"] = [];
+        component["render"]["differencesObjects"] = [];
     });
 
     it("should create", () => {
