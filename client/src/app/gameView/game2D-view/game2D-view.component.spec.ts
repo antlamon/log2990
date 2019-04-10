@@ -5,7 +5,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { IndexService } from "src/app/services/index.service";
-import { GameRoomUpdate } from "../../../../../common/communication/message";
+import { GameRoomUpdate, Gamer } from "../../../../../common/communication/message";
 import { IFullGame, IGame } from "../../../../../common/models/game";
 import { Game2DViewComponent } from "./game2D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
@@ -24,6 +24,19 @@ const mockedFullGame: IFullGame = {
     modifiedImage: " ",
     differenceImage: " ",
 };
+const mockGamers: Gamer[] = [
+    {
+    username: "winner",
+    differencesFound: 4,
+    isReady: true,
+    },
+    {
+        username: "looser",
+        differencesFound: 0,
+        isReady: true,
+        },
+
+];
 describe("Game2DViewComponent", () => {
     let component: Game2DViewComponent;
     let fixture: ComponentFixture<Game2DViewComponent>;
@@ -47,6 +60,8 @@ describe("Game2DViewComponent", () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
         component["simpleGame"] = mockedFullGame;
+        component["gamers"] = mockGamers;
+        component["gameRoomId"] = "yolo";
         spyOn(component["gameService"], "getSimpleGame").and.returnValue(of(mockedFullGame));
          });
 
@@ -70,15 +85,15 @@ describe("Game2DViewComponent", () => {
     it("handle check difference should modify the modified image and play a sound", async () => {
         const spy: jasmine.Spy = spyOn(component["correctSound"], "play").and.returnValue(Promise.resolve());
         const update: GameRoomUpdate = {
-            username: "test",
+            username: mockGamers[0].username,
             newImage: "testImage",
-            differencesFound: 3,
+            differencesFound: 1,
             isGameOver: false,
         };
+        component["index"]["username"] = mockGamers[0].username;
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
         expect(component["simpleGame"].modifiedImage).toEqual(update.newImage);
-        expect(component["differencesFound"]).toEqual(update.differencesFound);
         expect(spy).toHaveBeenCalled();
     });
 
@@ -86,64 +101,58 @@ describe("Game2DViewComponent", () => {
         const spy: jasmine.Spy = spyOn(component["errorSound"], "play").and.returnValue(Promise.resolve());
         const spyE: jasmine.Spy = spyOn(component["errorPopup"], "showPopup").and.callFake(() => {});
         const update: GameRoomUpdate = {
-            username: "test",
+            username: "looser",
             newImage: "testImage",
             differencesFound: -1,
             isGameOver: false,
         };
+        component["index"]["username"] = "looser";
         component["lastClick"] = new MouseEvent("click");
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
         expect(spyE).toHaveBeenCalled();
     });
 
-    it("handle check difference should play the victory sound with 7 differences", async () => {
+    it("handle check difference should play the victory sound with 7 differences, when in solo mode", async () => {
         const spy: jasmine.Spy = spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+        component["gamers"] = [mockGamers[0]]; // only 1 gamer in solo mode
         const update: GameRoomUpdate = {
-            username: "test",
+            username: mockGamers[0].username,
             newImage: "testImage",
             differencesFound: 7,
             isGameOver: true,
         };
         component["lastClick"] = new MouseEvent("click");
+        component["index"]["username"] = mockGamers[0].username;
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
     });
-    it("A event should be sent to the socket once 7 differences are found", () => {
+    it("An event should be sent to the socket once 7 differences are found, in solo mode", () => {
         const spy: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.callFake(() => {});
         spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+        component["gamers"] = [mockGamers[0]]; // only 1 gamer in solo mode
         const update: GameRoomUpdate = {
-            username: "test",
+            username: mockGamers[0].username,
             newImage: "testImage",
             differencesFound: 7,
             isGameOver: true,
         };
         component["lastClick"] = new MouseEvent("click");
+        component["index"]["username"] = mockGamers[0].username;
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
     });
-    it("After 7 differences, the timer should be stopped", async () => {
+    it("After 7 differences, the timer should be stopped, in solo mode", async () => {
         const spy: jasmine.Spy = spyOn(component["timer"], "stopTimer");
+        component["gamers"] = [mockGamers[0]]; // only 1 gamer in solo mode
         const update: GameRoomUpdate = {
-            username: "test",
+            username: mockGamers[0].username,
             newImage: "testImage",
             differencesFound: 7,
             isGameOver: true,
         };
         component["lastClick"] = new MouseEvent("click");
-        component["handleCheckDifference"](update);
-        expect(spy).toHaveBeenCalled();
-    });
-    it("The router should be called 7 differences are found", () => {
-        spyOn(component["socket"], "emitEvent").and.callFake(() => {});
-        const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-        const update: GameRoomUpdate = {
-            username: "test",
-            newImage: "testImage",
-            differencesFound: 7,
-            isGameOver: true,
-        };
-        component["lastClick"] = new MouseEvent("click");
+        component["index"]["username"] = mockGamers[0].username;
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
     });
