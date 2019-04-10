@@ -19,6 +19,8 @@ import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { MOUSE } from "three";
 import { Game3DRoomUpdate } from "../../../../../common/communication/message";
 import { GameMessagesComponent } from "../game-messages/game-messages.component";
+import { EndingMessageComponent } from "../ending-message/ending-message.component";
+import { ModalService } from "src/app/services/modal.service";
 const mockObjects: IObjet3D[] = [];
 
 const mockGame3D: IGame3D = {
@@ -43,11 +45,27 @@ describe("Game3DViewComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [Game3DViewComponent, ErrorPopupComponent, GameMessagesComponent],
-            imports: [HttpClientModule, HttpClientTestingModule, RouterTestingModule, MatProgressSpinnerModule],
-            providers: [RenderService, ShapeCreatorService, AppRoutingModule,
-                        IndexService, MedievalObjectsCreatorService, SceneGeneratorService
-                    ]
+            declarations: [
+                Game3DViewComponent,
+                ErrorPopupComponent,
+                GameMessagesComponent,
+                EndingMessageComponent
+            ],
+            imports: [
+                HttpClientModule,
+                HttpClientTestingModule,
+                RouterTestingModule,
+                MatProgressSpinnerModule
+            ],
+            providers: [
+                RenderService,
+                ShapeCreatorService,
+                AppRoutingModule,
+                IndexService,
+                MedievalObjectsCreatorService,
+                SceneGeneratorService,
+                ModalService
+            ]
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);
@@ -244,5 +262,11 @@ describe("Game3DViewComponent", () => {
     it("get disableClick() should correctly return the value of disableClick", () => {
         component["_disableClick"] = "test123";
         expect(component.disableClick).toEqual("test123");
+    });
+
+    it("should call the modal soloEndGame from the modalService", () => {
+        const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+        component.openEndingDialog("soloEndGame");
+        expect(spyEndGame).toHaveBeenCalledWith("soloEndGame");
     });
 });

@@ -11,6 +11,8 @@ import { Game2DViewComponent } from "./game2D-view.component";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { GameMessagesComponent } from "../game-messages/game-messages.component";
+import { EndingMessageComponent } from "../ending-message/ending-message.component";
+import { ModalService } from "src/app/services/modal.service";
 
 const mockedGame: IGame = {
     id: "mockedID",
@@ -34,9 +36,14 @@ describe("Game2DViewComponent", () => {
                 Game2DViewComponent,
                 ErrorPopupComponent,
                 GameMessagesComponent,
+                EndingMessageComponent
             ],
-            imports: [RouterTestingModule, HttpClientModule, HttpClientTestingModule, MatProgressSpinnerModule],
-            providers: [IndexService, AppRoutingModule],
+            imports: [RouterTestingModule,
+                HttpClientModule,
+                HttpClientTestingModule,
+                MatProgressSpinnerModule
+            ],
+            providers: [IndexService, AppRoutingModule, ModalService ],
         })
             .compileComponents().then(() => { }, (error: Error) => {
             });
@@ -154,6 +161,12 @@ describe("Game2DViewComponent", () => {
     it("get disableClick() should correctly return the value of disableClick", () => {
         component["_disableClick"] = "test123";
         expect(component.disableClick).toEqual("test123");
+    });
+
+    it("should call the simpleModal from the modalService", () => {
+        const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+        component.openEndingDialog("soloEndGame");
+        expect(spyEndGame).toHaveBeenCalledWith("soloEndGame");
     });
 
 });

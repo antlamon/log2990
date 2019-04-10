@@ -22,6 +22,7 @@ import { ShapeCreatorService } from "src/app/scene3D/geometric/shape-creator.ser
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { WaitingComponent } from "src/app/waiting/waiting.component";
+import { EndingMessageComponent } from "src/app/gameView/ending-message/ending-message.component";
 describe("AdminMenuComponent", () => {
   let component: AdminMenuComponent;
   let fixture: ComponentFixture<AdminMenuComponent>;
@@ -41,6 +42,7 @@ describe("AdminMenuComponent", () => {
         GameMessagesComponent,
         ErrorPopupComponent,
         WaitingComponent,
+        EndingMessageComponent
       ],
       imports: [
         AppRoutingModule,
