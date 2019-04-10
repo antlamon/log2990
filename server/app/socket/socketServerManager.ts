@@ -1,8 +1,10 @@
 import { Server } from "http";
 import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
-import { EndGameMessage, Game3DRoomUpdate, Gamer, GameRoomUpdate, ImageClickMessage,
-     INewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Obj3DClickMessage } from "../../../common/communication/message";
+import {
+    EndGameMessage, Game3DRoomUpdate, Gamer, GameRoomUpdate, ImageClickMessage,
+    INewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Obj3DClickMessage
+} from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
 import { UsersManager } from "../services/users.service";
@@ -14,8 +16,8 @@ type Socket = SocketIO.Socket;
 export class SocketServerManager {
     private socketServer: SocketIO.Server;
 
-    public constructor( @inject(TYPES.UserManager) private userManager: UsersManager,
-                        @inject(TYPES.GameRoomService) private gameRoomService: GameRoomService) { }
+    public constructor(@inject(TYPES.UserManager) private userManager: UsersManager,
+                       @inject(TYPES.GameRoomService) private gameRoomService: GameRoomService) { }
 
     public initializeSocket(server: Server): void {
         this.socketServer = SocketIO(server);
@@ -45,6 +47,7 @@ export class SocketServerManager {
             this.initializeMultiplayerGame(socket);
         });
     }
+
     private initializeMultiplayerGame(socket: Socket): void {
         socket.on(SocketsEvents.NEW_MULTIPLAYER_GAME, async (gameMessage: INewGameMessage) => {
             const newMultiplayerGame: NewMultiplayerGame = this.gameRoomService.createWaitingGameRoom(gameMessage);

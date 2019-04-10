@@ -1,7 +1,7 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import * as SocketClientIO from "socket.io-client";
-import { NewScoreUpdate } from "../../../common/communication/message";
+import { Game3DRoomUpdate, GameRoomUpdate, NewGameStarted, NewScoreUpdate } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { container } from "../inversify.config";
 import { Server } from "../server";
@@ -60,40 +60,47 @@ describe("Test for the socketServerManager", () => {
     });
 
     it("Should handle new-game-room event with resolved promise", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CREATE_GAME_ROOM, (gameRoomId: string) => {
+        const mockedNewGameStarted: NewGameStarted = {
+            gameRoomId: "123",
+            players: [{ username: "user", isReady: true, differencesFound: 0 }],
+        };
+        mockClientSocket.on(SocketsEvents.CREATE_GAME_ROOM, (newGame: NewGameStarted) => {
             mockClientSocket.off(SocketsEvents.CREATE_GAME_ROOM);
-            expect(gameRoomId).to.eql("123");
+            expect(newGame.gameRoomId).to.eql(mockedNewGameStarted.gameRoomId);
             done();
         });
-        sandbox.on(gameRoomService, "startGameRoom", async () => Promise.resolve("123"));
+        sandbox.on(gameRoomService, "startGameRoom", async () => Promise.resolve(mockedNewGameStarted));
         mockClientSocket.emit(SocketsEvents.CREATE_GAME_ROOM);
     });
 
     it("Should handle new-game-room event with rejected promise", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CREATE_GAME_ROOM, (rejection: Error) => {
-            mockClientSocket.off(SocketsEvents.CREATE_GAME_ROOM);
-            expect(rejection.message).to.equal("123");
-            done();
-        });
+        const spy: ChaiSpies.Spy = sandbox.on(console, "error", () => 1);
         sandbox.on(gameRoomService, "startGameRoom", async () => Promise.reject(new Error("123")));
         mockClientSocket.emit(SocketsEvents.CREATE_GAME_ROOM);
+        setTimeout(
+            () => {
+                expect(spy).to.have.been.called();
+                done();
+            },
+            // tslint:disable-next-line:no-magic-numbers
+            50);
     });
 
     it("Should handle check difference event with resolved promise", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE, (gameRoom: string) => {
-            expect(gameRoom).to.equal("123");
+        mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE, (update: GameRoomUpdate) => {
+            expect(update.username).to.equal("123");
             done();
         });
-        sandbox.on(gameRoomService, "checkDifference", async () => Promise.resolve("123"));
+        sandbox.on(gameRoomService, "checkDifference", async () => Promise.resolve({username: "123"}));
         mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE, { gameRoomId: "123" });
     });
 
     it("Should handle check difference 3D event with resolved promise", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE_3D, (gameRoom: string) => {
-            expect(gameRoom).to.equal("123");
+        mockClientSocket.on(SocketsEvents.CHECK_DIFFERENCE_3D, (update: Game3DRoomUpdate) => {
+            expect(update.username).to.equal("123");
             done();
         });
-        sandbox.on(gameRoomService, "checkDifference3D", async () => Promise.resolve("123"));
+        sandbox.on(gameRoomService, "checkDifference3D", async () => Promise.resolve({username: "123"}));
         mockClientSocket.emit(SocketsEvents.CHECK_DIFFERENCE_3D, { gameRoomId: "123" });
     });
 
@@ -115,7 +122,7 @@ describe("Test for the socketServerManager", () => {
             done();
         });
         sandbox.on(gameRoomService, "endGame", async () => Promise.resolve(mockedNewScoredUpdate));
-        mockClientSocket.emit(SocketsEvents.END_GAME, {gameId: "123"} );
+        mockClientSocket.emit(SocketsEvents.END_GAME, { gameId: "123" });
     });
 
     it("Should handle delete game  room event", (done: Mocha.Done) => {
