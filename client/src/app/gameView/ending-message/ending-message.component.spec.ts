@@ -14,6 +14,8 @@ import { SimpleGeneratorComponent } from 'src/app/adminView/simple-generator/sim
 import { FreeGeneratorComponent } from 'src/app/adminView/free-generator/free-generator.component';
 import { GamecardComponent } from 'src/app/gamecard/gamecard.component';
 import { MatProgressSpinnerModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
+import { ErrorPopupComponent } from '../error-popup/error-popup.component';
 
 describe('EndingMessageComponent', () => {
   let component: EndingMessageComponent;
@@ -32,9 +34,10 @@ describe('EndingMessageComponent', () => {
         WaitingComponent,
         SimpleGeneratorComponent,
         FreeGeneratorComponent,
-        GamecardComponent
+        GamecardComponent,
+        ErrorPopupComponent
       ],
-      imports: [ AppRoutingModule, MatProgressSpinnerModule ],
+      imports: [ AppRoutingModule, MatProgressSpinnerModule, FormsModule ],
       providers: [ ModalService ]
     })
     .compileComponents().then(() => { }, (error: Error) => {
@@ -50,5 +53,12 @@ describe('EndingMessageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it("The router should be called when the user click on the ending message", () => {
+    spyOn(component["el"], "nativeElement").and.callFake(() => {});
+    const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+    component.submit();
+    expect(spy).toHaveBeenCalledWith(["games"]);
   });
 });

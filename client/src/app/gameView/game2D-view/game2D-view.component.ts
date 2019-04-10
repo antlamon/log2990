@@ -145,7 +145,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         });
         this.openEndingDialog(this.SOLO_MODAL);
     }
-    private getBack(): void {
+    public getBack(): void {
         this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
     }
 

@@ -221,23 +221,23 @@ describe("Game3DViewComponent", () => {
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
         });
-        it("handle check difference receiving 7 differences should stop the timer and navigate to the games list", async () => {
-            spyOn(component["render"], "removeDiff").and.callFake(() => {});
-            component["game3D"] = mockGame3D;
-            spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
-            const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-            const spyT: jasmine.Spy = spyOn(component["timer"], "stopTimer").and.callFake(() => {});
-            const update: Game3DRoomUpdate = {
-                username: "test",
-                differencesFound: 7,
-                objName: "",
-                diffType: "",
-                isGameOver: true,
-            };
-            component["handleCheckDifference"](update);
-            expect(spy).toHaveBeenCalled();
-            expect(spyT).toHaveBeenCalled();
-        });
+        // it("handle check difference receiving 7 differences should stop the timer and navigate to the games list", async () => {
+        //     spyOn(component["render"], "removeDiff").and.callFake(() => {});
+        //     component["game3D"] = mockGame3D;
+        //     spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
+        //     const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+        //     const spyT: jasmine.Spy = spyOn(component["timer"], "stopTimer").and.callFake(() => {});
+        //     const update: Game3DRoomUpdate = {
+        //         username: "test",
+        //         differencesFound: 7,
+        //         objName: "",
+        //         diffType: "",
+        //         isGameOver: true,
+        //     };
+        //     component["handleCheckDifference"](update);
+        //     expect(spy).toHaveBeenCalled();
+        //     expect(spyT).toHaveBeenCalled();
+        // });
         it("handle check difference receiving -1 differences should play the error sound and show an error popup", async () => {
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
             component["lastClick"] = new MouseEvent("click");
