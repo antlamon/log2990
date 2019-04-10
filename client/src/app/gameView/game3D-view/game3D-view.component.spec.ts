@@ -236,6 +236,25 @@ describe("Game3DViewComponent", () => {
             expect(spy).toHaveBeenCalled();
             expect(spyE).toHaveBeenCalled();
         });
+        it("handle check difference when no differences are found should disable click for 1sec", async (done) => {
+            const update: Game3DRoomUpdate = {
+                username: "test",
+                differencesFound: -1,
+                objName: "",
+                diffType: "",
+                isGameOver: false,
+            };
+            component["lastClick"] = new MouseEvent("click");
+            component["handleCheckDifference"](update);
+            expect(component.disableClick).toEqual("disable-click");
+            expect(component.blockedCursor).toEqual("cursor-not-allowed");
+            setTimeout(() => {
+                expect(component.disableClick).toEqual("");
+                expect(component.blockedCursor).toEqual("");
+                done();
+            },         component["ONE_SEC_IN_MS"] + 1);
+    
+        });
     });
     it("get blockedCursor() should correctly return the value of blockCursor", () => {
         component["_blockedCursor"] = "test123";

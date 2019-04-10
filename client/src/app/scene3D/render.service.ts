@@ -181,14 +181,16 @@ export class RenderService {
     }
   }
   private isUnautorisedMove(): boolean {
-    
+
     return this.detectCollision() || this.detectOutOfBox();
   }
   private detectOutOfBox(): boolean {
 
     const pos: THREE.Vector3 = this.camera.position.clone().applyQuaternion(this.sceneOriginal.quaternion);
-    
-    return this.outOfOneSide(pos.x, SKY_BOX_WIDTH) || this.outOfOneSide(pos.y, SKY_BOX_HEIGHT, FLOOR_LEVEL) || this.outOfOneSide(pos.z, SKY_BOX_DEPTH);
+
+    return this.outOfOneSide(pos.x, SKY_BOX_WIDTH)
+    || this.outOfOneSide(pos.y, SKY_BOX_HEIGHT, FLOOR_LEVEL)
+    || this.outOfOneSide(pos.z, SKY_BOX_DEPTH);
   }
   private outOfOneSide(pos: number, max: number, min?: number): boolean {
 
