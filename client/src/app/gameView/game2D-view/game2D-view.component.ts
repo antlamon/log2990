@@ -26,7 +26,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     private readonly NB_MAX_DIFF: number = 7;
     private readonly NB_MAX_DIFF_MULTI: number = 4;
 
-    private readonly ONE_SEC_IN_MS: number = 1000;
+    private readonly CLICK_DELAY: number = 1000;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
     private victorySound: HTMLAudioElement;
@@ -123,7 +123,6 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                 if (isGameOver) {
                     this.timer.stopTimer();
                     this._disableClick = "disable-click";
-                    // tslint:disable-next-line:no-suspicious-comment
                     // TODO TELL THE GAMER THAT HE'S BAD
                 }
             }
@@ -142,7 +141,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                     this._disableClick = "";
                     this._blockedCursor = "";
                 },
-                this.ONE_SEC_IN_MS
+                this.CLICK_DELAY
             );
         }
     }
