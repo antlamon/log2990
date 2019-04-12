@@ -102,13 +102,11 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             this.handleDifferenceError(update.username);
         } else {
             this.render.removeDiff(update.objName, update.diffType);
-            const gamer: Gamer = this.gamers.find((x: Gamer) => x.username === update.username);
-            gamer.differencesFound = update.differencesFound;
-            const isGameOver: boolean = gamer.differencesFound === (this.gamers.length > 1 ? this.NB_MAX_DIFF_MULTI : this.NB_MAX_DIFF);
+            const isGameOver: boolean = update.differencesFound === (this.gamers.length > 1 ? this.NB_MAX_DIFF_MULTI : this.NB_MAX_DIFF);
             if (update.username === this.index.username) {
                 if (isGameOver) {
                     this.finishGame();
-                } else if (this.index.username === update.username) {
+                } else {
                     this.correctSound.play().catch((error: Error) => console.error(error.message));
                 }
             } else {

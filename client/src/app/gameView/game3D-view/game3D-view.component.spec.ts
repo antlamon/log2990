@@ -17,7 +17,7 @@ import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval-objects-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { MOUSE } from "three";
-import { Game3DRoomUpdate } from "../../../../../common/communication/message";
+import { Game3DRoomUpdate, Gamer } from "../../../../../common/communication/message";
 import { GameMessagesComponent } from "../game-messages/game-messages.component";
 const mockObjects: IObjet3D[] = [];
 
@@ -31,6 +31,20 @@ const mockGame3D: IGame3D = {
     backColor: 0,
     isThematic: false,
   };
+
+const mockGamers: Gamer[] = [
+    {
+    username: "winner",
+    differencesFound: 4,
+    isReady: true,
+    },
+    {
+        username: "looser",
+        differencesFound: 0,
+        isReady: true,
+        },
+
+];
 
 const nbRenderCall: number = 1;
 const DELAY: number = 50;
@@ -169,6 +183,8 @@ describe("Game3DViewComponent", () => {
                 diffType: "",
                 isGameOver: false,
             };
+            component["index"]["username"] = update.username;
+            component["gamers"] = mockGamers;
             component["handleCheckDifference"](update);
             expect(spyDiff).toHaveBeenCalledWith(update.objName, update.diffType);
             expect(spy).toHaveBeenCalled();
@@ -185,6 +201,8 @@ describe("Game3DViewComponent", () => {
                 diffType: "",
                 isGameOver: true,
             };
+            component["gamers"] = [mockGamers[0]];
+            component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
             expect(spySocket).toHaveBeenCalled();
         });
@@ -200,6 +218,8 @@ describe("Game3DViewComponent", () => {
                 diffType: "",
                 isGameOver: true,
             };
+            component["gamers"] = [mockGamers[0]];
+            component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
         });
@@ -216,6 +236,8 @@ describe("Game3DViewComponent", () => {
                 diffType: "",
                 isGameOver: true,
             };
+            component["gamers"] = [mockGamers[0]];
+            component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
             expect(spyT).toHaveBeenCalled();
@@ -232,6 +254,7 @@ describe("Game3DViewComponent", () => {
                 diffType: "",
                 isGameOver: false,
             };
+            component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
             expect(spyE).toHaveBeenCalled();
