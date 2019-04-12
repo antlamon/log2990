@@ -61,7 +61,7 @@ export class SocketServerManager {
         });
         socket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
             this.gameRoomService.cancelWaitingRoom(id);
-            this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, id);
+            this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, {gameId: id}); // only game id is necessary for cancel
         });
         socket.on(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
             const waitingRooms: NewMultiplayerGame[] = this.gameRoomService.findWaitingGameRooms();
