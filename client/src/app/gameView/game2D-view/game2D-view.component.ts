@@ -110,6 +110,8 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             this.handleDifferenceError(update.username);
         } else {
             this.simpleGame.modifiedImage = update.newImage;
+            const gamer: Gamer = this.gamers.find((x: Gamer) => x.username === update.username);
+            gamer.differencesFound = update.differencesFound;
             const isGameOver: boolean = update.differencesFound === (this.gamers.length > 1 ? this.NB_MAX_DIFF_MULTI : this.NB_MAX_DIFF);
             if (update.username === this.index.username) {
                 if (isGameOver) {
