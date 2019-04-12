@@ -15,8 +15,8 @@ export class GameManagerService {
   private _simpleGames: IGame[];
   private _freeGames: IGame3D[];
   private _imageURLs: Map<IGame3D, string>;
-  private simpleSubject: BehaviorSubject<IGame[]> = new BehaviorSubject([]);
-  private freeSubject: BehaviorSubject<IGame3D[]> = new BehaviorSubject([]);
+  private simpleSubject: BehaviorSubject<IGame[]> = new BehaviorSubject(undefined);
+  private freeSubject: BehaviorSubject<IGame3D[]> = new BehaviorSubject(undefined);
 
   public constructor(
     private gameService: GameService,
