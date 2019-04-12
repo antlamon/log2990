@@ -112,6 +112,24 @@ describe("Game2DViewComponent", () => {
         expect(spy).toHaveBeenCalled();
         expect(spyE).toHaveBeenCalled();
     });
+    it("handle check difference when no differences are found should disable click for 1sec", async (done) => {
+        const update: GameRoomUpdate = {
+            username: "test",
+            newImage: "testImage",
+            differencesFound: -1,
+            isGameOver: false,
+        };
+        component["lastClick"] = new MouseEvent("click");
+        component["handleCheckDifference"](update);
+        expect(component.disableClick).toEqual("disable-click");
+        expect(component.blockedCursor).toEqual("cursor-not-allowed");
+        setTimeout(() => {
+            expect(component.disableClick).toEqual("");
+            expect(component.blockedCursor).toEqual("");
+            done();
+        },         component["ONE_SEC_IN_MS"] + 1);
+
+    });
 
     it("handle check difference should play the victory sound with 7 differences, when in solo mode", async () => {
         const spy: jasmine.Spy = spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
