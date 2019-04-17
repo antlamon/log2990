@@ -95,7 +95,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         this.gameRoomId = response.gameRoomId;
         this.gamers = response.players;
         this.ref.reattach();
-        this.timer.startTimer();
+        this.timer.startTimer(response.startTime);
     }
     private handleCheckDifference(update: Game3DRoomUpdate): void {
         if (update.differencesFound === -1) {

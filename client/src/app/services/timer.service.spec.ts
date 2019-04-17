@@ -14,7 +14,7 @@ describe("TimerService", () => {
   describe("General test for all function", async () => {
     it("Time should be updated correctly", (done) => {
       const service: TimerService = TestBed.get(TimerService);
-      service.startTimer();
+      service.startTimer(new Date());
       setTimeout(() => {
         service.stopTimer();
         expect(service.nbMinutes).toEqual(0);

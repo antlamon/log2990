@@ -304,6 +304,7 @@ describe("Game3DViewComponent", () => {
             const mockMessage: NewGameStarted = {
                 gameRoomId: "",
                 players: [],
+                startTime: new Date(),
             };
             component["handleCreateGameRoom"](mockMessage);
             expect(component["gameRoomId"]).toEqual(mockMessage.gameRoomId);

@@ -43,6 +43,7 @@ export interface Gamer {
 export interface NewGameStarted {
     gameRoomId: string;
     players: Gamer[];
+    startTime: Date;
 }
 
 export interface Point {
