@@ -9,7 +9,7 @@
     height: 567px;
     display: flex;
     flex-direction: column;
-    background: #f4f7f8;
+    background:  #ccd9cb;
     border-radius: 8px;
 	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
@@ -90,7 +90,7 @@ button:focus,  .uploader + label:focus{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background: rgba(255,255,255,.1);
     background-color: #e8eeef;
-    color:#8a97a0;
+    color:#050505;
     box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 	border: none;
 	border-radius: 4px;
@@ -101,7 +101,7 @@ button:focus,  .uploader + label:focus{
 }
 
 #modifiedFileName, #originalFileName {
-    font-size: 10px;
+    font-size: 12px;
 
 }
 
