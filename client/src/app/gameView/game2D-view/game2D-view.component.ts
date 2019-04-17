@@ -102,7 +102,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.gameRoomId = response.gameRoomId;
         this.gamers = response.players;
         this.ref.reattach();
-        this.timer.startTimer(response.startTime);
+        this.timer.startTimer();
     }
 
     private handleCheckDifference(update: GameRoomUpdate): void {

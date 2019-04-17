@@ -43,7 +43,6 @@ export class GameRoomService {
         return {
             gameRoomId: newGameMessage.gameRoomId,
             players: this.gameRooms[newGameMessage.gameRoomId].gamer,
-            startTime: new Date(),
         };
     }
 
