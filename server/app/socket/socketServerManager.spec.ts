@@ -83,8 +83,8 @@ describe("Test for the socketServerManager", () => {
     });
 
     it("Receiving Cancel multiplayer should send the same event", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
-            expect(id).to.eql("123");
+        mockClientSocket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: {gameId: String}) => {
+            expect(id.gameId).to.eql("123");
             done();
         });
         sandbox.on(gameRoomService, "cancelWaitingRoom", () => Promise.resolve());
