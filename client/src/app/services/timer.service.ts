@@ -10,17 +10,19 @@ export class TimerService {
   public readonly FORMAT_ZERO_MAX: number = 9;
   private _nbSeconds: number;
   private _nbMinutes: number;
+  private startDate: Date;
   private timerUpdate: NodeJS.Timeout;
   public constructor() {
     this._nbSeconds = 0;
     this._nbMinutes = 0;
    }
 
-  public startTimer(): void {
+  public startTimer(startDate: Date): void {
     this.stopTimer();
     this._nbSeconds = 0;
     this._nbMinutes = 0;
-    this.timerUpdate = setInterval(this.updateTime.bind(this), this.CONVERSION_SEC_TO_MILI);
+    this.startDate = startDate;
+    this.timerUpdate = setInterval(this.updateTime.bind(this), 1);
   }
   public stopTimer(): void {
     clearInterval(this.timerUpdate);
@@ -40,11 +42,9 @@ export class TimerService {
   }
 
   private updateTime(): void {
-    this._nbSeconds++;
-    if (this._nbSeconds === this.CONVERSION_MIN_TO_SEC) {
-      this._nbMinutes++;
-      this._nbSeconds = 0;
-    }
+    const tempDate: Date = new Date();
+    this._nbMinutes = tempDate.getMinutes() - this.startDate.getMinutes();
+    this._nbSeconds = tempDate.getSeconds() - this.startDate.getSeconds();
   }
   public setToZero(): void {
     this.stopTimer();

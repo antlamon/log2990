@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { GameService } from "../../services/game.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IGame3D } from "../../../../../common/models/game3D";
@@ -6,12 +6,12 @@ import { RenderService } from "src/app/scene3D/render.service";
 import { SocketService } from "src/app/services/socket.service";
 import { IndexService } from "src/app/services/index.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../../../common/communication/message";
+import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage, NewGameStarted, Gamer } from "../../../../../common/communication/message";
 import { CLICK, KEYS, AXIS } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
-
+import { GAMES_LIST_PATH, INITIAL_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH } from "../../../app/global/constants";
 @Component({
     selector: "app-game3d-view",
     templateUrl: "./game3D-view.component.html",
@@ -20,13 +20,14 @@ import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/e
 export class Game3DViewComponent implements OnInit, OnDestroy {
 
     private game3D: IGame3D;
+    private gamers: Gamer[];
     private _gameIsReady: boolean;
-    private differencesFound: number;
     private _disableClick: string;
     private _blockedCursor: string;
 
-    private readonly ONE_SEC_IN_MS: number = 1000;
+    private readonly CLICK_DELAY: number = 1000;
     private readonly NB_MAX_DIFF: number = 7;
+    private readonly NB_MAX_DIFF_MULTI: number = 4;
 
     @ViewChild("originalContainer")
     private originalContainerRef: ElementRef;
@@ -40,7 +41,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
 
     private movementSpeed: number = 0.5;
     private press: boolean;
-    private roomID: string;
+    private gameRoomId: string;
     private cheatModeActivated: boolean;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
@@ -53,45 +54,75 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         private timer: TimerService,
         private index: IndexService,
         private render: RenderService,
+        private ref: ChangeDetectorRef,
         private router: Router) {
         if (!this.index.username) {
-            this.router.navigate([""]);
+            this.router.navigate([INITIAL_PATH]);
         }
         this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
-        this.correctSound = new Audio("assets/correct.wav");
-        this.errorSound = new Audio("assets/error.wav");
-        this.victorySound = new Audio("assets/Ta-Da.wav");
-        this.differencesFound = 0;
+        this.correctSound = new Audio(CORRECT_SOUND_PATH);
+        this.errorSound = new Audio(ERROR_SOUND_PATH);
+        this.victorySound = new Audio(VICTORY_SOUND_PATH);
+        this.gamers = [];
         this._disableClick = "";
         this._blockedCursor = "";
     }
 
     public ngOnInit(): void {
         this.timer.setToZero();
+        this.gameRoomId = this.getGameRoomId();
         this.get3DGame();
     }
 
     @HostListener("window:beforeunload")
     public ngOnDestroy(): void {
+        document.removeEventListener("contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false);
+        document.removeEventListener("keydown", this.onKeyDown, false);
+        document.removeEventListener("mouseup", () => this.press = false, false);
+
         this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE_3D);
         if (this.game3D) {
             this.render.stopCheatMode();
-            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.gameRoomId);
         }
     }
-    private handleCreateGameRoom(rejection?: string): void {
-        if (rejection !== null) {
-            alert(rejection);
-        }
-        this.timer.startTimer();
+    private handleCreateGameRoom(response: NewGameStarted): void {
+        this.gameRoomId = response.gameRoomId;
+        this.gamers = response.players;
+        this.ref.reattach();
+        this.timer.startTimer(response.startTime);
     }
     private handleCheckDifference(update: Game3DRoomUpdate): void {
         if (update.differencesFound === -1) {
+            this.handleDifferenceError(update.username);
+        } else {
+            this.render.removeDiff(update.objName, update.diffType);
+            const gamer: Gamer = this.gamers.find((x: Gamer) => x.username === update.username);
+            gamer.differencesFound = update.differencesFound;
+            const isGameOver: boolean = update.differencesFound === (this.gamers.length > 1 ? this.NB_MAX_DIFF_MULTI : this.NB_MAX_DIFF);
+            if (update.username === this.index.username) {
+                if (isGameOver) {
+                    this.finishGame();
+                } else {
+                    this.correctSound.play().catch((error: Error) => console.error(error.message));
+                }
+            } else {
+                if (isGameOver) {
+                    this.timer.stopTimer();
+                    this._disableClick = "disable-click";
+                    // TODO TELL THE GAMER THAT HE'S BAD
+                }
+            }
+        }
+    }
+
+    private handleDifferenceError(username: string): void {
+        if (this.index.username === username) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
             this._disableClick = "disable-click";
@@ -102,16 +133,8 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
                     this._disableClick = "";
                     this._blockedCursor = "";
                 },
-                this.ONE_SEC_IN_MS
+                this.CLICK_DELAY
             );
-        } else {
-            this.render.removeDiff(update.objName, update.diffType);
-            this.differencesFound = update.differencesFound;
-            if (this.differencesFound === this.NB_MAX_DIFF) {
-                this.finishGame();
-            } else {
-                this.correctSound.play().catch((error: Error) => console.error(error.message));
-            }
         }
     }
 
@@ -123,12 +146,17 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
             username: this.index.username,
             score: this.timer.getTimeAsString(),
             gameId: this.game3D.id,
+            gameRoomId: this.gameRoomId,
             gameType: "free",
         });
         this.getBack();
     }
     private getBack(): void {
-        this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
+        this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
+    }
+
+    private getGameRoomId(): string {
+        return this.route.snapshot.queryParamMap.get("gameRoomId");
     }
 
     private getId(): string {
@@ -146,23 +174,24 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     public get3DGame(): void {
         this.gameService.get3DGame(this.getId())
             .then((response: IGame3D) => {
+                this.ref.detach();
                 this.game3D = response;
                 this.sendCreation();
                 this.render.initialize(this.originalContainer, this.modifiedContainer, this.game3D).then(() => {
                     this._gameIsReady = true;
                     this.startGame();
                 }
-                ).catch(() => {throw new THREE_ERROR("error while rendering 3D game"); });
+                ).catch(() => { throw new THREE_ERROR("error while rendering 3D game"); });
             })
-            .catch(() => {throw new COMMUNICATION_ERROR("unable to get 3DGames."); });
+            .catch(() => { throw new COMMUNICATION_ERROR("unable to get 3DGames."); });
     }
     private sendCreation(): void {
-        this.roomID = this.game3D.id;
         const newGameMessage: NewGame3DMessage = {
             username: this.index.username,
-            gameRoomId: this.roomID,
+            gameId: this.game3D.id,
             gameName: this.game3D.name,
             is3D: true,
+            gameRoomId: this.gameRoomId,
             differences: this.game3D.differences
         };
         this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
@@ -234,7 +263,7 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         const object: THREE.Object3D | null = this.render.identifyDiff(event);
         this.lastClick = event;
         const objMessage: Obj3DClickMessage = {
-            gameRoomId: this.roomID,
+            gameRoomId: this.gameRoomId,
             username: this.index.username,
             name: object ? object.name : null,
         };

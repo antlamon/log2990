@@ -8,7 +8,6 @@ export class SocketsEvents {
     public static readonly CREATE_GAME_ROOM = "create-game-room";
     public static readonly DELETE_GAME_ROOM = "delete-game-room";
     public static readonly USER_CONNECTION = "user-connection";
-    public static readonly NEW_BEST_TIME = "user-best-score";
     public static readonly DELETE_GAME_3D_ROOM = "delete-game-3D-room";
     public static readonly SIMPLE_GAME_ADDED = "add-simple";
     public static readonly FREE_GAME_ADDED = "add-free";

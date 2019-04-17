@@ -17,7 +17,7 @@ import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval-objects-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { MOUSE } from "three";
-import { Game3DRoomUpdate } from "../../../../../common/communication/message";
+import { Game3DRoomUpdate, Gamer, NewGameStarted } from "../../../../../common/communication/message";
 import { GameMessagesComponent } from "../game-messages/game-messages.component";
 const mockObjects: IObjet3D[] = [];
 
@@ -31,6 +31,20 @@ const mockGame3D: IGame3D = {
     backColor: 0,
     isThematic: false,
   };
+
+const mockGamers: Gamer[] = [
+    {
+        username: "winner",
+        differencesFound: 4,
+        isReady: true,
+    },
+    {
+        username: "looser",
+        differencesFound: 0,
+        isReady: true,
+    },
+
+];
 
 const nbRenderCall: number = 1;
 const DELAY: number = 50;
@@ -60,7 +74,7 @@ describe("Game3DViewComponent", () => {
         spyOn(component, "ngOnDestroy").and.callFake(() => {});
         fixture.detectChanges();
         spyOn(component["gameService"], "get3DGame").and.returnValue(Promise.resolve(mockGame3D));
-        component["render"]["differences"] = [];
+        component["render"]["differencesObjects"] = [];
     });
 
     it("should create", () => {
@@ -163,12 +177,14 @@ describe("Game3DViewComponent", () => {
             const spyDiff: jasmine.Spy = spyOn(component["render"], "removeDiff").and.callFake(() => {});
             const spy: jasmine.Spy = spyOn(component["correctSound"], "play").and.returnValue(Promise.resolve());
             const update: Game3DRoomUpdate = {
-                username: "test",
+                username: mockGamers[0].username,
                 differencesFound: 3,
                 objName: "",
                 diffType: "",
                 isGameOver: false,
             };
+            component["index"]["username"] = update.username;
+            component["gamers"] = mockGamers;
             component["handleCheckDifference"](update);
             expect(spyDiff).toHaveBeenCalledWith(update.objName, update.diffType);
             expect(spy).toHaveBeenCalled();
@@ -179,12 +195,14 @@ describe("Game3DViewComponent", () => {
             component["game3D"] = mockGame3D;
             const spySocket: jasmine.Spy = spyOn(component["socket"], "emitEvent").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
-                username: "test",
+                username: mockGamers[0].username,
                 differencesFound: 7,
                 objName: "",
                 diffType: "",
                 isGameOver: true,
             };
+            component["gamers"] = [mockGamers[0]];
+            component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
             expect(spySocket).toHaveBeenCalled();
         });
@@ -194,12 +212,14 @@ describe("Game3DViewComponent", () => {
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
             spyOn(component["socket"], "emitEvent").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
-                username: "test",
+                username: mockGamers[0].username,
                 differencesFound: 7,
                 objName: "",
                 diffType: "",
                 isGameOver: true,
             };
+            component["gamers"] = [mockGamers[0]];
+            component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
         });
@@ -210,12 +230,14 @@ describe("Game3DViewComponent", () => {
             const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
             const spyT: jasmine.Spy = spyOn(component["timer"], "stopTimer").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
-                username: "test",
+                username: mockGamers[0].username,
                 differencesFound: 7,
                 objName: "",
                 diffType: "",
                 isGameOver: true,
             };
+            component["gamers"] = [mockGamers[0]];
+            component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
             expect(spyT).toHaveBeenCalled();
@@ -226,23 +248,69 @@ describe("Game3DViewComponent", () => {
             const spy: jasmine.Spy = spyOn(component["errorSound"], "play").and.returnValue(Promise.resolve());
             const spyE: jasmine.Spy = spyOn(component["errorPopup"], "showPopup").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
-                username: "test",
+                username: mockGamers[0].username,
                 differencesFound: -1,
                 objName: "",
                 diffType: "",
                 isGameOver: false,
             };
+            component["index"]["username"] = update.username;
+            component["gamers"] = mockGamers;
             component["handleCheckDifference"](update);
             expect(spy).toHaveBeenCalled();
             expect(spyE).toHaveBeenCalled();
         });
+        it("handle check difference receiving -1 differences should NOT play the error sound when its not the right user", async () => {
+            spyOn(component["render"], "removeDiff").and.callFake(() => {});
+            component["lastClick"] = new MouseEvent("click");
+            const spy: jasmine.Spy = spyOn(component["errorSound"], "play").and.returnValue(Promise.resolve());
+            const spyE: jasmine.Spy = spyOn(component["errorPopup"], "showPopup").and.callFake(() => {});
+            const update: Game3DRoomUpdate = {
+                username: mockGamers[0].username,
+                differencesFound: -1,
+                objName: "",
+                diffType: "",
+                isGameOver: false,
+            };
+            component["index"]["username"] = "WRONG USER";
+            component["gamers"] = mockGamers;
+            component["handleCheckDifference"](update);
+            expect(spy).toHaveBeenCalledTimes(0);
+            expect(spyE).toHaveBeenCalledTimes(0);
+        });
+        it("handle check difference when no differences are found should disable click for 1sec", async (done) => {
+            const update: Game3DRoomUpdate = {
+                username: mockGamers[0].username,
+                differencesFound: -1,
+                objName: "",
+                diffType: "",
+                isGameOver: false,
+            };
+            component["lastClick"] = new MouseEvent("click");
+            component["index"]["username"] = update.username;
+            component["gamers"] = mockGamers;
+            component["handleCheckDifference"](update);
+            expect(component.disableClick).toEqual("disable-click");
+            expect(component.blockedCursor).toEqual("cursor-not-allowed");
+            setTimeout(() => {
+                expect(component.disableClick).toEqual("");
+                expect(component.blockedCursor).toEqual("");
+                done();
+            },         component["CLICK_DELAY"] + 1);
+        });
     });
-    it("get blockedCursor() should correctly return the value of blockCursor", () => {
-        component["_blockedCursor"] = "test123";
-        expect(component.blockedCursor).toEqual("test123");
+    describe("handleCreateGameRoom function", () => {
+        it("should set the component's gamers and roomID properties according to the data sent by the event", () => {
+            const mockMessage: NewGameStarted = {
+                gameRoomId: "",
+                players: [],
+                startTime: new Date(),
+            };
+            component["handleCreateGameRoom"](mockMessage);
+            expect(component["gameRoomId"]).toEqual(mockMessage.gameRoomId);
+            expect(component["gamers"]).toEqual(mockMessage.players);
+        });
+
     });
-    it("get disableClick() should correctly return the value of disableClick", () => {
-        component["_disableClick"] = "test123";
-        expect(component.disableClick).toEqual("test123");
-    });
+// tslint:disable-next-line:max-file-line-count
 });

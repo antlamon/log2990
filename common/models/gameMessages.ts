@@ -1,9 +1,7 @@
 
 export interface IGameMessage {
-    eventType: string;
     time: string;
-    username: string;
-    data: string;
+    text: string;
 }
 
 export interface IMessageForm {
