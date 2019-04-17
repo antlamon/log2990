@@ -5,7 +5,7 @@ import { SocketService } from "./socket.service";
 import { GameService } from "./game.service";
 import { RenderService } from "../scene3D/render.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-import { SIMPLE_GAME_TYPE, IScoreUpdate, FREE_GAME_TYPE } from "../../../../common/communication/message";
+import { SIMPLE_GAME_TYPE, IScoreUpdate, FREE_GAME_TYPE, NewScoreUpdate } from "../../../../common/communication/message";
 import { BehaviorSubject } from "rxjs";
 
 @Injectable({
@@ -15,8 +15,8 @@ export class GameManagerService {
   private _simpleGames: IGame[];
   private _freeGames: IGame3D[];
   private _imageURLs: Map<IGame3D, string>;
-  private simpleSubject: BehaviorSubject<IGame[]> = new BehaviorSubject([]);
-  private freeSubject: BehaviorSubject<IGame3D[]> = new BehaviorSubject([]);
+  private simpleSubject: BehaviorSubject<IGame[]>;
+  private freeSubject: BehaviorSubject<IGame3D[]>;
 
   public constructor(
     private gameService: GameService,
@@ -30,6 +30,8 @@ export class GameManagerService {
       this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.removeFreeGame.bind(this));
       this.socket.addEvent(SocketsEvents.SCORES_UPDATED, this.updateScore.bind(this));
       this._imageURLs = new Map();
+      this.simpleSubject = new BehaviorSubject(undefined);
+      this.freeSubject = new BehaviorSubject(undefined);
       this.getSimpleGames();
       this.getFreeGames();
   }
@@ -42,26 +44,27 @@ export class GameManagerService {
   public getImageUrl(game: IGame3D): string {
     return this._imageURLs.get(game);
   }
-  public async updateScore(upd: IScoreUpdate): Promise<void> {
-    if (upd.gameType === SIMPLE_GAME_TYPE) {
+  public async updateScore(update: NewScoreUpdate): Promise<void> {
+    const score: IScoreUpdate = update.scoreUpdate;
+    if (score.gameType === SIMPLE_GAME_TYPE) {
       if (!this._simpleGames) {
         await this.getSimpleGames();
       }
-      const index: number = this._simpleGames.findIndex((x: IGame) => x.id === upd.id);
+      const index: number = this._simpleGames.findIndex((x: IGame) => x.id === score.id);
       if (index !== -1) {
-        this._simpleGames[index].solo = upd.solo;
-        this._simpleGames[index].multi = upd.multi;
+        this._simpleGames[index].solo = score.solo;
+        this._simpleGames[index].multi = score.multi;
       }
       this.simpleSubject.next(this._simpleGames);
     }
-    if (upd.gameType === FREE_GAME_TYPE) {
+    if (score.gameType === FREE_GAME_TYPE) {
       if (!this._freeGames) {
         await this.getFreeGames();
       }
-      const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === upd.id);
+      const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === score.id);
       if (index !== -1) {
-        this._freeGames[index].solo = upd.solo;
-        this._freeGames[index].multi = upd.multi;
+        this._freeGames[index].solo = score.solo;
+        this._freeGames[index].multi = score.multi;
       }
       this.freeSubject.next(this._freeGames);
     }

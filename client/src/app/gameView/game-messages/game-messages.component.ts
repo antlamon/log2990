@@ -2,7 +2,7 @@ import { Component, OnDestroy } from "@angular/core";
 import { SocketService } from "src/app/services/socket.service";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IGameMessage } from "../../../../../common/models/gameMessages";
-import { GameRoomUpdate, NewScoreUpdate } from "../../../../../common/communication/message";
+import { GameRoomUpdate, NewScoreUpdate, NewGameStarted } from "../../../../../common/communication/message";
 
 @Component({
   selector: "app-game-messages",
@@ -14,12 +14,16 @@ export class GameMessagesComponent implements OnDestroy {
   private readonly PADDED_ZERO: number = -2;
 
   private gameMessages: IGameMessage[] = [];
+  private isMultiplayer: boolean;
+  private readonly positions: string[] = ["première", "deuxième", "troisième"];
 
   public constructor(private socket: SocketService) {
+    this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleNewGameRoom.bind(this));
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleNewIdentification.bind(this));
     this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleNewIdentification.bind(this));
     this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleConnection.bind(this));
-    this.socket.addEvent(SocketsEvents.NEW_BEST_TIME, this.handleNewBestTime.bind(this));
+    this.socket.addEvent(SocketsEvents.SCORES_UPDATED, this.handleNewBestTime.bind(this));
+    this.isMultiplayer = false;
   }
 
   public ngOnDestroy(): void {
@@ -27,21 +31,30 @@ export class GameMessagesComponent implements OnDestroy {
     this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
   }
 
+  private handleNewGameRoom(response: NewGameStarted): void {
+    this.isMultiplayer = response.players.length > 1;
+  }
+
   public handleNewIdentification(update: GameRoomUpdate): void {
+    let text: string;
     if (update.differencesFound === -1) {
+      text = "Erreur";
+      if (this.isMultiplayer) {
+        text += ` par ${update.username}`;
+      }
       const msg: IGameMessage = {
-        eventType: "identificationError",
-        username: "",
         time: this.getTime(),
-        data: "Erreur",
+        text,
       };
       this.gameMessages.push(msg);
     } else {
+      text = "Différence trouvée";
+      if (this.isMultiplayer) {
+        text += ` par ${update.username}`;
+      }
       const msg: IGameMessage = {
-        eventType: "differenceFound",
-        username: "",
         time: this.getTime(),
-        data: "Différence trouvée",
+        text,
       };
       this.gameMessages.push(msg);
     }
@@ -50,33 +63,27 @@ export class GameMessagesComponent implements OnDestroy {
   public handleConnection(username: string, eventType: string): void {
     if (eventType === "userConnected") {
       const msg: IGameMessage = {
-        eventType: eventType,
-        username: username,
         time: this.getTime(),
-        data: " s'est connecté(e)",
+        text: `${username} s'est connecté(e)`,
       };
       this.gameMessages.push(msg);
 
     } else {
     const msg: IGameMessage = {
-      eventType: eventType,
-      username: username,
       time: this.getTime(),
-      data: " s'est déconnecté(e)",
+      text: `${username} s'est déconnecté(e)`,
     };
     this.gameMessages.push(msg);
     }
   }
 
   public handleNewBestTime(newScoreUpdate: NewScoreUpdate): void {
-    const newBestMsg: string = `obtient la position ${newScoreUpdate.scoreUpdate.insertPos} dans les meilleurs
-     temps du jeu ${newScoreUpdate.gameName} en ${newScoreUpdate.gameMode}`;
+    const newBestMsg: string = `${newScoreUpdate.username} obtient la ${this.positions[newScoreUpdate.scoreUpdate.insertPos - 1]}
+     place dans les meilleurs temps du jeu ${newScoreUpdate.gameName} en ${newScoreUpdate.gameMode}`;
 
     const msg: IGameMessage = {
-      eventType: "newBestTime",
-      username: newScoreUpdate.username,
       time: this.getTime(),
-      data: newBestMsg,
+      text: newBestMsg,
     };
     this.gameMessages.push(msg);
   }

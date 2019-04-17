@@ -2,7 +2,8 @@ import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, ViewChil
 import { ActivatedRoute, Router } from "@angular/router";
 import { IndexService } from "src/app/services/index.service";
 import { TimerService } from "src/app/services/timer.service";
-import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point } from "../../../../../common/communication/message";
+import { GameRoomUpdate, ImageClickMessage, NewGameMessage, Point,
+    NewGameStarted, Gamer } from "../../../../../common/communication/message";
 import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
@@ -18,12 +19,14 @@ import {GAMES_LIST_PATH, INITIAL_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, COR
 export class Game2DViewComponent implements OnInit, OnDestroy {
 
     private simpleGame: IFullGame;
-    private differencesFound: number;
+    private gameRoomId: string;
+    private gamers: Gamer[];
     private _disableClick: string;
     private _blockedCursor: string;
     private readonly NB_MAX_DIFF: number = 7;
+    private readonly NB_MAX_DIFF_MULTI: number = 4;
 
-    private readonly ONE_SEC_IN_MS: number = 1000;
+    private readonly CLICK_DELAY: number = 1000;
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
     private victorySound: HTMLAudioElement;
@@ -46,7 +49,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         }
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
-        this.differencesFound = 0;
+        this.gamers = [];
         this._disableClick = "";
         this._blockedCursor = "";
         this.correctSound = new Audio(CORRECT_SOUND_PATH);
@@ -56,6 +59,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.timer.setToZero();
+        this.gameRoomId = this.getGameRoomId();
         this.getSimpleGame();
     }
 
@@ -64,42 +68,69 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
         if (this.simpleGame) {
-            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.simpleGame.card.id);
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.gameRoomId);
         }
     }
 
+    private getGameRoomId(): string {
+        return this.route.snapshot.queryParamMap.get("gameRoomId");
+    }
     private getId(): string {
         return String(this.route.snapshot.paramMap.get("id"));
     }
 
     private getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
-            .subscribe((response: IFullGame) => {
-                this.ref.detach();
-                this.simpleGame = response;
-                const newGameMessage: NewGameMessage = {
+        .subscribe((response: IFullGame) => {
+            this.ref.detach();
+            this.simpleGame = response;
+            const newGameMessage: NewGameMessage = {
                     username: this.index.username,
-                    gameRoomId: this.simpleGame.card.id,
+                    gameId: this.simpleGame.card.id,
                     gameName: this.simpleGame.card.name,
                     is3D: false,
+                    gameRoomId: this.gameRoomId,
                     originalImage: this.simpleGame.card.originalImage,
                     modifiedImage: this.simpleGame.modifiedImage,
                     differenceImage: this.simpleGame.differenceImage
                 };
-                this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
+            this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
             });
     }
 
-    private handleCreateGameRoom(rejection?: string): void {
-        if (rejection !== null) {
-            alert(rejection);
-        }
+    private handleCreateGameRoom(response: NewGameStarted): void {
+        this.gameRoomId = response.gameRoomId;
+        this.gamers = response.players;
         this.ref.reattach();
         this.timer.startTimer();
     }
 
     private handleCheckDifference(update: GameRoomUpdate): void {
         if (update.differencesFound === -1) {
+            this.handleDifferenceError(update.username);
+        } else {
+            this.simpleGame.modifiedImage = update.newImage;
+            const gamer: Gamer = this.gamers.find((x: Gamer) => x.username === update.username);
+            gamer.differencesFound = update.differencesFound;
+            const isGameOver: boolean = update.differencesFound === (this.gamers.length > 1 ? this.NB_MAX_DIFF_MULTI : this.NB_MAX_DIFF);
+            if (update.username === this.index.username) {
+                if (isGameOver) {
+                    this.finishGame();
+                } else {
+                    this.correctSound.play().catch((error: Error) => console.error(error.message));
+                }
+            } else {
+                if (isGameOver) {
+                    this.timer.stopTimer();
+                    this._disableClick = "disable-click";
+                    // TODO TELL THE GAMER THAT HE'S BAD
+                }
+            }
+        }
+    }
+
+    private handleDifferenceError(username: string): void {
+        if (this.index.username === username) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
             this._disableClick = "disable-click";
@@ -110,19 +141,9 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
                     this._disableClick = "";
                     this._blockedCursor = "";
                 },
-                this.ONE_SEC_IN_MS
+                this.CLICK_DELAY
             );
-        } else {
-            this.simpleGame.modifiedImage = update.newImage;
-            this.differencesFound = update.differencesFound;
-            if (this.differencesFound === this.NB_MAX_DIFF) {
-                this.finishGame();
-            } else {
-                this.correctSound.play().catch((error: Error) => console.error(error.message));
-            }
-
         }
-
     }
 
     private finishGame(): void {
@@ -134,6 +155,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
             score: this.timer.getTimeAsString(),
             gameId: this.simpleGame.card.id,
             gameType: "simple",
+            gameRoomId: this.gameRoomId,
         });
         this.getBack();
     }
@@ -149,7 +171,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
         };
         const imageClickMessage: ImageClickMessage = {
             point: point,
-            gameRoomId: this.simpleGame.card.id,
+            gameRoomId: this.gameRoomId,
             username: this.index.username,
         };
 
