@@ -260,6 +260,24 @@ describe("Game3DViewComponent", () => {
             expect(spy).toHaveBeenCalled();
             expect(spyE).toHaveBeenCalled();
         });
+        it("handle check difference receiving -1 differences should NOT play the error sound when its not the right user", async () => {
+            spyOn(component["render"], "removeDiff").and.callFake(() => {});
+            component["lastClick"] = new MouseEvent("click");
+            const spy: jasmine.Spy = spyOn(component["errorSound"], "play").and.returnValue(Promise.resolve());
+            const spyE: jasmine.Spy = spyOn(component["errorPopup"], "showPopup").and.callFake(() => {});
+            const update: Game3DRoomUpdate = {
+                username: mockGamers[0].username,
+                differencesFound: -1,
+                objName: "",
+                diffType: "",
+                isGameOver: false,
+            };
+            component["index"]["username"] = "WRONG USER";
+            component["gamers"] = mockGamers;
+            component["handleCheckDifference"](update);
+            expect(spy).toHaveBeenCalledTimes(0);
+            expect(spyE).toHaveBeenCalledTimes(0);
+        });
         it("handle check difference when no differences are found should disable click for 1sec", async (done) => {
             const update: Game3DRoomUpdate = {
                 username: mockGamers[0].username,
