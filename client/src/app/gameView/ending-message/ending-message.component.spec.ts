@@ -16,6 +16,7 @@ import { GamecardComponent } from 'src/app/gamecard/gamecard.component';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ErrorPopupComponent } from '../error-popup/error-popup.component';
+import { By } from '@angular/platform-browser';
 
 describe('EndingMessageComponent', () => {
   let component: EndingMessageComponent;
@@ -56,9 +57,18 @@ describe('EndingMessageComponent', () => {
   });
 
   it("The router should be called when the user click on the ending message", () => {
-    spyOn(component["el"], "nativeElement").and.callFake(() => {});
     const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
     component.submit();
     expect(spy).toHaveBeenCalledWith(["games"]);
   });
+
+  // it("The submit should be called when the user click on the ending message", () => {
+  //   const input: Element = fixture.debugElement.query(By.css("messageForm")).nativeElement;
+
+  //   spyOn(component, "submit");
+
+  //   input.dispatchEvent(new Event("click"));
+
+  //   expect(component.submit).toHaveBeenCalled();
+  // });
 });
