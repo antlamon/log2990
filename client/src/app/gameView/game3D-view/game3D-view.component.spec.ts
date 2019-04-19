@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from "@angular/material";
 import { IScore } from "../../../../../common/models/top3";
 import { IndexService } from "src/app/services/index.service";
 import { SocketService } from "src/app/services/socket.service";
-import { KEYS, AXIS } from "src/app/global/constants";
+import { KEYS, AXIS, GAME_STATE } from "src/app/global/constants";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { MedievalObjectsCreatorService } from "src/app/scene3D/thematic/medieval-objects-creator.service";
 import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
@@ -330,21 +330,21 @@ describe("Game3DViewComponent", () => {
         it("should call the soloEndGame modal from the modalService", () => {
             component["gamers"] = [mockGamers[0]]; // only 1 gamer in solo mode
             const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
-            component.openEndingDialog("WON");
+            component.openEndingDialog(GAME_STATE.WIN);
             expect(spyEndGame).toHaveBeenCalledWith("soloEndGame");
         });
 
         it("should call the multWinGame from the modalService", () => {
             component["gamers"] = mockGamers;
             const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
-            component.openEndingDialog("WON");
+            component.openEndingDialog(GAME_STATE.WIN);
             expect(spyEndGame).toHaveBeenCalledWith("multWinGame");
         });
 
         it("should call the multLostGame from the modalService", () => {
             component["gamers"] = mockGamers;
             const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
-            component.openEndingDialog("LOST");
+            component.openEndingDialog(GAME_STATE.LOST);
             expect(spyEndGame).toHaveBeenCalledWith("multLostGame");
         });
     });

@@ -163,13 +163,20 @@ describe("SceneGeneratorService", () => {
 
         return [tempMesh];
       });
+      spyOn(service["modelsService"], "createObject").and.callFake(async (): Promise<THREE.Mesh> => {
+        const tempMesh: THREE.Mesh = new THREE.Mesh();
+        tempMesh.name = "0";
+
+        return tempMesh;
+      });
+      spyOn(service["textureLoader"], "load").and.callFake(() => {});
       const scene: THREE.Scene  = await service.createScene(mockObjects, 1, true, []);
       const sceneM: THREE.Scene  = await service.modifyScene(scene.clone(),   [{
         type: MODIFICATION_TYPE,
         object: cubeM,
         name: "0",
        }]);
-      expect(scene.getObjectByName("1") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("0") as THREE.Mesh);
+      expect(scene.getObjectByName("0") as THREE.Mesh).not.toEqual(sceneM.getObjectByName("0") as THREE.Mesh);
     });
     it("The returned THREE.Scene should have and element which the material is different from the original scene (thematic)", async () => {
       spyOn(service, "createScene").and.callFake(async (): Promise<THREE.Scene> => {

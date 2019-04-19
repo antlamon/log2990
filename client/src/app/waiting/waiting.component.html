@@ -1,10 +1,18 @@
 <body>
-  <div class="spinner">
+  <div *ngIf="isDeleted">
+    <div>
+      <p class="textAlert">Le jeu a été supprimé. Vous allez être renvoyé à la liste des jeux.</p>
+    </div>
+    <div>
+      <button class = "buttonAlert" (click)="cancel()" >OK</button>
+    </div>
+  </div>
+  <div *ngIf="!isDeleted" class="spinner">
     <div class="spinner-circle spinner-circle-outer"></div>
     <div class="spinner-circle-off spinner-circle-inner"></div>
     <div class="spinner-circle spinner-circle-single-1"></div>
     <div class="spinner-circle spinner-circle-single-2"></div>
   </div>
-  <div class="text">...En attente d'un joueur...</div>
-  <button (click) = "cancel()">Annuler</button>
+  <div *ngIf="!isDeleted" class="text">...En attente d'un joueur...</div>
+  <button *ngIf="!isDeleted" (click)="cancel()">Annuler</button>
 </body>

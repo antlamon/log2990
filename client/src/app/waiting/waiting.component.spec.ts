@@ -87,20 +87,18 @@ describe("WaitingComponent", () => {
       expect(routeSpy).toHaveBeenCalledWith(["games"]);
     });
   });
-  describe("HandleGameDeleted function", () => {
-    it("should route back to the games list ONLY if it has the correct ID", () => {
-      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+  describe("HandleGameDeleted ", () => {
+    it("should set the isDeleted property to true ONLY if it has the correct ID", () => {
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue("goodId");
       component["handleGameDeleted"]("goodId");
-      expect(routeSpy).toHaveBeenCalledWith(["games"]);
+      expect(component.isDeleted).toEqual(true);
     });
-    it("should NOT route back to the games list if it DOES NOT have the correct ID", () => {
-      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+    it("should NOT set the isDeleted property to true if it DOES NOT have the correct ID", () => {
       // tslint:disable-next-line:no-any
       spyOn<any>(component, "getId").and.returnValue("goodId");
       component["handleGameDeleted"]("wrongID");
-      expect(routeSpy).toHaveBeenCalledTimes(0);
+      expect(component.isDeleted).toEqual(false);
     });
   });
 });

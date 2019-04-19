@@ -6,7 +6,7 @@ import { SocketService } from "../services/socket.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IndexService } from "../services/index.service";
 import { TimerService } from "../services/timer.service";
-import { INITIAL_PATH, CORRECT_SOUND_PATH, ERROR_SOUND_PATH, VICTORY_SOUND_PATH, GAMES_LIST_PATH } from "../global/constants";
+import { INITIAL_PATH, CORRECT_SOUND_PATH, ERROR_SOUND_PATH, VICTORY_SOUND_PATH, GAMES_LIST_PATH, GAME_STATE } from "../global/constants";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 import { ModalService } from "../services/modal.service";
 
@@ -90,8 +90,8 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
             if (isGameOver) {
                 this.timer.stopTimer();
                 this._disableClick = "disable-click";
-                // TODO TELL THE GAMER THAT HE'S BAD
-                this.openEndingDialog("LOST");
+
+                this.openEndingDialog(GAME_STATE.WIN);
             }
         }
     }
@@ -117,7 +117,7 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this._disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
-        this.openEndingDialog("WON");
+        this.openEndingDialog(GAME_STATE.WIN);
     }
 
     protected getBack(): void {
@@ -131,15 +131,14 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
     public get blockedCursor(): string {
         return this._blockedCursor;
     }
-    public openEndingDialog(gameResult: string): void {
-       if(this.gamers.length === this.MULTIPLAYER_GAME){
-            if(gameResult == "WON"){
+    public openEndingDialog(gameResult: number): void {
+       if (this.gamers.length === this.MULTIPLAYER_GAME) {
+            if (gameResult === GAME_STATE.WIN) {
                 this.modalService.open(this.MULT_MODAL_W);
             } else {
                 this.modalService.open(this.MULT_MODAL_L);
             }
-        }
-        else{
+        } else {
             this.modalService.open(this.SOLO_MODAL);
         }
     }
