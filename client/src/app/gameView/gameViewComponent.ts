@@ -6,11 +6,16 @@ import { SocketService } from "../services/socket.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { IndexService } from "../services/index.service";
 import { TimerService } from "../services/timer.service";
-import { INITIAL_PATH, CORRECT_SOUND_PATH, ERROR_SOUND_PATH, VICTORY_SOUND_PATH, GAMES_LIST_PATH } from "../global/constants";
+import { INITIAL_PATH, CORRECT_SOUND_PATH, ERROR_SOUND_PATH, VICTORY_SOUND_PATH, GAMES_LIST_PATH, GAME_STATE } from "../global/constants";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
+import { ModalService } from "../services/modal.service";
 
 export abstract class GameViewComponent implements OnInit, OnDestroy {
     private readonly CLICK_DELAY: number = 1000;
+    private readonly MULTIPLAYER_GAME: number = 2;
+    private readonly SOLO_MODAL: string = "soloEndGame";
+    private readonly MULT_MODAL_L: string = "multLostGame";
+    private readonly MULT_MODAL_W: string = "multWinGame";
 
     protected gamers: Gamer[];
     protected _disableClick: string;
@@ -32,7 +37,8 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
         protected index: IndexService,
         protected timer: TimerService,
         protected ref: ChangeDetectorRef,
-        protected router: Router) {
+        protected router: Router,
+        protected modalService: ModalService) {
         if (!this.index.username) {
             this.router.navigate([INITIAL_PATH]).catch((error: Error) => console.error(error.message));
         }
@@ -84,7 +90,8 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
             if (isGameOver) {
                 this.timer.stopTimer();
                 this._disableClick = "disable-click";
-                // TODO TELL THE GAMER THAT HE'S BAD
+
+                this.openEndingDialog(GAME_STATE.WIN);
             }
         }
     }
@@ -110,6 +117,7 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
         this.timer.stopTimer();
         this._disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
+        this.openEndingDialog(GAME_STATE.WIN);
     }
 
     protected getBack(): void {
@@ -122,5 +130,16 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
 
     public get blockedCursor(): string {
         return this._blockedCursor;
+    }
+    public openEndingDialog(gameResult: number): void {
+       if (this.gamers.length === this.MULTIPLAYER_GAME) {
+            if (gameResult === GAME_STATE.WIN) {
+                this.modalService.open(this.MULT_MODAL_W);
+            } else {
+                this.modalService.open(this.MULT_MODAL_L);
+            }
+        } else {
+            this.modalService.open(this.SOLO_MODAL);
+        }
     }
 }

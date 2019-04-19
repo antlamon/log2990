@@ -21,6 +21,7 @@ import { GamecardComponent } from "../../gamecard/gamecard.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { WaitingComponent } from "src/app/waiting/waiting.component";
 import { of } from "rxjs";
+import { EndingMessageComponent } from "src/app/gameView/ending-message/ending-message.component";
 
 describe("SimpleGeneratorComponent", () => {
   const LOADING_FILE_DELAY: number = 50;
@@ -41,6 +42,7 @@ describe("SimpleGeneratorComponent", () => {
         ErrorPopupComponent,
         GameMessagesComponent,
         WaitingComponent,
+        EndingMessageComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, FileValidatorService, GameService, RenderService]

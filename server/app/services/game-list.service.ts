@@ -150,7 +150,8 @@ export class GameListService {
             const tempGame: IGame3D | null = await this.freeCollection.findOne({ id });
             if (tempGame) {
                 this.socketController.emitEvent(
-                    SocketsEvents.SCORES_UPDATED, { gameType: gameType, id: id, solo: tempGame.solo, multi: tempGame.multi });
+                    SocketsEvents.SCORES_UPDATED,
+                    { gameType: gameType, id: id, solo: tempGame.solo, multi: tempGame.multi });
             }
         }
     }

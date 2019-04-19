@@ -11,7 +11,7 @@ import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/e
 import { IGame3D } from "../../../../../common/models/game3D";
 import { GameService } from "../../services/game.service";
 import { GameViewComponent } from "../gameViewComponent";
-
+import { ModalService } from "src/app/services/modal.service";
 @Component({
     selector: "app-game3d-view",
     templateUrl: "./game3D-view.component.html",
@@ -41,8 +41,9 @@ export class Game3DViewComponent extends GameViewComponent {
         index: IndexService,
         private render: RenderService,
         ref: ChangeDetectorRef,
-        router: Router) {
-        super(gameService, socket, route, index, timer, ref, router);
+        router: Router,
+        modalService: ModalService) {
+        super(gameService, socket, route, index, timer, ref, router, modalService);
         this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
@@ -88,7 +89,6 @@ export class Game3DViewComponent extends GameViewComponent {
             gameRoomId: this.gameRoomId,
             gameType: "free",
         });
-        this.getBack();
     }
 
     private get originalContainer(): HTMLDivElement {
@@ -141,6 +141,7 @@ export class Game3DViewComponent extends GameViewComponent {
     }
 
     private onKeyDown = (event: KeyboardEvent) => {
+        // tslint:disable-next-line:deprecation from cli
         switch (event.keyCode) {
             case KEYS["S"]:
                 this.render.moveCam(AXIS.Z, this.movementSpeed);

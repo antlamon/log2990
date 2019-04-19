@@ -19,6 +19,7 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { WaitingComponent } from "src/app/waiting/waiting.component";
 import { GameService } from "src/app/services/game.service";
 import { of } from "rxjs";
+import { EndingMessageComponent } from "src/app/gameView/ending-message/ending-message.component";
 
 describe("FreeGeneratorComponent", () => {
   let component: FreeGeneratorComponent;
@@ -38,6 +39,7 @@ describe("FreeGeneratorComponent", () => {
         GameMessagesComponent,
         GamecardComponent,
         WaitingComponent,
+        EndingMessageComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, RenderService, GameService]

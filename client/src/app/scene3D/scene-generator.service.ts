@@ -71,7 +71,7 @@ export class SceneGeneratorService {
         });
         break;
       case MODIFICATION_TYPE:
-        this.modifyObject(scene, diffObj).catch(() => {
+        await this.modifyObject(scene, diffObj).catch(() => {
           throw new THREE_ERROR("unable to modify a three object.");
         });
         break;
@@ -104,6 +104,7 @@ export class SceneGeneratorService {
            });
         }
       });
+      newMesh.parent = scene;
       scene.remove(originalMesh);
       scene.add(newMesh);
     } else {

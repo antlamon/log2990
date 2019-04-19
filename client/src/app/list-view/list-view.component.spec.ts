@@ -23,6 +23,7 @@ import { IGame3D } from "../../../../common/models/game3D";
 import { AppRoutingModule } from "../app-routing.module";
 import { RouterTestingModule } from "@angular/router/testing";
 import { WaitingComponent } from "../waiting/waiting.component";
+import { EndingMessageComponent } from "../gameView/ending-message/ending-message.component";
 
 describe("ListViewComponent", () => {
   let component: ListViewComponent;
@@ -54,6 +55,7 @@ describe("ListViewComponent", () => {
         FreeGeneratorComponent, Game3DViewComponent,
         ErrorPopupComponent, GamecardComponent,
         GameMessagesComponent, WaitingComponent,
+        EndingMessageComponent
       ],
       providers: [GameManagerService, RenderService,
                   IndexService, MedievalObjectsCreatorService,
