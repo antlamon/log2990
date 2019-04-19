@@ -145,6 +145,7 @@ export class RenderService {
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(devicePixelRatio);
     renderer.setSize(container.clientWidth, container.clientHeight);
+    // tslint:disable-next-line:deprecation
     renderer.gammaFactor = this.GAMMA_FACTOR;
     renderer.gammaOutput = true;
 
