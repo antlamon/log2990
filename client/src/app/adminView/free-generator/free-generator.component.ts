@@ -76,13 +76,24 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
           this.errorsMessages.push(message.body);
         } else {
           this.close();
-
-          return true;
         }
       });
     } else {
       this.showErrors();
     }
+  }
+
+  public changeType(newType: string): void {
+    this.selectedType = newType;
+  }
+
+  public open(): void {
+    this.element.style.display = "block";
+  }
+
+  public close(): void {
+    this.resetForm();
+    this.element.style.display = "none";
   }
 
   private isValidSubmit(): boolean {
@@ -102,22 +113,9 @@ export class FreeGeneratorComponent implements OnInit, OnDestroy, IModal {
     }
   }
 
-  public hasModifications(): boolean {
+  private hasModifications(): boolean {
     return this.colorCheckbox || this.addCheckbox || this.deleteCheckbox;
 
-  }
-
-  public changeType(newType: string): void {
-    this.selectedType = newType;
-  }
-
-  public open(): void {
-    this.element.style.display = "block";
-  }
-
-  public close(): void {
-    this.resetForm();
-    this.element.style.display = "none";
   }
 
   private resetForm(): void {
