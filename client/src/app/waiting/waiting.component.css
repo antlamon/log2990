@@ -77,7 +77,7 @@ button:focus{
   text-align: center;
   width: 400px;
   font-size: 2em;
-  color: #fcfcf666;
+  color: #ccd9cb;
 }
 .spinner .spinner-circle {
   position: absolute;
@@ -116,8 +116,8 @@ button:focus{
   opacity: 0.9;
   filter: alpha(opacity=30);
   animation: spinner-rotate-single-1 5s 0s ease-in-out infinite;
-  border-color: transparent transparent transparent #ccd9cb;
-  box-shadow: 2px 0 2px #ccd9cb;
+  border-color: transparent transparent transparent #edc252;
+  box-shadow: 2px 0 2px #edc252;
 }
 .spinner .spinner-circle.spinner-circle-single-2 {
   width: 0;
@@ -128,8 +128,8 @@ button:focus{
   opacity: 0.0;
   filter: alpha(opacity=30);
   animation: spinner-rotate-single-2 7s 0s ease-in-out infinite;
-  border-color: #ccd9cb transparent transparent transparent;
-  box-shadow: 0 -12px 4px #ccd9cb;
+  border-color: #edc252 transparent transparent transparent;
+  box-shadow: 0 -12px 4px #edc252;
 }
 
 @keyframes spinner-rotate-outer {

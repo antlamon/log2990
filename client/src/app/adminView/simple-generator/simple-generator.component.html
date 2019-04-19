@@ -5,16 +5,14 @@
     <form id="formSV">
       <div class="form-grid">
         <div>
-          <div *ngIf="(this.fileValidator.isValidGameName(this.gameName))"><p id="gameNameLabel">Nom du jeu</p></div>
-          <div *ngIf="!(this.fileValidator.isValidGameName(this.gameName))" style="color:red"><p id="gameNameLabel">Nom du jeu</p></div>
+          <div><p id="gameNameLabel">Nom du jeu</p></div>
         </div>
         <div class="rightColumn">
           <input [(ngModel)]="gameName" placeholder="Nom du jeu" name="gameNAME"/>
         </div>
         <div>
           <p id="originalFileLabel">Image originale</p>
-          <div *ngIf ="originalFileIsOK"><p id ="{{ID_ORIGINAL_FILENAME}}">{{originalFileName}}</p></div>
-          <div  *ngIf ="!(originalFileIsOK)" style="color:red"><p id ="{{ID_ORIGINAL_FILENAME}}">{{originalFileName}}</p></div>
+          <div><p id ="{{ID_ORIGINAL_FILENAME}}">{{originalFileName}}</p></div>
         </div>
         <div class="rightColumn">
           <input  type="file" name="file" id={{ID_ORIGINAL_FILE}} class="uploader" (change)="onFileChange($event.target.files[0],'originalFile')">
@@ -22,8 +20,7 @@
         </div>
         <div>
           <p id = "modifiedFileLabel"> Image modifiée </p>
-          <div *ngIf ="modifiedFileIsOK"><p id ="{{ID_MODIFIED_FILENAME}}">{{modifiedFileName}}</p></div>
-          <div  *ngIf ="!(modifiedFileIsOK)" style="color:red"><p id ="{{ID_MODIFIED_FILENAME}}">{{modifiedFileName}}</p></div>
+          <div><p id ="{{ID_MODIFIED_FILENAME}}">{{modifiedFileName}}</p></div>
         </div>
         <div class="rightColumn">
           <input  type="file" name="file" id={{ID_MODIFIED_FILE}} class="uploader" (change)="onFileChange($event.target.files[0],'modifiedFile')">
