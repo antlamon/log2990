@@ -107,5 +107,14 @@ describe("FreeGeneratorComponent", () => {
     component.close();
     expect(resetSpy).toHaveBeenCalled();
   });
+  it("the function resetForm should properly reset the form's properties", () => {
+    component["resetForm"]();
+    expect(component["noObj"]).toEqual("");
+    expect(component["gameName"]).toEqual("");
+    expect(component["errorsMessages"]).toEqual([]);
+    expect(component["addCheckbox"]).toEqual(false);
+    expect(component["deleteCheckbox"]).toEqual(false);
+    expect(component["colorCheckbox"]).toEqual(false);
+  });
 
 });
