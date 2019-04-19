@@ -1,5 +1,5 @@
 import { OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from "@angular/core";
-import { Gamer, NewGameStarted, GameRoomUpdate } from "../../../../common/communication/message";
+import { Gamer, NewGameStarted, IGameRoomUpdate } from "../../../../common/communication/message";
 import { ErrorPopupComponent } from "./error-popup/error-popup.component";
 import { GameService } from "../services/game.service";
 import { SocketService } from "../services/socket.service";
@@ -9,43 +9,42 @@ import { TimerService } from "../services/timer.service";
 import { INITIAL_PATH, CORRECT_SOUND_PATH, ERROR_SOUND_PATH, VICTORY_SOUND_PATH, GAMES_LIST_PATH } from "../global/constants";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 
-export class GameViewComponent implements OnInit, OnDestroy {
+export abstract class GameViewComponent implements OnInit, OnDestroy {
     private readonly CLICK_DELAY: number = 1000;
     private readonly NB_MAX_DIFF: number = 7;
     private readonly NB_MAX_DIFF_MULTI: number = 4;
 
     protected gamers: Gamer[];
-    protected disableClick: string;
-    protected blockedCursor: string;
+    protected _disableClick: string;
+    protected _blockedCursor: string;
     protected gameRoomId: string;
 
     @ViewChild(ErrorPopupComponent)
     private errorPopup: ErrorPopupComponent;
-    private lastClick: MouseEvent;
+    protected lastClick: MouseEvent;
 
     private correctSound: HTMLAudioElement;
     private errorSound: HTMLAudioElement;
     private victorySound: HTMLAudioElement;
 
     protected constructor(
-        private gameService: GameService,
-        private socket: SocketService,
-        private route: ActivatedRoute,
-        private index: IndexService,
-        private timer: TimerService,
-        private ref: ChangeDetectorRef,
-        private router: Router) {
+        protected gameService: GameService,
+        protected socket: SocketService,
+        protected route: ActivatedRoute,
+        protected index: IndexService,
+        protected timer: TimerService,
+        protected ref: ChangeDetectorRef,
+        protected router: Router) {
         if (!this.index.username) {
             this.router.navigate([INITIAL_PATH]);
         }
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
-        this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
         this.correctSound = new Audio(CORRECT_SOUND_PATH);
         this.errorSound = new Audio(ERROR_SOUND_PATH);
         this.victorySound = new Audio(VICTORY_SOUND_PATH);
         this.gamers = [];
-        this.disableClick = "";
-        this.blockedCursor = "";
+        this._disableClick = "";
+        this._blockedCursor = "";
     }
 
     public ngOnInit(): void {
@@ -55,7 +54,6 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
-        this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
     }
 
     protected getId(): string {
@@ -73,7 +71,7 @@ export class GameViewComponent implements OnInit, OnDestroy {
         this.timer.startTimer();
     }
 
-    protected handleCheckDifference(update: GameRoomUpdate): void {}
+    protected abstract handleCheckDifference(update: IGameRoomUpdate): void;
 
     protected handleDifferenceFound(username: string, differencesFound: number): void {
         const gamer: Gamer = this.gamers.find((x: Gamer) => x.username === username);
@@ -88,23 +86,23 @@ export class GameViewComponent implements OnInit, OnDestroy {
         } else {
             if (isGameOver) {
                 this.timer.stopTimer();
-                this.disableClick = "disable-click";
+                this._disableClick = "disable-click";
                 // TODO TELL THE GAMER THAT HE'S BAD
             }
         }
     }
 
-    private handleDifferenceError(username: string): void {
+    protected handleDifferenceError(username: string): void {
         if (this.index.username === username) {
             this.errorSound.play().catch((error: Error) => console.error(error.message));
             this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
-            this.disableClick = "disable-click";
-            this.blockedCursor = "cursor-not-allowed";
+            this._disableClick = "disable-click";
+            this._blockedCursor = "cursor-not-allowed";
             setTimeout(
                 () => {
                     this.errorPopup.hidePopup();
-                    this.disableClick = "";
-                    this.blockedCursor = "";
+                    this._disableClick = "";
+                    this._blockedCursor = "";
                 },
                 this.CLICK_DELAY
             );
@@ -113,11 +111,19 @@ export class GameViewComponent implements OnInit, OnDestroy {
 
     protected finishGame(): void {
         this.timer.stopTimer();
-        this.disableClick = "disable-click";
+        this._disableClick = "disable-click";
         this.victorySound.play().catch((error: Error) => console.error(error.message));
     }
 
     protected getBack(): void {
         this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
+    }
+
+    public get disableClick(): string {
+        return this._disableClick;
+    }
+
+    public get blockedCursor(): string {
+        return this._blockedCursor;
     }
 }

@@ -50,7 +50,7 @@ export interface Point {
     y: number;
 }
 
-interface IGameRoomUpdate {
+export interface IGameRoomUpdate {
     username: string;
     differencesFound: number;
     isGameOver: boolean;
