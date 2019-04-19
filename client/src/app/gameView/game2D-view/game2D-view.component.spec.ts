@@ -28,9 +28,9 @@ const mockedFullGame: IFullGame = {
 };
 const mockGamers: Gamer[] = [
     {
-    username: "winner",
-    differencesFound: 4,
-    isReady: true,
+        username: "winner",
+        differencesFound: 4,
+        isReady: true,
     },
     {
         username: "looser",
@@ -193,10 +193,27 @@ describe("Game2DViewComponent", () => {
             expect(component["gamers"]).toEqual(mockMessage.players);
         });
     });
-    it("should call the simpleModal from the modalService", () => {
-        const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
-        component.openEndingDialog("soloEndGame");
-        expect(spyEndGame).toHaveBeenCalledWith("soloEndGame");
-    });
 
+    describe("handleCreateGameRoom function", () => {
+        it("should call the soloEndGame modal from the modalService", () => {
+            component["gamers"] = [mockGamers[0]]; // only 1 gamer in solo mode
+            const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+            component.openEndingDialog("WON");
+            expect(spyEndGame).toHaveBeenCalledWith("soloEndGame");
+        });
+
+        it("should call the multWinGame modal from the modalService", () => {
+            component["gamers"] = mockGamers;
+            const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+            component.openEndingDialog("WON");
+            expect(spyEndGame).toHaveBeenCalledWith("multWinGame");
+        });
+
+        it("should call the multLostGame modal from the modalService", () => {
+            component["gamers"] = mockGamers;
+            const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+            component.openEndingDialog("LOST");
+            expect(spyEndGame).toHaveBeenCalledWith("multLostGame");
+        });
+    });
 });
