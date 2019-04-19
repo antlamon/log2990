@@ -12,12 +12,13 @@ import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { TimerService } from "src/app/services/timer.service";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
 import { GAMES_LIST_PATH, INITIAL_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH } from "../../../app/global/constants";
+import { GameViewComponent } from "../gameViewComponent";
 @Component({
     selector: "app-game3d-view",
     templateUrl: "./game3D-view.component.html",
     styleUrls: ["./game3D-view.component.css"]
 })
-export class Game3DViewComponent implements OnInit, OnDestroy {
+export class Game3DViewComponent extends GameViewComponent {
 
     private game3D: IGame3D;
     private gamers: Gamer[];

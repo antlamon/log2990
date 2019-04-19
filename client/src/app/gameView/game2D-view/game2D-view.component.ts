@@ -10,13 +10,14 @@ import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import {GAMES_LIST_PATH, INITIAL_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH} from "../../../app/global/constants";
+import { GameViewComponent } from "../gameViewComponent";
 
 @Component({
     selector: "app-game2d-view",
     templateUrl: "./game2D-view.component.html",
     styleUrls: ["./game2D-view.component.css"]
 })
-export class Game2DViewComponent implements OnInit, OnDestroy {
+export class Game2DViewComponent extends GameViewComponent {
 
     private simpleGame: IFullGame;
     private gameRoomId: string;
@@ -58,8 +59,7 @@ export class Game2DViewComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.timer.setToZero();
-        this.gameRoomId = this.getGameRoomId();
+        super.ngOnInit();
         this.getSimpleGame();
     }
 
