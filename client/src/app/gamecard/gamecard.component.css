@@ -4,6 +4,8 @@ button{
     background-color: #538ea1;
     font-size: 20px;
     transition: all .2s ease-in-out;
+    box-shadow: 0 0 5px;
+    background-image: radial-gradient(#8ebbc9, #558ea0);
     border-radius: 10px;
     font-weight: bold;
     color:black;
@@ -22,7 +24,8 @@ button{
 }
 button:hover{
     cursor: pointer;
-    background-color: #2A5E8F;
+    background-image: radial-gradient(#6d7999, #3d6674);
+    box-shadow: 0 0 0px;
 }
 .page-title{
     display: flex;
