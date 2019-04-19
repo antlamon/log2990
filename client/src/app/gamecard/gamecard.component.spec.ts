@@ -56,17 +56,19 @@ describe("GamecardComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
-  it("should route to game simple Play with the proper iD", () => {
-    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    component["game"] = mockSimple;
-    component.playSelectedGame();
-    expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
-  });
-  it("should route to game free Play with the proper iD", () => {
-    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    component["game"] = mockGame3D;
-    component.playSelectedGame();
-    expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
+  describe("PlaySelectedGame function", () => {
+    it("should route to game simple Play with the proper iD", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component["game"] = mockSimple;
+      component.playSelectedGame();
+      expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
+    });
+    it("should route to game free Play with the proper iD", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component["game"] = mockGame3D;
+      component.playSelectedGame();
+      expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
+    });
   });
 
   describe("Test for admin functions", () => {
