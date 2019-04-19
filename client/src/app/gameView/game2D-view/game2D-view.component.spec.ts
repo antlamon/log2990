@@ -13,6 +13,7 @@ import { GameMessagesComponent } from "../game-messages/game-messages.component"
 import { EndingMessageComponent } from "../ending-message/ending-message.component";
 import { ModalService } from "src/app/services/modal.service";
 import { Game2DViewComponent } from "./game2D-view.component";
+import { GAME_STATE } from "src/app/global/constants";
 
 const mockedGame: IGame = {
     id: "mockedID",
@@ -198,21 +199,21 @@ describe("Game2DViewComponent", () => {
         it("should call the soloEndGame modal from the modalService", () => {
             component["gamers"] = [mockGamers[0]]; // only 1 gamer in solo mode
             const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
-            component.openEndingDialog("WON");
+            component.openEndingDialog(GAME_STATE.WIN);
             expect(spyEndGame).toHaveBeenCalledWith("soloEndGame");
         });
 
         it("should call the multWinGame modal from the modalService", () => {
             component["gamers"] = mockGamers;
             const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
-            component.openEndingDialog("WON");
+            component.openEndingDialog(GAME_STATE.WIN);
             expect(spyEndGame).toHaveBeenCalledWith("multWinGame");
         });
 
         it("should call the multLostGame modal from the modalService", () => {
             component["gamers"] = mockGamers;
             const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
-            component.openEndingDialog("LOST");
+            component.openEndingDialog(GAME_STATE.LOST);
             expect(spyEndGame).toHaveBeenCalledWith("multLostGame");
         });
     });
