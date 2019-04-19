@@ -20,7 +20,7 @@ export class ImageService {
 
     public constructor(@inject(TYPES.ConvertImage) private convertImage: ConvertImage) { }
 
-    public getDifferencesImage(newImageName: string, originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
+    public getDifferencesImage(originalBuffer: Buffer, modifiedBuffer: Buffer): Message {
         try {
 
             const originalImage: string = ImageService.BMP_S64_HEADER + originalBuffer.toString("base64");

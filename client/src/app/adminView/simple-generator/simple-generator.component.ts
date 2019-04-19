@@ -123,6 +123,16 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
 
     return false;
   }
+
+  public open(): void {
+    this.element.style.display = "block";
+
+  }
+
+  public close(): void {
+    this.resetForm();
+    this.element.style.display = "none";
+  }
   private filesAreValid(): boolean {
     return this.modifiedFileIsOK && this.originalFileIsOK;
   }
@@ -145,16 +155,6 @@ export class SimpleGeneratorComponent implements OnInit, OnDestroy, IModal {
     this.modifiedFileIsOK = false;
     this.originalFileIsOK = false;
     this.errorsMessages = [];
-  }
-
-  public open(): void {
-    this.element.style.display = "block";
-
-  }
-
-  public close(): void {
-    this.resetForm();
-    this.element.style.display = "none";
   }
 
   private initModal(): void {
