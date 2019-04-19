@@ -15,8 +15,8 @@ export class GameManagerService {
   private _simpleGames: IGame[];
   private _freeGames: IGame3D[];
   private _imageURLs: Map<IGame3D, string>;
-  private simpleSubject: BehaviorSubject<IGame[]> = new BehaviorSubject(undefined);
-  private freeSubject: BehaviorSubject<IGame3D[]> = new BehaviorSubject(undefined);
+  private simpleSubject: BehaviorSubject<IGame[]>;
+  private freeSubject: BehaviorSubject<IGame3D[]>;
 
   public constructor(
     private gameService: GameService,
@@ -30,6 +30,8 @@ export class GameManagerService {
       this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.removeFreeGame.bind(this));
       this.socket.addEvent(SocketsEvents.SCORES_UPDATED, this.updateScore.bind(this));
       this._imageURLs = new Map();
+      this.simpleSubject = new BehaviorSubject(undefined);
+      this.freeSubject = new BehaviorSubject(undefined);
       this.getSimpleGames();
       this.getFreeGames();
   }

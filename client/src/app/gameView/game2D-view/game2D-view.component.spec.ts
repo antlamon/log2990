@@ -114,12 +114,13 @@ describe("Game2DViewComponent", () => {
     });
     it("handle check difference when no differences are found should disable click for 1sec", async (done) => {
         const update: GameRoomUpdate = {
-            username: "test",
+            username: mockGamers[0].username,
             newImage: "testImage",
             differencesFound: -1,
             isGameOver: false,
         };
         component["lastClick"] = new MouseEvent("click");
+        component["index"]["username"] = mockGamers[0].username;
         component["handleCheckDifference"](update);
         expect(component.disableClick).toEqual("disable-click");
         expect(component.blockedCursor).toEqual("cursor-not-allowed");
@@ -127,7 +128,7 @@ describe("Game2DViewComponent", () => {
             expect(component.disableClick).toEqual("");
             expect(component.blockedCursor).toEqual("");
             done();
-        },         component["ONE_SEC_IN_MS"] + 1);
+        },         component["CLICK_DELAY"] + 1);
 
     });
 
@@ -173,14 +174,6 @@ describe("Game2DViewComponent", () => {
         component["index"]["username"] = mockGamers[0].username;
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
-    });
-    it("get blockedCursor() should correctly return the value of blockCursor", () => {
-        component["_blockedCursor"] = "test123";
-        expect(component.blockedCursor).toEqual("test123");
-    });
-    it("get disableClick() should correctly return the value of disableClick", () => {
-        component["_disableClick"] = "test123";
-        expect(component.disableClick).toEqual("test123");
     });
 
 });

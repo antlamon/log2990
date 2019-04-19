@@ -1,3 +1,4 @@
+// tslint:disable:max-file-line-count
 import { fail } from "assert";
 import Axios, { AxiosResponse } from "axios";
 import chai = require("chai");
@@ -20,6 +21,9 @@ const mongoClient = mongoMock.MongoClient;
 
 let mockSimpleCollection: Collection;
 let mockFreeCollection: Collection;
+
+const mockError: Error = new Error("fail");
+
 const mockedNewImageMessage: Message = {
     title: BASE_ID, // Title is error_id to not add the game to the databse
     body: "newImageName",
@@ -158,10 +162,21 @@ describe("GameList service", () => {
                     () => fail(),
                 );
             });
-            it("Falling to add a free game should return an error message", async () => {
+            it("Falling to create a free game should return an error message", async () => {
                 service.addFreeGame(mockError3DGameForm).then(
                     (message: Message) => {
                         expect(message.title).to.eql(mockedErrorMessage.title);
+                    },
+                    () => fail(),
+                );
+            });
+            it("Falling to inserting a free game should return an error message", async () => {
+                sandbox.on(service["freeCollection"], "insertOne", async () => {
+                    return Promise.reject(mockError);
+                });
+                service.addFreeGame(mock3DGameForm).then(
+                    (message: Message) => {
+                        expect(message.body).to.eql(mockError.message);
                     },
                     () => fail(),
                 );
@@ -207,7 +222,18 @@ describe("GameList service", () => {
 
     describe("Deleting games", () => {
         describe("Deleting simple games", () => {
+            it("Should catch an error when one is thrown by the sandbox for simple collection", (done: Mocha.Done) => {
+                sandbox.on(service["simpleCollection"], "deleteOne", async () => {
+                    return Promise.reject(mockError);
+                });
+                service.deleteSimpleGame("simpleGame").then(
+                    (message: Message) => {
+                        expect(message.body).to.equal(mockError.message);
+                        done();
+                    }).catch();
+            });
             it("Deleting a simple game that doesnt exist should return a relevant message", (done: Mocha.Done) => {
+                sandbox.restore();
                 service.deleteSimpleGame("simpleGame3").then(
                     (message: Message) => {
                         expect(message.body).to.equal("Le jeu simpleGame3 n'existe pas!");
@@ -228,8 +254,18 @@ describe("GameList service", () => {
         });
 
         describe("Deleting free games", () => {
-
+            it("Should catch an error when one is thrown by the sandbox for free collection", (done: Mocha.Done) => {
+                sandbox.on(service["freeCollection"], "deleteOne", async () => {
+                    return Promise.reject(mockError);
+                });
+                service.deleteFreeGame("freeGame").then(
+                    (message: Message) => {
+                        expect(message.body).to.equal("fail");
+                        done();
+                    }).catch();
+            });
             it("Deleting a free game that doesnt exist should return a relevant message", (done: Mocha.Done) => {
+                sandbox.restore();
                 service.deleteFreeGame("freeGame").then(
                     (message: Message) => {
                         expect(message.body).to.equal("Le jeu freeGame n'existe pas!");

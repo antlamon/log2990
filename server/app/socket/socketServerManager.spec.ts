@@ -1,7 +1,8 @@
 import chai = require("chai");
 import spies = require("chai-spies");
 import * as SocketClientIO from "socket.io-client";
-import { Game3DRoomUpdate, GameRoomUpdate, NewGameStarted, NewScoreUpdate, INewGameMessage, NewMultiplayerGame } from "../../../common/communication/message";
+import { Game3DRoomUpdate, GameRoomUpdate, INewGameMessage,
+    NewGameStarted, NewMultiplayerGame, NewScoreUpdate } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { container } from "../inversify.config";
 import { Server } from "../server";
@@ -64,7 +65,7 @@ describe("Test for the socketServerManager", () => {
             expect(gameMessage.gameRoomId).to.eql("123");
             done();
         });
-        sandbox.on(gameRoomService, "joinGameRoom", () => Promise.resolve());
+        sandbox.on(gameRoomService, "joinGameRoom", async () => Promise.resolve());
         mockClientSocket.emit(SocketsEvents.START_MULTIPLAYER_GAME, {gameRoomId: "123"});
     });
 
@@ -83,11 +84,11 @@ describe("Test for the socketServerManager", () => {
     });
 
     it("Receiving Cancel multiplayer should send the same event", (done: Mocha.Done) => {
-        mockClientSocket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
-            expect(id).to.eql("123");
+        mockClientSocket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: {gameId: String}) => {
+            expect(id.gameId).to.eql("123");
             done();
         });
-        sandbox.on(gameRoomService, "cancelWaitingRoom", () => Promise.resolve());
+        sandbox.on(gameRoomService, "cancelWaitingRoom", async () => Promise.resolve());
         mockClientSocket.emit(SocketsEvents.CANCEL_MULTIPLAYER_GAME, "123");
     });
 
