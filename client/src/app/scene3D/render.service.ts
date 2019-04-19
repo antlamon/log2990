@@ -53,7 +53,8 @@ export class RenderService {
     this.createCamera();
     this.rendererO = this.createRenderer(this.containerOriginal);
     this.rendererM = this.createRenderer(this.containerModif);
-    this.setCollidableAndFlashingObjs(game.differences);
+    this.setCollidableObjects(game.differences);
+    this.setFlashingObjs(game.differences);
   }
 
   public onResize(): void {
@@ -100,16 +101,22 @@ export class RenderService {
     this.raycaster = new THREE.Raycaster();
     this.render();
   }
-  private setCollidableAndFlashingObjs(differences: IDifference[]): void {
+  private setCollidableObjects(differences: IDifference[]): void {
     this.hitboxes = [];
     this.differencesObjects = [];
     this.sceneModif.children.forEach((obj: THREE.Object3D) => {
         this.hitboxes.push( [obj.name, new THREE.Box3().setFromObject(obj)]);
     });
     for (const diff of differences) {
+      if (diff.type === ADD_TYPE) {
+        this.hitboxes.push( [diff.name, new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name))]);
+      }
+    }
+  }
+  private setFlashingObjs(differences: IDifference[]): void {
+    for (const diff of differences) {
       switch (diff.type) {
         case DELETE_TYPE:
-          this.hitboxes.push( [diff.name, new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name))]);
           this.differencesObjects.push(this.getObject(this.sceneOriginal, diff.name));
           break;
         case ADD_TYPE:
