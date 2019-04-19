@@ -11,8 +11,6 @@ import { SocketsEvents } from "../../../../common/communication/socketsEvents";
 
 export abstract class GameViewComponent implements OnInit, OnDestroy {
     private readonly CLICK_DELAY: number = 1000;
-    private readonly NB_MAX_DIFF: number = 7;
-    private readonly NB_MAX_DIFF_MULTI: number = 4;
 
     protected gamers: Gamer[];
     protected _disableClick: string;
@@ -73,10 +71,9 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
 
     protected abstract handleCheckDifference(update: IGameRoomUpdate): void;
 
-    protected handleDifferenceFound(username: string, differencesFound: number): void {
+    protected handleDifferenceFound(username: string, differencesFound: number, isGameOver: boolean): void {
         const gamer: Gamer = this.gamers.find((x: Gamer) => x.username === username);
         gamer.differencesFound = differencesFound;
-        const isGameOver: boolean = differencesFound === (this.gamers.length > 1 ? this.NB_MAX_DIFF_MULTI : this.NB_MAX_DIFF);
         if (username === this.index.username) {
             if (isGameOver) {
                 this.finishGame();

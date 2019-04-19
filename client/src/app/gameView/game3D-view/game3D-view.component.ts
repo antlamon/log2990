@@ -75,7 +75,7 @@ export class Game3DViewComponent extends GameViewComponent {
             this.handleDifferenceError(update.username);
         } else {
             this.render.removeDiff(update.objName, update.diffType);
-            this.handleDifferenceFound(update.username, update.differencesFound);
+            this.handleDifferenceFound(update.username, update.differencesFound, update.isGameOver);
         }
     }
 

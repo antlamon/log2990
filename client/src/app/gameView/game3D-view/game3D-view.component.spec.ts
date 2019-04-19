@@ -309,7 +309,6 @@ describe("Game3DViewComponent", () => {
             expect(component["gameRoomId"]).toEqual(mockMessage.gameRoomId);
             expect(component["gamers"]).toEqual(mockMessage.players);
         });
-
     });
 // tslint:disable-next-line:max-file-line-count
 });

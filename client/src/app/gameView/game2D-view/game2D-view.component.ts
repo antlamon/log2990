@@ -71,7 +71,7 @@ export class Game2DViewComponent extends GameViewComponent {
             this.handleDifferenceError(update.username);
         } else {
             this.simpleGame.modifiedImage = update.newImage;
-            this.handleDifferenceFound(update.username, update.differencesFound);
+            this.handleDifferenceFound(update.username, update.differencesFound, update.isGameOver);
         }
     }
 
