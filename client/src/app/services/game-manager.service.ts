@@ -32,8 +32,8 @@ export class GameManagerService {
       this._imageURLs = new Map();
       this.simpleSubject = new BehaviorSubject(undefined);
       this.freeSubject = new BehaviorSubject(undefined);
-      this.getSimpleGames();
-      this.getFreeGames();
+      this.getSimpleGames().catch((error: Error) => console.error(error.message));
+      this.getFreeGames().catch((error: Error) => console.error(error.message));
   }
   public get simpleGames(): BehaviorSubject<IGame[]> {
       return this.simpleSubject;

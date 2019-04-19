@@ -35,7 +35,7 @@ export class ListViewComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     if (!this.isAdminMode) {
       if (!this.index.username) {
-        this.router.navigate([INITIAL_PATH]);
+        this.router.navigate([INITIAL_PATH]).catch((error: Error) => console.error(error.message));
       }
     }
   }

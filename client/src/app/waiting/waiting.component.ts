@@ -23,7 +23,7 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public ngAfterViewInit(): void {
     if (!this.index.username) {
-      this.router.navigate([""]);
+      this.router.navigate([""]).catch((error: Error) => console.error(error.message));
     }
   }
 

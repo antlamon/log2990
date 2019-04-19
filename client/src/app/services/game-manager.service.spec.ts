@@ -81,13 +81,15 @@ describe("GameManagerService", () => {
   describe("Updating score", () => {
     it("Updating a simple game score should modify the simple games array", () => {
       service["_simpleGames"] = [mockSimple];
-      service.updateScore({scoreUpdate: {id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []}} as NewScoreUpdate);
+      service.updateScore({scoreUpdate: {id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []}} as NewScoreUpdate)
+      .catch((error: Error) => console.error(error.message));
       expect(service["_simpleGames"][0].solo).toEqual([]);
       expect(service["_simpleGames"][0].multi).toEqual([]);
     });
     it("Updating a free game score should modify the free games array", () => {
       service["_freeGames"] = [mockGame3D];
-      service.updateScore({scoreUpdate: {id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []}} as NewScoreUpdate);
+      service.updateScore({scoreUpdate: {id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []}} as NewScoreUpdate)
+      .catch((error: Error) => console.error(error.message));
       expect(service["_freeGames"][0].solo).toEqual([]);
       expect(service["_freeGames"][0].multi).toEqual([]);
     });

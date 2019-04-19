@@ -34,7 +34,7 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
         protected ref: ChangeDetectorRef,
         protected router: Router) {
         if (!this.index.username) {
-            this.router.navigate([INITIAL_PATH]);
+            this.router.navigate([INITIAL_PATH]).catch((error: Error) => console.error(error.message));
         }
         this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.correctSound = new Audio(CORRECT_SOUND_PATH);
