@@ -41,8 +41,9 @@ export class Game3DViewComponent extends GameViewComponent {
         index: IndexService,
         private render: RenderService,
         ref: ChangeDetectorRef,
-        router: Router) {
-        super(gameService, socket, route, index, timer, ref, router);
+        router: Router,
+        modalService: ModalService) {
+        super(gameService, socket, route, index, timer, ref, router, modalService);
         this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
@@ -88,7 +89,6 @@ export class Game3DViewComponent extends GameViewComponent {
             gameRoomId: this.gameRoomId,
             gameType: "free",
         });
-        this.openEndingDialog(this.SOLO_MODAL);
     }
 
     private get originalContainer(): HTMLDivElement {
@@ -201,8 +201,5 @@ export class Game3DViewComponent extends GameViewComponent {
 
     public get gameIsReady(): boolean {
         return this._gameIsReady;
-    }
-    public openEndingDialog(id: string): void {
-        this.modalService.open(id);
     }
 }

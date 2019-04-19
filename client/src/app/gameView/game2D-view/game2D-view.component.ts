@@ -26,9 +26,10 @@ export class Game2DViewComponent extends GameViewComponent {
         index: IndexService,
         timer: TimerService,
         ref: ChangeDetectorRef,
-        router: Router
+        router: Router,
+        modalService: ModalService
     ) {
-        super(gameService, socket, route, index, timer, ref, router);
+        super(gameService, socket, route, index, timer, ref, router, modalService);
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
     }
 
@@ -85,7 +86,6 @@ export class Game2DViewComponent extends GameViewComponent {
             gameType: "simple",
             gameRoomId: this.gameRoomId,
         });
-        this.openEndingDialog(this.SOLO_MODAL);
     }
 
     public sendClick(event: MouseEvent): void {
@@ -102,8 +102,5 @@ export class Game2DViewComponent extends GameViewComponent {
 
         this.lastClick = event;
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE, imageClickMessage);
-    }
-    public openEndingDialog(id: string): void {
-        this.modalService.open(id);
     }
 }
