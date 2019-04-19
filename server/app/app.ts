@@ -41,9 +41,9 @@ export class Application {
 
     public bindRoutes(): void {
         // Notre application utilise le routeur de notre API
-        this.app.use(this.connexionController.URL, this.connexionController.router);
+        this.app.use(ConnexionController.URL, this.connexionController.router);
         this.app.use(ImageController.URL, this.imageController.router);
-        this.app.use(this.gameListController.URL, this.gameListController.router);
+        this.app.use(GameListController.URL, this.gameListController.router);
         this.app.use(IdentificationController.URL, this.identificationController.router);
         this.app.use(Identification3DController.URL, this.identification3DController.router);
         this.app.use(TimescoreController.URL, this.timeScoreController.router);

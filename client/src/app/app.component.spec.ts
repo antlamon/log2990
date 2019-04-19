@@ -23,6 +23,7 @@ import { ShapeCreatorService } from "./scene3D/geometric/shape-creator.service";
 import { MedievalObjectsCreatorService } from "./scene3D/thematic/medieval-objects-creator.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { WaitingComponent } from "./waiting/waiting.component";
+import { EndingMessageComponent } from "./gameView/ending-message/ending-message.component";
 describe("AppComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -40,6 +41,7 @@ describe("AppComponent", () => {
         ErrorPopupComponent,
         GamecardComponent,
         WaitingComponent,
+        EndingMessageComponent
       ],
       imports: [HttpClientModule, FormsModule, AppRoutingModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [IndexService, RenderService, SceneGeneratorService, ShapeCreatorService, MedievalObjectsCreatorService]

@@ -1,3 +1,4 @@
+// tslint:disable:max-file-line-count
 import { fail } from "assert";
 import Axios, { AxiosResponse } from "axios";
 import chai = require("chai");
@@ -21,7 +22,7 @@ const mongoClient = mongoMock.MongoClient;
 let mockSimpleCollection: Collection;
 let mockFreeCollection: Collection;
 
-const mockError = new Error("fail");
+const mockError: Error = new Error("fail");
 
 const mockedNewImageMessage: Message = {
     title: BASE_ID, // Title is error_id to not add the game to the databse
@@ -133,7 +134,7 @@ describe("GameList service", () => {
             const games: IGame3D[] = await service.getFreeGames();
             expect(games.length).to.eql(1);
         });
-        
+
         it("Getting a simple game should return the game", async () => {
             const game: IFullGame = await service.getSimpleGame(mockedGame.id);
 

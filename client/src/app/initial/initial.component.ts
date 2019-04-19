@@ -35,7 +35,12 @@ export class InitialComponent {
         }
       });
     } else {
-      this.errors.push("Le username n'est pas valide");
+      if (!this.fileValidator.isValidNameLength(username)) {
+        this.errors.push(`Le username doit etre entre ${this.fileValidator.MIN_LENGTH} et ${this.fileValidator.MAX_NAME} caractères`);
+      }
+      if (!this.fileValidator.containOnlyAlphaNumeric(username)) {
+        this.errors.push("Le username doit contenir des caractères alphanumérics seulement");
+      }
     }
   }
 }

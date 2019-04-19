@@ -43,7 +43,6 @@ export interface Gamer {
 export interface NewGameStarted {
     gameRoomId: string;
     players: Gamer[];
-    startTime: Date;
 }
 
 export interface Point {
@@ -51,7 +50,7 @@ export interface Point {
     y: number;
 }
 
-interface IGameRoomUpdate {
+export interface IGameRoomUpdate {
     username: string;
     differencesFound: number;
     isGameOver: boolean;

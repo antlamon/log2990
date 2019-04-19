@@ -19,6 +19,8 @@ import { SceneGeneratorService } from "src/app/scene3D/scene-generator.service";
 import { MOUSE } from "three";
 import { Game3DRoomUpdate, Gamer, NewGameStarted } from "../../../../../common/communication/message";
 import { GameMessagesComponent } from "../game-messages/game-messages.component";
+import { EndingMessageComponent } from "../ending-message/ending-message.component";
+import { ModalService } from "src/app/services/modal.service";
 const mockObjects: IObjet3D[] = [];
 
 const mockGame3D: IGame3D = {
@@ -57,11 +59,27 @@ describe("Game3DViewComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [Game3DViewComponent, ErrorPopupComponent, GameMessagesComponent],
-            imports: [HttpClientModule, HttpClientTestingModule, RouterTestingModule, MatProgressSpinnerModule],
-            providers: [RenderService, ShapeCreatorService, AppRoutingModule,
-                        IndexService, MedievalObjectsCreatorService, SceneGeneratorService
-                    ]
+            declarations: [
+                Game3DViewComponent,
+                ErrorPopupComponent,
+                GameMessagesComponent,
+                EndingMessageComponent
+            ],
+            imports: [
+                HttpClientModule,
+                HttpClientTestingModule,
+                RouterTestingModule,
+                MatProgressSpinnerModule
+            ],
+            providers: [
+                RenderService,
+                ShapeCreatorService,
+                AppRoutingModule,
+                IndexService,
+                MedievalObjectsCreatorService,
+                SceneGeneratorService,
+                ModalService
+            ]
         })
             .compileComponents().then(() => { }, (error: Error) => {
                 console.error(error);
@@ -227,7 +245,6 @@ describe("Game3DViewComponent", () => {
             spyOn(component["render"], "removeDiff").and.callFake(() => {});
             component["game3D"] = mockGame3D;
             spyOn(component["victorySound"], "play").and.returnValue(Promise.resolve());
-            const spy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
             const spyT: jasmine.Spy = spyOn(component["timer"], "stopTimer").and.callFake(() => {});
             const update: Game3DRoomUpdate = {
                 username: mockGamers[0].username,
@@ -239,7 +256,6 @@ describe("Game3DViewComponent", () => {
             component["gamers"] = [mockGamers[0]];
             component["index"]["username"] = update.username;
             component["handleCheckDifference"](update);
-            expect(spy).toHaveBeenCalled();
             expect(spyT).toHaveBeenCalled();
         });
         it("handle check difference receiving -1 differences should play the error sound and show an error popup", async () => {
@@ -304,13 +320,33 @@ describe("Game3DViewComponent", () => {
             const mockMessage: NewGameStarted = {
                 gameRoomId: "",
                 players: [],
-                startTime: new Date(),
             };
             component["handleCreateGameRoom"](mockMessage);
             expect(component["gameRoomId"]).toEqual(mockMessage.gameRoomId);
             expect(component["gamers"]).toEqual(mockMessage.players);
         });
+    });
+    describe("handleCreateGameRoom function", () => {
+        it("should call the soloEndGame modal from the modalService", () => {
+            component["gamers"] = [mockGamers[0]]; // only 1 gamer in solo mode
+            const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+            component.openEndingDialog("WON");
+            expect(spyEndGame).toHaveBeenCalledWith("soloEndGame");
+        });
 
+        it("should call the multWinGame from the modalService", () => {
+            component["gamers"] = mockGamers;
+            const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+            component.openEndingDialog("WON");
+            expect(spyEndGame).toHaveBeenCalledWith("multWinGame");
+        });
+
+        it("should call the multLostGame from the modalService", () => {
+            component["gamers"] = mockGamers;
+            const spyEndGame: jasmine.Spy = spyOn(component["modalService"], "open");
+            component.openEndingDialog("LOST");
+            expect(spyEndGame).toHaveBeenCalledWith("multLostGame");
+        });
     });
 // tslint:disable-next-line:max-file-line-count
 });

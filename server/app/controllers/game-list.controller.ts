@@ -12,7 +12,7 @@ import { TYPES } from "../types";
 export class GameListController {
 
     private static readonly INVALID_PARAM: number = 422;
-    public readonly URL: string = "/api/gameList";
+    public static readonly URL: string = "/api/gameList";
     private upload: RequestHandler;
 
     public constructor(@inject(TYPES.GameListService) private gameListService: GameListService) {

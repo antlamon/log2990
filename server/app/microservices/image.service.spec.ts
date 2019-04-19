@@ -118,18 +118,18 @@ describe ( "imageService tests", () => {
         it("Should create an result.bmp file", async () => {
             const NB_DIFFERENCES: number = 7;
             sandbox.on(service, "getNbDifferences", () => NB_DIFFERENCES);
-            expect(service.getDifferencesImage("testImage", readFileSync(path1), readFileSync(path2)).title).to.equal(BASE_ID);
+            expect(service.getDifferencesImage(readFileSync(path1), readFileSync(path2)).title).to.equal(BASE_ID);
         });
 
         it("Should return a string with a error message for the format", () => {
             const buffer: Buffer = readFileSync(path6);
-            expect(service.getDifferencesImage("name", readFileSync(path1), buffer).body).to.
+            expect(service.getDifferencesImage(readFileSync(path1), buffer).body).to.
                 equal(ConvertImage.ERROR_MESSAGE_WRONG_FORMAT);
 
         });
         it("Should return an error for wrong number of differences", () => {
             sandbox.on(service, "getNbDifferences", () => 3);
-            expect(service.getDifferencesImage("name", readFileSync(path1), readFileSync(path2)).body)
+            expect(service.getDifferencesImage(readFileSync(path1), readFileSync(path2)).body)
             .to.equal(ImageService.ERROR_MESSAGE_NOT_7_ERRORS);
         });
     });

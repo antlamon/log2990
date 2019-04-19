@@ -174,7 +174,6 @@ describe("Game3D Modificator service", () => {
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
         });
         it("Should return an array with 7 thematic modified objects with type MODIF", async () => {
-            // to modify with texture next sprint
 
             const newObjs: IDifference[] = service.createModifScene(mockObjects, THEMATIC_TYPE_NAME, mockTypeModifColor);
             let count: number = 0;
@@ -251,6 +250,18 @@ describe("Game3D Modificator service", () => {
                 }
             });
             expect(count).to.eql(Game3DModificatorService.NB_DIFF);
+        });
+        it("A invalid modification type should throw a error", async () => {
+            try {
+                // tslint:disable-next-line:no-any
+                sandbox.on(service as any, "chooseModif", () => {
+                    return -1;
+                });
+                service.createModifScene(mockObjects, THEMATIC_TYPE_NAME, mockTypeModifAll);
+                expect(false).to.equal(true);
+            } catch (error) {
+                expect(true).to.equal(true);
+            }
         });
     });
     describe("Should test the contrast to notice difference", () => {
