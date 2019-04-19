@@ -31,7 +31,7 @@ export class MedievalObjectsCreatorService {
     const objectsTHREE: THREE.Mesh[] = [];
     let toReload: boolean = false;
     let tempSceneChildren: THREE.Mesh [] = [];
- 
+
     tempSceneChildren = await this.createObjectsFromScene(this.castleWorld, false);
     tempSceneChildren.forEach( (obj: THREE.Mesh) => {
         objectsTHREE.push(obj);

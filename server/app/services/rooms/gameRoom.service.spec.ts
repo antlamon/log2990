@@ -2,7 +2,7 @@ import Axios from "axios";
 import * as chai from "chai";
 import * as spies from "chai-spies";
 import { Guid } from "guid-typescript";
-import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate, INewGameMessage,NewGame3DMessage,
+import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate, INewGameMessage, NewGame3DMessage,
     NewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, ScoreUpdate } from "../../../../common/communication/message";
 import { ADD_TYPE } from "../../../../common/models/game3D";
 import { container } from "../../inversify.config";

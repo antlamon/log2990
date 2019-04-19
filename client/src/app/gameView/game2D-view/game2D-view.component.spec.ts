@@ -1,16 +1,16 @@
 import { HttpClientModule } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatProgressSpinnerModule } from "@angular/material";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { IndexService } from "src/app/services/index.service";
-import { GameRoomUpdate, Gamer } from "../../../../../common/communication/message";
+import { Gamer, GameRoomUpdate, NewGameStarted } from "../../../../../common/communication/message";
 import { IFullGame, IGame } from "../../../../../common/models/game";
-import { Game2DViewComponent } from "./game2D-view.component";
-import { MatProgressSpinnerModule } from "@angular/material";
 import { ErrorPopupComponent } from "../error-popup/error-popup.component";
 import { GameMessagesComponent } from "../game-messages/game-messages.component";
+import { Game2DViewComponent } from "./game2D-view.component";
 
 const mockedGame: IGame = {
     id: "mockedID",
@@ -175,5 +175,15 @@ describe("Game2DViewComponent", () => {
         component["handleCheckDifference"](update);
         expect(spy).toHaveBeenCalled();
     });
-
+    describe("handleCreateGameRoom function", () => {
+        it("should set the component's gamers and roomID properties according to the data sent by the event", () => {
+            const mockMessage: NewGameStarted = {
+                gameRoomId: "",
+                players: [],
+            };
+            component["handleCreateGameRoom"](mockMessage);
+            expect(component["gameRoomId"]).toEqual(mockMessage.gameRoomId);
+            expect(component["gamers"]).toEqual(mockMessage.players);
+        });
+    });
 });
