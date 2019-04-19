@@ -37,7 +37,7 @@ export class ImageController {
                 const originalBuffer: Buffer = req.files["originalImage"][0].buffer;
                 const modifiedBuffer: Buffer = req.files["modifiedImage"][0].buffer;
                 if (name) {
-                    message = this.imageService.getDifferencesImage(name, originalBuffer, modifiedBuffer);
+                    message = this.imageService.getDifferencesImage(originalBuffer, modifiedBuffer);
                 } else {
                     res.status(HTTP_BADREQUEST);
                     message = {
