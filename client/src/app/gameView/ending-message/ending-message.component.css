@@ -1,0 +1,50 @@
+.messageForm{
+    padding: 20px;
+    border: solid black;
+    top: 50%;
+    left: 50%;
+    margin-top: -275px;
+    margin-left: -250px; 
+    width: 500px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    background: #edc252;
+    border-radius: 8px;
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.24), 0 4px 12px 0 rgba(0,0,0,0.19);
+    overflow: none;
+    position: fixed;
+    z-index: 1000;
+}
+
+h1 {
+    font-size: 40px;
+    text-align: center;
+    align-self: center;
+    line-height: 40px;
+}
+
+.messageForm > p {
+    text-align: center;
+    align-self: center;
+    font-size: 22px;
+    line-height: 10px;
+}
+
+.messageForm:hover {
+    cursor: pointer;
+    border: solid white;
+}
+
+.form-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.50;
+    z-index: 900;
+  }
+

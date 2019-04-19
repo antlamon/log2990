@@ -19,6 +19,7 @@ import { GameMessagesComponent } from "../gameView/game-messages/game-messages.c
 import { RenderService } from "../scene3D/render.service";
 import { GamecardComponent } from "../gamecard/gamecard.component";
 import { WaitingComponent } from "../waiting/waiting.component";
+import { EndingMessageComponent } from "../gameView/ending-message/ending-message.component";
 describe("FileValidatorService", () => {
 
   const LARGER_WIDTH: number = 1000;
@@ -45,6 +46,7 @@ describe("FileValidatorService", () => {
         GameMessagesComponent,
         GamecardComponent,
         WaitingComponent,
+        EndingMessageComponent
       ],
       imports: [AppRoutingModule, FormsModule, HttpClientModule, MatProgressSpinnerModule, HttpClientTestingModule],
       providers: [ModalService, FileValidatorService, Game2DViewComponent, RenderService]
