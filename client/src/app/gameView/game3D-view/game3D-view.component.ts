@@ -1,40 +1,27 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, OnDestroy } from "@angular/core";
-import { GameService } from "../../services/game.service";
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IGame3D } from "../../../../../common/models/game3D";
+import { AXIS, CLICK, KEYS } from "src/app/global/constants";
 import { RenderService } from "src/app/scene3D/render.service";
-import { SocketService } from "src/app/services/socket.service";
 import { IndexService } from "src/app/services/index.service";
-import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
-import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../../../common/communication/message";
-import { CLICK, KEYS, AXIS } from "src/app/global/constants";
-import { ErrorPopupComponent } from "../error-popup/error-popup.component";
+import { SocketService } from "src/app/services/socket.service";
 import { TimerService } from "src/app/services/timer.service";
+import { Game3DRoomUpdate, NewGame3DMessage, Obj3DClickMessage } from "../../../../../common/communication/message";
+import { SocketsEvents } from "../../../../../common/communication/socketsEvents";
 import { COMMUNICATION_ERROR, THREE_ERROR } from "../../../../../common/models/errors";
-import {GAMES_LIST_PATH, INITIAL_PATH, VICTORY_SOUND_PATH, ERROR_SOUND_PATH, CORRECT_SOUND_PATH} from "../../../app/global/constants";
+import { IGame3D } from "../../../../../common/models/game3D";
+import { GameService } from "../../services/game.service";
+import { GameViewComponent } from "../gameViewComponent";
 import { ModalService } from "src/app/services/modal.service";
-
 @Component({
     selector: "app-game3d-view",
     templateUrl: "./game3D-view.component.html",
     styleUrls: ["./game3D-view.component.css"]
 })
-export class Game3DViewComponent implements OnInit, OnDestroy {
+
+export class Game3DViewComponent extends GameViewComponent {
 
     private game3D: IGame3D;
     private _gameIsReady: boolean;
-    private differencesFound: number;
-    private _disableClick: string;
-    private _blockedCursor: string;
-
-    private readonly ONE_SEC_IN_MS: number = 1000;
-    private readonly NB_MAX_DIFF: number = 7;
-
-    private readonly SOLO_MODAL: string = "soloEndGame";
-    // tslint:disable-next-line: comment-format
-    // Ne pas delete
-    // private readonly MULT_WIN_MODAL: string = "multWinGame";
-    // private readonly MULT_LOST_MODAL: string = "multLostGame";
 
     @ViewChild("originalContainer")
     private originalContainerRef: ElementRef;
@@ -42,110 +29,66 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     @ViewChild("modifiedContainer")
     private modifiedContainerRef: ElementRef;
 
-    @ViewChild(ErrorPopupComponent)
-    private errorPopup: ErrorPopupComponent;
-    private lastClick: MouseEvent;
-
     private movementSpeed: number = 0.5;
     private press: boolean;
-    private roomID: string;
     private cheatModeActivated: boolean;
-    private correctSound: HTMLAudioElement;
-    private errorSound: HTMLAudioElement;
-    private victorySound: HTMLAudioElement;
 
     public constructor(
-        private gameService: GameService,
-        private route: ActivatedRoute,
-        private socket: SocketService,
-        private timer: TimerService,
-        private index: IndexService,
+        gameService: GameService,
+        route: ActivatedRoute,
+        socket: SocketService,
+        timer: TimerService,
+        index: IndexService,
         private render: RenderService,
-        private modalService: ModalService,
-        private router: Router) {
-        if (!this.index.username) {
-            this.router.navigate([INITIAL_PATH]);
-        }
+        ref: ChangeDetectorRef,
+        router: Router) {
+        super(gameService, socket, route, index, timer, ref, router);
         this._gameIsReady = false;
         this.cheatModeActivated = false;
         this.press = false;
-        this.socket.addEvent(SocketsEvents.CREATE_GAME_ROOM, this.handleCreateGameRoom.bind(this));
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference.bind(this));
-        this.correctSound = new Audio(CORRECT_SOUND_PATH);
-        this.errorSound = new Audio(ERROR_SOUND_PATH);
-        this.victorySound = new Audio(VICTORY_SOUND_PATH);
-        this.differencesFound = 0;
-        this._disableClick = "";
-        this._blockedCursor = "";
     }
 
+    // tslint:disable-next-line:use-life-cycle-interface
     public ngOnInit(): void {
-        this.timer.setToZero();
+        super.ngOnInit();
         this.get3DGame();
     }
 
     @HostListener("window:beforeunload")
+    // tslint:disable-next-line:use-life-cycle-interface
     public ngOnDestroy(): void {
         document.removeEventListener("contextmenu", (event: MouseEvent) => { event.preventDefault(); }, false);
         document.removeEventListener("keydown", this.onKeyDown, false);
         document.removeEventListener("mouseup", () => this.press = false, false);
 
-        this.socket.unsubscribeTo(SocketsEvents.CREATE_GAME_ROOM);
+        super.ngOnDestroy();
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE_3D);
         if (this.game3D) {
             this.render.stopCheatMode();
-            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.roomID);
-        }
-    }
-    private handleCreateGameRoom(rejection?: string): void {
-        if (rejection !== null) {
-            alert(rejection);
-        }
-        this.timer.startTimer();
-    }
-    private handleCheckDifference(update: Game3DRoomUpdate): void {
-        if (update.differencesFound === -1) {
-            this.errorSound.play().catch((error: Error) => console.error(error.message));
-            this.errorPopup.showPopup(this.lastClick.clientX, this.lastClick.clientY);
-            this._disableClick = "disable-click";
-            this._blockedCursor = "cursor-not-allowed";
-            setTimeout(
-                () => {
-                    this.errorPopup.hidePopup();
-                    this._disableClick = "";
-                    this._blockedCursor = "";
-                },
-                this.ONE_SEC_IN_MS
-            );
-        } else {
-            this.render.removeDiff(update.objName, update.diffType);
-            this.differencesFound = update.differencesFound;
-            if (this.differencesFound === this.NB_MAX_DIFF) {
-                this.finishGame();
-            } else {
-                this.correctSound.play().catch((error: Error) => console.error(error.message));
-            }
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.gameRoomId);
         }
     }
 
-    private finishGame(): void {
-        this.timer.stopTimer();
-        this._disableClick = "disable-click";
-        this.victorySound.play().catch((error: Error) => console.error(error.message));
+    protected handleCheckDifference(update: Game3DRoomUpdate): void {
+        if (update.differencesFound === -1) {
+            this.handleDifferenceError(update.username);
+        } else {
+            this.render.removeDiff(update.objName, update.diffType);
+            this.handleDifferenceFound(update.username, update.differencesFound, update.isGameOver);
+        }
+    }
+
+    protected finishGame(): void {
+        super.finishGame();
         this.socket.emitEvent(SocketsEvents.END_GAME, {
             username: this.index.username,
             score: this.timer.getTimeAsString(),
             gameId: this.game3D.id,
+            gameRoomId: this.gameRoomId,
             gameType: "free",
         });
         this.openEndingDialog(this.SOLO_MODAL);
-    }
-    public getBack(): void {
-        this.router.navigate([GAMES_LIST_PATH]).catch((error: Error) => console.error(error.message));
-    }
-
-    private getId(): string {
-        return String(this.route.snapshot.paramMap.get("id"));
     }
 
     private get originalContainer(): HTMLDivElement {
@@ -159,23 +102,25 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
     public get3DGame(): void {
         this.gameService.get3DGame(this.getId())
             .then((response: IGame3D) => {
+                this.ref.detach();
                 this.game3D = response;
                 this.sendCreation();
                 this.render.initialize(this.originalContainer, this.modifiedContainer, this.game3D).then(() => {
                     this._gameIsReady = true;
                     this.startGame();
                 }
-                ).catch(() => {throw new THREE_ERROR("error while rendering 3D game"); });
+                ).catch(() => { throw new THREE_ERROR("error while rendering 3D game"); });
             })
-            .catch(() => {throw new COMMUNICATION_ERROR("unable to get 3DGames."); });
+            .catch(() => { throw new COMMUNICATION_ERROR("unable to get 3DGames."); });
     }
+
     private sendCreation(): void {
-        this.roomID = this.game3D.id;
         const newGameMessage: NewGame3DMessage = {
             username: this.index.username,
-            gameRoomId: this.roomID,
+            gameId: this.game3D.id,
             gameName: this.game3D.name,
             is3D: true,
+            gameRoomId: this.gameRoomId,
             differences: this.game3D.differences
         };
         this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
@@ -247,22 +192,16 @@ export class Game3DViewComponent implements OnInit, OnDestroy {
         const object: THREE.Object3D | null = this.render.identifyDiff(event);
         this.lastClick = event;
         const objMessage: Obj3DClickMessage = {
-            gameRoomId: this.roomID,
+            gameRoomId: this.gameRoomId,
             username: this.index.username,
             name: object ? object.name : null,
         };
         this.socket.emitEvent(SocketsEvents.CHECK_DIFFERENCE_3D, objMessage);
     }
+
     public get gameIsReady(): boolean {
         return this._gameIsReady;
     }
-    public get disableClick(): string {
-        return this._disableClick;
-    }
-    public get blockedCursor(): string {
-        return this._blockedCursor;
-    }
-
     public openEndingDialog(id: string): void {
         this.modalService.open(id);
     }

@@ -9,6 +9,8 @@ import {} from "jasmine";
 import { MatProgressSpinnerModule } from "@angular/material";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { WAITING_PATH } from "../global/constants";
+import { NewMultiplayerGame, INewGameMessage } from "../../../../common/communication/message";
+import { IndexService } from "../services/index.service";
 const mockSimple: IGame = {
   id: "idSimple",
   name: "nameSimple",
@@ -26,6 +28,12 @@ const mockGame3D: IGame3D = {
   isThematic: false,
   backColor: 0,
 };
+const mockGameMessage: INewGameMessage = {
+  gameId: "",
+  gameName: "",
+  username: "",
+  is3D: false,
+};
 describe("GamecardComponent", () => {
   let component: GamecardComponent;
   let fixture: ComponentFixture<GamecardComponent>;
@@ -34,7 +42,7 @@ describe("GamecardComponent", () => {
     TestBed.configureTestingModule({
       declarations: [ GamecardComponent ],
       imports: [HttpClientModule, RouterTestingModule, MatProgressSpinnerModule, HttpClientTestingModule],
-      providers: [AppRoutingModule]
+      providers: [AppRoutingModule, IndexService]
     })
     .compileComponents().catch((error: Error) => console.error(error));
   }));
@@ -48,17 +56,19 @@ describe("GamecardComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
-  it("should route to game simple Play with the proper iD", () => {
-    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    component["game"] = mockSimple;
-    component.playSelectedGame();
-    expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id]);
-  });
-  it("should route to game free Play with the proper iD", () => {
-    const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
-    component["game"] = mockGame3D;
-    component.playSelectedGame();
-    expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id]);
+  describe("PlaySelectedGame function", () => {
+    it("should route to game simple Play with the proper iD", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component["game"] = mockSimple;
+      component.playSelectedGame();
+      expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
+    });
+    it("should route to game free Play with the proper iD", () => {
+      const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
+      component["game"] = mockGame3D;
+      component.playSelectedGame();
+      expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
+    });
   });
 
   describe("Test for admin functions", () => {
@@ -96,53 +106,48 @@ describe("GamecardComponent", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
       component["game"] = mockSimple;
       component.joinMultiGame();
-      expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id]);
+      expect(routeSpy).toHaveBeenCalledWith(["simple-game/" + mockSimple.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
     });
     it("should route to game free Play with the proper iD", () => {
       const routeSpy: jasmine.Spy = spyOn(component["router"], "navigate").and.returnValue(Promise.resolve());
       component["game"] = mockGame3D;
       component.joinMultiGame();
-      expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id]);
+      expect(routeSpy).toHaveBeenCalledWith(["free-game/" + mockGame3D.id], {queryParams: {gameRoomId: component["joinableGameRoomId"]}});
     });
   });
   describe("HandleNewMultiPlayerGame function", () => {
     it("should set isJoinable to true if the game has the proper ID", () => {
+      const newMultiplayerGame: NewMultiplayerGame = {
+        gameId: mockSimple.id,
+        gameRoomId: "1234"
+      };
       component["game"] = mockSimple;
-      component["handleNewMulitplayerGamer"](mockSimple.id);
+      component["handleNewMulitplayerGamer"](newMultiplayerGame);
       expect(component["isJoinable"]).toEqual(true);
     });
     it("isJoinable should not change if the game doesnt have the proper ID", () => {
       const initialValue: boolean = component["isJoinable"];
+      const newMultiplayerGame: NewMultiplayerGame = {
+        gameId: "badID",
+        gameRoomId: "1234"
+      };
       component["game"] = mockSimple;
-      component["handleNewMulitplayerGamer"]("badID");
+      component["handleNewMulitplayerGamer"](newMultiplayerGame);
       expect(component["isJoinable"]).toEqual(initialValue);
     });
   });
-  describe("HandleStartMultiPlayerGame function", () => {
+  describe("resetJoinableGame function", () => {
     it("should set isJoinable to false if the game has the proper ID", () => {
       component["game"] = mockSimple;
-      component["handleStartMulitplayerGamer"](mockSimple.id);
+      mockGameMessage.gameId = mockSimple.id;
+      component["resetJoinableGame"](mockGameMessage);
       expect(component["isJoinable"]).toEqual(false);
     });
     it("isJoinable should not change if the game doesnt have the proper ID", () => {
       const initialValue: boolean = component["isJoinable"];
       component["game"] = mockSimple;
-      component["handleStartMulitplayerGamer"]("badID");
-      expect(component["isJoinable"]).toEqual(initialValue);
-      // TODO : REFACTOR WHEN ANTOINE IS DONE
-    });
-  });
-  describe("HandleCancelMultiPlayerGame function", () => {
-    it("should set isJoinable to false if the game has the proper ID", () => {
-      component["game"] = mockSimple;
-      component["handleCancelMulitplayerGamer"](mockSimple.id);
-      expect(component["isJoinable"]).toEqual(false);
-      // TODO : REFACTOR WHEN ANTOINE IS DONE
-    });
-    it("isJoinable should not change if the game doesnt have the proper ID", () => {
-      const initialValue: boolean = component["isJoinable"];
-      component["game"] = mockSimple;
-      component["handleCancelMulitplayerGamer"]("badID");
+      mockGameMessage.gameId = mockSimple.id;
+      component["resetJoinableGame"](mockGameMessage);
       expect(component["isJoinable"]).toEqual(initialValue);
     });
   });

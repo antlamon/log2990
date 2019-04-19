@@ -1,3 +1,4 @@
+// tslint:disable:max-file-line-count
 import { TestBed, async,  inject  } from "@angular/core/testing";
 import * as THREE from "three";
 import { RenderService } from "./render.service";

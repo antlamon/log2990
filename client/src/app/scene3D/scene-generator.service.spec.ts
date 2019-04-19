@@ -147,7 +147,7 @@ describe("SceneGeneratorService", () => {
       });
       const sceneM: THREE.Scene  = await service.modifyScene((
         await service.createScene([], 1, true, [])).clone(),
-                                                       [{type: DELETE_TYPE, name: "0"}]);
+                                                             [{type: DELETE_TYPE, name: "0"}]);
       let nbNotVisible: number = 0;
       sceneM.children.forEach((obj: THREE.Object3D) => {
         if ( !obj.visible) {

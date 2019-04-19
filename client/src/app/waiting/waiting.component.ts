@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy, AfterViewInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import { SocketService } from "../services/socket.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-import { IGame3D } from "../../../../common/models/game3D";
-import { IGame } from "../../../../common/models/game";
+import { INewGameMessage } from "../../../../common/communication/message";
 import { IndexService } from "../services/index.service";
+import { SIMPLE_GAME_PATH, FREE_GAME_PATH } from "../global/constants";
 
 @Component({
   selector: "app-waiting",
@@ -13,48 +13,49 @@ import { IndexService } from "../services/index.service";
 })
 export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public constructor (private router: Router, private socket: SocketService, private route: ActivatedRoute,
-                      private index: IndexService) { }
+  public constructor(private router: Router, private socket: SocketService, private route: ActivatedRoute,
+                     private index: IndexService) { }
   public ngOnInit(): void {
-      this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.handleGameDeleted.bind(this));
-      this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.handleGameDeleted.bind(this));
-      this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.startGame.bind(this));
-      this.socket.addEvent(SocketsEvents.NEW_GAME_LIST_LOADED, this.emitEventToNewPlayer.bind(this));
+    this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.handleGameDeleted.bind(this));
+    this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.handleGameDeleted.bind(this));
+    this.socket.addEvent(SocketsEvents.START_MULTIPLAYER_GAME, this.startGame.bind(this));
   }
+
   public ngAfterViewInit(): void {
     if (!this.index.username) {
       this.router.navigate([""]);
     }
   }
+
   public ngOnDestroy(): void {
     this.socket.unsubscribeTo(SocketsEvents.NEW_GAME_LIST_LOADED);
     this.socket.unsubscribeTo(SocketsEvents.START_MULTIPLAYER_GAME);
   }
+
   public cancel(): void {
     this.socket.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, this.getId());
     this.router.navigate(["games"]).catch((error: Error) => console.error(error.message));
   }
+
+  private startGame(gameMessage: INewGameMessage): void {
+    if (this.getId() === gameMessage.gameId) {
+      if (!gameMessage.is3D) {
+        this.router.navigate([SIMPLE_GAME_PATH + gameMessage.gameId], { queryParams: { gameRoomId: gameMessage.gameRoomId } })
+          .catch((error: Error) => console.error(error.message));
+      } else {
+        this.router.navigate([FREE_GAME_PATH + gameMessage.gameId], { queryParams: { gameRoomId: gameMessage.gameRoomId } })
+          .catch((error: Error) => console.error(error.message));
+      }
+    }
+  }
+
   private handleGameDeleted(id: string): void {
     if (this.getId() === id) {
       alert("Le jeu a été supprimer. Vous allez être renvoyé à la liste des jeux");
       this.cancel();
     }
   }
-  private emitEventToNewPlayer(): void {
-    this.socket.emitEvent(SocketsEvents.NEW_MULTIPLAYER_GAME, this.getId());
-  }
-  private startGame(game: IGame | IGame3D ): void {
-    if (game.id === this.getId()) {
-        if (this.isSimpleGame(game)) {
-          this.router.navigate(["simple-game/" + game.id]).catch((error: Error) => console.error(error.message));
-      } else {
-        this.router.navigate(["free-game/" + game.id]).catch((error: Error) => console.error(error.message));
-      }
-    }
-  }
-  private isSimpleGame(game: IGame | IGame3D): boolean {
-    return (game) && "originalImage" in game;
-  }
+
   private getId(): string {
     return String(this.route.snapshot.paramMap.get("id"));
   }

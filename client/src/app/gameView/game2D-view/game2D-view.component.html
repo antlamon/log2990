@@ -19,9 +19,16 @@
 <div class="infoBottom">
   <div class="gameInfo">
     <div class="chrono">Temps: {{timer.getTimeAsString()}}</div>
-    <div class="compteur">Différences trouvées: {{differencesFound}}</div>
+    <div *ngFor="let gamer of gamers" class="compteur">Différences trouvées par {{gamer.username}}: {{gamer.differencesFound}}</div>
   </div>
+  
   <app-game-messages></app-game-messages>
+  <div class="gameControls">
+    <div class="controlIcon" id="left-click">
+      <img src="../../../assets/icons/left_click.png">
+    </div>
+    <div class="control-label">: Identifier une erreur</div>
+  </div>
 </div>
 <ng-template #spinny><mat-spinner class="spinny" md-mode="indeterminate"></mat-spinner></ng-template>
 <app-error-popup></app-error-popup>

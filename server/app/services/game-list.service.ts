@@ -56,7 +56,9 @@ export class GameListService {
 
                 return { title: BASE_ID, body: `Le jeu ${id} n'existe pas!` };
             }
-        }).catch();
+        }).catch((error: Error) => {
+            return { title: ERROR_ID, body: error.message };
+        });
     }
 
     public async deleteFreeGame(id: string): Promise<Message> {
@@ -69,7 +71,9 @@ export class GameListService {
 
                 return { title: BASE_ID, body: `Le jeu ${id} n'existe pas!` };
             }
-        }).catch();
+        }).catch((error: Error) => {
+            return { title: ERROR_ID, body: error.message };
+        });
     }
 
     public async addSimpleGame(newGame: ISimpleForm, originalImage: MulterFile, modifiedImage: MulterFile): Promise<Message> {
@@ -152,14 +156,14 @@ export class GameListService {
     }
 
     private get simpleCollection(): Collection {
-        if (this._simpleCollection == null) {
+        if (!this._simpleCollection) {
             this._simpleCollection = this.databaseClient.db.collection(this.SIMPLE_COLLECTION);
         }
 
         return this._simpleCollection;
     }
     private get freeCollection(): Collection {
-        if (this._freeCollection == null) {
+        if (!this._freeCollection) {
             this._freeCollection = this.databaseClient.db.collection(this.FREE_COLLECTION);
         }
 

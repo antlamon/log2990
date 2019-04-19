@@ -25,8 +25,8 @@ describe("TimerService", () => {
     });
     it("Time should be formatted correctly", () => {
       const service: TimerService = TestBed.get(TimerService);
-      service["_nbMinutes"] = service.FORMAT_ZERO_MAX + 1;
-      service["_nbSeconds"] = service.FORMAT_ZERO_MAX - 1;
+      const tempNbOfSecs: number = 608;
+      service["_nbSeconds"] = tempNbOfSecs;
       expect(service.getTimeAsString()).toEqual("10:08");
     });
     it("Set to zero should set the nbSecond and nb minutes to 0", () => {
