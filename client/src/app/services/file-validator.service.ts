@@ -8,9 +8,9 @@ export class FileValidatorService {
 
   private readonly IMAGE_WIDTH: number = 640;
   private readonly IMAGE_HEIGHT: number = 480;
-  private readonly MIN_LENGTH: number = 3;
+  public readonly MIN_LENGTH: number = 3;
   private readonly MAX_LENGTH: number = 15;
-  private readonly MAX_NAME: number = 10;
+  public readonly MAX_NAME: number = 10;
   private readonly ALPHA_NUMERICS_REGEX: RegExp = /^[a-zA-Z0-9]+$/i;
   private readonly NUMERICS_REGEX: RegExp = /^[0-9]+$/i;
 
@@ -21,9 +21,12 @@ export class FileValidatorService {
   public isValidGameName(name: string): boolean {
     return name.length <= this.MAX_LENGTH && name.length >= this.MIN_LENGTH && this.containOnlyAlphaNumeric(name);
   }
+  public isValidNameLength(name: string): boolean {
+    return name.length <= this.MAX_NAME && name.length >= this.MIN_LENGTH;
+  }
 
   public isValidName(name: string): boolean {
-    return name.length <= this.MAX_NAME && name.length >= this.MIN_LENGTH && this.containOnlyAlphaNumeric(name);
+    return this.isValidNameLength(name) && this.containOnlyAlphaNumeric(name);
   }
 
   public containOnlyAlphaNumeric(name: string): boolean {
