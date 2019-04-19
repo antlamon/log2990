@@ -43,4 +43,7 @@
   </div>
 </div>
 <app-error-popup></app-error-popup>
+<app-ending-message id="soloEndGame" [isSoloGame]="true" [isMultGame]="false" [isWin]="true" class="modal-body"></app-ending-message>
+<app-ending-message id="multWinGame" [isSoloGame]="false" [isMultGame]="true" [isWin]="true" class="modal-body"></app-ending-message>
+<app-ending-message id="multLostGame" [isSoloGame]="false" [isMultGame]="true" [isWin]="false" class="modal-body"></app-ending-message>
 </body>

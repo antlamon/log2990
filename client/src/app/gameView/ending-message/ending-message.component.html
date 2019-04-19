@@ -1,0 +1,14 @@
+<div *ngIf="isSoloGame && isWin" class="messageForm" (click)="submit()">
+    <h1>Félicitations ! <br> Vous avez réussi le jeu !</h1>
+    <p>Cliquez ici pour retourner au menu des jeux</p>
+</div>
+<div *ngIf="isMultGame && isWin" class="messageForm" (click)="submit()">
+    <h1>Félicitations ! <br> Vous avez gagné !</h1>
+    <p>Cliquez ici pour retourner au menu des jeux</p>
+</div>
+<div *ngIf="isMultGame && !isWin" class="messageForm" (click)="submit()">
+    <h1>Dommage... <br> Vous avez perdu</h1>
+    <p>Cliquez ici pour retourner au menu des jeux</p>
+</div>
+<div class="form-background"></div>
+    

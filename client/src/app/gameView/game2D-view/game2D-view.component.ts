@@ -7,6 +7,7 @@ import { SocketsEvents } from "../../../../../common/communication/socketsEvents
 import { IFullGame } from "../../../../../common/models/game";
 import { GameService } from "../../services/game.service";
 import { SocketService } from "../../services/socket.service";
+import { ModalService } from "src/app/services/modal.service";
 import { GameViewComponent } from "../gameViewComponent";
 
 @Component({
@@ -25,9 +26,10 @@ export class Game2DViewComponent extends GameViewComponent {
         index: IndexService,
         timer: TimerService,
         ref: ChangeDetectorRef,
-        router: Router
+        router: Router,
+        modalService: ModalService
     ) {
-        super(gameService, socket, route, index, timer, ref, router);
+        super(gameService, socket, route, index, timer, ref, router, modalService);
         this.socket.addEvent(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
     }
 
@@ -84,7 +86,6 @@ export class Game2DViewComponent extends GameViewComponent {
             gameType: "simple",
             gameRoomId: this.gameRoomId,
         });
-        this.getBack();
     }
 
     public sendClick(event: MouseEvent): void {
