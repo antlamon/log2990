@@ -13,8 +13,12 @@ import { SIMPLE_GAME_PATH, FREE_GAME_PATH } from "../global/constants";
 })
 export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  public isDeleted: boolean;
+
   public constructor(private router: Router, private socket: SocketService, private route: ActivatedRoute,
-                     private index: IndexService) { }
+                     private index: IndexService) {
+    this.isDeleted = false;
+  }
   public ngOnInit(): void {
     this.socket.addEvent(SocketsEvents.FREE_GAME_DELETED, this.handleGameDeleted.bind(this));
     this.socket.addEvent(SocketsEvents.SIMPLE_GAME_DELETED, this.handleGameDeleted.bind(this));
@@ -51,11 +55,9 @@ export class WaitingComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private handleGameDeleted(id: string): void {
     if (this.getId() === id) {
-      alert("Le jeu a été supprimer. Vous allez être renvoyé à la liste des jeux");
-      this.cancel();
+      this.isDeleted = true;
     }
   }
-
   private getId(): string {
     return String(this.route.snapshot.paramMap.get("id"));
   }
