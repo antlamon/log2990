@@ -104,6 +104,7 @@ export class SceneGeneratorService {
            });
         }
       });
+      newMesh.parent = scene;
       scene.remove(originalMesh);
       scene.add(newMesh);
     } else {

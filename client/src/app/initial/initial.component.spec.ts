@@ -57,7 +57,8 @@ describe("InitialComponent", () => {
     });
     it("Should return a list of errors if the name is not valid", () => {
       component.connect("test fail *");
-      expect(component["errors"]).toEqual(["Le username n'est pas valide"]);
+      // tslint:disable-next-line:no-magic-numbers
+      expect(component["errors"].length).toEqual(2);
     });
   });
 });
