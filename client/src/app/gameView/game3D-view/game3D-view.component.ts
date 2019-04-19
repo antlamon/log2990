@@ -141,6 +141,7 @@ export class Game3DViewComponent extends GameViewComponent {
     }
 
     private onKeyDown = (event: KeyboardEvent) => {
+        // tslint:disable-next-line:deprecation from cli
         switch (event.keyCode) {
             case KEYS["S"]:
                 this.render.moveCam(AXIS.Z, this.movementSpeed);

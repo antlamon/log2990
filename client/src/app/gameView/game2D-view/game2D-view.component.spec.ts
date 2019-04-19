@@ -52,9 +52,9 @@ describe("Game2DViewComponent", () => {
                 EndingMessageComponent
             ],
             imports: [RouterTestingModule,
-                HttpClientModule,
-                HttpClientTestingModule,
-                MatProgressSpinnerModule
+                      HttpClientModule,
+                      HttpClientTestingModule,
+                      MatProgressSpinnerModule
             ],
             providers: [IndexService, AppRoutingModule, ModalService ],
         })

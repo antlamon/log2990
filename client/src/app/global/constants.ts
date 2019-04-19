@@ -16,6 +16,7 @@ export interface KeysMap {
 }
 
 export enum AXIS {X, Y, Z}
+export enum GAME_STATE {WIN, LOST}
 
 export const KEYS: KeysMap = {"A": 65, "D": 68, "S": 83, "W": 87, "T": 84};
 

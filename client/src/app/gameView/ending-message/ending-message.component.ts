@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, ElementRef, Input } from '@angular/core';
-import { IModal } from 'src/app/models/modal';
-import { ModalService } from 'src/app/services/modal.service';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy, ElementRef, Input } from "@angular/core";
+import { IModal } from "src/app/models/modal";
+import { ModalService } from "src/app/services/modal.service";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-ending-message',
-  templateUrl: './ending-message.component.html',
-  styleUrls: ['./ending-message.component.css']
+  selector: "app-ending-message",
+  templateUrl: "./ending-message.component.html",
+  styleUrls: ["./ending-message.component.css"]
 })
 export class EndingMessageComponent implements OnInit, OnDestroy, IModal {
 
