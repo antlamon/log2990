@@ -1,11 +1,11 @@
 <body>
   <div *ngIf="isDeleted">
-    <mat-dialog-content>
+    <div>
       <p class="textAlert">Le jeu a été supprimé. Vous allez être renvoyé à la liste des jeux.</p>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button class = "buttonAlert" mat-button (click)="cancel()" >OK</button>
-    </mat-dialog-actions>
+    </div>
+    <div>
+      <button class = "buttonAlert" (click)="cancel()" >OK</button>
+    </div>
   </div>
   <div *ngIf="!isDeleted" class="spinner">
     <div class="spinner-circle spinner-circle-outer"></div>
