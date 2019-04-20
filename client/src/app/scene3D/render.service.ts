@@ -103,12 +103,12 @@ export class RenderService {
   private setCollidableObjects(differences: IDifference[]): void {
     this.hitboxes = [];
     this.differencesObjects = [];
-    this.sceneModif.children.forEach((obj: THREE.Object3D) => {
+    this.sceneOriginal.children.forEach((obj: THREE.Object3D) => {
         this.hitboxes.push( [obj.name, new THREE.Box3().setFromObject(obj)]);
     });
     for (const diff of differences) {
       if (diff.type === ADD_TYPE) {
-        this.hitboxes.push( [diff.name, new THREE.Box3().setFromObject(this.getObject(this.sceneOriginal, diff.name))]);
+        this.hitboxes.push( [diff.name, new THREE.Box3().setFromObject(this.getObject(this.sceneModif, diff.name))]);
       }
     }
   }
