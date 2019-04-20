@@ -79,14 +79,16 @@ export class GameMessagesComponent implements OnDestroy {
   }
 
   public handleNewBestTime(newScoreUpdate: NewScoreUpdate): void {
-    const newBestMsg: string = `${newScoreUpdate.username} obtient la ${this.positions[newScoreUpdate.scoreUpdate.insertPos - 1]}
-     place dans les meilleurs temps du jeu ${newScoreUpdate.gameName} en ${newScoreUpdate.gameMode}`;
-
-    const msg: IGameMessage = {
-      time: this.getTime(),
-      text: newBestMsg,
-    };
-    this.gameMessages.push(msg);
+    let newBestMsg: string;
+    if (newScoreUpdate.username) {
+      newBestMsg = `${newScoreUpdate.username} obtient la ${this.positions[newScoreUpdate.scoreUpdate.insertPos - 1]}
+      place dans les meilleurs temps du jeu ${newScoreUpdate.gameName} en ${newScoreUpdate.gameMode}`;
+      const msg: IGameMessage = {
+        time: this.getTime(),
+        text: newBestMsg,
+      };
+      this.gameMessages.push(msg);
+    }
   }
 
   private getTime(): string {
