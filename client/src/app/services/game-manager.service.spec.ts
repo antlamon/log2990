@@ -6,7 +6,7 @@ import { IGame3D, IDifference } from "../../../../common/models/game3D";
 import { IObjet3D } from "../../../../common/models/objet3D";
 import { IScore } from "../../../../common/models/top3";
 import { GameService } from "./game.service";
-import { SIMPLE_GAME_TYPE, FREE_GAME_TYPE, IScoreUpdate } from "../../../../common/communication/message";
+import { SIMPLE_GAME_TYPE, FREE_GAME_TYPE, NewScoreUpdate } from "../../../../common/communication/message";
 import { HttpClientModule } from "@angular/common/http";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RenderService } from "../scene3D/render.service";
@@ -81,14 +81,14 @@ describe("GameManagerService", () => {
   describe("Updating score", () => {
     it("Updating a simple game score should modify the simple games array", () => {
       service["_simpleGames"] = [mockSimple];
-      service.updateScore({id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []} as IScoreUpdate)
+      service.updateScore({scoreUpdate: {id: mockSimple.id, gameType: SIMPLE_GAME_TYPE, solo: [], multi: []}} as NewScoreUpdate)
       .catch((error: Error) => console.error(error.message));
       expect(service["_simpleGames"][0].solo).toEqual([]);
       expect(service["_simpleGames"][0].multi).toEqual([]);
     });
     it("Updating a free game score should modify the free games array", () => {
       service["_freeGames"] = [mockGame3D];
-      service.updateScore({id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []} as IScoreUpdate)
+      service.updateScore({scoreUpdate: {id: mockGame3D.id, gameType: FREE_GAME_TYPE, solo: [], multi: []}} as NewScoreUpdate)
       .catch((error: Error) => console.error(error.message));
       expect(service["_freeGames"][0].solo).toEqual([]);
       expect(service["_freeGames"][0].multi).toEqual([]);

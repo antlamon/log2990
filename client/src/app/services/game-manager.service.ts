@@ -5,7 +5,7 @@ import { SocketService } from "./socket.service";
 import { GameService } from "./game.service";
 import { RenderService } from "../scene3D/render.service";
 import { SocketsEvents } from "../../../../common/communication/socketsEvents";
-import { SIMPLE_GAME_TYPE, IScoreUpdate, FREE_GAME_TYPE } from "../../../../common/communication/message";
+import { SIMPLE_GAME_TYPE, FREE_GAME_TYPE, NewScoreUpdate } from "../../../../common/communication/message";
 import { BehaviorSubject } from "rxjs";
 
 @Injectable({
@@ -44,26 +44,26 @@ export class GameManagerService {
   public getImageUrl(game: IGame3D): string {
     return this._imageURLs.get(game);
   }
-  public async updateScore(update: IScoreUpdate): Promise<void> {
-    if (update.gameType === SIMPLE_GAME_TYPE) {
+  public async updateScore(update: NewScoreUpdate): Promise<void> {
+    if (update.scoreUpdate.gameType === SIMPLE_GAME_TYPE) {
       if (!this._simpleGames) {
         await this.getSimpleGames();
       }
-      const index: number = this._simpleGames.findIndex((x: IGame) => x.id === update.id);
+      const index: number = this._simpleGames.findIndex((x: IGame) => x.id === update.scoreUpdate.id);
       if (index !== -1) {
-        this._simpleGames[index].solo = update.solo;
-        this._simpleGames[index].multi = update.multi;
+        this._simpleGames[index].solo = update.scoreUpdate.solo;
+        this._simpleGames[index].multi = update.scoreUpdate.multi;
       }
       this.simpleSubject.next(this._simpleGames);
     }
-    if (update.gameType === FREE_GAME_TYPE) {
+    if (update.scoreUpdate.gameType === FREE_GAME_TYPE) {
       if (!this._freeGames) {
         await this.getFreeGames();
       }
-      const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === update.id);
+      const index: number = this._freeGames.findIndex((x: IGame3D) => x.id === update.scoreUpdate.id);
       if (index !== -1) {
-        this._freeGames[index].solo = update.solo;
-        this._freeGames[index].multi = update.multi;
+        this._freeGames[index].solo = update.scoreUpdate.solo;
+        this._freeGames[index].multi = update.scoreUpdate.multi;
       }
       this.freeSubject.next(this._freeGames);
     }

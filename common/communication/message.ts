@@ -98,9 +98,9 @@ export interface ScoreUpdate extends IScoreUpdate {
 
 export interface NewScoreUpdate {
     scoreUpdate: ScoreUpdate;
-    username: string;
-    gameMode: string;
-    gameName: string;
+    username?: string;
+    gameMode?: string;
+    gameName?: string;
 }
 
 export interface NewMultiplayerGame {

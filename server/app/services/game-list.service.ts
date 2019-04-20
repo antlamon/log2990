@@ -144,14 +144,15 @@ export class GameListService {
             const tempGame: IFullGame | null = await this.simpleCollection.findOne({ "card.id": id });
             if (tempGame) {
                 this.socketController.emitEvent(
-                    SocketsEvents.SCORES_UPDATED, { gameType: gameType, id: id, solo: tempGame.card.solo, multi: tempGame.card.multi });
+                    SocketsEvents.SCORES_UPDATED, { scoreUpdate: { gameType: gameType,
+                                                                   id: id, solo: tempGame.card.solo, multi: tempGame.card.multi }});
             }
         } else {
             const tempGame: IGame3D | null = await this.freeCollection.findOne({ id });
             if (tempGame) {
                 this.socketController.emitEvent(
-                    SocketsEvents.SCORES_UPDATED,
-                    { gameType: gameType, id: id, solo: tempGame.solo, multi: tempGame.multi });
+                    SocketsEvents.SCORES_UPDATED, { scoreUpdate: { gameType: gameType,
+                                                                   id: id, solo: tempGame.solo, multi: tempGame.multi }});
             }
         }
     }

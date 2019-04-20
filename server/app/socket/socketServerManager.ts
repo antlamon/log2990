@@ -107,9 +107,12 @@ export class SocketServerManager {
     }
 
     private async handleEndGame(socket: Socket, endGameMessage: EndGameMessage): Promise<void> {
+        console.log(`entrer ici`);
         socket.leave(endGameMessage.gameRoomId);
+        console.log(`leave`);
         const newScoreUpdate: NewScoreUpdate = await this.gameRoomService.endGame(endGameMessage);
         if (newScoreUpdate.scoreUpdate.insertPos !== -1) {
+            console.log(`envent envoyer`);
             this.emitEvent(SocketsEvents.SCORES_UPDATED, newScoreUpdate);
         }
     }
