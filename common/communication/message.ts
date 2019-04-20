@@ -64,16 +64,16 @@ export interface Game3DRoomUpdate extends IGameRoomUpdate {
     diffType: string;
 }
 
-export interface clickMessage {
+export interface UserRoomId {
     username: string;
     gameRoomId: string;
 }
 
-export interface ImageClickMessage extends clickMessage {
+export interface ImageClickMessage extends UserRoomId {
     point: Point;
 }
 
-export interface Obj3DClickMessage extends clickMessage {
+export interface Obj3DClickMessage extends UserRoomId {
     name: string;
 }
 

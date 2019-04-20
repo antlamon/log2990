@@ -2,8 +2,10 @@ import Axios from "axios";
 import * as chai from "chai";
 import * as spies from "chai-spies";
 import { Guid } from "guid-typescript";
-import { BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate, INewGameMessage, NewGame3DMessage,
-    NewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, ScoreUpdate } from "../../../../common/communication/message";
+import {
+    BASE_ID, EndGameMessage, ERROR_ID, Game3DRoomUpdate, GameRoomUpdate, INewGameMessage, NewGame3DMessage,
+    NewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, ScoreUpdate
+} from "../../../../common/communication/message";
 import { ADD_TYPE } from "../../../../common/models/game3D";
 import { container } from "../../inversify.config";
 import { TYPES } from "../../types";
@@ -68,6 +70,7 @@ describe("GameRoomService", () => {
                 },
                 gamer: [{ username: "user", differencesFound: 0, isReady: false }],
                 serviceStarted: false,
+                mode: "multi",
             });
         });
     });
@@ -82,8 +85,9 @@ describe("GameRoomService", () => {
                 },
                 gamer: [{ username: "user", differencesFound: 0, isReady: false }],
                 serviceStarted: false,
+                mode: "multi",
             };
-            const mockedMultiplayerGame: NewMultiplayerGame = {gameId: mockedGameRoom.game.gameId, gameRoomId: "findingPlayers"};
+            const mockedMultiplayerGame: NewMultiplayerGame = { gameId: mockedGameRoom.game.gameId, gameRoomId: "findingPlayers" };
             service["gameRooms"]["findingPlayers"] = mockedGameRoom;
             const gameRooms: NewMultiplayerGame[] = service.findWaitingGameRooms();
             expect(gameRooms).to.deep.include(mockedMultiplayerGame);
@@ -102,6 +106,7 @@ describe("GameRoomService", () => {
                 isReady: true,
             }],
             serviceStarted: true,
+            mode: "solo",
         };
         service["gameRooms"]["test3D"] = {
             game: {
@@ -114,6 +119,7 @@ describe("GameRoomService", () => {
                 isReady: true,
             }],
             serviceStarted: true,
+            mode: "solo",
         };
 
         it("Should return the ok on resolve", (done: Mocha.Done) => {
@@ -234,12 +240,12 @@ describe("GameRoomService", () => {
     describe("Deleting a game room", () => {
         it("Deleting a game room should send a delete request", async () => {
             const spy: ChaiSpies.Spy = sandbox.on(Axios, "delete", async () => Promise.resolve());
-            await service.deleteGameRoom("test");
+            await service.deleteGameRoom({ gameRoomId: "test", username: "user" });
             expect(spy).to.have.been.called();
         });
         it("Deleting a game 3D room should send a delete request", async () => {
             const spy: ChaiSpies.Spy = sandbox.on(Axios, "delete", async () => Promise.resolve());
-            await service.deleteGame3DRoom("test3D");
+            await service.deleteGame3DRoom({ gameRoomId: "test3D", username: "user" });
             expect(spy).to.have.been.called();
         });
         it("Canceling a waiting game room should delete the correct room", async () => {

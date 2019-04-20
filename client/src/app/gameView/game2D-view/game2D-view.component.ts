@@ -45,16 +45,16 @@ export class Game2DViewComponent extends GameViewComponent {
         super.ngOnDestroy();
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE);
         if (this.simpleGame) {
-            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, this.gameRoomId);
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_ROOM, { gameRoomId: this.gameRoomId, username: this.index.username });
         }
     }
 
     private getSimpleGame(): void {
         this.gameService.getSimpleGame(this.getId())
-        .subscribe((response: IFullGame) => {
-            this.ref.detach();
-            this.simpleGame = response;
-            const newGameMessage: NewGameMessage = {
+            .subscribe((response: IFullGame) => {
+                this.ref.detach();
+                this.simpleGame = response;
+                const newGameMessage: NewGameMessage = {
                     username: this.index.username,
                     gameId: this.simpleGame.card.id,
                     gameName: this.simpleGame.card.name,
@@ -64,7 +64,7 @@ export class Game2DViewComponent extends GameViewComponent {
                     modifiedImage: this.simpleGame.modifiedImage,
                     differenceImage: this.simpleGame.differenceImage
                 };
-            this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
+                this.socket.emitEvent(SocketsEvents.CREATE_GAME_ROOM, newGameMessage);
             });
     }
 
