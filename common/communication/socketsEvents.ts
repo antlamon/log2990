@@ -20,4 +20,6 @@ export class SocketsEvents {
     public static readonly CANCEL_MULTIPLAYER_GAME = "cancel-multi-game";
     public static readonly START_MULTIPLAYER_GAME = "start-multi-game";
     public static readonly NEW_GAME_LIST_LOADED = "new-game-list-loaded";
+    public static USER_CONNECTED_TYPE: string = "userConnected";
+    public static USER_DISCONNECTED_TYPE: string = "userDisconnected";
 }

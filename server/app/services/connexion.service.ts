@@ -18,7 +18,7 @@ export class ConnexionService {
 
     public async addName(newName: string, id: string): Promise<Message> {
         if (!this.formValidator.isCorrectLength(newName, ConnexionService.MIN_USERNAME_LENGTH, ConnexionService.MAX_USERNAME_LENGTH )) {
-            return {title: ERROR_ID, body: `Le nom n'est pas de la bonne taile entre
+            return {title: ERROR_ID, body: `Le nom n'est pas de la bonne taille entre
             ${ConnexionService.MIN_USERNAME_LENGTH} et ${ConnexionService.MAX_USERNAME_LENGTH}`};
         }
         if (!this.formValidator.containOnlyAlphaNumeric(newName)) {
@@ -30,7 +30,7 @@ export class ConnexionService {
         }
 
         this.userManager.setUserName(newName, id);
-        this.socket.emitEvent(SocketsEvents.USER_CONNECTION, newName, "userConnected");
+        this.socket.emitEvent(SocketsEvents.USER_CONNECTION, newName, SocketsEvents.USER_CONNECTED_TYPE);
 
         return {
             title: BASE_ID,

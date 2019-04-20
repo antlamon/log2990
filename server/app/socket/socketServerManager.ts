@@ -41,7 +41,7 @@ export class SocketServerManager {
                 const userName: string = this.userManager.getUsername(socket.client.id);
                 this.userManager.removeUser(socket.client.id);
                 if (userName) {
-                    this.emitEvent(SocketsEvents.USER_CONNECTION, userName, "userDisconnected");
+                    this.emitEvent(SocketsEvents.USER_CONNECTION, userName, SocketsEvents.USER_DISCONNECTED_TYPE);
                 }
             });
             this.initializeMultiplayerGame(socket);
