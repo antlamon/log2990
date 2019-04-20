@@ -15,7 +15,6 @@ import { SceneGeneratorService } from "./scene-generator.service";
 import { MedievalObjectsCreatorService } from "./thematic/medieval-objects-creator.service";
 import { WHITE, AXIS, SQUARE_BOX_LENGHT, SKY_BOX_DEPTH } from "src/app/global/constants";
 import { THREE_ERROR } from "../../../../common/models/errors";
-import { Object3D } from "three";
 
 describe("renderService", () => {
   const cone: IObjet3D = {
@@ -114,13 +113,13 @@ describe("renderService", () => {
     service["differences"] = [];
     it("container property should be properly affected", async () => {
       // tslint:disable-next-line:no-any
-      spyOn(service as any, "getObject").and.returnValue(new Object3D());
+      spyOn(service as any, "getObject").and.returnValue(new THREE.Object3D());
       await service.initialize(container1, container2, mockGame);
       expect(service["containerOriginal"]).toEqual(container1);
     });
     it("should give the background color given in parameters at creation", async () => {
       // tslint:disable-next-line:no-any
-      spyOn(service as any, "getObject").and.returnValue(new Object3D());
+      spyOn(service as any, "getObject").and.returnValue(new THREE.Object3D());
       await service.initialize(container1, container2, mockGame);
       expect(service["sceneOriginal"].background).toEqual(new THREE.Color(mockGame.backColor));
     });
@@ -143,7 +142,7 @@ describe("renderService", () => {
     });
     it("should set the new size when resized", async () => {
       // tslint:disable-next-line:no-any
-      spyOn(service as any, "getObject").and.returnValue(new Object3D());
+      spyOn(service as any, "getObject").and.returnValue(new THREE.Object3D());
       await service.initialize(container1, container2, mockGame);
       const spyRenderer: jasmine.Spy = spyOn(service["rendererO"], "setSize");
       service.onResize();

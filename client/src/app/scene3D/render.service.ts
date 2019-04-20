@@ -92,7 +92,6 @@ export class RenderService {
     this.sceneOriginal.add(this.camera);
     this.sceneModif.add(this.camera);
   }
-
   private getAspectRatio(): number {
     return this.containerOriginal.clientWidth / this.containerOriginal.clientHeight;
   }
@@ -129,7 +128,6 @@ export class RenderService {
         default:
       }
     }
-
   }
   private createRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
     const renderer: THREE.WebGLRenderer = this.initializeRenderer(container);
@@ -147,7 +145,6 @@ export class RenderService {
 
     return renderer;
   }
-
   private initializeRenderer(container: HTMLDivElement): THREE.WebGLRenderer {
     const renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
     renderer.setPixelRatio(devicePixelRatio);
@@ -158,7 +155,6 @@ export class RenderService {
 
     return renderer;
   }
-
   private render(): void {
     requestAnimationFrame(() => this.render());
     this.rendererO.render(this.sceneOriginal, this.camera);
