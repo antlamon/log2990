@@ -12,6 +12,7 @@ import { GameRoomUpdate, NewScoreUpdate, NewGameStarted } from "../../../../../c
 export class GameMessagesComponent implements OnDestroy {
 
   private readonly PADDED_ZERO: number = -2;
+  private readonly USER_CONNECTED: string = "userConnected";
 
   private gameMessages: IGameMessage[];
   private isMultiplayer: boolean;
@@ -62,7 +63,7 @@ export class GameMessagesComponent implements OnDestroy {
   }
 
   public handleConnection(username: string, eventType: string): void {
-    if (eventType === "userConnected") {
+    if (eventType === this.USER_CONNECTED) {
       const msg: IGameMessage = {
         time: this.getTime(),
         text: `${username} s'est connecté(e)`,
