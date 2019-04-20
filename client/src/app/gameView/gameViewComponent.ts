@@ -91,7 +91,7 @@ export abstract class GameViewComponent implements OnInit, OnDestroy {
                 this.timer.stopTimer();
                 this._disableClick = "disable-click";
 
-                this.openEndingDialog(GAME_STATE.WIN);
+                this.openEndingDialog(GAME_STATE.LOST);
             }
         }
     }
