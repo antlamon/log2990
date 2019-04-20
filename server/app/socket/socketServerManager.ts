@@ -61,7 +61,7 @@ export class SocketServerManager {
         });
         socket.on(SocketsEvents.CANCEL_MULTIPLAYER_GAME, (id: string) => {
             this.gameRoomService.cancelWaitingRoom(id);
-            this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, {gameId: id}); // only game id is necessary for cancel
+            this.emitEvent(SocketsEvents.CANCEL_MULTIPLAYER_GAME, {gameId: id});
         });
         socket.on(SocketsEvents.NEW_GAME_LIST_LOADED, () => {
             const waitingRooms: NewMultiplayerGame[] = this.gameRoomService.findWaitingGameRooms();
@@ -107,12 +107,9 @@ export class SocketServerManager {
     }
 
     private async handleEndGame(socket: Socket, endGameMessage: EndGameMessage): Promise<void> {
-        console.log(`entrer ici`);
         socket.leave(endGameMessage.gameRoomId);
-        console.log(`leave`);
         const newScoreUpdate: NewScoreUpdate = await this.gameRoomService.endGame(endGameMessage);
         if (newScoreUpdate.scoreUpdate.insertPos !== -1) {
-            console.log(`envent envoyer`);
             this.emitEvent(SocketsEvents.SCORES_UPDATED, newScoreUpdate);
         }
     }
