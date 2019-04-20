@@ -13,7 +13,7 @@ export class GameMessagesComponent implements OnDestroy {
 
   private readonly PADDED_ZERO: number = -2;
 
-  private gameMessages: IGameMessage[] = [];
+  private gameMessages: IGameMessage[];
   private isMultiplayer: boolean;
   private readonly positions: string[] = ["première", "deuxième", "troisième"];
 
@@ -24,6 +24,7 @@ export class GameMessagesComponent implements OnDestroy {
     this.socket.addEvent(SocketsEvents.USER_CONNECTION, this.handleConnection.bind(this));
     this.socket.addEvent(SocketsEvents.SCORES_UPDATED, this.handleNewBestTime.bind(this));
     this.isMultiplayer = false;
+    this.gameMessages = [];
   }
 
   public ngOnDestroy(): void {
