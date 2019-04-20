@@ -3,7 +3,7 @@ import { inject, injectable } from "inversify";
 import * as SocketIO from "socket.io";
 import {
     EndGameMessage, Game3DRoomUpdate, Gamer, GameRoomUpdate, ImageClickMessage,
-    INewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Obj3DClickMessage
+    INewGameMessage, NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Obj3DClickMessage, UserRoomId
 } from "../../../common/communication/message";
 import { SocketsEvents } from "../../../common/communication/socketsEvents";
 import { GameRoomService } from "../services/rooms/gameRoom.service";
@@ -28,11 +28,11 @@ export class SocketServerManager {
             });
             socket.on(SocketsEvents.CHECK_DIFFERENCE, this.handleCheckDifference.bind(this));
             socket.on(SocketsEvents.CHECK_DIFFERENCE_3D, this.handleCheckDifference3D.bind(this));
-            socket.on(SocketsEvents.DELETE_GAME_ROOM, async (gameRoomId: string) => {
-                await this.handleDeleteGameRoom(socket, gameRoomId);
+            socket.on(SocketsEvents.DELETE_GAME_ROOM, async (userRoomId: UserRoomId) => {
+                await this.handleDeleteGameRoom(socket, userRoomId);
             });
-            socket.on(SocketsEvents.DELETE_GAME_3D_ROOM, async (gameRoomId: string) => {
-                await this.handleDeleteGame3DRoom(socket, gameRoomId);
+            socket.on(SocketsEvents.DELETE_GAME_3D_ROOM, async (userRoomId: UserRoomId) => {
+                await this.handleDeleteGame3DRoom(socket, userRoomId);
             });
             socket.on(SocketsEvents.END_GAME, async (endGameMessage: EndGameMessage) => {
                 await this.handleEndGame(socket, endGameMessage);
@@ -96,14 +96,14 @@ export class SocketServerManager {
         this.emitRoomEvent(SocketsEvents.CHECK_DIFFERENCE_3D, event.gameRoomId, update);
     }
 
-    private async handleDeleteGameRoom(socket: Socket, gameRoomId: string): Promise<void> {
-        socket.leave(gameRoomId);
-        await this.gameRoomService.deleteGameRoom(gameRoomId);
+    private async handleDeleteGameRoom(socket: Socket, userRoomId: UserRoomId): Promise<void> {
+        socket.leave(userRoomId.gameRoomId);
+        await this.gameRoomService.deleteGameRoom(userRoomId);
     }
 
-    private async handleDeleteGame3DRoom(socket: Socket, gameRoomId: string): Promise<void> {
-        socket.leave(gameRoomId);
-        await this.gameRoomService.deleteGame3DRoom(gameRoomId);
+    private async handleDeleteGame3DRoom(socket: Socket, userRoomId: UserRoomId): Promise<void> {
+        socket.leave(userRoomId.gameRoomId);
+        await this.gameRoomService.deleteGame3DRoom(userRoomId);
     }
 
     private async handleEndGame(socket: Socket, endGameMessage: EndGameMessage): Promise<void> {

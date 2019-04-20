@@ -67,7 +67,7 @@ export class Game3DViewComponent extends GameViewComponent {
         this.socket.unsubscribeTo(SocketsEvents.CHECK_DIFFERENCE_3D);
         if (this.game3D) {
             this.render.stopCheatMode();
-            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, this.gameRoomId);
+            this.socket.emitEvent(SocketsEvents.DELETE_GAME_3D_ROOM, { gameRoomId: this.gameRoomId, username: this.index.username });
         }
     }
 

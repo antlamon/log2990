@@ -2,7 +2,7 @@ import Axios, { AxiosResponse } from "axios";
 import { Guid } from "guid-typescript";
 import { injectable } from "inversify";
 import { BASE_ID, EndGameMessage, Game3DRoomUpdate, Gamer, GameRoomUpdate, INewGameMessage,
-     NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Point } from "../../../../common/communication/message";
+     NewGameStarted, NewMultiplayerGame, NewScoreUpdate, Point, UserRoomId } from "../../../../common/communication/message";
 
 @injectable()
 export class GameRoomService {
@@ -13,6 +13,8 @@ export class GameRoomService {
     private readonly TIMESCORE_URL: string = "http://localhost:3000/api/timescore";
     private readonly MAX_SOLO_DIFFERENCES: number = 7;
     private readonly MAX_MULTI_DIFFERENCES: number = 4;
+    private readonly MODE_SOLO: string = "solo";
+    private readonly MODE_MULTI: string = "multi";
 
     public constructor() {
         this.gameRooms = {} as GameRooms;
@@ -22,7 +24,7 @@ export class GameRoomService {
         if (newGameMessage.gameRoomId == null) {
             const gameRoomId: string = Guid.create().toString();
             newGameMessage.gameRoomId = gameRoomId;
-            this.createGameRoom(newGameMessage.gameRoomId, newGameMessage.gameId, newGameMessage.gameName);
+            this.createGameRoom(newGameMessage.gameRoomId, newGameMessage.gameId, newGameMessage.gameName, this.MODE_SOLO);
             this.joinGameRoom(newGameMessage.username, newGameMessage.gameRoomId);
         }
         if (!this.gameRooms[newGameMessage.gameRoomId].serviceStarted) {
@@ -48,7 +50,7 @@ export class GameRoomService {
 
     public createWaitingGameRoom(newGameMessage: INewGameMessage): NewMultiplayerGame {
         const gameRoomId: string = Guid.create().toString();
-        this.createGameRoom(gameRoomId, newGameMessage.gameId, newGameMessage.gameName);
+        this.createGameRoom(gameRoomId, newGameMessage.gameId, newGameMessage.gameName, this.MODE_MULTI);
         this.joinGameRoom(newGameMessage.username, gameRoomId);
 
         return {
@@ -82,7 +84,7 @@ export class GameRoomService {
         this.gameRooms[gameRoomId].gamer.push(newGamer);
     }
 
-    private createGameRoom(gameRoomId: string, gameId: string, gameName: string): void {
+    private createGameRoom(gameRoomId: string, gameId: string, gameName: string, mode: string): void {
         this.gameRooms[gameRoomId] = {
             game: {
                 gameId,
@@ -90,6 +92,7 @@ export class GameRoomService {
             },
             gamer: [],
             serviceStarted: false,
+            mode,
         };
     }
 
@@ -113,7 +116,7 @@ export class GameRoomService {
             username: username,
             newImage: response.data.body,
             differencesFound: ++gamer.differencesFound,
-            isGameOver: this.gameRooms[gameRoomId].gamer.length === 1 ? gamer.differencesFound === this.MAX_SOLO_DIFFERENCES
+            isGameOver: this.gameRooms[gameRoomId].mode === this.MODE_SOLO ? gamer.differencesFound === this.MAX_SOLO_DIFFERENCES
                 : gamer.differencesFound === this.MAX_MULTI_DIFFERENCES,
         };
     }
@@ -140,7 +143,7 @@ export class GameRoomService {
             differencesFound: ++gamer.differencesFound,
             objName: response.data.body.name,
             diffType: response.data.body.type,
-            isGameOver: this.gameRooms[gameRoomId].gamer.length === 1 ? gamer.differencesFound === this.MAX_SOLO_DIFFERENCES
+            isGameOver: this.gameRooms[gameRoomId].mode === this.MODE_SOLO ? gamer.differencesFound === this.MAX_SOLO_DIFFERENCES
                 : gamer.differencesFound === this.MAX_MULTI_DIFFERENCES,
         };
     }
@@ -154,22 +157,28 @@ export class GameRoomService {
         }
     }
 
-    public async deleteGameRoom(gameRoomId: string): Promise<void> {
-        if (this.gameRooms[gameRoomId]) {
-            await Axios.delete(this.IDENTIFICATION_URL, { params: { gameRoomId: gameRoomId } });
-            delete this.gameRooms[gameRoomId];
+    public async deleteGameRoom(userRoomId: UserRoomId): Promise<void> {
+        this.gameRooms[userRoomId.gameRoomId].gamer = this.gameRooms[userRoomId.gameRoomId].gamer.filter((gamer: Gamer) =>
+            gamer.username !== userRoomId.username,
+        );
+        if (this.gameRooms[userRoomId.gameRoomId] && this.gameRooms[userRoomId.gameRoomId].gamer.length === 0) {
+            await Axios.delete(this.IDENTIFICATION_URL, { params: { gameRoomId: userRoomId.gameRoomId } });
+            delete this.gameRooms[userRoomId.gameRoomId];
         }
     }
 
-    public async deleteGame3DRoom(gameRoomId: string): Promise<void> {
-        if (this.gameRooms[gameRoomId]) {
-            await Axios.delete(this.IDENTIFICATION_3D_URL, { params: { gameRoomId: gameRoomId } });
-            delete this.gameRooms[gameRoomId];
+    public async deleteGame3DRoom(userRoomId: UserRoomId): Promise<void> {
+        this.gameRooms[userRoomId.gameRoomId].gamer = this.gameRooms[userRoomId.gameRoomId].gamer.filter((gamer: Gamer) =>
+            gamer.username !== userRoomId.username,
+        );
+        if (this.gameRooms[userRoomId.gameRoomId] && this.gameRooms[userRoomId.gameRoomId].gamer.length === 0) {
+            await Axios.delete(this.IDENTIFICATION_3D_URL, { params: { gameRoomId: userRoomId.gameRoomId } });
+            delete this.gameRooms[userRoomId.gameRoomId];
         }
     }
 
     public async endGame(endGameMessage: EndGameMessage): Promise<NewScoreUpdate> {
-        const gameMode: string = this.gameRooms[endGameMessage.gameRoomId].gamer.length === 1 ? "solo" : "multi";
+        const gameMode: string = this.gameRooms[endGameMessage.gameRoomId].mode;
         const scoreTime: string[] = endGameMessage.score.split(":");
         const gameName: string = this.gameRooms[endGameMessage.gameRoomId].game.gameName;
         const scoreUpdate: AxiosResponse = await Axios.put(this.TIMESCORE_URL, {
@@ -191,6 +200,7 @@ interface GameRooms {
         game: Game,
         gamer: Gamer[],
         serviceStarted: boolean,
+        mode: string,
     };
 }
 
